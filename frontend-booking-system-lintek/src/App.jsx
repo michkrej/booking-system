@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import './App.css'
 import Login from './Login'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -16,6 +16,7 @@ const theme = createTheme({
         },
     },
 })
+
 function App() {
     return (
         <ThemeProvider theme={theme}>
