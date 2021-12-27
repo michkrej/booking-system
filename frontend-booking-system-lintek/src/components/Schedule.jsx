@@ -16,15 +16,23 @@ import {
     AppointmentTooltip,
     ConfirmationDialog,
 } from '@devexpress/dx-react-scheduler-material-ui'
-import { Container, Autocomplete, TextField } from '@mui/material'
+import { Container, Autocomplete, TextField, Grid } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { theme } from '../App'
 import DateAdapter from '@mui/lab/AdapterMoment'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import moment from 'moment'
+import { Box } from '@mui/system'
 
-const options = [{ key: 'S27', group: 'C-huset' }]
+import heart from '../images/LinTek_hjarta.png'
+
+const options = [
+    { key: 'S27', group: 'C-huset' },
+    { key: 'S26', group: 'C-huset' },
+    { key: 'S25', group: 'C-huset' },
+    { key: 'C23', group: 'Utomhus' },
+]
 
 const Schedule = () => {
     const [data, setData] = React.useState([])
@@ -89,34 +97,68 @@ const Schedule = () => {
                         )}
                     />
                     <LocalizationProvider dateAdapter={DateAdapter}>
-                        <DateTimePicker
-                            renderInput={(props) => <TextField {...props} />}
-                            value={appointmentData.startDate}
-                            onChange={(newValue) => {
-                                onFieldChange({
-                                    startDate: moment(newValue).toDate(),
-                                })
-                            }}
-                            ampm={false}
-                            inputFormat="hh:mm DD-MM-YYYY"
-                            minDate={moment('2022-08-01')}
-                            maxDate={moment('2022-10-01')}
-                            openTo="hours"
-                        />
-                        <DateTimePicker
-                            renderInput={(props) => <TextField {...props} />}
-                            value={appointmentData.endDate}
-                            onChange={(newValue) => {
-                                onFieldChange({
-                                    endDate: moment(newValue).toDate(),
-                                })
-                            }}
-                            ampm={false}
-                            inputFormat="hh:mm DD-MM-YYYY"
-                            minDate={moment('2022-08-01')}
-                            maxDate={moment('2022-10-01')}
-                            openTo="hours"
-                        />
+                        <Grid container>
+                            <Grid item xs={5} pt={3}>
+                                <DateTimePicker
+                                    renderInput={(props) => (
+                                        <TextField {...props} />
+                                    )}
+                                    value={appointmentData.startDate}
+                                    onChange={(newValue) => {
+                                        onFieldChange({
+                                            startDate:
+                                                moment(newValue).toDate(),
+                                        })
+                                    }}
+                                    label="Start"
+                                    ampm={false}
+                                    inputFormat="hh:mm DD-MM-YYYY"
+                                    minDate={moment('2022-08-01')}
+                                    maxDate={moment('2022-10-01')}
+                                    openTo="hours"
+                                    margin="normal"
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                xs={2}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <img
+                                    src={heart}
+                                    style={{ width: '20%', marginTop: '20px' }}
+                                />
+                                <img
+                                    src={heart}
+                                    style={{ width: '20%', marginTop: '15px' }}
+                                />
+                            </Grid>
+                            <Grid item xs={5} pt={3}>
+                                <DateTimePicker
+                                    renderInput={(props) => (
+                                        <TextField {...props} />
+                                    )}
+                                    value={appointmentData.endDate}
+                                    onChange={(newValue) => {
+                                        onFieldChange({
+                                            endDate: moment(newValue).toDate(),
+                                        })
+                                    }}
+                                    label="Slut"
+                                    ampm={false}
+                                    inputFormat="hh:mm DD-MM-YYYY"
+                                    minDate={moment('2022-08-01')}
+                                    maxDate={moment('2022-10-01')}
+                                    openTo="hours"
+                                    margin="normal"
+                                />
+                            </Grid>
+                        </Grid>
                     </LocalizationProvider>
                 </Container>
             </ThemeProvider>
