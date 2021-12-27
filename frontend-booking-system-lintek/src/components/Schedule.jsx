@@ -18,14 +18,16 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui'
 import { Container, Autocomplete, TextField, Grid } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { theme } from '../App'
+import { primary, theme } from '../App'
 import DateAdapter from '@mui/lab/AdapterMoment'
 import DateTimePicker from '@mui/lab/DateTimePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import moment from 'moment'
 import { Box } from '@mui/system'
+import { withStyles, Theme, createStyles } from '@material-ui/core'
 
 import heart from '../images/LinTek_hjarta.png'
+import { green } from '@mui/material/colors'
 
 const options = [
     { key: 'S27', group: 'C-huset' },
@@ -34,29 +36,47 @@ const options = [
     { key: 'C23', group: 'Utomhus' },
 ]
 
+const styles = () =>
+    createStyles({
+        text: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+        },
+        content: {
+            opacity: 0.7,
+        },
+        container: {
+            width: '100%',
+            lineHeight: 1.2,
+            height: '100%',
+        },
+    })
+
 const Schedule = () => {
     const [data, setData] = React.useState([])
+
+    const addZero = (time) => {
+        if (time.toString().length > 1) {
+            return time
+        }
+        return '0' + time.toString()
+    }
+
+    const formatTime = (date) => {
+        return `${addZero(date.getHours())}:${
+            date.getMinutes() === 0 ? '00' : date.getMinutes()
+        }`
+    }
 
     const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
         const onCustomFieldChange = (nextValue) => {
             onFieldChange({ location: nextValue })
         }
 
-        console.log(appointmentData)
-
         return (
             <ThemeProvider theme={theme}>
                 <Container sx={{ m: 2 }}>
-                    {/*                     <AppointmentForm.Label
-                        type="titleLabel"
-                        text="Lokal/Område"
-                        style={{
-                            fontWeight: 700,
-                            fontSize: '19px',
-                            marginBlock: '4px',
-                        }}
-                        mt={1}
-                    /> */}
                     <TextField
                         margin="normal"
                         required
@@ -112,7 +132,7 @@ const Schedule = () => {
                                     }}
                                     label="Start"
                                     ampm={false}
-                                    inputFormat="hh:mm DD-MM-YYYY"
+                                    /* inputFormat="HH:mm DD-MM-YYYY" */
                                     minDate={moment('2022-08-01')}
                                     maxDate={moment('2022-10-01')}
                                     openTo="hours"
@@ -151,7 +171,7 @@ const Schedule = () => {
                                     }}
                                     label="Slut"
                                     ampm={false}
-                                    inputFormat="hh:mm DD-MM-YYYY"
+                                    /* inputFormat="HH:mm DD-MM-YYYY" */
                                     minDate={moment('2022-08-01')}
                                     maxDate={moment('2022-10-01')}
                                     openTo="hours"
@@ -164,6 +184,39 @@ const Schedule = () => {
             </ThemeProvider>
         )
     }
+
+    const Appointment = ({ children, style, ...restProps }) => (
+        <Appointments.Appointment
+            {...restProps}
+            style={{
+                ...style,
+                backgroundColor: primary,
+                borderRadius: '8px',
+            }}
+        >
+            {children}
+        </Appointments.Appointment>
+    )
+
+    const AppointmentContent = withStyles(styles, {
+        name: 'AppointmentContent',
+    })(({ classes, data, ...restProps }) => {
+        return (
+            <Appointments.AppointmentContent {...restProps} data={data}>
+                <div className={classes.container}>
+                    <div className={classes.text}>{data.title}</div>
+                    <div className={`${classes.text} ${classes.content}`}>
+                        {`${formatTime(data.startDate)} - ${formatTime(
+                            data.endDate
+                        )}`}
+                    </div>
+                    <div className={`${classes.text} ${classes.content}`}>
+                        {`Location: ${options[data.location].key}`}
+                    </div>
+                </div>
+            </Appointments.AppointmentContent>
+        )
+    })
 
     const commitChanges = ({ added, changed, deleted }) => {
         let temp = data
@@ -183,7 +236,6 @@ const Schedule = () => {
         if (deleted !== undefined) {
             temp = data.filter((appointment) => appointment.id !== deleted)
         }
-        console.log(temp)
         setData(temp)
         return { temp }
     }
@@ -193,7 +245,12 @@ const Schedule = () => {
                 data={data}
                 locale="sv-SE"
                 firstDayOfWeek={1}
-                height={660}
+                height={
+                    window.innerHeight -
+                    document.querySelector('#nav') -
+                    document.querySelector('#footer') -
+                    250
+                }
             >
                 <ViewState defaultCurrentDate="2022-08-16" />
                 <EditingState onCommitChanges={commitChanges} />
@@ -212,7 +269,10 @@ const Schedule = () => {
                             'Är du säker att du vill överge dina osparade ändringar?',
                     }}
                 />
-                <Appointments />
+                <Appointments
+                    appointmentComponent={Appointment}
+                    appointmentContentComponent={AppointmentContent}
+                />
                 <AppointmentTooltip showOpenButton showDeleteButton />
                 <AppointmentForm
                     booleanEditorComponent={(props) => (

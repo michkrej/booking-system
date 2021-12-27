@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Footer from './components/Footer'
 import Booking from './pages/Booking'
 
+export const primary = '#E1007A'
+
 export const theme = createTheme({
     palette: {
         primary: {
@@ -28,7 +30,7 @@ function App() {
                 }}
             >
                 <CssBaseline />
-                <Container component="main">
+                <Container component="main" pb={5}>
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<Login />} />
