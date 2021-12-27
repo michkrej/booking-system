@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 
-import heart from './images/LinTek_hjarta.png'
+import heart from '../images/LinTek_hjarta.png'
 
 export default function Login() {
     const handleSubmit = (event) => {

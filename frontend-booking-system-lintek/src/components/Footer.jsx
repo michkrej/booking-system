@@ -3,7 +3,8 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 
-import lintek from './images/lintek.png'
+import lintek from '../images/lintek.png'
+
 export default function Footer() {
     return (
         <Box
