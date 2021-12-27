@@ -16,16 +16,13 @@ import {
     AppointmentTooltip,
     ConfirmationDialog,
 } from '@devexpress/dx-react-scheduler-material-ui'
-import {
-    Container,
-    MenuItem,
-    Select,
-    Box,
-    Autocomplete,
-    TextField,
-} from '@mui/material'
+import { Container, Autocomplete, TextField } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { theme } from '../App'
+import DateAdapter from '@mui/lab/AdapterMoment'
+import DateTimePicker from '@mui/lab/DateTimePicker'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import moment from 'moment'
 
 const options = [{ key: 'S27', group: 'C-huset' }]
 
@@ -87,9 +84,40 @@ const Schedule = () => {
                                 {...params}
                                 label="Lokal/område"
                                 margin="normal"
+                                required
                             />
                         )}
                     />
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DateTimePicker
+                            renderInput={(props) => <TextField {...props} />}
+                            value={appointmentData.startDate}
+                            onChange={(newValue) => {
+                                onFieldChange({
+                                    startDate: moment(newValue).toDate(),
+                                })
+                            }}
+                            ampm={false}
+                            inputFormat="hh:mm DD-MM-YYYY"
+                            minDate={moment('2022-08-01')}
+                            maxDate={moment('2022-10-01')}
+                            openTo="hours"
+                        />
+                        <DateTimePicker
+                            renderInput={(props) => <TextField {...props} />}
+                            value={appointmentData.endDate}
+                            onChange={(newValue) => {
+                                onFieldChange({
+                                    endDate: moment(newValue).toDate(),
+                                })
+                            }}
+                            ampm={false}
+                            inputFormat="hh:mm DD-MM-YYYY"
+                            minDate={moment('2022-08-01')}
+                            maxDate={moment('2022-10-01')}
+                            openTo="hours"
+                        />
+                    </LocalizationProvider>
                 </Container>
             </ThemeProvider>
         )
