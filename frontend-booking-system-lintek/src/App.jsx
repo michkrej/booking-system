@@ -31,12 +31,10 @@ function App() {
             >
                 <CssBaseline />
                 <Container component="main" pb={5} sx={{ flexGrow: 1 }}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<Login />} />
-                            <Route path="booking" element={<Booking />} />
-                        </Routes>
-                    </BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="booking" element={<Booking />} />
+                    </Routes>
                 </Container>
                 <Footer />
             </Box>
