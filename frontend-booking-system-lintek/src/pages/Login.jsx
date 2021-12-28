@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import heart from '../images/LinTek_hjarta.png'
 
 export default function Login() {
-    const { loginWithRedirect, user } = useAuth0()
+    const { loginWithRedirect, user, isAuthenticated } = useAuth0()
     let navigate = useNavigate()
 
     const handleSubmit = (event) => {
@@ -22,7 +22,8 @@ export default function Login() {
     }
 
     React.useEffect(() => {
-        if (user) {
+        console.log(user)
+        if (isAuthenticated) {
             console.log(user)
             navigate('/booking')
         }

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Login from './components/Login'
+import Login from './pages/Login'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box } from '@mui/material'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
