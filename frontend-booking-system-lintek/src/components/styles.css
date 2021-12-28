@@ -1,0 +1,17 @@
+.showtime-preview {
+    background-color: green;
+    height: 80px;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+}
+
+.showtime-preview > div:first-child {
+    font-size: 16px;
+    white-space: normal;
+}
+
+.showtime-preview > div:not(:first-child) {
+    font-size: 14px;
+    white-space: normal;
+}

@@ -1,12 +1,14 @@
 import * as React from 'react'
-import './App.css'
-import Login from './Login'
+import Login from './components/Login'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box } from '@mui/material'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Footer from './components/Footer'
+import Booking from './pages/Booking'
 
-import Footer from './Footer'
+export const primary = '#E1007A'
 
-const theme = createTheme({
+export const theme = createTheme({
     palette: {
         primary: {
             main: '#E1007A',
@@ -28,8 +30,13 @@ function App() {
                 }}
             >
                 <CssBaseline />
-                <Container component="main">
-                    <Login />
+                <Container component="main" pb={5} sx={{ flexGrow: 1 }}>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Login />} />
+                            <Route path="booking" element={<Booking />} />
+                        </Routes>
+                    </BrowserRouter>
                 </Container>
                 <Footer />
             </Box>

@@ -8,8 +8,9 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router-dom'
 
-import heart from './images/LinTek_hjarta.png'
+import heart from '../images/LinTek_hjarta.png'
 
 export default function Login() {
     const { loginWithRedirect, user } = useAuth0()
