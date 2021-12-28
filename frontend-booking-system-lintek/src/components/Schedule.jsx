@@ -15,6 +15,8 @@ import {
     AppointmentForm,
     AppointmentTooltip,
     ConfirmationDialog,
+    DayView,
+    ViewSwitcher,
 } from '@devexpress/dx-react-scheduler-material-ui'
 import { Container, Autocomplete, TextField, Grid } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -98,6 +100,15 @@ const Schedule = () => {
                 <EditingState onCommitChanges={commitChanges} />
                 <IntegratedEditing />
                 <WeekView
+                    displayName="Vecka"
+                    startDayHour={6}
+                    endDayHour={24}
+                    cellDuration={60}
+                    timeScaleLabelComponent={TimeScale}
+                    timeTableCellComponent={CalendarCell}
+                />
+                <DayView
+                    displayName={'Dag'}
                     startDayHour={6}
                     endDayHour={24}
                     cellDuration={60}
@@ -117,6 +128,7 @@ const Schedule = () => {
                             'Är du säker att du vill överge dina osparade ändringar?',
                     }}
                 />
+                <ViewSwitcher />
                 <Appointments appointmentComponent={Appointment} />
                 <AppointmentTooltip showOpenButton showDeleteButton />
                 <AppointmentForm
