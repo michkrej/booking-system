@@ -12,7 +12,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import heart from './images/LinTek_hjarta.png'
 
 export default function Login() {
-    const { loginWithRedirect } = useAuth0()
+    const { loginWithRedirect, user } = useAuth0()
     const handleSubmit = (event) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
@@ -22,6 +22,8 @@ export default function Login() {
             password: data.get('password'),
         })
     }
+
+    console.log(user)
 
     return (
         <Container component="div" maxWidth="xs">
