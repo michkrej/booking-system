@@ -30,7 +30,11 @@ function App() {
                 }}
             >
                 <CssBaseline />
-                <Container component="main" pb={5} sx={{ flexGrow: 1 }}>
+                <Container
+                    component="main"
+                    pb={5}
+                    sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}
+                >
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route path="booking" element={<Booking />} />
