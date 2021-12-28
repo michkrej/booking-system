@@ -7,14 +7,16 @@ import Checkbox from '@mui/material/Checkbox'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import { useAuth0 } from '@auth0/auth0-react'
 
 import heart from './images/LinTek_hjarta.png'
 
 export default function Login() {
+    const { loginWithRedirect } = useAuth0()
     const handleSubmit = (event) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
-        // eslint-disable-next-line no-console
+        loginWithRedirect()
         console.log({
             email: data.get('email'),
             password: data.get('password'),
