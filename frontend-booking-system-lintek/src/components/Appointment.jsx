@@ -4,19 +4,20 @@ import { options } from './Schedule'
 import './styles.css'
 import { withStyles, Theme, createStyles } from '@material-ui/core'
 import { primary } from '../App'
-import { Hidden } from '@mui/material'
 
 const styles = () =>
     createStyles({
         text: {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
+            fontSize: '16px',
         },
         content: {
             opacity: 0.7,
             whiteSpace: 'pre-wrap',
             display: 'inline-block',
             overflow: 'hidden',
+            fontSize: '14px',
         },
         container: {
             width: '100%',

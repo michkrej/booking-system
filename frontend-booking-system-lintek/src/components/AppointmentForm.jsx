@@ -15,7 +15,7 @@ const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
     }
 
     return (
-        <Container sx={{ m: 2 }}>
+        <Container {...restProps} sx={{ m: 2 }}>
             <TextField
                 margin="normal"
                 required
