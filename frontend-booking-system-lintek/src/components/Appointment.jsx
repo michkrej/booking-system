@@ -4,29 +4,34 @@ import { options } from './Schedule'
 import './styles.css'
 import { withStyles, Theme, createStyles } from '@material-ui/core'
 import { primary } from '../App'
+import { Hidden } from '@mui/material'
 
 const styles = () =>
     createStyles({
         text: {
-            overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
         },
         content: {
             opacity: 0.7,
+            whiteSpace: 'pre-wrap',
+            display: 'inline-block',
+            overflow: 'hidden',
         },
         container: {
             width: '100%',
             lineHeight: 1.2,
             height: '100%',
             backgroundColor: primary,
-            borderRadius: '2px',
+
             marginTop: '-1px',
             display: 'flex',
-            justifyContent: 'center',
             paddingLeft: '0.5em',
+            paddingTop: '0.5em',
             flexDirection: 'column',
             color: 'white',
+            border: '1px solid white',
+            borderRadius: '4px',
         },
     })
 
@@ -46,12 +51,19 @@ const Appointment = ({ classes, data, ...restProps }) => {
     return (
         <div {...restProps} className={classes.container}>
             <div className={classes.text}>{data.title}</div>
-            <div className={`${classes.text} ${classes.content}`}>
-                {`${formatTime(data.startDate)} - ${formatTime(data.endDate)}`}
-            </div>
-            <div className={`${classes.text} ${classes.content}`}>{`Plats: ${
-                options[data.location].key
-            }`}</div>
+            {data.location !== undefined ? (
+                <div className={`${classes.text} ${classes.content}`}>
+                    {`${formatTime(data.startDate)}, ${
+                        options[data.location].key
+                    }`}
+                </div>
+            ) : (
+                <div className={`${classes.text} ${classes.content}`}>
+                    {`${formatTime(data.startDate)} - ${formatTime(
+                        data.endDate
+                    )}`}
+                </div>
+            )}
         </div>
     )
 }
