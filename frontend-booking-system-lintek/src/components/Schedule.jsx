@@ -30,6 +30,8 @@ import Appointment from './Appointment'
 
 import heart from '../images/LinTek_hjarta.png'
 import { green } from '@mui/material/colors'
+import TimeScale from './TimeScale'
+import CalendarCell from './CalendarCell'
 
 export const options = [
     { key: 'S27', group: 'C-huset' },
@@ -95,7 +97,13 @@ const Schedule = () => {
                 <ViewState defaultCurrentDate="2022-08-16" />
                 <EditingState onCommitChanges={commitChanges} />
                 <IntegratedEditing />
-                <WeekView startDayHour={6} endDayHour={24} />
+                <WeekView
+                    startDayHour={6}
+                    endDayHour={24}
+                    cellDuration={60}
+                    timeScaleLabelComponent={TimeScale}
+                    timeTableCellComponent={CalendarCell}
+                />
                 <Toolbar />
                 <DateNavigator />
                 <ConfirmationDialog
