@@ -30,7 +30,7 @@ function App() {
                 }}
             >
                 <CssBaseline />
-                <Container component="main" pb={5}>
+                <Container component="main" pb={5} sx={{ flexGrow: 1 }}>
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<Login />} />

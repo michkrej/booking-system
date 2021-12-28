@@ -7,13 +7,17 @@ import Checkbox from '@mui/material/Checkbox'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import { useNavigate } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
 
 export default function Login() {
+    const navigate = useNavigate()
+
     const handleSubmit = (event) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
+        navigate('/booking')
         // eslint-disable-next-line no-console
         console.log({
             email: data.get('email'),
