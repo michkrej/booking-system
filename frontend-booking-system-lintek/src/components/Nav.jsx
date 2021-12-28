@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Nav() {
     const classes = useStyles()
     let navigate = useNavigate()
+    const { logout } = useAuth0()
     return (
         <React.Fragment>
             <AppBar className={classes.background}>
@@ -30,7 +32,7 @@ export default function Nav() {
                         <Button
                             color="secondary"
                             size="large"
-                            onClick={() => navigate('/')}
+                            onClick={() => logout()}
                         >
                             Logga ut
                         </Button>

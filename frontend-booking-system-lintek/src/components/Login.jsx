@@ -14,17 +14,19 @@ import heart from '../images/LinTek_hjarta.png'
 
 export default function Login() {
     const { loginWithRedirect, user } = useAuth0()
+    let navigate = useNavigate()
+
     const handleSubmit = (event) => {
         event.preventDefault()
-        const data = new FormData(event.currentTarget)
         loginWithRedirect()
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        })
     }
 
-    console.log(user)
+    React.useEffect(() => {
+        if (user) {
+            console.log(user)
+            navigate('/booking')
+        }
+    }, [user])
 
     return (
         <Container component="div" maxWidth="xs">
