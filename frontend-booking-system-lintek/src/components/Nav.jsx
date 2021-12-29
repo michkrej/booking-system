@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Nav() {
     const classes = useStyles()
-    let navigate = useNavigate()
     const { logout } = useAuth0()
     return (
         <React.Fragment>
@@ -32,7 +31,9 @@ export default function Nav() {
                         <Button
                             color="secondary"
                             size="large"
-                            onClick={() => logout()}
+                            onClick={() =>
+                                logout({ returnTo: window.location.origin })
+                            }
                         >
                             Logga ut
                         </Button>

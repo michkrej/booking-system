@@ -19,6 +19,14 @@ export default function Login() {
         loginWithRedirect()
     }
 
+    React.useEffect(() => {
+        console.log(user)
+        if (isAuthenticated) {
+            console.log(user)
+            navigate('/booking')
+        }
+    }, [isAuthenticated])
+
     React.useEffect(async () => {
         console.log(user)
         if (isAuthenticated) {
@@ -36,9 +44,6 @@ export default function Login() {
                         console.log(response)
                         navigate('/booking')
                     })
-            } else {
-                console.log(user)
-                navigate('/booking')
             }
         }
     }, [user])
