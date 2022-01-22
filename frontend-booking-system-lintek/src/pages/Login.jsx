@@ -44,14 +44,21 @@ export default function Login() {
                 <Typography component="h2" variant="h5">
                     Logga in
                 </Typography>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    sx={{ mt: 1 }}
                 >
-                    Sign In
-                </Button>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        Sign In
+                    </Button>
+                </Box>
             </Box>
         </Container>
     )

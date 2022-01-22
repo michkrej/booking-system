@@ -3,9 +3,12 @@ import * as React from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box } from '@mui/material'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+import 'devextreme/dist/css/dx.light.css'
+
 import Footer from './components/Footer'
 import Login from './pages/Login'
-//import Booking from './pages/Booking'
+import Booking from './pages/Booking'
 
 export const primary = '#E1007A'
 
@@ -34,8 +37,8 @@ function App() {
                 <Container component="main" pb={5} sx={{ flexGrow: 1 }}>
                     <BrowserRouter>
                         <Routes>
-                            <Route path="/" element={<Login />} />
-                            {/* <Route path="booking" element={<Booking />} /> */}
+                            {/* <Route path="/" element={<Login />} /> */}
+                            <Route path="booking" element={<Booking />} />
                         </Routes>
                     </BrowserRouter>
                 </Container>
