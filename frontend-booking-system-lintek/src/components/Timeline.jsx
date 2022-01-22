@@ -22,7 +22,6 @@ const Timeline = () => {
     const [filteredRooms, setFilteredRooms] = useState(rooms)
 
     const handleChange = (selectedOption) => {
-        console.log(selectedOption)
         setCurrentLocation(selectedOption)
     }
 
@@ -32,28 +31,22 @@ const Timeline = () => {
                 (room) => room.locationId === currentLocation.id
             )
             setFilteredRooms(tempRooms)
+            return tempRooms
         } else {
             setFilteredRooms([])
+            return []
         }
     }
 
     useEffect(() => {
-        console.log('Updated location')
         filterRooms()
     }, [currentLocation])
 
     const onAppointmentFormOpening = (e) => {
-        // namn på aktivitet
-        // start- och sluttid
-        // beskrivning
-        // plats + rum (hitta bättre namn)
-        // antal bänkset (bord + bänkar)
-        // antal bord (om ej hela bänkset)
-        // antal grillar
-        // annat som ska bokas
         const { form } = e
         form.beginUpdate()
         const validation = [{ type: 'required' }]
+
         e.popup.option('showTitle', true)
         e.popup.option(
             'title',
@@ -89,8 +82,7 @@ const Timeline = () => {
             searchEnabled: true,
         }
         room.validationRules = validation
-
-        console.log(mainGroupItems)
+        room.colSpan = 2
 
         let formItems = form.option('items')
         if (
@@ -167,11 +159,11 @@ const Timeline = () => {
                             useColorAsDefault={true}
                             allowMultiple={true}
                         />
-                        <Resource
+                        {/*                         <Resource
                             dataSource={locations}
                             fieldExpr="locationId"
                             label="Plats"
-                        />
+                        /> */}
                     </Scheduler>
                 </Grid>
             </Grid>
