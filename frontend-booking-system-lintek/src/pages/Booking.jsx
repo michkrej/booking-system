@@ -6,7 +6,7 @@ import Timeline from '../components/Timeline'
 
 export default function Booking() {
     return (
-        <Container maxWidth="xl">
+        <Container maxWidth="false">
             <Nav id="nav" />
             <Grid container>
                 <Grid item xs={12} mt={5}>

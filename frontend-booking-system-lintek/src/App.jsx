@@ -34,7 +34,12 @@ function App() {
                 }}
             >
                 <CssBaseline />
-                <Container component="main" pb={5} sx={{ flexGrow: 1 }}>
+                <Container
+                    component="main"
+                    pb={5}
+                    sx={{ flexGrow: 1 }}
+                    maxWidth="xl"
+                >
                     <BrowserRouter>
                         <Routes>
                             {/* <Route path="/" element={<Login />} /> */}

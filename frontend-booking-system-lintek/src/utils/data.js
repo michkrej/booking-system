@@ -169,10 +169,21 @@ export const assignees = [
     },
 ]
 
+export const locations = [
+    {
+        text: 'C-huset',
+        id: 1,
+        color: '#00af2c',
+        value: 1,
+        label: 'C-huset',
+    },
+]
+
 export const rooms = [
     {
         text: 'Room 1',
         id: 1,
+        locationId: 1,
         color: '#00af2c',
     },
     {
@@ -183,6 +194,27 @@ export const rooms = [
     {
         text: 'Room 3',
         id: 3,
+        color: '#8ecd3c',
+    },
+    {
+        text: 'Room 4',
+        id: 4,
+        color: '#8ecd4c',
+    },
+    {
+        text: 'Hela S-korridoren',
+        id: 5,
+        locationId: 1,
+        color: '#8ecd3c',
+    },
+    {
+        text: 'Room 5',
+        id: 6,
+        color: '#8ecd3c',
+    },
+    {
+        text: 'Room 6',
+        id: 7,
         color: '#8ecd3c',
     },
 ]
