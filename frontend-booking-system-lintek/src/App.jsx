@@ -1,10 +1,11 @@
 import * as React from 'react'
-import Login from './components/Login'
+
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box } from '@mui/material'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Footer from './components/Footer'
-import Booking from './pages/Booking'
+import Login from './pages/Login'
+//import Booking from './pages/Booking'
 
 export const primary = '#E1007A'
 
@@ -34,7 +35,7 @@ function App() {
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<Login />} />
-                            <Route path="booking" element={<Booking />} />
+                            {/* <Route path="booking" element={<Booking />} /> */}
                         </Routes>
                     </BrowserRouter>
                 </Container>

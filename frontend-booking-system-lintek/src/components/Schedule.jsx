@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react'
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 import {
     ViewState,
     EditingState,
@@ -18,20 +18,10 @@ import {
     DayView,
     ViewSwitcher,
 } from '@devexpress/dx-react-scheduler-material-ui'
-import { Container, Autocomplete, TextField, Grid } from '@mui/material'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { primary, theme } from '../App'
-import DateAdapter from '@mui/lab/AdapterMoment'
-import DateTimePicker from '@mui/lab/DateTimePicker'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import moment from 'moment'
-import { Box } from '@mui/system'
-import { withStyles, Theme, createStyles } from '@material-ui/core'
+import { createStyles, makeStyles } from '@mui/styles'
+
 import BasicLayout from './AppointmentForm'
 import Appointment from './Appointment'
-
-import heart from '../images/LinTek_hjarta.png'
-import { green } from '@mui/material/colors'
 import TimeScale from './TimeScale'
 import CalendarCell from './CalendarCell'
 

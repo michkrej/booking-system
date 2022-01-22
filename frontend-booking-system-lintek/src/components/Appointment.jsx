@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { options } from './Schedule'
 import './styles.css'
-import { withStyles, Theme, createStyles } from '@material-ui/core'
+import { withStyles, Theme, createStyles } from '@mui/styles'
 import { primary } from '../App'
 
 const styles = () =>
