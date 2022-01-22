@@ -2,24 +2,17 @@ import React, { useState, useEffect } from 'react'
 
 import Scheduler, { Resource } from 'devextreme-react/scheduler'
 
-import {
-    data,
-    assignees,
-    rooms,
-    priorities,
-    locations,
-    resourcesList,
-} from '../utils/data'
+import { data, rooms, locations } from '../utils/data'
 import Grid from '@mui/material/Grid'
 import SelectLocation from './SelectLocation'
 
 const currentDate = new Date('2021-04-26T16:30:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
-const groups = ['roomId']
 
 const Timeline = () => {
-    const [currentLocation, setCurrentLocation] = useState(locations[0])
+    const [currentLocation, setCurrentLocation] = useState()
     const [filteredRooms, setFilteredRooms] = useState(rooms)
+    const [groups, setGroups] = useState(['locationId'])
 
     const handleChange = (selectedOption) => {
         setCurrentLocation(selectedOption)
@@ -33,13 +26,21 @@ const Timeline = () => {
             setFilteredRooms(tempRooms)
             return tempRooms
         } else {
-            setFilteredRooms([])
-            return []
+            setFilteredRooms(rooms)
+            return rooms
         }
     }
 
+    /** TODO
+     * När vyn där allt grupperas på hus går det att välja alla lokaler oavsett var man klickar
+     */
     useEffect(() => {
         filterRooms()
+        if (!currentLocation) {
+            setGroups(['locationId'])
+        } else {
+            setGroups(['roomId'])
+        }
     }, [currentLocation])
 
     const onAppointmentFormOpening = (e) => {
@@ -123,6 +124,12 @@ const Timeline = () => {
             form.option('items', formItems)
         }
 
+        form.updateData('locationId', currentLocation.id)
+        let location = form.itemOption('mainGroup.locationId')
+        location.editorOptions = {
+            ...location.editorOptions,
+            readOnly: true,
+        }
         form.endUpdate()
         form.repaint()
     }
@@ -150,20 +157,20 @@ const Timeline = () => {
                         firstDayOfWeek={1}
                         startDayHour={8}
                         endDayHour={20}
+                        editing={groups[0] !== 'locationId'}
                         onAppointmentFormOpening={onAppointmentFormOpening}
                     >
                         <Resource
-                            dataSource={filteredRooms}
-                            fieldExpr="roomId"
-                            label="Rum"
-                            useColorAsDefault={true}
-                            allowMultiple={true}
-                        />
-                        {/*                         <Resource
                             dataSource={locations}
                             fieldExpr="locationId"
                             label="Plats"
-                        /> */}
+                        />
+                        <Resource
+                            dataSource={filteredRooms}
+                            fieldExpr="roomId"
+                            label="Del"
+                            allowMultiple={true}
+                        />
                     </Scheduler>
                 </Grid>
             </Grid>
