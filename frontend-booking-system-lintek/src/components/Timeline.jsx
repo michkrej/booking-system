@@ -18,23 +18,8 @@ const views = ['timelineDay', 'timelineWeek']
 const groups = ['roomId']
 
 const Timeline = () => {
-    const [currentLocation, setCurrentLocation] = useState(undefined)
+    const [currentLocation, setCurrentLocation] = useState(locations[0])
     const [filteredRooms, setFilteredRooms] = useState(rooms)
-
-    const onAppointmentFormOpening = (e) => {
-        const { form } = e
-
-        const startDateTimezoneEditor = form.getEditor('startDateTimeZone')
-        const endDateTimezoneEditor = form.getEditor('endDateTimeZone')
-        const startDateDataSource = startDateTimezoneEditor.option('dataSource')
-        const endDateDataSource = endDateTimezoneEditor.option('dataSource')
-
-        startDateDataSource.filter(['id', 'contains', 'Europe'])
-        endDateDataSource.filter(['id', 'contains', 'Europe'])
-
-        startDateDataSource.load()
-        endDateDataSource.load()
-    }
 
     const handleChange = (selectedOption) => {
         console.log(selectedOption)
@@ -47,12 +32,108 @@ const Timeline = () => {
                 (room) => room.locationId === currentLocation.id
             )
             setFilteredRooms(tempRooms)
+        } else {
+            setFilteredRooms([])
         }
     }
 
     useEffect(() => {
+        console.log('Updated location')
         filterRooms()
     }, [currentLocation])
+
+    const onAppointmentFormOpening = (e) => {
+        // namn på aktivitet
+        // start- och sluttid
+        // beskrivning
+        // plats + rum (hitta bättre namn)
+        // antal bänkset (bord + bänkar)
+        // antal bord (om ej hela bänkset)
+        // antal grillar
+        // annat som ska bokas
+        const { form } = e
+        form.beginUpdate()
+        const validation = [{ type: 'required' }]
+        e.popup.option('showTitle', true)
+        e.popup.option(
+            'title',
+            e.appointmentData.text
+                ? e.appointmentData.text
+                : 'Ange infromation om din bokning'
+        )
+
+        let mainGroupItems = form.itemOption('mainGroup').items
+        if (
+            mainGroupItems.find(
+                (i) =>
+                    i.itemType === 'group' && i.items[0].dataField === 'allDay'
+            )
+        ) {
+            mainGroupItems.splice(2, 1)
+        }
+
+        mainGroupItems[0] = {
+            ...mainGroupItems[0],
+            label: {
+                text: 'Aktivitet',
+            },
+            validationRules: [{ type: 'required' }],
+        }
+        mainGroupItems[1].items[0].label.text = 'Starttid'
+        mainGroupItems[1].items[2].label.text = 'Sluttid'
+        mainGroupItems[3].label.text = 'Beskrivning'
+        let room = form.itemOption('mainGroup.roomId')
+        room.editorOptions = {
+            ...room.editorOptions,
+            dataSource: filteredRooms,
+            searchEnabled: true,
+        }
+        room.validationRules = validation
+
+        console.log(mainGroupItems)
+
+        let formItems = form.option('items')
+        if (
+            !formItems.find(function (i) {
+                return (
+                    i.dataField ===
+                    ('bankset' || 'bord' || 'grillar' || 'annat')
+                )
+            })
+        ) {
+            formItems.push(
+                {
+                    label: { text: 'Bänkset' },
+                    editorType: 'dxNumberBox',
+                    dataField: 'bankset',
+                    validationRules: validation,
+                },
+                {
+                    label: { text: 'Bord' },
+                    editorType: 'dxNumberBox',
+                    dataField: 'bord',
+                    validationRules: validation,
+                },
+                {
+                    label: { text: 'Grillar' },
+                    editorType: 'dxNumberBox',
+                    dataField: 'grillar',
+                    validationRules: validation,
+                },
+                { itemType: 'empty' },
+                {
+                    colSpan: 2,
+                    label: { text: 'Annat som behöver bokas' },
+                    editorType: 'dxTextArea',
+                    dataField: 'annat',
+                }
+            )
+            form.option('items', formItems)
+        }
+
+        form.endUpdate()
+        form.repaint()
+    }
 
     return (
         <>
@@ -61,6 +142,7 @@ const Timeline = () => {
                     <SelectLocation
                         locations={locations}
                         handleChange={handleChange}
+                        current={currentLocation}
                     />
                 </Grid>
                 <Grid item xs={10}>
@@ -76,12 +158,12 @@ const Timeline = () => {
                         firstDayOfWeek={1}
                         startDayHour={8}
                         endDayHour={20}
-                        style={{ zIndex: 1 }}
+                        onAppointmentFormOpening={onAppointmentFormOpening}
                     >
                         <Resource
                             dataSource={filteredRooms}
                             fieldExpr="roomId"
-                            label="Room"
+                            label="Rum"
                             useColorAsDefault={true}
                             allowMultiple={true}
                         />

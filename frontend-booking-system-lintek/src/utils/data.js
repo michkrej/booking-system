@@ -177,44 +177,56 @@ export const locations = [
         value: 1,
         label: 'C-huset',
     },
+    {
+        text: 'Utomhus',
+        id: 2,
+        color: '#00af2c',
+        value: 2,
+        label: 'Utomhus',
+    },
 ]
 
 export const rooms = [
     {
-        text: 'Room 1',
+        text: 'U1',
         id: 1,
         locationId: 1,
         color: '#00af2c',
     },
     {
-        text: 'Room 2',
+        text: 'U3',
         id: 2,
+        locationId: 1,
         color: '#56ca85',
     },
     {
-        text: 'Room 3',
+        text: 'R66',
         id: 3,
+        locationId: 1,
         color: '#8ecd3c',
     },
     {
-        text: 'Room 4',
+        text: 'R14',
         id: 4,
+        locationId: 1,
         color: '#8ecd4c',
     },
     {
-        text: 'Hela S-korridoren',
+        text: 'S-korridoren',
         id: 5,
         locationId: 1,
         color: '#8ecd3c',
     },
     {
-        text: 'Room 5',
+        text: 'A1',
         id: 6,
+        locationId: 2,
         color: '#8ecd3c',
     },
     {
-        text: 'Room 6',
+        text: 'A2',
         id: 7,
+        locationId: 2,
         color: '#8ecd3c',
     },
 ]
