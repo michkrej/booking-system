@@ -5,6 +5,14 @@ import Scheduler, { Resource } from 'devextreme-react/scheduler'
 import { data, rooms, locations } from '../utils/data'
 import Grid from '@mui/material/Grid'
 import SelectLocation from './SelectLocation'
+import Stack from '@mui/material/Stack'
+import { styled } from '@mui/material/styles'
+import Button from './Button'
+
+const Item = styled('div')(({ theme }) => ({
+    marginBottom: '1em',
+    width: '100%',
+}))
 
 const currentDate = new Date('2021-04-26T16:30:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
@@ -134,15 +142,32 @@ const Timeline = () => {
         form.repaint()
     }
 
+    const handleClick = () => {
+        let res = window.prompt('Vad vill du spara detta som?', '')
+        console.log(res)
+    }
+
     return (
         <>
             <Grid container spacing={2}>
                 <Grid item xs={2}>
-                    <SelectLocation
-                        locations={locations}
-                        handleChange={handleChange}
-                        current={currentLocation}
-                    />
+                    <Stack>
+                        <Item>
+                            <SelectLocation
+                                locations={locations}
+                                handleChange={handleChange}
+                                current={currentLocation}
+                            />
+                        </Item>
+                        <Item>
+                            <Button
+                                variant="contained"
+                                handleClick={handleClick}
+                            >
+                                Spara
+                            </Button>
+                        </Item>
+                    </Stack>
                 </Grid>
                 <Grid item xs={10}>
                     <Scheduler
