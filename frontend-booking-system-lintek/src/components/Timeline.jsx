@@ -52,7 +52,7 @@ const Timeline = () => {
             'title',
             e.appointmentData.text
                 ? e.appointmentData.text
-                : 'Ange infromation om din bokning'
+                : 'Ange information om din bokning'
         )
 
         let mainGroupItems = form.itemOption('mainGroup').items
