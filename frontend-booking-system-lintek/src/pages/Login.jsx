@@ -9,10 +9,11 @@ import {
     Grid,
     Link,
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 
+import { useNavigate } from 'react-router-dom'
 import heart from '../images/LinTek_hjarta.png'
 
+//TODO auth user and redirect
 export default function Login() {
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -76,7 +77,7 @@ export default function Login() {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="/signup" variant="body2">
                                 {'Har du inte ett konto? Skapa ett'}
                             </Link>
                         </Grid>

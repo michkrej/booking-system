@@ -26,7 +26,7 @@ const useSignup = () => {
             })
         } catch (error) {
             console.log(error.message)
-            setError(err.message)
+            setError(error.message)
             setIsPending(false)
         }
     }

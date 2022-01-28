@@ -9,6 +9,7 @@ import 'devextreme/dist/css/dx.light.css'
 import Footer from './components/Footer'
 import Login from './pages/Login'
 import Booking from './pages/Booking'
+import Signup from './pages/Signup'
 
 export const primary = '#E1007A'
 
@@ -43,6 +44,7 @@ function App() {
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<Login />} />
+                            <Route path="/signup" element={<Signup />} />
                             <Route path="booking" element={<Booking />} />
                         </Routes>
                     </BrowserRouter>
