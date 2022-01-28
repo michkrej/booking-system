@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Scheduler, { Resource } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import { rooms, locations } from '../utils/data'
+import { data, rooms, locations } from '../utils/data'
 const currentDate = new Date('2021-04-26T16:30:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
 
@@ -132,7 +132,7 @@ const Timeline = ({ currentLocation, store }) => {
         <>
             <Scheduler
                 timeZone="America/Los_Angeles"
-                dataSource={store}
+                dataSource={data /*store*/}
                 views={views}
                 defaultCurrentView="timelineDay"
                 defaultCurrentDate={currentDate}

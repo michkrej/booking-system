@@ -9,12 +9,19 @@ import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
 
 import { locations } from '../utils/data'
+import dxButton from 'devextreme/ui/button'
+import { refType } from '@mui/utils'
 
 const Item = styled('div')(() => ({
     marginBottom: '1em',
     width: '100%',
 }))
 
+/**
+ * TODO
+ * If reading like this gets too expensive: connect to an array
+ * instead and then parse and save array to Firebase on button click
+ */
 const customDataSource = new CustomStore({
     key: 'id',
     load: () => {
@@ -33,7 +40,33 @@ const customDataSource = new CustomStore({
                 }
             })
     },
-    insert: (values) => {},
+    insert: (values) => {
+        console.log(values)
+        const doc = { ...values }
+        try {
+            firestore.collection('events').add(doc)
+        } catch (e) {
+            console.log(e)
+        }
+        return values
+    },
+    remove: (id) => {
+        try {
+            firestore.collection('events').doc(id).delete()
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    update: (id, values) => {
+        try {
+            let docRef = firestore.collection('events').doc(id)
+            return docRef.update({
+                ...values,
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    },
 })
 
 export default function Booking() {
