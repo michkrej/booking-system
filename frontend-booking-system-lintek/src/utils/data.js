@@ -18,7 +18,7 @@ export const data = [
         locationId: 1,
         eventId: 1,
         startDate: new Date('2021-04-26T16:30:00.000Z'),
-        endDate: new Date('2021-04-26T18:30:00.000Z'),
+        endDate: new Date('2021-04-26T20:30:00.000Z'),
     },
 ]
 

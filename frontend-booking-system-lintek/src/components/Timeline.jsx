@@ -1,36 +1,13 @@
 import React, { useState, useEffect } from 'react'
-
 import Scheduler, { Resource } from 'devextreme-react/scheduler'
-
-import { data, rooms, locations } from '../utils/data'
-import Grid from '@mui/material/Grid'
-import SelectLocation from './SelectLocation'
-import Stack from '@mui/material/Stack'
-import { styled } from '@mui/material/styles'
-import ArrayStore from 'devextreme/data/array_store'
-import Button from './Button'
-
-const store = new ArrayStore({
-    key: 'eventId',
-    data: data,
-})
-
-const Item = styled('div')(({ theme }) => ({
-    marginBottom: '1em',
-    width: '100%',
-}))
-
+import PropTypes from 'prop-types'
+import { rooms, locations } from '../utils/data'
 const currentDate = new Date('2021-04-26T16:30:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
 
-const Timeline = () => {
-    const [currentLocation, setCurrentLocation] = useState()
+const Timeline = ({ currentLocation, store }) => {
     const [filteredRooms, setFilteredRooms] = useState(rooms)
     const [groups, setGroups] = useState(['locationId'])
-
-    const handleChange = (selectedOption) => {
-        setCurrentLocation(selectedOption)
-    }
 
     const filterRooms = () => {
         if (currentLocation) {
@@ -138,7 +115,10 @@ const Timeline = () => {
             form.option('items', formItems)
         }
 
-        form.updateData('locationId', currentLocation.id)
+        if (currentLocation) {
+            form.updateData('locationId', currentLocation.id)
+        }
+
         let location = form.itemOption('mainGroup.locationId')
         location.editorOptions = {
             ...location.editorOptions,
@@ -148,67 +128,42 @@ const Timeline = () => {
         form.repaint()
     }
 
-    const handleClick = () => {
-        let res = window.prompt('Vad vill du spara detta som?', '')
-        console.log(res)
-    }
-
-    console.log(store)
-
     return (
         <>
-            <Grid container spacing={2}>
-                <Grid item xs={2}>
-                    <Stack>
-                        <Item>
-                            <SelectLocation
-                                locations={locations}
-                                handleChange={handleChange}
-                                current={currentLocation}
-                            />
-                        </Item>
-                        <Item>
-                            <Button
-                                variant="contained"
-                                handleClick={handleClick}
-                            >
-                                Spara
-                            </Button>
-                        </Item>
-                    </Stack>
-                </Grid>
-                <Grid item xs={10}>
-                    <Scheduler
-                        timeZone="America/Los_Angeles"
-                        dataSource={store}
-                        views={views}
-                        defaultCurrentView="timelineDay"
-                        defaultCurrentDate={currentDate}
-                        height={580}
-                        groups={groups}
-                        cellDuration={120}
-                        firstDayOfWeek={1}
-                        startDayHour={8}
-                        endDayHour={20}
-                        editing={groups[0] !== 'locationId'}
-                        onAppointmentFormOpening={onAppointmentFormOpening}
-                    >
-                        <Resource
-                            dataSource={locations}
-                            fieldExpr="locationId"
-                            label="Plats"
-                        />
-                        <Resource
-                            dataSource={filteredRooms}
-                            fieldExpr="roomId"
-                            label="Del"
-                            allowMultiple={true}
-                        />
-                    </Scheduler>
-                </Grid>
-            </Grid>
+            <Scheduler
+                timeZone="America/Los_Angeles"
+                dataSource={store}
+                views={views}
+                defaultCurrentView="timelineDay"
+                defaultCurrentDate={currentDate}
+                height={580}
+                groups={groups}
+                cellDuration={120}
+                firstDayOfWeek={1}
+                startDayHour={8}
+                endDayHour={20}
+                editing={groups[0] !== 'locationId'}
+                onAppointmentFormOpening={onAppointmentFormOpening}
+            >
+                <Resource
+                    dataSource={locations}
+                    fieldExpr="locationId"
+                    label="Plats"
+                />
+                <Resource
+                    dataSource={filteredRooms}
+                    fieldExpr="roomId"
+                    label="Del"
+                    allowMultiple={true}
+                />
+            </Scheduler>
         </>
     )
+}
+
+Timeline.propTypes = {
+    currentLocation: PropTypes.object,
+    store: PropTypes.object,
 }
 
 export default Timeline
