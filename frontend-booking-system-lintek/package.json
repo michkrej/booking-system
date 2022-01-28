@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^13.5.0",
     "devextreme": "21.2.4",
     "devextreme-react": "21.2.4",
+    "firebase": "^8.10.1",
     "graphql": "^16.2.0",
     "history": "^5.2.0",
     "moment": "^2.29.1",
