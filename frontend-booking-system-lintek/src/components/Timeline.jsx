@@ -7,7 +7,13 @@ import Grid from '@mui/material/Grid'
 import SelectLocation from './SelectLocation'
 import Stack from '@mui/material/Stack'
 import { styled } from '@mui/material/styles'
+import ArrayStore from 'devextreme/data/array_store'
 import Button from './Button'
+
+const store = new ArrayStore({
+    key: 'eventId',
+    data: data,
+})
 
 const Item = styled('div')(({ theme }) => ({
     marginBottom: '1em',
@@ -147,6 +153,8 @@ const Timeline = () => {
         console.log(res)
     }
 
+    console.log(store)
+
     return (
         <>
             <Grid container spacing={2}>
@@ -172,7 +180,7 @@ const Timeline = () => {
                 <Grid item xs={10}>
                     <Scheduler
                         timeZone="America/Los_Angeles"
-                        dataSource={data}
+                        dataSource={store}
                         views={views}
                         defaultCurrentView="timelineDay"
                         defaultCurrentDate={currentDate}
