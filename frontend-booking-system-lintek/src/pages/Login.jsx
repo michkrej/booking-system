@@ -1,32 +1,23 @@
-import * as React from 'react'
+import React from 'react'
 import {
     Avatar,
     Button,
     TextField,
-    FormControlLabel,
-    Checkbox,
     Box,
     Typography,
     Container,
+    Grid,
+    Link,
 } from '@mui/material'
-import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
 
 export default function Login() {
-    const { loginWithRedirect, user } = useAuth0()
     const handleSubmit = (event) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
-        loginWithRedirect()
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        })
     }
-
-    console.log(user)
 
     return (
         <Container component="div" maxWidth="xs">
@@ -50,14 +41,46 @@ export default function Login() {
                     noValidate
                     sx={{ mt: 1 }}
                 >
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Din e-mail"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Lösenord"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        Sign In
+                        Logga in
                     </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Glömt lösenord?
+                            </Link>
+                        </Grid>
+                        <Grid item>
+                            <Link href="#" variant="body2">
+                                {'Har du inte ett konto? Skapa ett'}
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </Box>
             </Box>
         </Container>
