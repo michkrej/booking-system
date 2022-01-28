@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Container, Grid, Stack } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import SelectLocation from '../components/SelectLocation'
+import SelectInput from '../components/SelectInput'
 import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import Button from '../components/Button'
@@ -86,10 +86,11 @@ export default function Booking() {
                 <Grid item xs={2}>
                     <Stack>
                         <Item>
-                            <SelectLocation
+                            <SelectInput
                                 locations={locations}
                                 handleChange={handleChange}
                                 current={currentLocation}
+                                placeholder="Filtrera på plats"
                             />
                         </Item>
                         <Item>

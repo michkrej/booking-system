@@ -2,22 +2,23 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 
-const SelectLocation = ({ handleChange, locations, current }) => {
+const SelectInput = ({ handleChange, options, current, placeholder }) => {
     return (
         <Select
-            options={locations}
+            options={options}
             onChange={handleChange}
-            placeholder="Filtrera på plats"
+            placeholder={placeholder}
             isClearable={true}
             value={current}
         />
     )
 }
 
-SelectLocation.propTypes = {
+SelectInput.propTypes = {
     handleChange: PropTypes.func,
-    locations: PropTypes.array,
+    options: PropTypes.array,
     current: PropTypes.object,
+    placeholder: PropTypes.string,
 }
 
-export default SelectLocation
+export default SelectInput
