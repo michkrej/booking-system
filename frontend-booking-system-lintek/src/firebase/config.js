@@ -3,12 +3,13 @@ import 'firebase/firestore'
 import 'firebase/auth'
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyB-SrkGvE90xmL6i7KcR4GbLoGden3KYwk',
-    authDomain: 'booking-system-1377d.firebaseapp.com',
-    projectId: 'booking-system-1377d',
-    storageBucket: 'booking-system-1377d.appspot.com',
-    messagingSenderId: '193135357886',
-    appId: '1:193135357886:web:3a0aede71cb382bfb3d3ef',
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
 }
 
 firebase.initializeApp(firebaseConfig)
