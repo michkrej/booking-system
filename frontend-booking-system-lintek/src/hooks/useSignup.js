@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { auth, firestore } from '../firebase/config'
 import useAuthContext from './useAuthContext'
 
 const useSignup = () => {
+    const [isCancelled, setIsCancelled] = useState(false)
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState()
     const { dispatch } = useAuthContext()
@@ -35,12 +36,24 @@ const useSignup = () => {
                     commitee,
                 },
             })
+            if (!isCancelled) {
+                setIsPending(false)
+                setError(undefined)
+            }
         } catch (error) {
-            console.log(error.message)
-            setError(error.message)
-            setIsPending(false)
+            if (!isCancelled) {
+                console.log(error.message)
+                setError(error.message)
+                setIsPending(false)
+            }
         }
     }
+
+    useEffect(() => {
+        return () => {
+            setIsCancelled(true)
+        }
+    }, [])
 
     return { error, isPending, signup }
 }

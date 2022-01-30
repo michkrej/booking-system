@@ -10,14 +10,15 @@ import {
     Link,
 } from '@mui/material'
 
-import { useNavigate } from 'react-router-dom'
 import heart from '../images/LinTek_hjarta.png'
+import useLogin from '../hooks/useLogin'
 
-//TODO auth user and redirect
 export default function Login() {
+    const { login } = useLogin()
     const handleSubmit = (event) => {
         event.preventDefault()
         const data = new FormData(event.currentTarget)
+        login(data.get('email'), data.get('password'))
     }
 
     return (

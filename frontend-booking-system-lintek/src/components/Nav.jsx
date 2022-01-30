@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles } from '@mui/styles'
 import { Button, AppBar, Toolbar, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import useLogout from '../hooks/useLogout'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -14,8 +15,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Nav() {
+    const { logout } = useLogout()
     const classes = useStyles()
-    let navigate = useNavigate()
+
     return (
         <React.Fragment>
             <AppBar className={classes.background}>
@@ -24,11 +26,7 @@ export default function Nav() {
                         Bokningsystem
                     </Typography>
                     <div>
-                        <Button
-                            color="secondary"
-                            size="large"
-                            onClick={() => navigate('/')}
-                        >
+                        <Button color="secondary" size="large" onClick={logout}>
                             Logga ut
                         </Button>
                     </div>
