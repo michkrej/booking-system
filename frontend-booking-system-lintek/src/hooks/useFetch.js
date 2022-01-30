@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
-const useFetch = () => {
+const useFetch = ({ url }) => {
     const [data, setData] = useState()
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState()

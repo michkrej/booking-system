@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { auth, firestore } from '../firebase/config'
 
 const useSignup = () => {

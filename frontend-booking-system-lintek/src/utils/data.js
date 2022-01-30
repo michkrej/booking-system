@@ -111,14 +111,12 @@ export const rooms = [
         text: 'A1',
         id: 6,
         locationId: 2,
-        color: '#8ecd3c',
         color: colors.Utomhus,
     },
     {
         text: 'A2',
         id: 7,
         locationId: 2,
-        color: '#8ecd3c',
         color: colors.Utomhus,
     },
 ]
