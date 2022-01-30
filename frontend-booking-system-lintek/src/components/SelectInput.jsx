@@ -2,21 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 
-const customStyles = {
-    option: (provided, state) => ({
-        ...provided,
-        backgroundColor: state.isSelected ? '#e60080' : 'white',
-    }),
-    control: (provided) => ({
-        // none of react-select's styles are passed to <Control />
-        ...provided,
-    }),
-    singleValue: (provided, state) => ({
-        ...provided,
-        color: 'black',
-    }),
-}
-
 const SelectInput = ({
     handleChange,
     options,

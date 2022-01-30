@@ -1,7 +1,9 @@
 import React from 'react'
 import { makeStyles } from '@mui/styles'
-import { Button, AppBar, Toolbar, Typography } from '@mui/material'
+import { Button, AppBar, Toolbar, Typography, Avatar } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+
+import heart from '../images/LinTek_hjarta.png'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -20,8 +22,10 @@ export default function Nav() {
         <React.Fragment>
             <AppBar className={classes.background}>
                 <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
-                        Bokningsystem
+                    <img src={heart} style={{ width: '40px' }} />
+
+                    <Typography variant="h6" className={classes.title} ml={2}>
+                        LinTeks system för bokningsplanering
                     </Typography>
                     <div>
                         <Button
