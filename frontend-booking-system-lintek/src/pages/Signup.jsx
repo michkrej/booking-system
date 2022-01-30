@@ -47,7 +47,8 @@ export default function Signup() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'
-        }}>
+        }}
+      >
         <Avatar sx={{ m: 1, bgcolor: 'white' }} variant="square">
           <img src={heart} style={{ width: '100%' }} />
         </Avatar>
