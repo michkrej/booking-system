@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Box, Typography, Paper, Grid } from '@mui/material'
+import { Button, Box, Typography, Paper, Grid, Divider } from '@mui/material'
 import SelectInput from './SelectInput'
+import SearchIcon from '@mui/icons-material/Search'
 
 const CollisionsOverview = ({ plans }) => {
     const [startCollision, setStartCollison] = useState('')
@@ -17,6 +18,7 @@ const CollisionsOverview = ({ plans }) => {
         <Paper sx={{ padding: 2, marginTop: 2 }}>
             <Box>
                 <Typography variant="h6">Hitta krockar</Typography>
+                <Divider />
                 <Box component="form">
                     <Grid container spacing={2}>
                         <Grid item xs={12} mt={2}>
@@ -42,6 +44,7 @@ const CollisionsOverview = ({ plans }) => {
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
+                        startIcon={<SearchIcon />}
                     >
                         Hitta
                     </Button>

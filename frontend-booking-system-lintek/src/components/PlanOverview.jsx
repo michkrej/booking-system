@@ -10,8 +10,10 @@ import {
     IconButton,
     Checkbox,
     Paper,
+    Divider,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add'
 
 const PlanOverview = ({ plans }) => {
     const [checked, setChecked] = useState([])
@@ -31,6 +33,7 @@ const PlanOverview = ({ plans }) => {
         <Paper sx={{ padding: 2 }}>
             <Box>
                 <Typography variant="h6">Planeringar</Typography>
+                <Divider />
                 <List>
                     {plans.map((plan) => {
                         return (
@@ -60,6 +63,9 @@ const PlanOverview = ({ plans }) => {
                         )
                     })}
                 </List>
+                <Button variant="contained" startIcon={<AddIcon />} fullWidth>
+                    Skapa ny
+                </Button>
             </Box>
         </Paper>
     )

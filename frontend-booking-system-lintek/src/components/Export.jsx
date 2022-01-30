@@ -8,14 +8,18 @@ import {
     Button,
     Checkbox,
     FormControlLabel,
+    IconButton,
+    Divider,
 } from '@mui/material'
 import SelectInput from './SelectInput'
+import GetAppIcon from '@mui/icons-material/GetApp'
 
 const Export = ({ plans }) => {
     const [checked, setChecked] = useState(false)
     return (
         <Paper sx={{ padding: 2 }}>
             <Typography variant="h6">Export</Typography>
+            <Divider />
             <Box component="form" mt={2}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -49,7 +53,8 @@ const Export = ({ plans }) => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 1, mb: 1 }}
+                    sx={{ mt: 1 }}
+                    startIcon={<GetAppIcon />}
                 >
                     Exportera
                 </Button>
