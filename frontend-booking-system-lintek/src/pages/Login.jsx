@@ -1,14 +1,24 @@
-import { Avatar, Button, TextField, Box, Typography, Container, Grid, Link } from '@mui/material'
-import { Link as LinkR, Outlet } from 'react-router-dom'
+import { Avatar, Button, TextField, Box, Typography, Container, Grid } from '@mui/material'
+import { makeStyles } from '@mui/styles'
+import { Link } from 'react-router-dom'
 
-import { useNavigate } from 'react-router-dom'
 import heart from '../images/LinTek_hjarta.png'
+import useLogin from '../hooks/useLogin'
 
-//TODO auth user and redirect
+export const useLinkStyles = makeStyles({
+  link: {
+    fontSize: '0.875rem',
+    color: '#E1007A'
+  }
+})
+
 export default function Login() {
+  const classes = useLinkStyles()
+  const { login } = useLogin()
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
+    login(data.get('email'), data.get('password'))
   }
 
   return (
@@ -52,14 +62,14 @@ export default function Login() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <LinkR to={''}>
-                <Link variant="body2">Glömt lösenord?</Link>
-              </LinkR>
+              <Link to="#" variant="body2" className={classes.link}>
+                Glömt lösenord?
+              </Link>
             </Grid>
             <Grid item>
-              <LinkR to="signup">
-                <Link variant="body2">{'Har du inte ett konto? Skapa ett'}</Link>
-              </LinkR>
+              <Link to="/signup" variant="body2" className={classes.link}>
+                {'Har du inte ett konto? Skapa ett'}
+              </Link>
             </Grid>
           </Grid>
         </Box>

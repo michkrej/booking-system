@@ -11,23 +11,29 @@ import {
   MenuItem,
   Grid,
   FormControl,
-  InputLabel,
-  Link
+  InputLabel
 } from '@mui/material'
-import { Link as LinkR } from 'react-router-dom'
+import { makeStyles } from '@mui/styles'
+import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
 import { assignees } from '../utils/data'
+import { useLinkStyles } from './Login'
 
-//TODO Redirect on account creation
 export default function Signup() {
   const [commitee, setCommitee] = useState('')
+  const classes = useLinkStyles()
   const { signup, isPending, error } = useSignup()
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
 
-    signup(data.get('email'), data.get('password'), data.get('firstName'), commitee)
+    signup(
+      data.get('email'),
+      data.get('password'),
+      `${data.get('firstName')} ${data.get('lastName')}`,
+      commitee
+    )
   }
 
   const handleChange = (event) => {
@@ -42,8 +48,7 @@ export default function Signup() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'
-        }}
-      >
+        }}>
         <Avatar sx={{ m: 1, bgcolor: 'white' }} variant="square">
           <img src={heart} style={{ width: '100%' }} />
         </Avatar>
@@ -112,9 +117,9 @@ export default function Signup() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <LinkR to="/">
-                <Link variant="body2">Har du redan ett konto? Logga in</Link>
-              </LinkR>
+              <Link to="/" variant="body2" className={classes.link}>
+                Har du redan ett konto? Logga in
+              </Link>
             </Grid>
           </Grid>
         </Box>
