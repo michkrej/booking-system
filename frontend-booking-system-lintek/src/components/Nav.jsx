@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react';
 import { makeStyles } from '@mui/styles'
 import { Button, AppBar, Toolbar, Typography, Avatar } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
@@ -19,7 +19,7 @@ export default function Nav() {
     const classes = useStyles()
     let navigate = useNavigate()
     return (
-        <React.Fragment>
+        <Fragment>
             <AppBar className={classes.background}>
                 <Toolbar>
                     <img src={heart} style={{ width: '40px' }} />
@@ -39,6 +39,6 @@ export default function Nav() {
                 </Toolbar>
             </AppBar>
             <Toolbar />
-        </React.Fragment>
-    )
+        </Fragment>
+    );
 }

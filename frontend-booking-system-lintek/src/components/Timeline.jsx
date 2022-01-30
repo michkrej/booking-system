@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import Scheduler, { Resource } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
 import { data, rooms, locations } from '../utils/data'

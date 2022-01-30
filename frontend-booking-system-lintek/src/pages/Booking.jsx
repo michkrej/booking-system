@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import { Container, Grid, Stack } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import SelectInput from '../components/SelectInput'

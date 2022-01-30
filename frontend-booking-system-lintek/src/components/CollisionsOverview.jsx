@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import PropTypes from 'prop-types'
 import { Button, Box, Typography, Paper, Grid, Divider } from '@mui/material'
 import SelectInput from './SelectInput'

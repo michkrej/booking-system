@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react';
 import useSignup from '../hooks/useSignup'
 import {
     Avatar,
@@ -21,7 +21,7 @@ import { assignees } from '../utils/data'
 
 //TODO Redirect on account creation
 export default function Signup() {
-    const [commitee, setCommitee] = React.useState('')
+    const [commitee, setCommitee] = useState('')
     const { signup, isPending, error } = useSignup()
     const handleSubmit = (event) => {
         event.preventDefault()
