@@ -9,6 +9,7 @@ import {
     Grid,
     Link,
 } from '@mui/material'
+import { Link as LinkR } from 'react-router-dom'
 
 import { useNavigate } from 'react-router-dom'
 import heart from '../images/LinTek_hjarta.png'
@@ -72,14 +73,16 @@ export default function Login() {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Glömt lösenord?
-                            </Link>
+                            <LinkR to={''}>
+                                <Link variant="body2">Glömt lösenord?</Link>
+                            </LinkR>
                         </Grid>
                         <Grid item>
-                            <Link href="/signup" variant="body2">
-                                {'Har du inte ett konto? Skapa ett'}
-                            </Link>
+                            <LinkR to="signup">
+                                <Link variant="body2">
+                                    {'Har du inte ett konto? Skapa ett'}
+                                </Link>
+                            </LinkR>
                         </Grid>
                     </Grid>
                 </Box>

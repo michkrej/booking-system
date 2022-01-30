@@ -14,6 +14,7 @@ import {
     InputLabel,
     Link,
 } from '@mui/material'
+import { Link as LinkR } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
 import { assignees } from '../utils/data'
@@ -134,9 +135,11 @@ export default function Signup() {
                     </Button>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link href="/" variant="body2">
-                                Har du redan ett konto? Logga in
-                            </Link>
+                            <LinkR to="/">
+                                <Link variant="body2">
+                                    Har du redan ett konto? Logga in
+                                </Link>
+                            </LinkR>
                         </Grid>
                     </Grid>
                 </Box>

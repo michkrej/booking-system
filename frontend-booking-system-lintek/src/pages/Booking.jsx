@@ -87,7 +87,7 @@ export default function Booking() {
                     <Stack>
                         <Item>
                             <SelectInput
-                                locations={locations}
+                                options={locations}
                                 handleChange={handleChange}
                                 current={currentLocation}
                                 placeholder="Filtrera på plats"

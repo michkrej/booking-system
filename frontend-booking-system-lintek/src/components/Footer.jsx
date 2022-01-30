@@ -40,7 +40,15 @@ const Footer = () => {
                 }}
             >
                 <Typography variant="body1">
-                    Vid frågor kontakta ma-lkpg@lintek.liu.se
+                    Vid frågor kontakta{' '}
+                    <Link
+                        href="mailto:ma-lkpg@lintek.liu.se"
+                        rel="noopener noreferrer"
+                        target="_top"
+                        color="inherit"
+                    >
+                        ma-lkpg@lintek.liu.se
+                    </Link>
                 </Typography>
                 <Copyright />
             </Container>
