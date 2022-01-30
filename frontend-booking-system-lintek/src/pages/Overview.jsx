@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Container, Grid, Typography } from '@mui/material'
 import Nav from '../components/Nav'
 import Export from '../components/Export'
 import PlanOverview from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
+import { firestore } from '../firebase/config'
 
-const plans = [
+/* const plans = [
   {
     value: 1,
     label: 'Normal-p'
@@ -14,9 +15,36 @@ const plans = [
     value: 2,
     label: 'Covid-p'
   }
-]
+] */
 
 const Overview = () => {
+  const [plans, setPlans] = useState([])
+
+  useEffect(() => {
+    const getPlans = async () => {
+      firestore
+        .collection('plans')
+        .where('userId', '==', 'UdNEI3S5q6NZ9ebMUYdQ1B6Mgsg1')
+        .get()
+        .then((snapshot) => {
+          if (snapshot.empty) {
+            console.log('No events to load')
+          } else {
+            let results = []
+            snapshot.docs.forEach((doc) => {
+              results.push({ value: doc.id, ...doc.data() })
+            })
+            setPlans(results)
+          }
+        })
+        .catch((error) => {
+          console.log('Error getting documents: ', error)
+        })
+    }
+
+    getPlans()
+  }, [])
+
   return (
     <Container>
       <Nav />

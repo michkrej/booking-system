@@ -31,16 +31,23 @@ function App() {
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh'
-        }}
-      >
+        }}>
         <CssBaseline />
         <Container component="main" pb={5} sx={{ flexGrow: 1 }} maxWidth="xl">
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="booking" element={<Booking />} />
+              <Route path="/booking/:id" element={<Booking />} />
               <Route path="/overview" element={<Overview />} />
+              <Route
+                path="*"
+                element={
+                  <main style={{ padding: '1rem' }}>
+                    <p>Oops, denna sidan är tom!</p>
+                  </main>
+                }
+              />
             </Routes>
           </BrowserRouter>
         </Container>

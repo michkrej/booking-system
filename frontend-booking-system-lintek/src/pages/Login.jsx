@@ -1,5 +1,5 @@
 import { Avatar, Button, TextField, Box, Typography, Container, Grid, Link } from '@mui/material'
-import { Link as LinkR } from 'react-router-dom'
+import { Link as LinkR, Outlet } from 'react-router-dom'
 
 import { useNavigate } from 'react-router-dom'
 import heart from '../images/LinTek_hjarta.png'
@@ -19,8 +19,7 @@ export default function Login() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'
-        }}
-      >
+        }}>
         <Avatar sx={{ m: 1, bgcolor: 'white' }} variant="square">
           <img src={heart} style={{ width: '100%' }} />
         </Avatar>
