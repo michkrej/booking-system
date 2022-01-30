@@ -40,7 +40,8 @@ const Export = ({ plans }) => {
           fullWidth
           variant="contained"
           sx={{ mt: 1 }}
-          startIcon={<GetAppIcon />}>
+          startIcon={<GetAppIcon />}
+        >
           Exportera
         </Button>
       </Box>
