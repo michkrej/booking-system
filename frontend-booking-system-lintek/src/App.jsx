@@ -34,7 +34,8 @@ function App() {
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh'
-        }}>
+        }}
+      >
         <CssBaseline />
         <Container component="main" pb={5} sx={{ flexGrow: 1 }} maxWidth="xl">
           {authFinished && (

@@ -67,10 +67,12 @@ const PlanOverview = ({ plans }) => {
                       <DeleteIcon />
                     </IconButton>
                   </>
-                }>
+                }
+              >
                 <Link
                   to={`/booking/${plan.value}`}
-                  style={{ color: 'inherit', textDecoration: 'inherit' }}>
+                  style={{ color: 'inherit', textDecoration: 'inherit' }}
+                >
                   <ListItemText>{plan.label}</ListItemText>
                 </Link>
               </ListItem>

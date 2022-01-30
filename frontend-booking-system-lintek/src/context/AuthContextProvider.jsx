@@ -4,43 +4,36 @@ import { auth } from '../firebase/config'
 
 export const AuthContext = createContext()
 export const authReducer = (state, action) => {
-    switch (action.type) {
-        case 'LOGIN':
-            return { ...state, user: action.payload }
-        case 'LOGOUT':
-            return { ...state, user: undefined }
-        case 'AUTH_READY':
-            return { ...state, user: action.payload, authFinished: true }
-        default:
-            return state
-    }
+  switch (action.type) {
+    case 'LOGIN':
+      return { ...state, user: action.payload }
+    case 'LOGOUT':
+      return { ...state, user: undefined }
+    case 'AUTH_READY':
+      return { ...state, user: action.payload, authFinished: true }
+    default:
+      return state
+  }
 }
 
 const AuthContextProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(authReducer, {
-        user: undefined,
-        authFinished: false,
+  const [state, dispatch] = useReducer(authReducer, {
+    user: undefined,
+    authFinished: false
+  })
+
+  useEffect(() => {
+    const unsibscribe = auth.onAuthStateChanged((user) => {
+      dispatch({ type: 'AUTH_READY', payload: user })
+      unsibscribe()
     })
+  }, [])
 
-    useEffect(() => {
-        const unsibscribe = auth.onAuthStateChanged((user) => {
-            dispatch({ type: 'AUTH_READY', payload: user })
-            unsibscribe()
-        })
-    }, [])
-
-    console.log(state)
-    return (
-        <AuthContext.Provider value={{ ...state, dispatch }}>
-            {children}
-        </AuthContext.Provider>
-    )
+  console.log(state)
+  return <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>
 }
 
 AuthContextProvider.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node,
-    ]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired
 }
 export default AuthContextProvider

@@ -13,7 +13,6 @@ import {
   FormControl,
   InputLabel
 } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
@@ -23,7 +22,7 @@ import { useLinkStyles } from './Login'
 export default function Signup() {
   const [commitee, setCommitee] = useState('')
   const classes = useLinkStyles()
-  const { signup, isPending, error } = useSignup()
+  const { signup } = useSignup()
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)

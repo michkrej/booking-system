@@ -8,7 +8,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  IconButton,
   Divider
 } from '@mui/material'
 import SelectInput from './SelectInput'
@@ -41,8 +40,7 @@ const Export = ({ plans }) => {
           fullWidth
           variant="contained"
           sx={{ mt: 1 }}
-          startIcon={<GetAppIcon />}
-        >
+          startIcon={<GetAppIcon />}>
           Exportera
         </Button>
       </Box>

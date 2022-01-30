@@ -1,10 +1,10 @@
 import { makeStyles } from '@mui/styles'
-import { Button, AppBar, Toolbar, Typography, Avatar } from '@mui/material'
+import { Button, AppBar, Toolbar, Typography } from '@mui/material'
 import useLogout from '../hooks/useLogout'
 
 import heart from '../images/LinTek_hjarta.png'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   title: {
     flexGrow: 1,
     color: 'black'
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: '#eeeeee'
   }
-}))
+})
 
 export default function Nav() {
   const { logout } = useLogout()

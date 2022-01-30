@@ -9,8 +9,6 @@ import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
 
 import { locations } from '../utils/data'
-import dxButton from 'devextreme/ui/button'
-import { refType } from '@mui/utils'
 
 const Item = styled('div')(() => ({
   marginBottom: '1em',
