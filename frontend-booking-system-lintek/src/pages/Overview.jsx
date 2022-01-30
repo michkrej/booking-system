@@ -24,7 +24,7 @@ const Overview = () => {
     const getPlans = async () => {
       firestore
         .collection('plans')
-        .where('userId', '==', 'UdNEI3S5q6NZ9ebMUYdQ1B6Mgsg1')
+        .where('userId', '==', 'UdNEI3S5q6NZ9ebMUYdQ1B6Mgsg1') //TODO change to varaible
         .get()
         .then((snapshot) => {
           if (snapshot.empty) {
