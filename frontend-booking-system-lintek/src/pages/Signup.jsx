@@ -29,7 +29,7 @@ export default function Signup() {
         signup(
             data.get('email'),
             data.get('password'),
-            data.get('firstName'),
+            `${data.get('firstName')} ${data.get('lastName')}`,
             commitee
         )
     }
