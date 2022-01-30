@@ -13,46 +13,41 @@ import Overview from './pages/Overview'
 export const primary = '#E1007A'
 
 export const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#E1007A',
-        },
-        secondary: {
-            main: '#D786B3',
-        },
+  palette: {
+    primary: {
+      main: '#E1007A'
     },
+    secondary: {
+      main: '#D786B3'
+    }
+  }
 })
 
 function App() {
-    return (
-        <ThemeProvider theme={theme}>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100vh',
-                }}
-            >
-                <CssBaseline />
-                <Container
-                    component="main"
-                    pb={5}
-                    sx={{ flexGrow: 1 }}
-                    maxWidth="xl"
-                >
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<Login />} />
-                            <Route path="/signup" element={<Signup />} />
-                            <Route path="booking" element={<Booking />} />
-                            <Route path="/overview" element={<Overview />} />
-                        </Routes>
-                    </BrowserRouter>
-                </Container>
-                <Footer />
-            </Box>
-        </ThemeProvider>
-    )
+  return (
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh'
+        }}
+      >
+        <CssBaseline />
+        <Container component="main" pb={5} sx={{ flexGrow: 1 }} maxWidth="xl">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="booking" element={<Booking />} />
+              <Route path="/overview" element={<Overview />} />
+            </Routes>
+          </BrowserRouter>
+        </Container>
+        <Footer />
+      </Box>
+    </ThemeProvider>
+  )
 }
 
 export default App
