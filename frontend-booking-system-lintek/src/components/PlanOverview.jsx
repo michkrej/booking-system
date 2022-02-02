@@ -20,8 +20,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import usePlansContext from '../hooks/usePlansContext'
 
 const PlanOverview = ({ userId }) => {
-  let navigate = useNavigate()
-  const [checked, setChecked] = useState([])
+  const navigate = useNavigate()
   const [isPending, setIsPending] = useState(false)
   const { plans = [], dispatch } = usePlansContext()
 

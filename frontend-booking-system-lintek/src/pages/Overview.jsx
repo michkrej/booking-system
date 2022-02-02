@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material'
+import { Box, Container, Grid, Typography } from '@mui/material'
 import Nav from '../components/Nav'
 import Export from '../components/Export'
 import PlanOverview from '../components/PlanOverview'
@@ -8,19 +8,7 @@ import { firestore } from '../firebase/config'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 
-/* const plans = [
-  {
-    value: 1,
-    label: 'Normal-p'
-  },
-  {
-    value: 2,
-    label: 'Covid-p'
-  }
-] */
-
 const Overview = () => {
-  const [plans, setPlans] = useState([])
   const [isPending, setIsPending] = useState(true)
   const { user, authFinished } = useAuthContext()
   const { dispatch } = usePlansContext()
