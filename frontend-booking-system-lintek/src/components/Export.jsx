@@ -12,9 +12,11 @@ import {
 } from '@mui/material'
 import SelectInput from './SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
+import usePlansContext from '../hooks/usePlansContext'
 
-const Export = ({ plans }) => {
+const Export = () => {
   const [checked, setChecked] = useState(false)
+  const { plans, publicPlans } = usePlansContext()
   return (
     <Paper sx={{ padding: 2 }}>
       <Typography variant="h6">Export</Typography>
@@ -26,7 +28,7 @@ const Export = ({ plans }) => {
           </Grid>
           {checked && (
             <Grid item xs={12}>
-              <SelectInput options={plans} placeholder="Publika planer" multiple />
+              <SelectInput options={publicPlans} placeholder="Publika planer" multiple />
             </Grid>
           )}
         </Grid>
@@ -47,10 +49,6 @@ const Export = ({ plans }) => {
       </Box>
     </Paper>
   )
-}
-
-Export.propTypes = {
-  plans: PropTypes.array.isRequired
 }
 
 export default Export

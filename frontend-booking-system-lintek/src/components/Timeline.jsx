@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react'
 import Scheduler, { Resource } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
@@ -75,29 +76,47 @@ const Timeline = ({ currentLocation, store }) => {
     ) {
       formItems.push(
         {
-          label: { text: 'Bänkset' },
-          editorType: 'dxNumberBox',
-          dataField: 'bankset',
-          validationRules: validation
+          label: { text: 'Mat?' },
+          editorType: 'dxCheckBox',
+          dataField: 'food'
         },
         {
-          label: { text: 'Bord' },
+          label: { text: 'Alkohol?' },
+          editorType: 'dxCheckBox',
+          dataField: 'alcohol'
+        },
+        {
+          label: { text: 'Kårservice-inventarier (antal)' },
+          editorType: 'dxTextArea',
+          dataField: 'karservice',
+          colSpan: 2
+        },
+        /*         {
+          label: { text: 'Antal bord' },
           editorType: 'dxNumberBox',
           dataField: 'bord',
           validationRules: validation
         },
         {
-          label: { text: 'Grillar' },
+          label: { text: 'Antal grillar' },
           editorType: 'dxNumberBox',
           dataField: 'grillar',
           validationRules: validation
         },
-        { itemType: 'empty' },
+        { itemType: 'empty' }, */
         {
           colSpan: 2,
-          label: { text: 'Annat som behöver bokas' },
+          label: { text: 'Övriga inventarier för bokningen' },
           editorType: 'dxTextArea',
           dataField: 'annat'
+        },
+        {
+          colSpan: 2,
+          label: {
+            text: 'Länk till plats (om det är oklart)'
+          },
+          editorType: 'dxTextBox',
+          dataField: 'link'
         }
       )
       form.option('items', formItems)

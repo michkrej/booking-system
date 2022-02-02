@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 import { Button, Box, Typography, Paper, Grid, Divider } from '@mui/material'
 import SelectInput from './SelectInput'
 import SearchIcon from '@mui/icons-material/Search'
+import usePlansContext from '../hooks/usePlansContext'
 
-const CollisionsOverview = ({ plans }) => {
+const CollisionsOverview = () => {
   const [startCollision, setStartCollison] = useState('')
   const [endCollision, setEndCollision] = useState('')
+  const { plans, publicPlans } = usePlansContext()
 
   const handleStartCollison = (option) => {
     setStartCollison(option)
@@ -31,7 +33,7 @@ const CollisionsOverview = ({ plans }) => {
             </Grid>
             <Grid item xs={12}>
               <SelectInput
-                options={plans}
+                options={publicPlans}
                 handleChange={handleEndCollision}
                 placeholder="Publika planer"
                 value={endCollision}
@@ -53,7 +55,5 @@ const CollisionsOverview = ({ plans }) => {
     </Paper>
   )
 }
-
-CollisionsOverview.propTypes = { plans: PropTypes.array }
 
 export default CollisionsOverview

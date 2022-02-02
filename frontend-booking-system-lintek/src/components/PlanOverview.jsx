@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Button,
   Box,
   Typography,
   List,
@@ -17,38 +16,58 @@ import AddIcon from '@mui/icons-material/Add'
 import { Link } from 'react-router-dom'
 import { firestore } from '../firebase/config'
 import { useNavigate } from 'react-router-dom'
+import LoadingButton from '@mui/lab/LoadingButton'
+import usePlansContext from '../hooks/usePlansContext'
 
-const PlanOverview = ({ plans }) => {
+const PlanOverview = ({ userId }) => {
   let navigate = useNavigate()
   const [checked, setChecked] = useState([])
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value)
-    const newChecked = [...checked]
-
-    if (currentIndex === -1) {
-      newChecked.push(value)
-    } else {
-      newChecked.splice(currentIndex, 1)
-    }
-
-    setChecked(newChecked)
-  }
+  const [isPending, setIsPending] = useState(false)
+  const { plans = [], dispatch } = usePlansContext()
 
   const createNewPlan = async () => {
     const name = window.prompt('Vad ska din ny plan heta?')
+    setIsPending(true)
     try {
-      //TODO - add user id
-      const res = await firestore.collection('plans').add({ label: name })
+      const res = await firestore.collection('plans').add({ label: name, userId, public: false })
       navigate(`/booking/${res.id}`)
+      setIsPending(false)
     } catch (e) {
       console.log(e)
+      setIsPending(false)
+    }
+  }
+
+  const deletePlan = async (planValue) => {
+    try {
+      await firestore.collection('plans').doc(planValue).delete()
+      dispatch({
+        type: 'DELETE',
+        payload: {
+          value: planValue
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const togglePublic = async (plan) => {
+    try {
+      const newState = !plan.public
+      dispatch({
+        type: 'UPDATE',
+        payload: { ...plan, public: newState }
+      })
+      await firestore.collection('plans').doc(plan.value).update({ public: newState })
+    } catch (error) {
+      console.log(error)
     }
   }
 
   return (
     <Paper sx={{ padding: 2 }}>
-      <Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Typography variant="h6">Planeringar</Typography>
         <Divider />
         <List>
@@ -60,10 +79,14 @@ const PlanOverview = ({ plans }) => {
                   <>
                     <Checkbox
                       edge="end"
-                      onChange={handleToggle(plan.value)}
-                      checked={checked.indexOf(plan.value) !== -1}
+                      onChange={() => togglePublic(plan)}
+                      checked={plan.public}
                     />
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => deletePlan(plan.value)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </>
@@ -79,16 +102,23 @@ const PlanOverview = ({ plans }) => {
             )
           })}
         </List>
-        <Button variant="contained" startIcon={<AddIcon />} fullWidth onClick={createNewPlan}>
+        <LoadingButton
+          onClick={createNewPlan}
+          loading={isPending}
+          loadingPosition="start"
+          startIcon={<AddIcon />}
+          variant="contained"
+          fullWidth
+        >
           Skapa ny
-        </Button>
+        </LoadingButton>
       </Box>
     </Paper>
   )
 }
 
 PlanOverview.propTypes = {
-  plans: PropTypes.array.isRequired
+  userId: PropTypes.string
 }
 
 export default PlanOverview

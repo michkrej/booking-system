@@ -17,7 +17,7 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "rules": { "react-in-jsx-scope": "off" },
+  "rules": { "react-in-jsx-scope": "off", "no-unused-vars": "warn" },
   "settings": {
     "react": {
       "version": "detect"

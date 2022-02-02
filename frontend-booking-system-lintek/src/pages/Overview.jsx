@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Box, Container, Grid, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material'
 import Nav from '../components/Nav'
 import Export from '../components/Export'
 import PlanOverview from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
 import { firestore } from '../firebase/config'
+import useAuthContext from '../hooks/useAuthContext'
+import usePlansContext from '../hooks/usePlansContext'
 
 /* const plans = [
   {
@@ -19,27 +21,31 @@ import { firestore } from '../firebase/config'
 
 const Overview = () => {
   const [plans, setPlans] = useState([])
+  const [isPending, setIsPending] = useState(true)
+  const { user, authFinished } = useAuthContext()
+  const { dispatch } = usePlansContext()
 
   useEffect(() => {
     const getPlans = async () => {
-      firestore
-        .collection('plans')
-        .where('userId', '==', 'UdNEI3S5q6NZ9ebMUYdQ1B6Mgsg1') //TODO change to varaible
-        .get()
-        .then((snapshot) => {
-          if (snapshot.empty) {
-            console.log('No events to load')
-          } else {
-            let results = []
-            snapshot.docs.forEach((doc) => {
-              results.push({ value: doc.id, ...doc.data() })
-            })
-            setPlans(results)
-          }
+      setIsPending(true)
+      try {
+        const ref = firestore.collection('plans')
+        const snapshotPersonal = await ref.where('userId', '==', user.uid).get()
+        const snapshotPublic = await ref
+          .where('userId', '!=', user.uid)
+          .where('public', '==', true)
+          .get()
+        const personalPlans = snapshotPersonal.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
+        const publicPlans = snapshotPublic.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
+        dispatch({
+          type: 'LOAD',
+          payload: { plans: personalPlans, publicPlans: publicPlans }
         })
-        .catch((error) => {
-          console.log('Error getting documents: ', error)
-        })
+        setIsPending(false)
+      } catch (error) {
+        console.log(error)
+        setIsPending(false)
+      }
     }
 
     getPlans()
@@ -48,19 +54,25 @@ const Overview = () => {
   return (
     <Container>
       <Nav />
-      <Typography variant="h4" align="center" mt={8}>
-        Hej NAME, <br /> välkommen till systemet för bokningsplanering!
-      </Typography>
-      <Box mt={6}>
-        <Grid container maxWidth="xs" spacing={2}>
-          <Grid item md={6} xs={12}>
-            <PlanOverview plans={plans} />
-            <CollisionsOverview plans={plans} />
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <Export plans={plans} />
-          </Grid>
-        </Grid>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        {!isPending && authFinished && (
+          <>
+            <Typography variant="h4" align="center" mt={8}>
+              Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
+            </Typography>
+            <Box mt={6}>
+              <Grid container maxWidth="xs" spacing={2}>
+                <Grid item md={6} xs={12}>
+                  <PlanOverview userId={user.uid} />
+                  <CollisionsOverview />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Export />
+                </Grid>
+              </Grid>
+            </Box>
+          </>
+        )}
       </Box>
     </Container>
   )
