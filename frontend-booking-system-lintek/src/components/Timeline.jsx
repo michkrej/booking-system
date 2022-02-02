@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react'
-import Scheduler, { Resource } from 'devextreme-react/scheduler'
+import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
 import { data, rooms, locations } from '../utils/data'
-const currentDate = new Date('2021-04-26T16:30:00.000Z')
+const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
 
 const Timeline = ({ currentLocation, store }) => {
@@ -71,7 +71,7 @@ const Timeline = ({ currentLocation, store }) => {
     let formItems = form.option('items')
     if (
       !formItems.find(function (i) {
-        return i.dataField === ('bankset' || 'bord' || 'grillar' || 'annat')
+        return i.dataField === ('food' || 'alcohol' || 'karservice' || 'annat' || 'link')
       })
     ) {
       formItems.push(
@@ -143,17 +143,17 @@ const Timeline = ({ currentLocation, store }) => {
         views={views}
         defaultCurrentView="timelineDay"
         defaultCurrentDate={currentDate}
-        height={580}
         groups={groups}
         cellDuration={120}
         firstDayOfWeek={1}
         startDayHour={8}
-        endDayHour={20}
+        endDayHour={24}
         editing={groups[0] !== 'locationId'}
         onAppointmentFormOpening={onAppointmentFormOpening}
       >
         <Resource dataSource={locations} fieldExpr="locationId" label="Plats" />
         <Resource dataSource={filteredRooms} fieldExpr="roomId" label="Del" allowMultiple={true} />
+        <Scrolling mode="virtual" />
       </Scheduler>
     </>
   )
