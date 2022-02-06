@@ -15,6 +15,8 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
   const filterRooms = () => {
     if (currentLocation) {
       const tempRooms = rooms.filter((room) => room.locationId === currentLocation.id)
+      tempRooms.sort((a, b) => (a.text > b.text ? 1 : -1))
+      console.log(tempRooms)
       setFilteredRooms(tempRooms)
       return tempRooms
     } else {

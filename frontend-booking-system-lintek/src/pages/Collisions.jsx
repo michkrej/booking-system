@@ -18,6 +18,9 @@ const Item = styled('div')(() => ({
   width: '100%'
 }))
 
+/*
+ * TODO: Kunna hantera krockar mellan korridorer och specifika salar.
+ */
 const findCollisions = (events, personalPlanId) => {
   const result = []
   const personalPlan = events.filter((event) => event.planId === personalPlanId)
