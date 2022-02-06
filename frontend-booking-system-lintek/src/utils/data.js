@@ -10,18 +10,6 @@ const colors = {
   Annat: '#74867c'
 }
 
-export const data = [
-  {
-    text: 'Testing',
-    committeeId: 1,
-    roomId: 1,
-    locationId: 1,
-    eventId: 1,
-    startDate: new Date('2021-04-26T16:30:00.000Z'),
-    endDate: new Date('2021-04-26T20:30:00.000Z')
-  }
-]
-
 export const committees = [
   {
     text: 'STABEN',
@@ -95,43 +83,36 @@ export const rooms = [
   {
     text: 'U1',
     id: 1,
-    locationId: 1,
-    color: colors['C-huset']
+    locationId: 1
   },
   {
     text: 'U3',
     id: 2,
-    locationId: 1,
-    color: colors['C-huset']
+    locationId: 1
   },
   {
     text: 'R44',
     id: 3,
-    locationId: 3,
-    color: colors['Key-huset']
+    locationId: 3
   },
   {
     text: 'R14',
     id: 4,
-    locationId: 4,
-    color: colors['C-huset']
+    locationId: 4
   },
   {
     text: 'S-korridoren',
     id: 5,
-    locationId: 1,
-    color: colors['C-huset']
+    locationId: 1
   },
   {
     text: 'A1',
     id: 6,
-    locationId: 2,
-    color: colors.Utomhus
+    locationId: 2
   },
   {
     text: 'A2',
     id: 7,
-    locationId: 2,
-    color: colors.Utomhus
+    locationId: 2
   }
 ]

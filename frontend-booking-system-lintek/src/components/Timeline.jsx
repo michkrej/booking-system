@@ -2,11 +2,13 @@
 import { useState, useEffect } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import { data, rooms, locations, committees } from '../utils/data'
+import { rooms, locations, committees } from '../utils/data'
+import useAuthContext from '../hooks/useAuthContext'
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
 
 const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
+  const { user } = useAuthContext()
   const [filteredRooms, setFilteredRooms] = useState(rooms)
   const [groups, setGroups] = useState(['locationId', showCommittee])
 
@@ -135,6 +137,13 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
     form.repaint()
   }
 
+  const onContentReady = (e) => {
+    const res = document.getElementsByClassName('dx-scheduler-appointment-horizontal')
+    for (var i = 0; i < res.length; i++) {
+      res[i].style.backgroundColor = committees[user.committeeId - 1].color
+    }
+  }
+
   const scheduleHeight = filteredRooms.length > 5 ? 1000 : filteredRooms.length * 250
   return (
     <>
@@ -152,7 +161,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
         endDayHour={24}
         editing={edit ? groups[0] !== 'locationId' : false}
         onAppointmentFormOpening={onAppointmentFormOpening}
-        Auto
+        onContentReady={!showCommittee ? onContentReady : undefined}
       >
         <Resource
           dataSource={locations}
