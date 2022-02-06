@@ -11,6 +11,7 @@ import usePlansContext from '../hooks/usePlansContext'
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
   const { user, authFinished } = useAuthContext()
+  const { plans } = usePlansContext()
   const { dispatch } = usePlansContext()
 
   useEffect(() => {
@@ -35,8 +36,9 @@ const Overview = () => {
         setIsPending(false)
       }
     }
-
-    getPlans()
+    if (!plans) {
+      getPlans()
+    }
   }, [])
 
   return (
