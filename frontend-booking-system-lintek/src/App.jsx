@@ -11,6 +11,7 @@ import Booking from './pages/Booking'
 import Signup from './pages/Signup'
 import Overview from './pages/Overview'
 import RequireAuth from './components/RequireAuth'
+import Collisions from './pages/Collisions'
 
 export const primary = '#E1007A'
 
@@ -49,6 +50,7 @@ function App() {
                 />
                 <Route element={<RequireAuth />}>
                   <Route exact path="/booking/:id" element={<Booking />} />
+                  <Route exact path="/collisions/:id" element={<Collisions />} />
                   <Route exact path="/overview" element={<Overview />} />
                 </Route>
                 <Route

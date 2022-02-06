@@ -28,7 +28,7 @@ const PlansContextProvider = ({ children }) => {
     publicPlans: undefined
   })
 
-  console.log(state)
+  //console.log(state)
   return <PlansContext.Provider value={{ ...state, dispatch }}>{children}</PlansContext.Provider>
 }
 

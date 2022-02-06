@@ -1,6 +1,6 @@
 import { createContext, useReducer, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { auth } from '../firebase/config'
+import { auth, firestore } from '../firebase/config'
 
 export const AuthContext = createContext()
 export const authReducer = (state, action) => {
@@ -23,8 +23,28 @@ const AuthContextProvider = ({ children }) => {
   })
 
   useEffect(() => {
-    const unsibscribe = auth.onAuthStateChanged((user) => {
-      dispatch({ type: 'AUTH_READY', payload: user })
+    const unsibscribe = auth.onAuthStateChanged(async (user) => {
+      const dataRes = []
+      const ref = firestore.collection('userDetails')
+      const data = await ref.where('userId', '==', user.uid).get()
+      data.docs.forEach((doc) => dataRes.push(doc.data()))
+      if (dataRes.length > 0) {
+        dispatch({
+          type: 'AUTH_READY',
+          payload: {
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            committeeId: dataRes[0].committeeId
+          }
+        })
+      } else {
+        dispatch({
+          type: 'AUTH_READY',
+          payload: {}
+        })
+      }
       unsibscribe()
     })
   }, [])

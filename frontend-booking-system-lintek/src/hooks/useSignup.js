@@ -8,7 +8,7 @@ const useSignup = () => {
   const [error, setError] = useState()
   const { dispatch } = useAuthContext()
 
-  const signup = async (email, password, displayName, commitee) => {
+  const signup = async (email, password, displayName, committee) => {
     setError(undefined)
     setIsPending(true)
     try {
@@ -20,17 +20,18 @@ const useSignup = () => {
 
       await res.user.updateProfile({ displayName })
       await firestore.collection('userDetails').add({
-        commitee,
+        committeeId: committee,
         userId: res.user.uid
       })
 
       dispatch({
         type: 'LOGIN',
         payload: {
+          uid: res.user.uid,
           displayName: res.user.displayName,
           email: res.user.email,
           emailVerified: res.user.emailVerified,
-          commitee
+          committeeId: committee
         }
       })
       if (!isCancelled) {

@@ -26,7 +26,7 @@ const useLogin = () => {
             displayName: res.user.displayName,
             email: res.user.email,
             emailVerified: res.user.emailVerified,
-            committee: dataRes[0].commitee
+            committeeId: dataRes[0].committeeId
           }
         })
       } else {

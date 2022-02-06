@@ -13,7 +13,7 @@ const colors = {
 export const data = [
   {
     text: 'Testing',
-    assigneeId: 1,
+    committeeId: 1,
     roomId: 1,
     locationId: 1,
     eventId: 1,
@@ -22,7 +22,7 @@ export const data = [
   }
 ]
 
-export const assignees = [
+export const committees = [
   {
     text: 'STABEN',
     id: 1,
