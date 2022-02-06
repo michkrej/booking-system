@@ -66,7 +66,7 @@ export const locations = [
 const RoomsC = [
   {
     text: 'U-korridoren',
-    id: 2,
+    id: 1,
     locationId: 1
   },
   {
@@ -452,26 +452,4 @@ const RoomsC = [
   }
 ]
 
-export const rooms = [
-  ...RoomsC,
-  {
-    text: 'R44',
-    id: 3,
-    locationId: 3
-  },
-  {
-    text: 'R14',
-    id: 4,
-    locationId: 4
-  },
-  {
-    text: 'A1',
-    id: 6,
-    locationId: 2
-  },
-  {
-    text: 'A2',
-    id: 7,
-    locationId: 2
-  }
-]
+export const rooms = [...RoomsC]

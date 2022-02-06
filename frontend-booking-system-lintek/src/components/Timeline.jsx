@@ -2,34 +2,20 @@
 import { useState, useEffect } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import { rooms, locations, committees } from '../utils/data'
+import { locations, committees } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
 
-const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
+const Timeline = ({ currentLocation, store, edit, showCommittee, rooms, setRooms }) => {
   const { user } = useAuthContext()
-  const [filteredRooms, setFilteredRooms] = useState(rooms)
+  // const [filteredRooms, setFilteredRooms] = useState(rooms)
   const [groups, setGroups] = useState(['locationId', showCommittee])
-
-  const filterRooms = () => {
-    if (currentLocation) {
-      const tempRooms = rooms.filter((room) => room.locationId === currentLocation.id)
-      tempRooms.sort((a, b) => (a.text > b.text ? 1 : -1))
-      console.log(tempRooms)
-      setFilteredRooms(tempRooms)
-      return tempRooms
-    } else {
-      setFilteredRooms(rooms)
-      return rooms
-    }
-  }
 
   /** TODO
    * När vyn där allt grupperas på hus går det att välja alla lokaler oavsett var man klickar
    */
   useEffect(() => {
-    filterRooms()
     if (!currentLocation) {
       setGroups(['locationId'])
     } else {
@@ -66,7 +52,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
     let room = form.itemOption('mainGroup.roomId')
     room.editorOptions = {
       ...room.editorOptions,
-      dataSource: filteredRooms,
+      dataSource: rooms,
       searchEnabled: true
     }
     room.validationRules = validation
@@ -95,19 +81,6 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
           dataField: 'karservice',
           colSpan: 2
         },
-        /*         {
-          label: { text: 'Antal bord' },
-          editorType: 'dxNumberBox',
-          dataField: 'bord',
-          validationRules: validation
-        },
-        {
-          label: { text: 'Antal grillar' },
-          editorType: 'dxNumberBox',
-          dataField: 'grillar',
-          validationRules: validation
-        },
-        { itemType: 'empty' }, */
         {
           colSpan: 2,
           label: { text: 'Övriga inventarier för bokningen' },
@@ -146,7 +119,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
     }
   }
 
-  const scheduleHeight = filteredRooms.length > 5 ? 1000 : filteredRooms.length * 250
+  const scheduleHeight = rooms.length > 5 ? 1000 : rooms.length * 250
   return (
     <>
       <Scheduler
@@ -171,7 +144,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
           label="Plats"
           useColorAsDefault={!showCommittee}
         />
-        <Resource dataSource={filteredRooms} fieldExpr="roomId" label="Del" allowMultiple={true} />
+        <Resource dataSource={rooms} fieldExpr="roomId" label="Del" allowMultiple={true} />
         {showCommittee && (
           <Resource
             dataSource={committees}
@@ -190,7 +163,9 @@ Timeline.propTypes = {
   currentLocation: PropTypes.object,
   store: PropTypes.object,
   edit: PropTypes.bool,
-  showCommittee: PropTypes.bool
+  showCommittee: PropTypes.bool,
+  rooms: PropTypes.array,
+  setRooms: PropTypes.func
 }
 
 export default Timeline

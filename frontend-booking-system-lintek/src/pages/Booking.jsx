@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Grid, Stack } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import SelectInput from '../components/SelectInput'
@@ -8,7 +8,7 @@ import Button from '../components/Button'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
 
-import { locations } from '../utils/data'
+import { locations, rooms } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
 
 const Item = styled('div')(() => ({
@@ -79,15 +79,53 @@ const customDataSource = (user) => {
 }
 
 export default function Booking() {
-  const [currentLocation, setCurrentLocation] = useState()
   const { user } = useAuthContext()
-  const handleChange = (selectedOption) => {
+  const [currentLocation, setCurrentLocation] = useState()
+  const [currentRoom, setCurrentRoom] = useState()
+  const [filteredRooms, setFilteredRooms] = useState(rooms)
+
+  const handleLocationChange = (selectedOption) => {
     setCurrentLocation(selectedOption)
   }
+  const handleRoomChange = (selectedOption) => {
+    setCurrentRoom(selectedOption)
+  }
+
   const handleClick = () => {
     let res = window.prompt('Vad vill du spara detta som?', '')
     console.log(res)
   }
+
+  useEffect(() => {
+    const filterRooms = () => {
+      if (currentRoom) {
+        const temp = rooms.filter(
+          (room) =>
+            room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
+        )
+        temp.sort((a, b) => (a.text > b.text ? 1 : -1))
+        setFilteredRooms(temp)
+      } else {
+        setFilteredRooms(rooms)
+      }
+    }
+
+    filterRooms()
+  }, [currentRoom])
+
+  useEffect(() => {
+    const filterRooms = () => {
+      if (currentLocation) {
+        const tempRooms = rooms.filter((room) => room.locationId === currentLocation.id)
+        tempRooms.sort((a, b) => (a.text > b.text ? 1 : -1))
+        setFilteredRooms(tempRooms)
+      } else {
+        setFilteredRooms(rooms)
+      }
+    }
+
+    filterRooms()
+  }, [currentLocation])
 
   return (
     <Container maxWidth="false">
@@ -98,20 +136,36 @@ export default function Booking() {
             <Item>
               <SelectInput
                 options={locations}
-                handleChange={handleChange}
+                handleChange={handleLocationChange}
                 current={currentLocation}
                 placeholder="Filtrera på plats"
               />
             </Item>
-            <Item>
-              <Button variant="contained" handleClick={handleClick}>
-                Spara
-              </Button>
-            </Item>
+            {currentLocation && (
+              <Item>
+                <SelectInput
+                  options={rooms
+                    .filter(
+                      (room) =>
+                        room.text.includes('korridoren') && room.locationId === currentLocation.id
+                    )
+                    .map(({ id, text }) => ({ value: id, label: text }))}
+                  handleChange={handleRoomChange}
+                  current={currentRoom}
+                  placeholder="Filtrera på del"
+                />
+              </Item>
+            )}
           </Stack>
         </Grid>
         <Grid item xs={10}>
-          <Timeline currentLocation={currentLocation} store={customDataSource(user)} edit />
+          <Timeline
+            currentLocation={currentLocation}
+            store={customDataSource(user)}
+            rooms={filteredRooms}
+            setRooms={setFilteredRooms}
+            edit
+          />
         </Grid>
       </Grid>
     </Container>
