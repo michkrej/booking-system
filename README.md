@@ -13,3 +13,9 @@ Because of time constrains the project currently uses React (w. context and hook
 - [ ] Can export excel sheet with own bookings
 - [ ] Can export excel sheet with all colliding bookings between users
 - [ ] Can exprt all bookings across all users
+
+### Useful commands
+
+Horizontal scroll: shift + scroll
+New appointment: Enter or Space
+Delete appointment: Delete
