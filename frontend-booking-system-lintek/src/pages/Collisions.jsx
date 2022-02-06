@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Container, Grid, Stack } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import SelectInput from '../components/SelectInput'
@@ -6,7 +6,7 @@ import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
-import { locations } from '../utils/data'
+import { locations, rooms } from '../utils/data'
 import { useParams } from 'react-router-dom'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
@@ -69,12 +69,53 @@ const customDataSource = (planIds) => {
 }
 
 export default function Collisions() {
+  const [filteredRooms, setFilteredRooms] = useState(rooms)
   const [currentLocation, setCurrentLocation] = useState()
+  const [currentRoom, setCurrentRoom] = useState()
   const { id } = useParams()
 
   const handleChange = (selectedOption) => {
     setCurrentLocation(selectedOption)
   }
+
+  const handleRoomChange = (selectedOption) => {
+    setCurrentRoom(selectedOption)
+  }
+
+  useEffect(() => {
+    const filterRooms = () => {
+      if (currentRoom) {
+        const temp = rooms.filter(
+          (room) =>
+            room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
+        )
+        //temp.sort((a, b) => (a.text > b.text ? 1 : -1))
+        setFilteredRooms(temp)
+      } else {
+        const temp = rooms
+        //temp.sort((a, b) => (a.text > b.text ? 1 : -1))
+        setFilteredRooms(temp)
+      }
+    }
+
+    filterRooms()
+  }, [currentRoom])
+
+  useEffect(() => {
+    const filterRooms = () => {
+      if (currentLocation) {
+        const tempRooms = rooms.filter((room) => room.locationId === currentLocation.id)
+        //tempRooms.sort((a, b) => (a.text > b.text ? 1 : -1))
+        setFilteredRooms(tempRooms)
+      } else {
+        const temp = rooms
+        //temp.sort((a, b) => (a.text > b.text ? 1 : -1))
+        setFilteredRooms(temp)
+      }
+    }
+
+    filterRooms()
+  }, [currentLocation])
 
   return (
     <Container maxWidth="false">
@@ -90,10 +131,30 @@ export default function Collisions() {
                 placeholder="Filtrera på plats"
               />
             </Item>
+            {currentLocation && (
+              <Item>
+                <SelectInput
+                  options={rooms
+                    .filter(
+                      (room) =>
+                        room.text.includes('korridoren') && room.locationId === currentLocation.id
+                    )
+                    .map(({ id, text }) => ({ value: id, label: text }))}
+                  handleChange={handleRoomChange}
+                  current={currentRoom}
+                  placeholder="Filtrera på del"
+                />
+              </Item>
+            )}
           </Stack>
         </Grid>
         <Grid item xs={10}>
-          <Timeline currentLocation={currentLocation} store={customDataSource(id)} showCommittee />
+          <Timeline
+            currentLocation={currentLocation}
+            store={customDataSource(id)}
+            rooms={filteredRooms}
+            showCommittee
+          />
         </Grid>
       </Grid>
     </Container>

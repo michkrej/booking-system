@@ -103,10 +103,12 @@ export default function Booking() {
           (room) =>
             room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
         )
-        temp.sort((a, b) => (a.text > b.text ? 1 : -1))
+        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
         setFilteredRooms(temp)
       } else {
-        setFilteredRooms(rooms)
+        const temp = rooms
+        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
+        setFilteredRooms(temp)
       }
     }
 
@@ -116,11 +118,13 @@ export default function Booking() {
   useEffect(() => {
     const filterRooms = () => {
       if (currentLocation) {
-        const tempRooms = rooms.filter((room) => room.locationId === currentLocation.id)
-        tempRooms.sort((a, b) => (a.text > b.text ? 1 : -1))
-        setFilteredRooms(tempRooms)
+        const temp = rooms.filter((room) => room.locationId === currentLocation.id)
+        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
+        setFilteredRooms(temp)
       } else {
-        setFilteredRooms(rooms)
+        const temp = rooms
+        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
+        setFilteredRooms(temp)
       }
     }
 

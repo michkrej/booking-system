@@ -4,17 +4,15 @@ import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
 import { locations, committees } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
+
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
-const views = ['timelineDay', 'timelineWeek']
+const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
 
-const Timeline = ({ currentLocation, store, edit, showCommittee, rooms, setRooms }) => {
+// TODO: Add better horizontal scrolling
+const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) => {
   const { user } = useAuthContext()
-  // const [filteredRooms, setFilteredRooms] = useState(rooms)
-  const [groups, setGroups] = useState(['locationId', showCommittee])
+  const [groups, setGroups] = useState(['locationId', 'committeeId'])
 
-  /** TODO
-   * När vyn där allt grupperas på hus går det att välja alla lokaler oavsett var man klickar
-   */
   useEffect(() => {
     if (!currentLocation) {
       setGroups(['locationId'])
@@ -57,6 +55,10 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms, setRooms
     }
     room.validationRules = validation
     room.colSpan = 2
+
+    if (!showCommittee) {
+      form.updateData('committeeId', user.committeeId)
+    }
 
     let formItems = form.option('items')
     if (
@@ -108,52 +110,49 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms, setRooms
       ...location.editorOptions,
       readOnly: true
     }
-    form.endUpdate()
-    form.repaint()
-  }
 
-  const onContentReady = (e) => {
-    const res = document.getElementsByClassName('dx-scheduler-appointment-horizontal')
-    for (var i = 0; i < res.length; i++) {
-      res[i].style.backgroundColor = committees[user.committeeId - 1].color
+    let committee = form.itemOption('mainGroup.committeeId')
+    committee.editorOptions = {
+      ...committee.editorOptions,
+      readOnly: true
     }
+    committee.colSpan = 2
+
+    form.endUpdate()
+    //form.repaint()
   }
 
-  const scheduleHeight = rooms.length > 5 ? 1000 : rooms.length * 250
+  const scheduleHeight = currentLocation ? rooms.length * 150 : 800
   return (
     <>
       <Scheduler
-        timeZone="America/Los_Angeles"
+        timeZone="Europe/Stockholm"
         dataSource={store}
         views={views}
         defaultCurrentView="timelineDay"
         defaultCurrentDate={currentDate}
         groups={groups}
-        height={scheduleHeight}
-        cellDuration={60}
+        cellDuration={120}
         firstDayOfWeek={1}
         startDayHour={8}
         endDayHour={24}
         editing={edit ? groups[0] !== 'locationId' : false}
         onAppointmentFormOpening={onAppointmentFormOpening}
-        onContentReady={!showCommittee ? onContentReady : undefined}
+        showAllDayPanel={false}
+        height={scheduleHeight}
+        maxAppointmentsPerCell={2}
+        crossScrollingEnabled={true}
       >
         <Resource
-          dataSource={locations}
-          fieldExpr="locationId"
-          label="Plats"
-          useColorAsDefault={!showCommittee}
+          dataSource={committees}
+          fieldExpr="committeeId"
+          label="Fadderi"
+          useColorAsDefault={true}
         />
+        <Resource dataSource={locations} fieldExpr="locationId" label="Plats" />
         <Resource dataSource={rooms} fieldExpr="roomId" label="Del" allowMultiple={true} />
-        {showCommittee && (
-          <Resource
-            dataSource={committees}
-            fieldExpr="committeeId"
-            label="Fadderi"
-            useColorAsDefault={true}
-          />
-        )}
-        <Scrolling mode="virtual" />
+
+        <Scrolling mode="standard" />
       </Scheduler>
     </>
   )
@@ -164,8 +163,7 @@ Timeline.propTypes = {
   store: PropTypes.object,
   edit: PropTypes.bool,
   showCommittee: PropTypes.bool,
-  rooms: PropTypes.array,
-  setRooms: PropTypes.func
+  rooms: PropTypes.array
 }
 
 export default Timeline
