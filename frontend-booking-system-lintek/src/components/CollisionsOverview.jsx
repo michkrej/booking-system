@@ -18,6 +18,12 @@ const CollisionsOverview = () => {
     setEndCollision(option)
   }
 
+  const formatCollisions = () => {
+    let res = ''
+    endCollision.forEach((collision) => (res += `+${collision.value}`))
+    return res
+  }
+
   return (
     <Paper sx={{ padding: 2, marginTop: 2 }}>
       <Box>
@@ -49,11 +55,7 @@ const CollisionsOverview = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             startIcon={<SearchIcon />}
-            onClick={() =>
-              navigate(
-                `/collisions/${startCollision.value}${endCollision.map((end) => '+' + end.value)}`
-              )
-            }
+            onClick={() => navigate(`/collisions/${startCollision.value}${formatCollisions()}`)}
           >
             Hitta
           </Button>

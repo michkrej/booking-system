@@ -135,8 +135,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
     form.repaint()
   }
 
-  const scheduleHeight =
-    filteredRooms.length === rooms.length ? rooms.length * 150 : filteredRooms.length * 200
+  const scheduleHeight = filteredRooms.length > 5 ? 1000 : filteredRooms.length * 150
   return (
     <>
       <Scheduler

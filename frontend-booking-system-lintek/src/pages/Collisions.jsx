@@ -18,25 +18,27 @@ const Item = styled('div')(() => ({
   width: '100%'
 }))
 
-const findCollisions = (array) => {
-  const test = []
-
-  array.forEach((elem, i) => {
-    array.forEach((s, y) => {
+const findCollisions = (events, personalPlan) => {
+  const result = []
+  events.forEach((ev1, i) => {
+    events.forEach((ev2, y) => {
       if (i !== y) {
-        const first = moment.range(new Date(elem.startDate), new Date(elem.endDate))
-        const firstRooms = elem.roomId
-        const second = moment.range(new Date(s.startDate), new Date(s.endDate))
-        const secondRooms = s.roomId
-
+        const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
+        const firstRooms = ev1.roomId
+        const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
+        const secondRooms = ev2.roomId
         const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
-        if (first.overlaps(second) && clashingRooms) {
-          test.push(elem)
+        if (
+          firstEvent.overlaps(secondEvent) &&
+          clashingRooms &&
+          (ev1.planId === personalPlan || ev2.planId === personalPlan)
+        ) {
+          result.push(ev1)
         }
       }
     })
   })
-  return test
+  return result
 }
 
 const customDataSource = (planIds) => {
@@ -57,7 +59,7 @@ const customDataSource = (planIds) => {
               results.push({ id: doc.id, ...doc.data() })
             })
 
-            return findCollisions(results)
+            return findCollisions(results, planIds.split('+')[0])
           }
         })
     }
