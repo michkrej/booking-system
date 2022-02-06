@@ -29,7 +29,7 @@ const CollisionsOverview = () => {
       <Box>
         <Typography variant="h6">Hitta krockar</Typography>
         <Divider />
-        <Box component="form">
+        <Box>
           <Grid container spacing={2}>
             <Grid item xs={12} mt={2}>
               <SelectInput

@@ -25,9 +25,12 @@ const PlanOverview = ({ userId }) => {
   const { plans = [], dispatch } = usePlansContext()
 
   const createNewPlan = async () => {
-    const name = window.prompt('Vad ska din ny plan heta?')
     setIsPending(true)
     try {
+      const name = window.prompt('Vad ska din ny plan heta?')
+      if (name.length === 0) {
+        throw new Error('Du måste ange ett namn för planen')
+      }
       const res = await firestore.collection('plans').add({ label: name, userId, public: false })
       navigate(`/booking/${res.id}`)
       setIsPending(false)
