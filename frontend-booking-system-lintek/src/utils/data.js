@@ -1,15 +1,3 @@
-const colors = {
-  'C-huset': '#8ecd3c',
-  Utomhus: '#8E44AD',
-  'A-huset': '#2ecc71',
-  Studenthuset: '#f39c12',
-  'B-huset': '#ffd15c',
-  Hemklassrum: '#e9e7fc',
-  'Key-huset': '#00a86b',
-  Kårallen: '#26619c',
-  Annat: '#74867c'
-}
-
 export const committees = [
   {
     text: 'STABEN',
@@ -50,31 +38,27 @@ export const committees = [
 
 export const locations = [
   {
-    text: 'C-huset',
     id: 1,
-    color: colors['C-huset'],
     value: 1,
+    text: 'C-huset',
     label: 'C-huset'
   },
   {
-    text: 'Utomhus',
     id: 2,
-    color: colors.Utomhus,
     value: 2,
+    text: 'Utomhus',
     label: 'Utomhus'
   },
   {
-    text: 'A-huset',
     id: 3,
-    color: colors['A-huset'],
     value: 3,
+    text: 'A-huset',
     label: 'A-huset'
   },
   {
-    text: 'Key-huset',
     id: 4,
-    color: colors['Key-huset'],
     value: 4,
+    text: 'Key-huset',
     label: 'Key-huset'
   }
 ]

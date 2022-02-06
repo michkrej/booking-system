@@ -23,7 +23,7 @@ const AuthContextProvider = ({ children }) => {
   })
 
   useEffect(() => {
-    const unsibscribe = auth.onAuthStateChanged(async (user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       const dataRes = []
       const ref = firestore.collection('userDetails')
       const data = await ref.where('userId', '==', user.uid).get()
@@ -45,7 +45,7 @@ const AuthContextProvider = ({ children }) => {
           payload: {}
         })
       }
-      unsibscribe()
+      unsubscribe()
     })
   }, [])
 
