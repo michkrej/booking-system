@@ -22,6 +22,7 @@ const useLogin = () => {
         dispatch({
           type: 'LOGIN',
           payload: {
+            uid: res.user.uid,
             displayName: res.user.displayName,
             email: res.user.email,
             emailVerified: res.user.emailVerified,
