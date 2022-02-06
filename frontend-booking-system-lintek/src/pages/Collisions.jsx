@@ -18,21 +18,20 @@ const Item = styled('div')(() => ({
   width: '100%'
 }))
 
-const findCollisions = (events, personalPlan) => {
+const findCollisions = (events, personalPlanId) => {
   const result = []
-  events.forEach((ev1, i) => {
-    events.forEach((ev2, y) => {
-      if (i !== y) {
-        const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
-        const firstRooms = ev1.roomId
-        const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
-        const secondRooms = ev2.roomId
-        const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
-        if (
-          firstEvent.overlaps(secondEvent) &&
-          clashingRooms &&
-          (ev1.planId === personalPlan || ev2.planId === personalPlan)
-        ) {
+  const personalPlan = events.filter((event) => event.planId === personalPlanId)
+  const publicPlans = events.filter((event) => event.planId !== personalPlanId)
+  personalPlan.forEach((ev1) => {
+    publicPlans.forEach((ev2) => {
+      const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
+      const firstRooms = ev1.roomId
+      const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
+      const secondRooms = ev2.roomId
+      const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
+      if (firstEvent.overlaps(secondEvent) && clashingRooms) {
+        result.push(ev2)
+        if (!result.includes(ev1)) {
           result.push(ev1)
         }
       }
@@ -84,7 +83,7 @@ export default function Collisions() {
               <SelectInput
                 options={locations}
                 handleChange={handleChange}
-                current={currentLocation}
+                personal={currentLocation}
                 placeholder="Filtrera på plats"
               />
             </Item>

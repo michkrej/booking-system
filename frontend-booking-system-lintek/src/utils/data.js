@@ -26,22 +26,37 @@ export const committees = [
   {
     text: 'STABEN',
     id: 1,
-    color: '#727bd2'
+    color: '#9B1111'
   },
   {
     text: 'URF',
     id: 2,
-    color: '#32c9ed'
+    color: '#97EA1F'
   },
   {
     text: 'YF',
     id: 3,
-    color: '#2a7ee4'
+    color: '#000000'
   },
   {
     text: 'MPiRE',
     id: 4,
-    color: '#7b49d3'
+    color: '#990A0A'
+  },
+  {
+    text: 'TackLING',
+    id: 5,
+    color: '#9D25CA'
+  },
+  {
+    text: 'CM',
+    id: 5,
+    color: '#0A741A'
+  },
+  {
+    text: 'GF',
+    id: 5,
+    color: '#A10E41'
   }
 ]
 
