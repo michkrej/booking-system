@@ -7,7 +7,11 @@ export const plansReducer = (state, action) => {
     case 'CREATE':
       return { ...state, plans: [...state.plans, action.payload] }
     case 'LOAD':
-      return { ...state, plans: action.payload.plans, publicPlans: action.payload.publicPlans }
+      return {
+        ...state,
+        plans: action.payload.plans,
+        publicPlans: action.payload.publicPlans
+      }
     case 'DELETE':
       return { ...state, plans: state.plans.filter((plan) => action.payload.value !== plan.value) }
     case 'UPDATE':

@@ -7,12 +7,12 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-  Checkbox,
   Paper,
   Divider
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
+import PublicIcon from '@mui/icons-material/Public'
 import { Link } from 'react-router-dom'
 import { firestore } from '../firebase/config'
 import { useNavigate } from 'react-router-dom'
@@ -25,11 +25,18 @@ const PlanOverview = ({ userId }) => {
   const { plans = [], dispatch } = usePlansContext()
 
   const createNewPlan = async () => {
-    const name = window.prompt('Vad ska din ny plan heta?')
     setIsPending(true)
     try {
+      const name = window.prompt('Vad ska din ny plan heta?')
+      if (name.length === 0) {
+        throw new Error('Du måste ange ett namn för planen')
+      }
       const res = await firestore.collection('plans').add({ label: name, userId, public: false })
       navigate(`/booking/${res.id}`)
+      dispatch({
+        type: 'CREATE',
+        payload: res
+      })
       setIsPending(false)
     } catch (e) {
       console.log(e)
@@ -76,11 +83,14 @@ const PlanOverview = ({ userId }) => {
                 key={plan.value}
                 secondaryAction={
                   <>
-                    <Checkbox
+                    <IconButton
                       edge="end"
-                      onChange={() => togglePublic(plan)}
-                      checked={plan.public}
-                    />
+                      aria-label="delete"
+                      onClick={() => togglePublic(plan)}
+                      sx={{ color: plan.public ? 'pink' : '' }}
+                    >
+                      <PublicIcon />
+                    </IconButton>
                     <IconButton
                       edge="end"
                       aria-label="delete"

@@ -2,13 +2,15 @@
 import { useState, useEffect } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import { data, rooms, locations } from '../utils/data'
+import { rooms, locations, committees } from '../utils/data'
+import useAuthContext from '../hooks/useAuthContext'
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek']
 
-const Timeline = ({ currentLocation, store }) => {
+const Timeline = ({ currentLocation, store, edit, showCommittee }) => {
+  const { user } = useAuthContext()
   const [filteredRooms, setFilteredRooms] = useState(rooms)
-  const [groups, setGroups] = useState(['locationId'])
+  const [groups, setGroups] = useState(['locationId', showCommittee])
 
   const filterRooms = () => {
     if (currentLocation) {
@@ -135,24 +137,47 @@ const Timeline = ({ currentLocation, store }) => {
     form.repaint()
   }
 
+  const onContentReady = (e) => {
+    const res = document.getElementsByClassName('dx-scheduler-appointment-horizontal')
+    for (var i = 0; i < res.length; i++) {
+      res[i].style.backgroundColor = committees[user.committeeId - 1].color
+    }
+  }
+
+  const scheduleHeight = filteredRooms.length > 5 ? 1000 : filteredRooms.length * 250
   return (
     <>
       <Scheduler
         timeZone="America/Los_Angeles"
-        dataSource={data /*store*/}
+        dataSource={store}
         views={views}
         defaultCurrentView="timelineDay"
         defaultCurrentDate={currentDate}
         groups={groups}
-        cellDuration={120}
+        height={scheduleHeight}
+        cellDuration={60}
         firstDayOfWeek={1}
         startDayHour={8}
         endDayHour={24}
-        editing={groups[0] !== 'locationId'}
+        editing={edit ? groups[0] !== 'locationId' : false}
         onAppointmentFormOpening={onAppointmentFormOpening}
+        onContentReady={!showCommittee ? onContentReady : undefined}
       >
-        <Resource dataSource={locations} fieldExpr="locationId" label="Plats" />
+        <Resource
+          dataSource={locations}
+          fieldExpr="locationId"
+          label="Plats"
+          useColorAsDefault={!showCommittee}
+        />
         <Resource dataSource={filteredRooms} fieldExpr="roomId" label="Del" allowMultiple={true} />
+        {showCommittee && (
+          <Resource
+            dataSource={committees}
+            fieldExpr="committeeId"
+            label="Fadderi"
+            useColorAsDefault={true}
+          />
+        )}
         <Scrolling mode="virtual" />
       </Scheduler>
     </>
@@ -161,7 +186,9 @@ const Timeline = ({ currentLocation, store }) => {
 
 Timeline.propTypes = {
   currentLocation: PropTypes.object,
-  store: PropTypes.object
+  store: PropTypes.object,
+  edit: PropTypes.bool,
+  showCommittee: PropTypes.bool
 }
 
 export default Timeline

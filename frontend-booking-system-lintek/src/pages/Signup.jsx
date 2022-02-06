@@ -16,11 +16,11 @@ import {
 import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
-import { assignees } from '../utils/data'
+import { committees } from '../utils/data'
 import { useLinkStyles } from './Login'
 
 export default function Signup() {
-  const [commitee, setCommitee] = useState('')
+  const [committee, setcommittee] = useState('')
   const classes = useLinkStyles()
   const { signup } = useSignup()
   const handleSubmit = (event) => {
@@ -31,12 +31,12 @@ export default function Signup() {
       data.get('email'),
       data.get('password'),
       `${data.get('firstName')} ${data.get('lastName')}`,
-      commitee
+      committee
     )
   }
 
   const handleChange = (event) => {
-    setCommitee(event.target.value)
+    setcommittee(event.target.value)
   }
 
   return (
@@ -102,9 +102,9 @@ export default function Signup() {
             <Grid item xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>Fadderi</InputLabel>
-                <Select label="Fadderi" value={commitee} onChange={handleChange} id="commitee">
-                  {assignees.map((assignee) => (
-                    <MenuItem key={assignee.text} value={assignee.text}>
+                <Select label="Fadderi" value={committee} onChange={handleChange} id="committee">
+                  {committees.map((assignee) => (
+                    <MenuItem key={assignee.text} value={assignee.id}>
                       {assignee.text}
                     </MenuItem>
                   ))}
