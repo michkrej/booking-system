@@ -50,12 +50,12 @@ export const committees = [
   },
   {
     text: 'CM',
-    id: 5,
+    id: 6,
     color: '#0A741A'
   },
   {
     text: 'GF',
-    id: 5,
+    id: 7,
     color: '#A10E41'
   }
 ]
