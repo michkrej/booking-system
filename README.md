@@ -9,7 +9,7 @@ Because of time constrains the project currently uses React (w. context and hook
 - [x] Can log in
 - [x] Can create bookings for the entierity of nolle-p that are saved to db and can be accessed later
 - [x] Bookings can be modified and deleted and these changes are reflected in the db
-- [ ] Can see collisions with other ppls bookings in graphic overview
+- [x] Can see collisions with other ppls bookings in graphic overview
 - [ ] Can export excel sheet with own bookings
 - [ ] Can export excel sheet with all colliding bookings between users
 - [ ] Can exprt all bookings across all users
