@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles'
 import SelectInput from '../components/SelectInput'
 import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
-import Button from '../components/Button'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
 
@@ -89,11 +88,6 @@ export default function Booking() {
   }
   const handleRoomChange = (selectedOption) => {
     setCurrentRoom(selectedOption)
-  }
-
-  const handleClick = () => {
-    let res = window.prompt('Vad vill du spara detta som?', '')
-    console.log(res)
   }
 
   useEffect(() => {
