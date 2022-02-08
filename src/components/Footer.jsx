@@ -7,7 +7,7 @@ const Copyright = () => {
   return (
     <Typography variant="body2" color="text.secondary">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://booking-system-1377d.web.app">
         Bokningsplanering
       </Link>{' '}
       {new Date().getFullYear()}

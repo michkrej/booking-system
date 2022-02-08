@@ -22,7 +22,7 @@ import usePlansContext from '../hooks/usePlansContext'
 const PlanOverview = ({ userId }) => {
   const navigate = useNavigate()
   const [isPending, setIsPending] = useState(false)
-  const { plans = [], dispatch } = usePlansContext()
+  const { plans, dispatch } = usePlansContext()
 
   const createNewPlan = async () => {
     setIsPending(true)
