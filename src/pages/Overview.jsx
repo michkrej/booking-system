@@ -38,30 +38,26 @@ const Overview = () => {
     getPlans()
   }, [])
 
-  console.log(authFinished)
-
   return (
     <Container>
       <Nav />
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        {authFinished && (
-          <>
-            <Typography variant="h4" align="center" mt={8}>
-              Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
-            </Typography>
-            <Box mt={6}>
-              <Grid container maxWidth="xs" spacing={2}>
-                <Grid item md={6} xs={12}>
-                  <PlanOverview userId={user.uid} />
-                  <CollisionsOverview />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Export />
-                </Grid>
+        <>
+          <Typography variant="h4" align="center" mt={8}>
+            Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
+          </Typography>
+          <Box mt={6}>
+            <Grid container maxWidth="xs" spacing={2}>
+              <Grid item md={6} xs={12}>
+                <PlanOverview userId={user.uid} />
+                <CollisionsOverview />
               </Grid>
-            </Box>
-          </>
-        )}
+              <Grid item md={6} xs={12}>
+                <Export />
+              </Grid>
+            </Grid>
+          </Box>
+        </>
       </Box>
     </Container>
   )
