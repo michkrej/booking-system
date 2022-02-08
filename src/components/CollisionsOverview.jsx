@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 const CollisionsOverview = () => {
   const [startCollision, setStartCollison] = useState('')
   const [endCollision, setEndCollision] = useState('')
-  const { plans, publicPlans } = usePlansContext()
+  const { plans = [], publicPlans } = usePlansContext()
   const navigate = useNavigate()
 
   const handleStartCollison = (option) => {

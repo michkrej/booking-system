@@ -11,7 +11,7 @@ import usePlansContext from '../hooks/usePlansContext'
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
   const { user, authFinished } = useAuthContext()
-  const { plans, dispatch } = usePlansContext()
+  const { dispatch } = usePlansContext()
 
   useEffect(() => {
     const getPlans = async () => {
@@ -38,11 +38,13 @@ const Overview = () => {
     getPlans()
   }, [])
 
+  console.log(authFinished)
+
   return (
     <Container>
       <Nav />
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        {!isPending && authFinished && (
+        {authFinished && (
           <>
             <Typography variant="h4" align="center" mt={8}>
               Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
