@@ -27,7 +27,7 @@ export default function Nav() {
         <Toolbar>
           <img src={heart} style={{ width: '40px', marginRight: '1em' }} />
           <Typography variant="h6" className={classes.title}>
-            Bokningsystem
+            Bokningssystem
           </Typography>
           <Box>
             <Button onClick={() => navigate('/overview')}>Översikt</Button>
