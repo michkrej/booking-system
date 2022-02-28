@@ -10,6 +10,8 @@ import { locations, rooms } from '../utils/data'
 import { useParams } from 'react-router-dom'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
+import { sortAlphabetically } from '../utils/helpers'
+import { sortedLocations } from './Booking'
 
 const moment = extendMoment(Moment)
 
@@ -89,28 +91,25 @@ export default function Collisions() {
           (room) =>
             room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
         )
-        //temp.sort((a, b) => (a.text > b.text ? 1 : -1))
-        setFilteredRooms(temp)
+        setFilteredRooms(sortAlphabetically(temp))
       } else {
         const temp = rooms
-        //temp.sort((a, b) => (a.text > b.text ? 1 : -1))
-        setFilteredRooms(temp)
+        setFilteredRooms(sortAlphabetically(temp))
       }
     }
 
     filterRooms()
   }, [currentRoom])
 
+  /** TODO: This doesnät seem correct - two functions that do the same thing? */
   useEffect(() => {
     const filterRooms = () => {
       if (currentLocation) {
         const tempRooms = rooms.filter((room) => room.locationId === currentLocation.id)
-        //tempRooms.sort((a, b) => (a.text > b.text ? 1 : -1))
-        setFilteredRooms(tempRooms)
+        setFilteredRooms(sortAlphabetically(tempRooms))
       } else {
         const temp = rooms
-        //temp.sort((a, b) => (a.text > b.text ? 1 : -1))
-        setFilteredRooms(temp)
+        setFilteredRooms(sortAlphabetically(temp))
       }
     }
 
@@ -125,7 +124,7 @@ export default function Collisions() {
           <Stack>
             <Item>
               <SelectInput
-                options={locations}
+                options={sortedLocations}
                 handleChange={handleChange}
                 personal={currentLocation}
                 placeholder="Filtrera på plats"

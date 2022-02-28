@@ -9,6 +9,10 @@ import { firestore } from '../firebase/config'
 
 import { locations, rooms } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
+import { sortAlphabetically } from '../utils/helpers'
+
+export const sortedLocations = sortAlphabetically(Object.values(locations))
+export const sortedRooms = sortAlphabetically(rooms)
 
 const Item = styled('div')(() => ({
   marginBottom: '1em',
@@ -90,18 +94,19 @@ export default function Booking() {
     setCurrentRoom(selectedOption)
   }
 
+  
+
   useEffect(() => {
     const filterRooms = () => {
+      console.log(currentRoom)
       if (currentRoom) {
-        const temp = rooms.filter(
+        const temp = sortAlphabetically(rooms.filter(
           (room) =>
             room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
-        )
-        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
+        ))
         setFilteredRooms(temp)
       } else {
-        const temp = rooms
-        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
+        const temp = sortedRooms
         setFilteredRooms(temp)
       }
     }
@@ -112,18 +117,18 @@ export default function Booking() {
   useEffect(() => {
     const filterRooms = () => {
       if (currentLocation) {
-        const temp = rooms.filter((room) => room.locationId === currentLocation.id)
-        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
+        const temp = sortAlphabetically(rooms.filter((room) => room.locationId === currentLocation.id))
         setFilteredRooms(temp)
       } else {
-        const temp = rooms
-        //temp.sort((a, b) => (a.text > b.text ? 1 : b.text > a.text ? -1 : 0))
+        const temp = sortedRooms
         setFilteredRooms(temp)
       }
     }
 
     filterRooms()
   }, [currentLocation])
+
+  const sortedLocations = Object.values(locations).sort((a, b) => (a.text > b.text ? 1 : (a.text === b.text ? 0 : -1)))
 
   return (
     <Container maxWidth="false">
@@ -133,7 +138,7 @@ export default function Booking() {
           <Stack>
             <Item>
               <SelectInput
-                options={locations}
+                options={sortedLocations}
                 handleChange={handleLocationChange}
                 current={currentLocation}
                 placeholder="Filtrera på plats"
@@ -142,7 +147,7 @@ export default function Booking() {
             {currentLocation && (
               <Item>
                 <SelectInput
-                  options={rooms
+                  options={sortedRooms
                     .filter(
                       (room) =>
                         room.text.includes('korridoren') && room.locationId === currentLocation.id

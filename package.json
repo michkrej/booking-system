@@ -20,7 +20,10 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-select": "^5.2.2",
-    "source-map-explorer": "^2.5.2"
+    "replace-in-file": "^6.3.2",
+    "source-map-explorer": "^2.5.2",
+    "uuid": "^8.3.2",
+    "yargs": "^17.3.1"
   },
   "scripts": {
     "start": "react-scripts start",

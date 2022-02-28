@@ -2,11 +2,13 @@
 import { useState, useEffect } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import { locations, committees } from '../utils/data'
+import { committees } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
+import { sortedLocations } from '../pages/Booking'
 
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
+
 
 // TODO: Add better horizontal scrolling
 const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) => {
@@ -149,7 +151,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
           label="Fadderi"
           useColorAsDefault={true}
         />
-        <Resource dataSource={locations} fieldExpr="locationId" label="Plats" />
+        <Resource dataSource={sortedLocations} fieldExpr="locationId" label="Plats" />
         <Resource dataSource={rooms} fieldExpr="roomId" label="Del" allowMultiple={true} />
 
         <Scrolling mode="standard" />
