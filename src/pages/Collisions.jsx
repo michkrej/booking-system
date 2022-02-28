@@ -22,6 +22,7 @@ const Item = styled('div')(() => ({
 
 /*
  * TODO: Kunna hantera krockar mellan korridorer och specifika salar.
+         Hantera krockar med grillantal 
  */
 const findCollisions = (events, personalPlanId) => {
   const result = []
@@ -40,6 +41,7 @@ const findCollisions = (events, personalPlanId) => {
           result.push(ev1)
         }
       }
+
     })
   })
   return result

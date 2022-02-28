@@ -44,7 +44,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
       label: {
         text: 'Aktivitet'
       },
-      validationRules: [{ type: 'required' }]
+      validationRules: validation
     }
     mainGroupItems[1].items[0].label.text = 'Starttid'
     mainGroupItems[1].items[2].label.text = 'Sluttid'
@@ -65,7 +65,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
     let formItems = form.option('items')
     if (
       !formItems.find(function (i) {
-        return i.dataField === ('food' || 'alcohol' || 'karservice' || 'annat' || 'link')
+        return i.dataField === ('food' || 'alcohol' || 'bankset' || 'bord' || 'grillar' || 'bardiskar' || 'annat' || 'link')
       })
     ) {
       formItems.push(
@@ -80,16 +80,38 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
           dataField: 'alcohol'
         },
         {
-          label: { text: 'Kårservice-inventarier (antal)' },
-          editorType: 'dxTextArea',
-          dataField: 'karservice',
-          colSpan: 2
+          label: { text: 'Kårallen - bänkset' },
+          editorType: 'dxNumberBox',
+          dataField: 'bankset',
+          colSpan: 1,
+          validationRules: validation
         },
         {
-          colSpan: 2,
+          label: { text: 'Kårallen - bord' },
+          editorType: 'dxNumberBox',
+          dataField: 'bord',
+          colSpan: 1,
+          validationRules: validation
+        },
+        {
+          label: { text: 'Kårallen - grillar' },
+          editorType: 'dxNumberBox',
+          dataField: 'grillar',
+          colSpan: 1,
+          validationRules: validation
+        },
+        {
+          label: { text: 'Kårallen - bardiskar' },
+          editorType: 'dxNumberBox',
+          dataField: 'bardiskar',
+          colSpan: 1,
+          validationRules: validation
+        },
+        {
           label: { text: 'Övriga inventarier för bokningen' },
           editorType: 'dxTextArea',
-          dataField: 'annat'
+          dataField: 'annat',
+          colSpan: 2,
         },
         {
           colSpan: 2,
