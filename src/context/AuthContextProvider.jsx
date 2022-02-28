@@ -24,7 +24,7 @@ const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      console.log(user)
+      // console.log(user)
       if (user) {
         const dataRes = []
         const ref = firestore.collection('userDetails')
@@ -53,7 +53,7 @@ const AuthContextProvider = ({ children }) => {
     })
   }, [])
 
-  console.log(state)
+  // console.log(state)
   return <AuthContext.Provider value={{ ...state, dispatch }}>{children}</AuthContext.Provider>
 }
 

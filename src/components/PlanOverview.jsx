@@ -39,7 +39,7 @@ const PlanOverview = ({ userId }) => {
       })
       setIsPending(false)
     } catch (e) {
-      console.log(e)
+      console.log(e.message)
       setIsPending(false)
     }
   }
@@ -54,7 +54,7 @@ const PlanOverview = ({ userId }) => {
         }
       })
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
@@ -67,7 +67,7 @@ const PlanOverview = ({ userId }) => {
       })
       await firestore.collection('plans').doc(plan.value).update({ public: newState })
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 

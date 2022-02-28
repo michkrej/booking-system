@@ -53,11 +53,10 @@ const customDataSource = (user) => {
         planId: window.location.pathname.split('/')[2],
         committeeId: user.committeeId
       }
-      console.log(doc)
       try {
         firestore.collection('events').add(doc)
       } catch (e) {
-        console.log(e)
+        console.log(e.message)
       }
       return values
     },
@@ -65,7 +64,7 @@ const customDataSource = (user) => {
       try {
         firestore.collection('events').doc(id).delete()
       } catch (e) {
-        console.log(e)
+        console.log(e.message)
       }
     },
     update: (id, values) => {
@@ -75,7 +74,7 @@ const customDataSource = (user) => {
           ...values
         })
       } catch (e) {
-        console.log(e)
+        console.log(e.message)
       }
     }
   })
@@ -98,7 +97,6 @@ export default function Booking() {
 
   useEffect(() => {
     const filterRooms = () => {
-      console.log(currentRoom)
       if (currentRoom) {
         const temp = sortAlphabetically(rooms.filter(
           (room) =>
