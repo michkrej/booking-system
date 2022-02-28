@@ -42,6 +42,7 @@ const findCollisions = (events, personalPlanId) => {
       }
     })
   })
+  console.log(result)
   return result
 }
 

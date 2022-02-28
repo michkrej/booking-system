@@ -1,6 +1,9 @@
+import { useEffect } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box } from '@mui/material'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { locale, loadMessages } from "devextreme/localization";
+import seMessages from "devextreme/localization/messages/sv.json";
 import useAuthContext from './hooks/useAuthContext'
 
 import 'devextreme/dist/css/dx.light.css'
@@ -28,6 +31,13 @@ export const theme = createTheme({
 
 function App() {
   const { authFinished, user } = useAuthContext()
+
+  useEffect(() => {
+    loadMessages(seMessages);
+    locale(navigator.language);
+  }, [])
+  
+
   return (
     <ThemeProvider theme={theme}>
       <Box
