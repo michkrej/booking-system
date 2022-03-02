@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import { Link } from '@mui/material'
+import Link from '@mui/material/Link'
 
 const Copyright = () => {
   return (
     <Typography variant="body2" color="text.secondary">
       {'Copyright © '}
-      <Link color="inherit" href="https://booking-system-1377d.web.app">
+      <Link color="inherit" href="https://bokningsplanering.com">
         Bokningsplanering
       </Link>{' '}
       {new Date().getFullYear()}

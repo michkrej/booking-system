@@ -1,15 +1,14 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
-  Paper,
-  Divider
-} from '@mui/material'
+import Divider from '@mui/material/Divider'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import Paper from '@mui/material/Paper'
+import IconButton from '@mui/material/IconButton'
+
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import PublicIcon from '@mui/icons-material/Public'

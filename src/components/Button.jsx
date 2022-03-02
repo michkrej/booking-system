@@ -1,4 +1,4 @@
-import { Button as MuiButton } from '@mui/material'
+import { default as MuiButton } from '@mui/material/Button'
 import PropTypes from 'prop-types'
 
 const Button = ({ variant, handleClick, children }) => {

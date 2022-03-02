@@ -1,6 +1,13 @@
-import { Avatar, Button, TextField, Box, Typography, Container, Grid } from '@mui/material'
-import { makeStyles } from '@mui/styles'
 import { Link } from 'react-router-dom'
+import makeStyles from '@mui/styles/makeStyles'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+
 
 import heart from '../images/LinTek_hjarta.png'
 import useLogin from '../hooks/useLogin'
@@ -14,7 +21,7 @@ export const useLinkStyles = makeStyles({
 
 export default function Login() {
   const classes = useLinkStyles()
-  const { login } = useLogin()
+  const { login, error } = useLogin()
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -37,6 +44,7 @@ export default function Login() {
         <Typography component="h2" variant="h5">
           Logga in
         </Typography>
+        {error && <p style={{color: 'red'}}>{error}</p>}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"

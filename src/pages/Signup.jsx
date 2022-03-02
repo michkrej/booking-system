@@ -1,18 +1,16 @@
 import { useState } from 'react'
 import useSignup from '../hooks/useSignup'
-import {
-  Avatar,
-  Button,
-  TextField,
-  Box,
-  Typography,
-  Container,
-  Select,
-  MenuItem,
-  Grid,
-  FormControl,
-  InputLabel
-} from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
@@ -22,7 +20,7 @@ import { useLinkStyles } from './Login'
 export default function Signup() {
   const [committee, setcommittee] = useState('')
   const classes = useLinkStyles()
-  const { signup } = useSignup()
+  const { signup, error } = useSignup()
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -55,6 +53,7 @@ export default function Signup() {
         <Typography component="h2" variant="h5">
           Skapa konto
         </Typography>
+        {error && <p style={{color: 'red'}}>{error}</p>}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

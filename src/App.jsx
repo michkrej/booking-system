@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box } from '@mui/material'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
@@ -10,11 +10,12 @@ import 'devextreme/dist/css/dx.light.css'
 
 import Footer from './components/Footer'
 import Login from './pages/Login'
-import Booking from './pages/Booking'
-import Signup from './pages/Signup'
-import Overview from './pages/Overview'
 import RequireAuth from './components/RequireAuth'
-import Collisions from './pages/Collisions'
+
+const Booking = lazy(() => import('./pages/Booking'))
+const Overview = lazy(() => import('./pages/Overview'))
+const Signup = lazy(() => import('./pages/Signup'))
+const Collisions = lazy(() => import('./pages/Collisions'))
 
 export const primary = '#E1007A'
 
@@ -52,6 +53,7 @@ function App() {
         <Container component="main" pb={5} sx={{ flexGrow: 1 }} maxWidth="xl">
           {authFinished && (
             <BrowserRouter>
+              <Suspense fallback={<div>Loading...</div>}>
               <Routes>
                 <Route exact path="/" element={user ? <Navigate to="/overview" /> : <Login />} />
                 <Route
@@ -73,6 +75,7 @@ function App() {
                   }
                 />
               </Routes>
+              </Suspense>
             </BrowserRouter>
           )}
         </Container>
