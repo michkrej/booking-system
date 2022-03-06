@@ -6,7 +6,7 @@ import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
-import { locations, rooms } from '../utils/data'
+import { corridorsC, locations, rooms, roomsC } from '../utils/data'
 import { useParams } from 'react-router-dom'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
@@ -20,6 +20,8 @@ const Item = styled('div')(() => ({
   width: '100%'
 }))
 
+const corridorIds = Object.values(corridorsC).map((corridor) => corridor.id)
+
 /*
  * TODO: Kunna hantera krockar mellan korridorer och specifika salar.
          Hantera krockar med grillantal 
@@ -30,18 +32,37 @@ const findCollisions = (events, personalPlanId) => {
   const publicPlans = events.filter((event) => event.planId !== personalPlanId)
   personalPlan.forEach((ev1) => {
     publicPlans.forEach((ev2) => {
-      const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
-      const firstRooms = ev1.roomId
-      const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
-      const secondRooms = ev2.roomId
-      const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
-      if (firstEvent.overlaps(secondEvent) && clashingRooms) {
-        result.push(ev2)
-        if (!result.includes(ev1)) {
-          result.push(ev1)
+      // Skit i att göra saker om de eventen inte sker inom samma område
+      if (ev1.locationId === ev2.locationId) {
+        // Hantera krockar i C-huset
+        let hasSameCorridor = false
+        if (ev1.locationId === locations['C-huset'].id) {
+          // hitta korridorerna
+          const bookedRooms1 = roomsC.filter((room) => ev1.roomId.includes(room.id))
+          const bookedRooms2 = roomsC.filter((room) => ev2.roomId.includes(room.id))
+          const bookedCorridors1 = ev1.roomId.filter((id) => corridorIds.includes(id))
+          const bookedCorridors2 = ev2.roomId.filter((id) => corridorIds.includes(id))
+
+          if (
+            bookedRooms1.some((room) => bookedCorridors2.includes(room.corridorId)) ||
+            bookedRooms2.some((room) => bookedCorridors1.includes(room.corridorId))
+          ) {
+            hasSameCorridor = true
+          }
+        }
+
+        const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
+        const firstRooms = ev1.roomId
+        const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
+        const secondRooms = ev2.roomId
+        const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
+        if (firstEvent.overlaps(secondEvent) && (clashingRooms || hasSameCorridor)) {
+          result.push(ev2)
+          if (!result.includes(ev1)) {
+            result.push(ev1)
+          }
         }
       }
-
     })
   })
   return result
@@ -64,7 +85,6 @@ const customDataSource = (planIds) => {
             snapshot.docs.forEach((doc) => {
               results.push({ id: doc.id, ...doc.data() })
             })
-
             return findCollisions(results, planIds.split('+')[0])
           }
         })

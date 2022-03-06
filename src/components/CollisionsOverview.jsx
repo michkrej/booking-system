@@ -29,8 +29,6 @@ const CollisionsOverview = () => {
     return res
   }
 
-  console.log(endCollision, startCollision)
-
   return (
     <Paper sx={{ padding: 2, marginTop: 2 }}>
       <Box>
