@@ -16,8 +16,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
-  const { user, authFinished } = useAuthContext()
-  const { plans, publicPlans, dispatch } = usePlansContext()
+  const { user } = useAuthContext()
+  const { dispatch } = usePlansContext()
 
   useEffect(() => {
     const getPlans = async () => {
