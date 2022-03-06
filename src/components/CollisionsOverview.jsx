@@ -11,8 +11,8 @@ import usePlansContext from '../hooks/usePlansContext'
 import { useNavigate } from 'react-router-dom'
 
 const CollisionsOverview = () => {
-  const [startCollision, setStartCollison] = useState('')
-  const [endCollision, setEndCollision] = useState('')
+  const [startCollision, setStartCollison] = useState()
+  const [endCollision, setEndCollision] = useState()
   const { plans = [], publicPlans } = usePlansContext()
   const navigate = useNavigate()
 
@@ -20,7 +20,7 @@ const CollisionsOverview = () => {
     setStartCollison(option)
   }
   const handleEndCollision = (option) => {
-    setEndCollision(option)
+    setEndCollision(option.length === 0 ? undefined : option)
   }
 
   const formatCollisions = () => {
@@ -29,10 +29,12 @@ const CollisionsOverview = () => {
     return res
   }
 
+  console.log(endCollision, startCollision)
+
   return (
     <Paper sx={{ padding: 2, marginTop: 2 }}>
       <Box>
-        <Typography variant="h6">Hitta krockar</Typography>
+        <Typography variant="h6">HITTA KROCKAR</Typography>
         <Divider />
         <Box>
           <Grid container spacing={2}>
@@ -60,6 +62,7 @@ const CollisionsOverview = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             startIcon={<SearchIcon />}
+            disabled={endCollision && startCollision ? false : true}
             onClick={() => navigate(`/collisions/${startCollision.value}${formatCollisions()}`)}
           >
             Hitta

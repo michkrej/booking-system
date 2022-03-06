@@ -84,28 +84,24 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
           editorType: 'dxNumberBox',
           dataField: 'bankset',
           colSpan: 1,
-          validationRules: validation
         },
         {
           label: { text: 'Kårallen - bord' },
           editorType: 'dxNumberBox',
           dataField: 'bord',
           colSpan: 1,
-          validationRules: validation
         },
         {
           label: { text: 'Kårallen - grillar' },
           editorType: 'dxNumberBox',
           dataField: 'grillar',
           colSpan: 1,
-          validationRules: validation
         },
         {
           label: { text: 'Kårallen - bardiskar' },
           editorType: 'dxNumberBox',
           dataField: 'bardiskar',
           colSpan: 1,
-          validationRules: validation
         },
         {
           label: { text: 'Övriga inventarier för bokningen' },

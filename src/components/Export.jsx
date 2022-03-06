@@ -16,7 +16,7 @@ const Export = () => {
   const { plans, publicPlans } = usePlansContext()
   return (
     <Paper sx={{ padding: 2 }}>
-      <Typography variant="h6">Export (Ej implementerat)</Typography>
+      <Typography variant="h6">EXPORT (Ej implementerat)</Typography>
       <Divider />
       <Box component="form" mt={2}>
         <Grid container spacing={2}>

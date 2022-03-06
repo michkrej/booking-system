@@ -44,14 +44,21 @@ const PlanOverview = ({ userId }) => {
   }
 
   const deletePlan = async (planValue) => {
+    console.log(plans)
     try {
-      await firestore.collection('plans').doc(planValue).delete()
-      dispatch({
-        type: 'DELETE',
-        payload: {
-          value: planValue
-        }
-      })
+      if (
+        confirm(
+          `Vill du verkligen radera '${plans.find((plan) => plan.value === planValue).label}'`
+        )
+      ) {
+        await firestore.collection('plans').doc(planValue).delete()
+        dispatch({
+          type: 'DELETE',
+          payload: {
+            value: planValue
+          }
+        })
+      }
     } catch (error) {
       console.log(error.message)
     }
@@ -73,7 +80,7 @@ const PlanOverview = ({ userId }) => {
   return (
     <Paper sx={{ padding: 2 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6">Planeringar</Typography>
+        <Typography variant="h6">PLANERINGAR</Typography>
         <Divider />
         <List>
           {plans.map((plan) => {
@@ -86,7 +93,7 @@ const PlanOverview = ({ userId }) => {
                       edge="end"
                       aria-label="delete"
                       onClick={() => togglePublic(plan)}
-                      sx={{ color: plan.public ? 'pink' : '' }}
+                      sx={{ color: plan.public ? 'pink' : 'lightGrey' }}
                     >
                       <PublicIcon />
                     </IconButton>
