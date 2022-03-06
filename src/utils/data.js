@@ -7,7 +7,7 @@ export const committees = [
   {
     text: 'URF',
     id: '850e6ab4-e900-4f34-a593-0361bb0451a6',
-    color: '#97EA1F'
+    color: '#006400'
   },
   {
     text: 'YF',
