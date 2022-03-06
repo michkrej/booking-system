@@ -9,7 +9,6 @@ import { sortedLocations } from '../pages/Booking'
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
 
-
 // TODO: Add better horizontal scrolling
 const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) => {
   const { user } = useAuthContext()
@@ -65,7 +64,17 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
     let formItems = form.option('items')
     if (
       !formItems.find(function (i) {
-        return i.dataField === ('food' || 'alcohol' || 'bankset' || 'bord' || 'grillar' || 'bardiskar' || 'annat' || 'link')
+        return (
+          i.dataField ===
+          ('food' ||
+            'alcohol' ||
+            'bankset' ||
+            'bord' ||
+            'grillar' ||
+            'bardiskar' ||
+            'annat' ||
+            'link')
+        )
       })
     ) {
       formItems.push(
@@ -83,31 +92,31 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
           label: { text: 'Kårallen - bänkset' },
           editorType: 'dxNumberBox',
           dataField: 'bankset',
-          colSpan: 1,
+          colSpan: 1
         },
-        {
+        /*         {
           label: { text: 'Kårallen - bord' },
           editorType: 'dxNumberBox',
           dataField: 'bord',
           colSpan: 1,
-        },
+        }, */
         {
           label: { text: 'Kårallen - grillar' },
           editorType: 'dxNumberBox',
           dataField: 'grillar',
-          colSpan: 1,
+          colSpan: 1
         },
         {
           label: { text: 'Kårallen - bardiskar' },
           editorType: 'dxNumberBox',
           dataField: 'bardiskar',
-          colSpan: 1,
+          colSpan: 2
         },
         {
           label: { text: 'Övriga inventarier för bokningen' },
           editorType: 'dxTextArea',
           dataField: 'annat',
-          colSpan: 2,
+          colSpan: 2
         },
         {
           colSpan: 2,
