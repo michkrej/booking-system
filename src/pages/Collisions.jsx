@@ -16,10 +16,6 @@ const Item = styled('div')(() => ({
   width: '100%'
 }))
 
-/*
- * TODO: Kunna hantera krockar mellan korridorer och specifika salar.
-         Hantera krockar med grillantal 
- */
 const customDataSource = (planIds) => {
   return new CustomStore({
     key: 'id',
@@ -75,7 +71,6 @@ export default function Collisions() {
     filterRooms()
   }, [currentRoom])
 
-  /** TODO: This doesnät seem correct - two functions that do the same thing? */
   useEffect(() => {
     const filterRooms = () => {
       if (currentLocation) {

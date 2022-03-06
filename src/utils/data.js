@@ -101,6 +101,12 @@ export const locations = {
     value: '3b651c71-3202-47e8-8b94-d5ba7175b1d0',
     text: 'Övriga områden på campus',
     label: 'Övriga områden på campus'
+  },
+  'Utanför campus': {
+    id: '5185c29c-e9ca-41d0-92ad-ad851f3c4784',
+    value: '5185c29c-e9ca-41d0-92ad-ad851f3c4784',
+    text: 'Utanför campus',
+    label: 'Utanför campus'
   }
 }
 
@@ -1215,5 +1221,10 @@ export const rooms = [
   ...roomsStudenthuset,
   ...karhus,
   ...outsideCampus,
-  ...otherCampus
+  ...otherCampus,
+  {
+    text: 'Övrigt',
+    id: 'ead531c3-372c-4dd6-9280-2c9db28ddc38',
+    locationId: locations['Utanför campus'].id
+  }
 ]

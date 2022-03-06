@@ -9,7 +9,6 @@ import { sortedLocations } from '../pages/Booking'
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
 
-// TODO: Add better horizontal scrolling
 const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) => {
   const { user } = useAuthContext()
   const [groups, setGroups] = useState(['locationId', 'committeeId'])
@@ -128,7 +127,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
         {
           colSpan: 2,
           label: {
-            text: 'Länk till plats (om det är oklart)'
+            text: 'Google Maps länk till plats (t.ex. för hajk eller stadsvandring)'
           },
           editorType: 'dxTextBox',
           dataField: 'link'
@@ -158,7 +157,8 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
     //form.repaint()
   }
 
-  const scheduleHeight = currentLocation ? rooms.length * 150 : 800
+  const nRooms = rooms.length > 1 ? rooms.length : 6
+  const scheduleHeight = currentLocation ? nRooms * 150 : 800
   return (
     <>
       <Scheduler
@@ -176,7 +176,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
         onAppointmentFormOpening={onAppointmentFormOpening}
         showAllDayPanel={false}
         height={scheduleHeight}
-        maxAppointmentsPerCell={2}
+        //maxAppointmentsPerCell={2}
         crossScrollingEnabled={true}
       >
         <Resource
