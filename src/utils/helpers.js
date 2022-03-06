@@ -17,6 +17,7 @@ const collisionCorridorAndRoom = (ev1, ev2) => {
     const bookedCorridors1 = ev1.roomId.filter((id) => corridorIds.includes(id))
     const bookedCorridors2 = ev2.roomId.filter((id) => corridorIds.includes(id))
 
+    //Om ena bokat hela korridoren och den andra en enstaka sal
     if (
       bookedRooms1.some((room) => bookedCorridors2.includes(room.corridorId)) ||
       bookedRooms2.some((room) => bookedCorridors1.includes(room.corridorId))
@@ -33,12 +34,15 @@ const collisionsItems = (ev1, ev2) => {
   const maxBardiskar = 6
 
   const ev1Grillar = ev1?.grillar ?? 0
-  const ev1Bankset = ev1?.bankset ?? 0
+  const ev1Bankset = ev1?.['bankset-k'] ?? 0
+  const ev1BanksetHG = ev1?.['bankset-hg'] ?? 0
   const ev1Bardiskar = ev1?.bardiskar ?? 0
   const ev2Grillar = ev2?.grillar ?? 0
-  const ev2Bankset = ev2?.bankset ?? 0
+  const ev2Bankset = ev2?.['bankset-k'] ?? 0
+  const ev2BanksetHG = ev2?.['bankset-hg'] ?? 0
   const ev2Bardiskar = ev2?.bardiskar ?? 0
   if (ev1Bankset + ev2Bankset > maxBankset) return true
+  if (ev1BanksetHG + ev2BanksetHG > maxBankset) return true
   if (ev1Grillar + ev2Grillar > maxGrillar) return true
   if (ev1Bardiskar + ev2Bardiskar > maxBardiskar) return true
   return false

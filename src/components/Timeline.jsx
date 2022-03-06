@@ -68,7 +68,8 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
           i.dataField ===
           ('food' ||
             'alcohol' ||
-            'bankset' ||
+            'bankset-k' ||
+            'bankset-hg' ||
             'bord' ||
             'grillar' ||
             'bardiskar' ||
@@ -91,7 +92,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
         {
           label: { text: 'Kårallen - bänkset' },
           editorType: 'dxNumberBox',
-          dataField: 'bankset',
+          dataField: 'bankset-k',
           colSpan: 1
         },
         /*         {
@@ -110,6 +111,12 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
           label: { text: 'Kårallen - bardiskar' },
           editorType: 'dxNumberBox',
           dataField: 'bardiskar',
+          colSpan: 2
+        },
+        {
+          label: { text: 'HG - bänkset' },
+          editorType: 'dxNumberBox',
+          dataField: 'bankset-hg',
           colSpan: 2
         },
         {

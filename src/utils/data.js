@@ -48,11 +48,11 @@ export const locations = {
     text: 'C-huset',
     label: 'C-huset'
   },
-  Utomhus: {
+  'Områden på campus': {
     id: 'a52889bd-908a-4a60-b432-13b863ff3d0b',
     value: 'a52889bd-908a-4a60-b432-13b863ff3d0b',
-    text: 'Utomhus',
-    label: 'Utomhus'
+    text: 'Områden på campus',
+    label: 'Områden på campus'
   },
   'A-huset': {
     id: 'b1a8936a-94a8-4dba-8840-70fcbfda97a8',
@@ -1109,6 +1109,89 @@ const karhus = [
   }
 ]
 
+const outsideCampus = [
+  {
+    text: 'Område 1',
+    id: '360c706b-1cd6-4c97-b56c-d5693ef33ede',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 2',
+    id: 'a0516a49-397f-42f5-b19e-532e6b6ee009',
+    locationId: locations['Områden på campus'].id
+  },
+    {
+    text: 'Område 2',
+    id: '4c9b7d91-6543-4f4d-98a0-1c61505f8afe',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 5',
+    id: '540dfbb4-6eee-4fda-8ee9-8acbea85f863',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 5',
+    id: 'eabc897c-0000-4e62-9abb-8c26b6ceed1b',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 6',
+    id: '9e9f9cf2-99f1-4eac-8c2b-3618655379a8',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 7',
+    id: '54716e7c-b7fa-4c74-8d0e-145451a9274a',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 8',
+    id: '653be46c-6036-4ae4-9f49-1a9bba2eaf85',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 9',
+    id: '5a16aee9-7af8-4ff3-8a5e-dbfc8119fa73',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 10',
+    id: '29e76602-8bee-4de6-b1cd-334e6e88dcdf',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 11',
+    id: '7620439a-a54a-4447-a200-28dc5a852867',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 12',
+    id: '3c4f2e6f-8147-4043-bf7c-a8cb5891e868',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 13',
+    id: '2e0d2add-249c-4bfd-b884-7ef35665bacb',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 14',
+    id: '98930f4d-4c1b-4e3e-b07d-c26819cd7f07',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 15',
+    id: '09d597f8-a2c4-40f0-bd6a-3acdbb7d9b7e',
+    locationId: locations['Områden på campus'].id
+  },
+  {
+    text: 'Område 16',
+    id: '43071551-f1be-4ba1-a9bb-4c65099a25ae',
+    locationId: locations['Områden på campus'].id
+  },
+]
+
 const otherCampus = [
   {
     text: 'Zenit',
@@ -1131,5 +1214,6 @@ export const rooms = [
   ...roomsKey,
   ...roomsStudenthuset,
   ...karhus,
+  ...outsideCampus,
   ...otherCampus
 ]
