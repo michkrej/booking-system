@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import { committees } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
 import { sortedLocations } from '../pages/Booking'
+import { formatDate } from 'devextreme/localization'
+import { Grid } from '@mui/material'
 
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
@@ -157,6 +159,65 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
     //form.repaint()
   }
 
+  const renderAppointmentTooltip = ({ targetedAppointmentData }) => {
+    console.log(targetedAppointmentData)
+    return (
+      <Grid sx={{ textAlign: 'left', width: '60%', marginLeft: '1em' }}>
+        <Grid item>
+          <b>{targetedAppointmentData.text}</b>
+        </Grid>
+        <Grid item sx={{ fontSize: '0.8em' }}>
+          {formatDate(targetedAppointmentData.displayStartDate, 'shortTime')}
+          {' - '}
+          {formatDate(targetedAppointmentData.displayEndDate, 'shortTime')}
+        </Grid>
+        <div style={{ display: 'flex', fontSize: '0.8em' }}>
+          <Grid item xs={6}>
+            <div>Kårallen</div>
+            <div style={{ marginLeft: '1em' }}>
+              {targetedAppointmentData?.grillar && (
+                <div>Grillar: {targetedAppointmentData?.grillar ?? 0}</div>
+              )}
+              {targetedAppointmentData?.['bankset-k'] && (
+                <div>Bänkset: {targetedAppointmentData?.['bankset-k'] ?? 0}</div>
+              )}
+              {targetedAppointmentData?.bardiskar && (
+                <div>Bardiskar: {targetedAppointmentData?.bardiskar ?? 0}</div>
+              )}
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div>HG</div>
+            <div style={{ marginLeft: '1em' }}>
+              {targetedAppointmentData?.['bankset-HG'] && (
+                <div>Bänkset: {targetedAppointmentData?.['bankset-HG'] ?? 0}</div>
+              )}
+            </div>
+          </Grid>
+        </div>
+      </Grid>
+    )
+  }
+
+  const appointmentRender = ({ targetedAppointmentData }) => {
+    console.log(targetedAppointmentData)
+    return (
+      <div>
+        <div style={{ fontSize: '0.9em' }}>
+          <b>{targetedAppointmentData.text}</b>
+        </div>
+        <div style={{ fontSize: '0.8em' }}>
+          {committees.find((com) => com.id === targetedAppointmentData.committeeId).text}
+        </div>
+        <div style={{ fontSize: '0.8em' }}>
+          {formatDate(targetedAppointmentData.displayStartDate, 'shortTime')}
+          {' - '}
+          {formatDate(targetedAppointmentData.displayEndDate, 'shortTime')}
+        </div>
+      </div>
+    )
+  }
+
   const nRooms = rooms.length > 1 ? rooms.length : 6
   const scheduleHeight = currentLocation ? nRooms * 175 : 1000
   return (
@@ -174,6 +235,8 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
         endDayHour={24}
         editing={edit ? groups[0] !== 'locationId' : false}
         onAppointmentFormOpening={onAppointmentFormOpening}
+        appointmentTooltipRender={renderAppointmentTooltip}
+        appointmentRender={appointmentRender}
         showAllDayPanel={false}
         height={scheduleHeight}
         crossScrollingEnabled={true}
