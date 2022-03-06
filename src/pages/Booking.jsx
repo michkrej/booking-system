@@ -95,15 +95,15 @@ export default function Booking() {
     setCurrentRoom(selectedOption)
   }
 
-  
-
   useEffect(() => {
     const filterRooms = () => {
       if (currentRoom) {
-        const temp = sortAlphabetically(rooms.filter(
-          (room) =>
-            room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
-        ))
+        const temp = sortAlphabetically(
+          rooms.filter(
+            (room) =>
+              room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
+          )
+        )
         setFilteredRooms(temp)
       } else {
         const temp = sortedRooms
@@ -117,7 +117,9 @@ export default function Booking() {
   useEffect(() => {
     const filterRooms = () => {
       if (currentLocation) {
-        const temp = sortAlphabetically(rooms.filter((room) => room.locationId === currentLocation.id))
+        const temp = sortAlphabetically(
+          rooms.filter((room) => room.locationId === currentLocation.id)
+        )
         setFilteredRooms(temp)
       } else {
         const temp = sortedRooms
@@ -128,7 +130,9 @@ export default function Booking() {
     filterRooms()
   }, [currentLocation])
 
-  const sortedLocations = Object.values(locations).sort((a, b) => (a.text > b.text ? 1 : (a.text === b.text ? 0 : -1)))
+  const sortedLocations = Object.values(locations).sort((a, b) =>
+    a.text > b.text ? 1 : a.text === b.text ? 0 : -1
+  )
 
   return (
     <Container maxWidth="false">

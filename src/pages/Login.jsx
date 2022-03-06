@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 
-
 import heart from '../images/LinTek_hjarta.png'
 import useLogin from '../hooks/useLogin'
 
@@ -44,7 +43,7 @@ export default function Login() {
         <Typography component="h2" variant="h5">
           Logga in
         </Typography>
-        {error && <p style={{color: 'red'}}>{error}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -71,9 +70,9 @@ export default function Login() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="#" variant="body2" className={classes.link}>
+              {/* <Link to="#" variant="body2" className={classes.link}>
                 Glömt lösenord?
-              </Link>
+              </Link> */}
             </Grid>
             <Grid item>
               <Link to="/signup" variant="body2" className={classes.link}>

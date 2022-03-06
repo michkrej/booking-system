@@ -28,24 +28,37 @@ const collisionCorridorAndRoom = (ev1, ev2) => {
   return false
 }
 
-const collisionsItems = (ev1, ev2) => {
+const increaseItemsUse = (items, event) => {
+  if (event?.grillar) {
+    items.grillar.sum += event.grillar
+    items.grillar.events.push(event)
+  }
+  if (event?.bardiskar) {
+    items.bardiskar.sum += event.bardiskar
+    items.bardiskar.events.push(event)
+  }
+  if (event?.['bankset-hg']) {
+    items.banksetHG.sum += event['bankset-hg']
+    items.banksetHG.events.push(event)
+  }
+  if (event?.['bankset-k']) {
+    items.banksetK.sum += event['bankset-k']
+    items.banksetK.events.push(event)
+  }
+
+  return items
+}
+
+const addItems = (items) => {
   const maxBankset = 25
   const maxGrillar = 9
   const maxBardiskar = 6
+  if (items.grillar.sum > maxGrillar) return items.grillar.events
+  if (items.bardiskar.sum > maxBardiskar) return items.bardiskar.events
+  if (items.banksetHG.sum > maxBankset) return items.banksetHG.events
+  if (items.banksetK.sum > maxBankset) return items.banksetK.events
 
-  const ev1Grillar = ev1?.grillar ?? 0
-  const ev1Bankset = ev1?.['bankset-k'] ?? 0
-  const ev1BanksetHG = ev1?.['bankset-hg'] ?? 0
-  const ev1Bardiskar = ev1?.bardiskar ?? 0
-  const ev2Grillar = ev2?.grillar ?? 0
-  const ev2Bankset = ev2?.['bankset-k'] ?? 0
-  const ev2BanksetHG = ev2?.['bankset-hg'] ?? 0
-  const ev2Bardiskar = ev2?.bardiskar ?? 0
-  if (ev1Bankset + ev2Bankset > maxBankset) return true
-  if (ev1BanksetHG + ev2BanksetHG > maxBankset) return true
-  if (ev1Grillar + ev2Grillar > maxGrillar) return true
-  if (ev1Bardiskar + ev2Bardiskar > maxBardiskar) return true
-  return false
+  return undefined
 }
 
 export const findCollisions = (events, personalPlanId) => {
@@ -53,22 +66,44 @@ export const findCollisions = (events, personalPlanId) => {
   const personalPlan = events.filter((event) => event.planId === personalPlanId)
   const publicPlans = events.filter((event) => event.planId !== personalPlanId)
   personalPlan.forEach((ev1) => {
+    let items = {
+      grillar: {
+        sum: ev1?.grillar ?? 0,
+        events: []
+      },
+      bardiskar: {
+        sum: ev1?.bardiskar ?? 0,
+        events: []
+      },
+      banksetK: {
+        sum: ev1?.['bankset-k'] ?? 0,
+        events: []
+      },
+      banksetHG: {
+        sum: ev1?.['bankset-hg'] ?? 0,
+        events: []
+      }
+    }
     publicPlans.forEach((ev2) => {
-      // Skit i att göra saker om de eventen inte sker inom samma område
-      if (ev1.locationId === ev2.locationId) {
-        // Hantera krockar i C-huset
-        const hasSameCorridor = collisionCorridorAndRoom(ev1, ev2)
-        const usesSameEquipment = collisionsItems(ev1, ev2)
+      // Hantera krockar i C-huset
+      const hasSameCorridor =
+        ev1.locationId === ev2.locationId ? collisionCorridorAndRoom(ev1, ev2) : false
 
-        const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
-        const firstRooms = ev1.roomId
-        const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
-        const secondRooms = ev2.roomId
-        const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
-        if (
-          firstEvent.overlaps(secondEvent) &&
-          (clashingRooms || hasSameCorridor || usesSameEquipment)
-        ) {
+      const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
+      const firstRooms = ev1.roomId
+      const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
+      const secondRooms = ev2.roomId
+      const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
+      if (firstEvent.overlaps(secondEvent)) {
+        items = increaseItemsUse(items, ev2)
+        const tooManyItems = addItems(items)
+        if (tooManyItems) {
+          result.push(...tooManyItems)
+          if (!result.includes(ev1)) {
+            result.push(ev1)
+          }
+        }
+        if (clashingRooms || hasSameCorridor) {
           result.push(ev2)
           if (!result.includes(ev1)) {
             result.push(ev1)

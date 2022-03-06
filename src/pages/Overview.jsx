@@ -10,11 +10,14 @@ import CollisionsOverview from '../components/CollisionsOverview'
 import { firestore } from '../firebase/config'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
+import PublicPlanOverview from '../components/PublicPlanOverview'
+import { committees } from '../utils/data'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
   const { user, authFinished } = useAuthContext()
-  const { dispatch } = usePlansContext()
+  const { plans, publicPlans, dispatch } = usePlansContext()
 
   useEffect(() => {
     const getPlans = async () => {
@@ -27,14 +30,33 @@ const Overview = () => {
           .where('public', '==', true)
           .get()
         const personalPlans = snapshotPersonal.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
-        const publicPlans = snapshotPublic.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
+        let publicPlans = snapshotPublic.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
+
+        // get Committees
+        if (publicPlans.length > 0) {
+          const dataRes = []
+          const userIds = publicPlans.map((plan) => plan.userId)
+          const _ref = firestore.collection('userDetails')
+          const data = await _ref.where('userId', 'in', userIds).get()
+          data.docs.forEach((doc) => {
+            const { committeeId, userId } = doc.data()
+            const committee = committees.find((com) => com.id === committeeId)
+            dataRes.push({ name: committee.text, userId })
+          })
+
+          publicPlans = publicPlans.map((plan) => ({
+            ...plan,
+            committee: dataRes.find((com) => com.userId === plan.userId).name
+          }))
+        }
+        publicPlans.sort((a, b) => a.committee - b.committee)
         dispatch({
           type: 'LOAD',
           payload: { plans: personalPlans, publicPlans: publicPlans }
         })
         setIsPending(false)
       } catch (error) {
-        console.log(error)
+        console.log(error.message)
         setIsPending(false)
       }
     }
@@ -50,15 +72,23 @@ const Overview = () => {
             Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
           </Typography>
           <Box mt={6}>
-            <Grid container maxWidth="xs" spacing={2}>
-              <Grid item md={6} xs={12}>
-                <PlanOverview userId={user.uid} />
-                <CollisionsOverview />
+            {isPending && (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
+            )}
+            {!isPending && (
+              <Grid container maxWidth="xs" spacing={2}>
+                <Grid item md={6} xs={12}>
+                  <PlanOverview userId={user.uid} />
+                  <CollisionsOverview />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <PublicPlanOverview />
+                  <Export />
+                </Grid>
               </Grid>
-              <Grid item md={6} xs={12}>
-                <Export />
-              </Grid>
-            </Grid>
+            )}
           </Box>
         </>
       </Box>

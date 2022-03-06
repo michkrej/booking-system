@@ -32,7 +32,9 @@ const CollisionsOverview = () => {
   return (
     <Paper sx={{ padding: 2, marginTop: 2 }}>
       <Box>
-        <Typography variant="h6">HITTA KROCKAR</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
+          Hitta krockar
+        </Typography>
         <Divider />
         <Box>
           <Grid container spacing={2}>

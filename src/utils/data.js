@@ -1126,7 +1126,7 @@ const outsideCampus = [
     id: 'a0516a49-397f-42f5-b19e-532e6b6ee009',
     locationId: locations['Områden på campus'].id
   },
-    {
+  {
     text: 'Område 2',
     id: '4c9b7d91-6543-4f4d-98a0-1c61505f8afe',
     locationId: locations['Områden på campus'].id
@@ -1195,7 +1195,7 @@ const outsideCampus = [
     text: 'Område 16',
     id: '43071551-f1be-4ba1-a9bb-4c65099a25ae',
     locationId: locations['Områden på campus'].id
-  },
+  }
 ]
 
 const otherCampus = [

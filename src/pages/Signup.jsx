@@ -25,12 +25,7 @@ export default function Signup() {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
 
-    signup(
-      data.get('email'),
-      data.get('password'),
-      `${data.get('firstName')} ${data.get('lastName')}`,
-      committee
-    )
+    signup(data.get('email'), data.get('password'), data.get('firstname'), committee)
   }
 
   const handleChange = (event) => {
@@ -53,10 +48,10 @@ export default function Signup() {
         <Typography component="h2" variant="h5">
           Skapa konto
         </Typography>
-        {error && <p style={{color: 'red'}}>{error}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 autoComplete="given-name"
                 name="firstName"
@@ -65,16 +60,6 @@ export default function Signup() {
                 id="firstName"
                 label="Förnamn"
                 autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Efternamn"
-                name="lastName"
-                autoComplete="family-name"
               />
             </Grid>
             <Grid item xs={12}>

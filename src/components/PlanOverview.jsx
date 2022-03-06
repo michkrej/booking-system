@@ -80,7 +80,9 @@ const PlanOverview = ({ userId }) => {
   return (
     <Paper sx={{ padding: 2 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6">PLANERINGAR</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
+          Planeringar
+        </Typography>
         <Divider />
         <List>
           {plans.map((plan) => {

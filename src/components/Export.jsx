@@ -15,8 +15,10 @@ const Export = () => {
   const [checked, setChecked] = useState(false)
   const { plans, publicPlans } = usePlansContext()
   return (
-    <Paper sx={{ padding: 2 }}>
-      <Typography variant="h6">EXPORT (Ej implementerat)</Typography>
+    <Paper sx={{ padding: 2, marginTop: 2 }}>
+      <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
+        Export (Ej implementerat)
+      </Typography>
       <Divider />
       <Box component="form" mt={2}>
         <Grid container spacing={2}>

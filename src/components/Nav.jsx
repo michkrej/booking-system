@@ -1,4 +1,3 @@
-
 import LogoutIcon from '@mui/icons-material/Logout'
 import useLogout from '../hooks/useLogout'
 import makeStyles from '@mui/styles/makeStyles'
@@ -32,7 +31,12 @@ export default function Nav() {
       <AppBar className={classes.background}>
         <Toolbar>
           <img src={heart} style={{ width: '40px', marginRight: '1em' }} />
-          <Typography variant="h6" className={classes.title}>
+          <Typography
+            variant="h6"
+            className={classes.title}
+            onClick={() => navigate('/overview')}
+            sx={{ cursor: 'pointer' }}
+          >
             Bokningsplanering
           </Typography>
           <Box>

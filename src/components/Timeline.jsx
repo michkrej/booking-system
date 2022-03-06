@@ -158,7 +158,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
   }
 
   const nRooms = rooms.length > 1 ? rooms.length : 6
-  const scheduleHeight = currentLocation ? nRooms * 150 : 800
+  const scheduleHeight = currentLocation ? nRooms * 175 : 1000
   return (
     <>
       <Scheduler
@@ -176,7 +176,6 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
         onAppointmentFormOpening={onAppointmentFormOpening}
         showAllDayPanel={false}
         height={scheduleHeight}
-        //maxAppointmentsPerCell={2}
         crossScrollingEnabled={true}
       >
         <Resource
