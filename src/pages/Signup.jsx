@@ -25,7 +25,7 @@ export default function Signup() {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
 
-    signup(data.get('email'), data.get('password'), data.get('firstname'), committee)
+    signup(data.get('email'), data.get('password'), data.get('firstName'), committee)
   }
 
   const handleChange = (event) => {
