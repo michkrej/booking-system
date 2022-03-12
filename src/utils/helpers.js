@@ -1,6 +1,6 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { corridorsC, locations, roomsC } from './data'
+import { committeesLinTek, corridorsC, kårer, locations, roomsC } from './data'
 
 const moment = extendMoment(Moment)
 
@@ -113,4 +113,17 @@ export const findCollisions = (events, personalPlanId) => {
     })
   })
   return result
+}
+
+export const kårCommittees = (kår) => {
+  switch (kår) {
+    case 'LinTek':
+      return kårer.LinTek
+    case 'StuFF':
+      return kårer.StuFF
+    case 'Consensus':
+      return kårer.Consensus
+    default:
+      return kårer.LinTek
+  }
 }
