@@ -24,18 +24,20 @@ const PublicPlanOverview = () => {
               <i>Här kommer det du att hitta andras planeringar när de markerat dem som publika</i>
             </p>
           )}
-          {publicPlans.map((plan) => {
-            return (
-              <ListItem key={plan.value}>
-                <Link
-                  to={`/booking/${plan.value}`}
-                  style={{ color: 'inherit', textDecoration: 'inherit' }}
-                >
-                  <ListItemText>{`${plan.committee} - ${plan.label}`}</ListItemText>
-                </Link>
-              </ListItem>
-            )
-          })}
+          {publicPlans
+            .sort((a, b) => ('' + a.label).localeCompare(b.label, 'sv', { numeric: true }))
+            .map((plan) => {
+              return (
+                <ListItem key={plan.value}>
+                  <Link
+                    to={`/booking/${plan.value}`}
+                    style={{ color: 'inherit', textDecoration: 'inherit' }}
+                  >
+                    <ListItemText>{`${plan.committee} - ${plan.label}`}</ListItemText>
+                  </Link>
+                </ListItem>
+              )
+            })}
         </List>
       </Box>
     </Paper>
