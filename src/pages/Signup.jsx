@@ -14,9 +14,9 @@ import InputLabel from '@mui/material/InputLabel'
 import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
-import { kårer } from '../utils/data'
 import { useLinkStyles } from './Login'
 import { kårCommittees } from '../utils/helpers'
+import { kårer } from '../utils/committees'
 
 export default function Signup() {
   const [committee, setCommittee] = useState('')

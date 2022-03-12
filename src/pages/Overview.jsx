@@ -11,8 +11,8 @@ import { firestore } from '../firebase/config'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
-import { committees } from '../utils/data'
 import CircularProgress from '@mui/material/CircularProgress'
+import { committees } from '../utils/committees'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)

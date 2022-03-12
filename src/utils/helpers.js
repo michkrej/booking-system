@@ -1,11 +1,14 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { committeesLinTek, corridorsC, kårer, locations, roomsC } from './data'
+import { corridorsC, locationsValla, roomsC } from './campusValla'
+import { kårer } from './committees'
+import { locations } from './data'
 
 const moment = extendMoment(Moment)
 
-export const sortAlphabetically = (elem) =>
-  elem.sort((a, b) => ('' + a.text).localeCompare(b.text, 'sv', { numeric: true }))
+export const sortAlphabetically = (elem) => {
+  return elem.sort((a, b) => ('' + a.text).localeCompare(b.text, 'sv', { numeric: true }))
+}
 
 const corridorIds = Object.values(corridorsC).map((corridor) => corridor.id)
 

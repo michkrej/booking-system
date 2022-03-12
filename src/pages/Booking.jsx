@@ -9,11 +9,11 @@ import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
 
-import { locations, rooms } from '../utils/data'
+import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
 import { sortAlphabetically } from '../utils/helpers'
+import { locationsValla } from '../utils/campusValla'
 
-export const sortedLocations = sortAlphabetically(Object.values(locations))
 export const sortedRooms = sortAlphabetically(rooms)
 
 const Item = styled('div')(() => ({
@@ -86,7 +86,11 @@ export default function Booking() {
   const { user } = useAuthContext()
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
-  const [filteredRooms, setFilteredRooms] = useState(rooms)
+  const [campus, setCampus] = useState(campuses[0])
+  const [filteredRooms, setFilteredRooms] = useState(filterCampusRooms(campus.label))
+  const [locations, setLocations] = useState(
+    sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
+  )
 
   const handleLocationChange = (selectedOption) => {
     setCurrentLocation(selectedOption)
@@ -95,11 +99,19 @@ export default function Booking() {
     setCurrentRoom(selectedOption)
   }
 
+  const handleCampusChange = (option) => {
+    const val = Object.values(filterCampusLocations(option.label))
+    sortAlphabetically(val)
+    setLocations(val)
+    setCurrentLocation(undefined)
+    setCampus(option)
+  }
+
   useEffect(() => {
     const filterRooms = () => {
       if (currentRoom) {
         const temp = sortAlphabetically(
-          rooms.filter(
+          filterCampusRooms(campus.label).filter(
             (room) =>
               room.text.startsWith(currentRoom.label[0]) && room.locationId === currentLocation.id
           )
@@ -118,7 +130,7 @@ export default function Booking() {
     const filterRooms = () => {
       if (currentLocation) {
         const temp = sortAlphabetically(
-          rooms.filter((room) => room.locationId === currentLocation.id)
+          filterCampusRooms(campus.label).filter((room) => room.locationId === currentLocation.id)
         )
         setFilteredRooms(temp)
       } else {
@@ -130,10 +142,6 @@ export default function Booking() {
     filterRooms()
   }, [currentLocation])
 
-  const sortedLocations = Object.values(locations).sort((a, b) =>
-    a.text > b.text ? 1 : a.text === b.text ? 0 : -1
-  )
-
   return (
     <Container maxWidth="false">
       <Nav id="nav" />
@@ -142,13 +150,22 @@ export default function Booking() {
           <Stack>
             <Item>
               <SelectInput
-                options={sortedLocations}
+                options={campuses}
+                handleChange={handleCampusChange}
+                current={campus}
+                placeholder="Campus"
+                clearable={false}
+              />
+            </Item>
+            <Item>
+              <SelectInput
+                options={locations}
                 handleChange={handleLocationChange}
                 current={currentLocation}
                 placeholder="Filtrera på plats"
               />
             </Item>
-            {currentLocation && (
+            {currentLocation && currentLocation.id === locationsValla['C-huset'].id && (
               <Item>
                 <SelectInput
                   options={sortedRooms
@@ -170,6 +187,7 @@ export default function Booking() {
             currentLocation={currentLocation}
             store={customDataSource(user)}
             rooms={filteredRooms}
+            locations={locations}
             setRooms={setFilteredRooms}
             edit
           />

@@ -6,10 +6,11 @@ import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
-import { rooms } from '../utils/data'
+import { locations, rooms } from '../utils/data'
 import { useParams } from 'react-router-dom'
 import { findCollisions, sortAlphabetically } from '../utils/helpers'
-import { sortedLocations } from './Booking'
+
+export const sortedLocations = sortAlphabetically(Object.values(locations))
 
 const Item = styled('div')(() => ({
   marginBottom: '1em',
