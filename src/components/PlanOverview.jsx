@@ -44,7 +44,6 @@ const PlanOverview = ({ userId }) => {
   }
 
   const deletePlan = async (planValue) => {
-    console.log(plans)
     try {
       if (
         confirm(

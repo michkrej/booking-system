@@ -11,7 +11,7 @@ import { firestore } from '../firebase/config'
 
 import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
-import { sortAlphabetically } from '../utils/helpers'
+import { defaultCampus, sortAlphabetically } from '../utils/helpers'
 import { locationsValla } from '../utils/campusValla'
 
 export const sortedRooms = sortAlphabetically(rooms)
@@ -86,7 +86,7 @@ export default function Booking() {
   const { user } = useAuthContext()
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
-  const [campus, setCampus] = useState(campuses[0])
+  const [campus, setCampus] = useState(defaultCampus(user.committeeId))
   const [filteredRooms, setFilteredRooms] = useState(filterCampusRooms(campus.label))
   const [locations, setLocations] = useState(
     sortAlphabetically(Object.values(filterCampusLocations(campus.label)))

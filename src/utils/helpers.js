@@ -1,8 +1,8 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { corridorsC, locationsValla, roomsC } from './campusValla'
-import { kårer } from './committees'
-import { locations } from './data'
+import { committeesConsensus, kårer } from './committees'
+import { campuses, locations } from './data'
 
 const moment = extendMoment(Moment)
 
@@ -129,4 +129,9 @@ export const kårCommittees = (kår) => {
     default:
       return kårer.LinTek
   }
+}
+
+export const defaultCampus = (committeeId) => {
+  if (committeesConsensus.find((com) => com.id === committeeId)) return campuses[1]
+  return campuses[0]
 }

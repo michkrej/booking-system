@@ -155,7 +155,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
     committee.colSpan = 2
 
     form.endUpdate()
-    //form.repaint()
+    form.repaint()
   }
 
   const renderAppointmentTooltip = ({ targetedAppointmentData }) => {
