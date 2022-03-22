@@ -34,12 +34,9 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
     )
 
     let mainGroupItems = form.itemOption('mainGroup').items
-    /*     console.log(mainGroupItems)
     if (mainGroupItems.find((i) => i.itemType === 'group' && i.items[0].dataField === 'allDay')) {
-      mainGroupItems.splice(2, 1)
-    } */
-    mainGroupItems[2].items.splice(0, 1)
-    console.log(mainGroupItems)
+      mainGroupItems[2].items.splice(0, 1)
+    }
 
     mainGroupItems[0] = {
       ...mainGroupItems[0],
@@ -235,7 +232,8 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
         endDayHour={24}
         editing={edit ? groups[0] !== 'locationId' : false}
         onAppointmentFormOpening={onAppointmentFormOpening}
-        appointmentTooltipRender={renderAppointmentTooltip}
+        /* TODO: fix tooltip so it shows delete */
+        //appointmentTooltipRender={renderAppointmentTooltip}
         appointmentRender={appointmentRender}
         height={scheduleHeight}
         crossScrollingEnabled={true}
