@@ -1,11 +1,14 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { corridorsC, locations, roomsC } from './data'
+import { corridorsC, locationsValla, roomsC } from './campusValla'
+import { committeesConsensus, kårer } from './committees'
+import { campuses, locations } from './data'
 
 const moment = extendMoment(Moment)
 
-export const sortAlphabetically = (elem) =>
-  elem.sort((a, b) => ('' + a.text).localeCompare(b.text, 'sv', { numeric: true }))
+export const sortAlphabetically = (elem) => {
+  return elem.sort((a, b) => ('' + a.text).localeCompare(b.text, 'sv', { numeric: true }))
+}
 
 const corridorIds = Object.values(corridorsC).map((corridor) => corridor.id)
 
@@ -113,4 +116,22 @@ export const findCollisions = (events, personalPlanId) => {
     })
   })
   return result
+}
+
+export const kårCommittees = (kår) => {
+  switch (kår) {
+    case 'LinTek':
+      return kårer.LinTek
+    case 'StuFF':
+      return kårer.StuFF
+    case 'Consensus':
+      return kårer.Consensus
+    default:
+      return kårer.LinTek
+  }
+}
+
+export const defaultCampus = (committeeId) => {
+  if (committeesConsensus.find((com) => com.id === committeeId)) return campuses[1]
+  return campuses[0]
 }

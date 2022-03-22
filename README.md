@@ -16,6 +16,6 @@ Because of time constrains the project currently uses React (w. context and hook
 
 ### Useful commands
 
-Horizontal scroll: shift + scroll
-New appointment: Enter or Space
-Delete appointment: Delete
+Horizontal scroll: shift + scroll.  
+New appointment: Enter or Space.  
+Delete appointment: Delete.   

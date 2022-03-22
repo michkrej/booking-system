@@ -1,13 +1,22 @@
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 
-const SelectInput = ({ handleChange, options, current, placeholder, multiple = false }) => {
+const SelectInput = ({
+  handleChange,
+  options,
+  current,
+  placeholder,
+  multiple = false,
+  clearable = true
+}) => {
   return (
     <Select
       options={options}
+      getOptionLabel={(option) => option.text ?? option.label}
+      getOptionValue={(option) => option.id ?? option.value}
       onChange={handleChange}
       placeholder={placeholder}
-      isClearable={true}
+      isClearable={clearable}
       value={current}
       isMulti={multiple}
       // styles={customStyles}
@@ -30,7 +39,8 @@ SelectInput.propTypes = {
   options: PropTypes.array,
   current: PropTypes.object,
   placeholder: PropTypes.string,
-  multiple: PropTypes.bool
+  multiple: PropTypes.bool,
+  clearable: PropTypes.bool
 }
 
 export default SelectInput

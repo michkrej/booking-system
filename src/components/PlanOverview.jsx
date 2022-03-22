@@ -44,7 +44,6 @@ const PlanOverview = ({ userId }) => {
   }
 
   const deletePlan = async (planValue) => {
-    console.log(plans)
     try {
       if (
         confirm(
@@ -85,39 +84,41 @@ const PlanOverview = ({ userId }) => {
         </Typography>
         <Divider />
         <List>
-          {plans.map((plan) => {
-            return (
-              <ListItem
-                key={plan.value}
-                secondaryAction={
-                  <>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => togglePublic(plan)}
-                      sx={{ color: plan.public ? 'pink' : 'lightGrey' }}
-                    >
-                      <PublicIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => deletePlan(plan.value)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </>
-                }
-              >
-                <Link
-                  to={`/booking/${plan.value}`}
-                  style={{ color: 'inherit', textDecoration: 'inherit' }}
+          {plans
+            .sort((a, b) => ('' + a.label).localeCompare(b.label, 'sv', { numeric: true }))
+            .map((plan) => {
+              return (
+                <ListItem
+                  key={plan.value}
+                  secondaryAction={
+                    <>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => togglePublic(plan)}
+                        sx={{ color: plan.public ? 'pink' : 'lightGrey' }}
+                      >
+                        <PublicIcon />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => deletePlan(plan.value)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
+                  }
                 >
-                  <ListItemText>{plan.label}</ListItemText>
-                </Link>
-              </ListItem>
-            )
-          })}
+                  <Link
+                    to={`/booking/${plan.value}`}
+                    style={{ color: 'inherit', textDecoration: 'inherit' }}
+                  >
+                    <ListItemText>{plan.label}</ListItemText>
+                  </Link>
+                </ListItem>
+              )
+            })}
         </List>
         <LoadingButton
           onClick={createNewPlan}

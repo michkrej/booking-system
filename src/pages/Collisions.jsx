@@ -6,10 +6,12 @@ import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
-import { rooms } from '../utils/data'
+import { campuses, filterCampusLocations, locations, rooms } from '../utils/data'
 import { useParams } from 'react-router-dom'
-import { findCollisions, sortAlphabetically } from '../utils/helpers'
-import { sortedLocations } from './Booking'
+import { defaultCampus, findCollisions, sortAlphabetically } from '../utils/helpers'
+import useAuthContext from '../hooks/useAuthContext'
+
+export const sortedLocations = sortAlphabetically(Object.values(locations))
 
 const Item = styled('div')(() => ({
   marginBottom: '1em',
@@ -41,9 +43,14 @@ const customDataSource = (planIds) => {
 }
 
 export default function Collisions() {
+  const { user } = useAuthContext()
   const [filteredRooms, setFilteredRooms] = useState(rooms)
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
+  const [campus, setCampus] = useState(defaultCampus(user.committeeId))
+  const [locations, setLocations] = useState(
+    sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
+  )
   const { id } = useParams()
 
   const handleChange = (selectedOption) => {
@@ -52,6 +59,14 @@ export default function Collisions() {
 
   const handleRoomChange = (selectedOption) => {
     setCurrentRoom(selectedOption)
+  }
+
+  const handleCampusChange = (option) => {
+    const val = Object.values(filterCampusLocations(option.label))
+    sortAlphabetically(val)
+    setLocations(val)
+    setCurrentLocation(undefined)
+    setCampus(option)
   }
 
   useEffect(() => {
@@ -93,7 +108,16 @@ export default function Collisions() {
           <Stack>
             <Item>
               <SelectInput
-                options={sortedLocations}
+                options={campuses}
+                handleChange={handleCampusChange}
+                current={campus}
+                placeholder="Campus"
+                clearable={false}
+              />
+            </Item>
+            <Item>
+              <SelectInput
+                options={locations}
                 handleChange={handleChange}
                 personal={currentLocation}
                 placeholder="Filtrera på plats"
@@ -121,6 +145,7 @@ export default function Collisions() {
             currentLocation={currentLocation}
             store={customDataSource(id)}
             rooms={filteredRooms}
+            locations={Object.values(locations)}
             showCommittee
           />
         </Grid>

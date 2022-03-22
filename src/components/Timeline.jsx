@@ -2,16 +2,15 @@
 import { useState, useEffect } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import { committees } from '../utils/data'
+import { committees } from '../utils/committees'
 import useAuthContext from '../hooks/useAuthContext'
-import { sortedLocations } from '../pages/Booking'
 import { formatDate } from 'devextreme/localization'
 import { Grid } from '@mui/material'
 
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
 
-const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) => {
+const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], locations }) => {
   const { user } = useAuthContext()
   const [groups, setGroups] = useState(['locationId', 'committeeId'])
 
@@ -159,11 +158,10 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
     committee.colSpan = 2
 
     form.endUpdate()
-    //form.repaint()
+    form.repaint()
   }
 
   const renderAppointmentTooltip = ({ targetedAppointmentData }) => {
-    console.log(targetedAppointmentData)
     return (
       <Grid sx={{ textAlign: 'left', width: '60%', marginLeft: '1em' }}>
         <Grid item>
@@ -203,7 +201,6 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
   }
 
   const appointmentRender = ({ targetedAppointmentData }) => {
-    console.log(targetedAppointmentData)
     return (
       <div>
         <div style={{ fontSize: '0.9em' }}>
@@ -249,7 +246,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [] }) =
           label="Fadderi"
           useColorAsDefault={true}
         />
-        <Resource dataSource={sortedLocations} fieldExpr="locationId" label="Plats" />
+        <Resource dataSource={locations} fieldExpr="locationId" label="Plats" />
         <Resource dataSource={rooms} fieldExpr="roomId" label="Del" allowMultiple={true} />
 
         <Scrolling mode="standard" />
@@ -263,7 +260,8 @@ Timeline.propTypes = {
   store: PropTypes.object,
   edit: PropTypes.bool,
   showCommittee: PropTypes.bool,
-  rooms: PropTypes.array
+  rooms: PropTypes.array,
+  locations: PropTypes.array
 }
 
 export default Timeline
