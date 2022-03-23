@@ -228,7 +228,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
         groups={groups}
         cellDuration={120}
         firstDayOfWeek={1}
-        startDayHour={8}
+        startDayHour={7}
         endDayHour={24}
         editing={edit ? groups[0] !== 'locationId' : false}
         onAppointmentFormOpening={onAppointmentFormOpening}
