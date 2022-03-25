@@ -80,6 +80,11 @@ const otherRooms = [
     id: 'ead531c3-372c-4dd6-9280-2c9db28ddc38',
     locationId: otherLocations['Utanför campus'].id
   },
+  {
+    text: 'SkåLand',
+    id: '352c3dde-3767-4940-aa63-a4eac42449bf',
+    locationId: otherLocations['Utanför campus'].id
+  },
   ...karhus
 ]
 
