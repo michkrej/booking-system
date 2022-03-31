@@ -1019,23 +1019,33 @@ const outsideCampus = [
     locationId: locationsValla['Områden på campus'].id
   },
   {
-    text: 'Område 2',
+    text: 'Område 3',
     id: '4c9b7d91-6543-4f4d-98a0-1c61505f8afe',
     locationId: locationsValla['Områden på campus'].id
   },
   {
-    text: 'Område 5',
+    text: 'Område 3:2',
+    id: 'e098be1e-c2c9-4d14-b1fe-d696e1033554',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 3:3',
+    id: 'bc045581-1cf4-4d54-8df8-d04c4d173bb8',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 4',
     id: '540dfbb4-6eee-4fda-8ee9-8acbea85f863',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 4:2',
+    id: 'c3da3abb-bae6-44b0-8c38-d616a3cde6b3',
     locationId: locationsValla['Områden på campus'].id
   },
   {
     text: 'Område 5',
     id: 'eabc897c-0000-4e62-9abb-8c26b6ceed1b',
-    locationId: locationsValla['Områden på campus'].id
-  },
-  {
-    text: 'Område 6',
-    id: '9e9f9cf2-99f1-4eac-8c2b-3618655379a8',
     locationId: locationsValla['Områden på campus'].id
   },
   {
@@ -1064,6 +1074,11 @@ const outsideCampus = [
     locationId: locationsValla['Områden på campus'].id
   },
   {
+    text: 'Område 11:2',
+    id: '800f883a-bcbe-4768-9d0a-a32164bba536',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
     text: 'Område 12',
     id: '3c4f2e6f-8147-4043-bf7c-a8cb5891e868',
     locationId: locationsValla['Områden på campus'].id
@@ -1086,6 +1101,61 @@ const outsideCampus = [
   {
     text: 'Område 16',
     id: '43071551-f1be-4ba1-a9bb-4c65099a25ae',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 16:2',
+    id: 'c87a7ff4-fdcd-45cb-9e1b-dbb2834f27e3',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 17',
+    id: '21f1a300-601c-4ff6-a04f-e6bd460c3cee',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 18',
+    id: '2d1f0d9e-ead3-444b-b0fb-ed7835a77788',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 19',
+    id: '267506b2-e6f6-4c5d-a44a-478aa0cbfe98',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 20',
+    id: '15d0cf0c-6e26-41a1-8e2f-cffce723d943',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 21',
+    id: '6747ce29-e725-49e6-9579-5c1557c8558c',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 22',
+    id: '7c4c5d0d-94a8-4c44-b41d-fe17cd967388',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 23',
+    id: 'c702736a-e672-44fb-9528-8184600b1a5d',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 24',
+    id: 'e3a8bddb-c0f9-48fb-867f-a11581786533',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 25',
+    id: '77dfcf82-0e1f-4544-901d-4d236b488164',
+    locationId: locationsValla['Områden på campus'].id
+  },
+  {
+    text: 'Område 26',
+    id: 'caeb5781-0052-446f-bd72-6bf6683e5864',
     locationId: locationsValla['Områden på campus'].id
   }
 ]
