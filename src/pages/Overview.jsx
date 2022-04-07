@@ -13,6 +13,7 @@ import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
 import { committees } from '../utils/committees'
+import { getContentById } from '../utils/helpers'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
@@ -34,16 +35,12 @@ const Overview = () => {
 
         // get Committees
         if (publicPlans.length > 0) {
-          const dataRes = []
           const userIds = [...new Set(publicPlans.map((plan) => plan.userId))]
-          const _ref = firestore.collection('userDetails')
-          const data = await _ref.where('userId', 'in', userIds).get()
-          data.docs.forEach((doc) => {
-            const { committeeId, userId } = doc.data()
-            const committee = committees.find((com) => com.id === committeeId)
-            dataRes.push({ name: committee.text, userId })
+          const res = await getContentById(userIds, 'userDetails', 'userId')
+          const dataRes = res.map((elem) => {
+            const committee = committees.find((com) => com.id === elem.committeeId)
+            return { name: committee.text, userId: elem.userId }
           })
-
           publicPlans = publicPlans.map((plan) => ({
             ...plan,
             committee: dataRes.find((com) => com.userId === plan.userId).name
@@ -84,8 +81,8 @@ const Overview = () => {
                   <CollisionsOverview />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <PublicPlanOverview />
                   <Export />
+                  <PublicPlanOverview />
                 </Grid>
               </Grid>
             )}

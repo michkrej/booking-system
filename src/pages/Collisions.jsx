@@ -8,7 +8,7 @@ import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
 import { campuses, filterCampusLocations, locations, rooms } from '../utils/data'
 import { useParams } from 'react-router-dom'
-import { defaultCampus, findCollisions, sortAlphabetically } from '../utils/helpers'
+import { defaultCampus, findCollisions, getContentById, sortAlphabetically } from '../utils/helpers'
 import useAuthContext from '../hooks/useAuthContext'
 
 export const sortedLocations = sortAlphabetically(Object.values(locations))
@@ -21,23 +21,14 @@ const Item = styled('div')(() => ({
 const customDataSource = (planIds) => {
   return new CustomStore({
     key: 'id',
-    load: () => {
-      return firestore
-        .collection('events')
-        .where('planId', 'in', planIds.split('+'))
-        .get()
-        .then((snapshot) => {
-          if (snapshot.empty) {
-            console.log('No events to load')
-            return []
-          } else {
-            let results = []
-            snapshot.docs.forEach((doc) => {
-              results.push({ id: doc.id, ...doc.data() })
-            })
-            return findCollisions(results, planIds.split('+')[0])
-          }
-        })
+    load: async () => {
+      const res = await getContentById(planIds.split('+'), 'events', 'planId')
+      if (res.length < 1) {
+        console.log('No events to load')
+        return []
+      } else {
+        return findCollisions(res, planIds.split('+')[0])
+      }
     }
   })
 }
