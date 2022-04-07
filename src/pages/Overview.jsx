@@ -35,7 +35,7 @@ const Overview = () => {
         // get Committees
         if (publicPlans.length > 0) {
           const dataRes = []
-          const userIds = publicPlans.map((plan) => plan.userId)
+          const userIds = [...new Set(publicPlans.map((plan) => plan.userId))]
           const _ref = firestore.collection('userDetails')
           const data = await _ref.where('userId', 'in', userIds).get()
           data.docs.forEach((doc) => {
