@@ -12,7 +12,7 @@ const PublicPlanOverview = () => {
   const { publicPlans } = usePlansContext()
 
   return (
-    <Paper sx={{ padding: 2 }}>
+    <Paper sx={{ padding: 2, marginTop: 2 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
           Publika planeringar
