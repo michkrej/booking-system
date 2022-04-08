@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { auth, firestore } from '../firebase/config'
+import { analytics, auth, firestore } from '../firebase/config'
 import useAuthContext from './useAuthContext'
 
 const useSignup = () => {
@@ -34,6 +34,7 @@ const useSignup = () => {
           committeeId: committee
         }
       })
+      analytics.logEvent(`User ${res.user.uid} created`)
       if (!isCancelled) {
         setIsPending(false)
         setError(undefined)

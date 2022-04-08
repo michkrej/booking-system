@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { auth, firestore } from '../firebase/config'
+import { analytics, auth, firestore } from '../firebase/config'
 import useAuthContext from './useAuthContext'
 
 const useLogin = () => {
@@ -29,6 +29,7 @@ const useLogin = () => {
             committeeId: dataRes[0].committeeId
           }
         })
+        analytics.logEvent(`User ${res.user.uid} logged in`)
       } else {
         throw Error('The user does not have a committee assigned')
       }
