@@ -58,6 +58,11 @@ const karhus = [
     locationId: otherLocations['Kårhus'].id
   },
   {
+    text: 'Kårallen - luftrummet',
+    id: 'c7c5b4ac-3534-41d7-8090-b39986fbdeea',
+    locationId: otherLocations['Kårhus'].id
+  },
+  {
     text: 'Kårallen',
     id: 'ed559a94-faaf-4daf-b70f-c7439fb989d7',
     locationId: otherLocations['Kårhus'].id
