@@ -34,7 +34,8 @@
     "lint:fix": "eslint --fix ./src/**/*.{jsx,js}",
     "check": "prettier --check ./src/**/*.{jsx,js}",
     "prettier": "prettier --write ./src/**/*.{jsx,js}",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "deploy": "npm run build && firebase deploy"
   },
   "eslintConfig": {
     "extends": [
