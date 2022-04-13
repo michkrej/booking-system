@@ -1170,6 +1170,11 @@ const otherCampus = [
     text: 'MatNat-backen',
     id: 'dd329c78-c810-4611-bb27-88042b6c6e5b',
     locationId: locationsValla['Övriga områden på campus'].id
+  },
+  {
+    text: 'Bokab',
+    id: '85982009-31dd-4597-9362-cd1b093b7f17',
+    locationId: locationsValla['Övriga områden på campus'].id
   }
 ]
 
