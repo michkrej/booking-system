@@ -1004,6 +1004,11 @@ const roomsB = [
     text: 'Ada Lovelace',
     id: 'ae945d57-2c9c-4622-9d4e-2c2a205587ce',
     locationId: locationsValla['B-huset'].id
+  },
+  {
+    text: 'CYD-poolen',
+    id: 'cf31dc1a-bc98-4af1-92f6-fa3f737a787a',
+    locationId: locationsValla['B-huset'].id
   }
 ]
 
