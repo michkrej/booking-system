@@ -1013,72 +1013,72 @@ const roomsB = [
   {
     text: 'ISYtan',
     id: '61f8b52d-4c93-4217-81c3-3774566d36bb',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU00',
     id: '20a98cbc-4551-4888-b503-eb447e3e850f',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU01',
     id: '6120e166-b099-4ffc-88ef-855c44b66974',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU02',
     id: '1cfdc6fc-cedb-4137-90fe-4b9a692934d6',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU03',
     id: '45db0d85-6009-462f-a10e-fd247b48944e',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU10',
     id: '5ca53466-ba57-4318-b986-aea662a5f896',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU11',
     id: '6b68ad92-ea03-4081-8aad-adde06e440ad',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU12',
     id: 'adbdcc05-10f3-4ef4-bdee-a0a5ec3794e6',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU13',
     id: '31e7befa-e113-4dee-a8a1-0521c930af3f',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU14',
     id: '8551a5d7-4e93-4029-81b2-330bb6ce0df4',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU15',
     id: 'd29ac8af-e2d4-49e7-98f4-492227bf2265',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU16',
     id: '773bf91c-53ac-480b-8ae9-0d832fd5c64c',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU17',
     id: '1f30bf90-c456-4985-bacd-f289bea8e8b7',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   },
   {
     text: 'SU18',
     id: 'b2704e2b-b160-411d-a22d-183743211bba',
-    locationId: locationsValla['Övriga områden på campus'].id
+    locationId: locationsValla['B-huset'].id
   }
 ]
 
