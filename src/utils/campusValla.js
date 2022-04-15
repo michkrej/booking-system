@@ -1175,6 +1175,36 @@ const otherCampus = [
     text: 'Bokab',
     id: '85982009-31dd-4597-9362-cd1b093b7f17',
     locationId: locationsValla['Övriga områden på campus'].id
+  },
+  {
+    text: 'Baljan',
+    id: 'e9c2c27c-e9c0-473f-ba54-c73dd468e729',
+    locationId: locationsValla['Övriga områden på campus'].id
+  },
+  {
+    text: 'LiU-store',
+    id: '13b0a454-4128-4e6a-9d52-f8ce0b3f24fa',
+    locationId: locationsValla['Övriga områden på campus'].id
+  },
+  {
+    text: 'LiU-secondhand',
+    id: '38389bd8-62e3-4ec1-9860-70b7a10b543c',
+    locationId: locationsValla['Övriga områden på campus'].id
+  },
+  {
+    text: 'M-verkstan',
+    id: 'ac63bbe8-4ea7-4847-9a57-66da7e966fc1',
+    locationId: locationsValla['Övriga områden på campus'].id
+  },
+  {
+    text: 'Campusbokhandeln',
+    id: 'b9968620-2b3d-44a5-ae59-3858b7c62634',
+    locationId: locationsValla['Övriga områden på campus'].id
+  },
+  {
+    text: 'Biblioteket',
+    id: 'e17bf523-259a-4752-9a96-f4dd6d0c7db6',
+    locationId: locationsValla['Övriga områden på campus'].id
   }
 ]
 
