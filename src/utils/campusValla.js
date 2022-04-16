@@ -1079,6 +1079,16 @@ const roomsB = [
     text: 'SU18',
     id: 'b2704e2b-b160-411d-a22d-183743211bba',
     locationId: locationsValla['B-huset'].id
+  },
+  {
+    text: 'Svedberg',
+    id: '68e264e5-cae9-46c2-ab0b-9c363dda0528',
+    locationId: locationsValla['B-huset'].id
+  },
+  {
+    text: 'Theorell',
+    id: '7e05e180-2090-4952-82f6-6d1467baf09d',
+    locationId: locationsValla['B-huset'].id
   }
 ]
 
