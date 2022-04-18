@@ -60,12 +60,23 @@ const CollisionsOverview = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 2, mb: 2 }}
             startIcon={<SearchIcon />}
             disabled={endCollision && startCollision ? false : true}
             onClick={() => navigate(`/collisions/${startCollision.value}${formatCollisions()}`)}
           >
-            Hitta
+            Hitta endast dina krockar med valda fadderier
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mb: 2 }}
+            startIcon={<SearchIcon />}
+            disabled={endCollision && startCollision ? false : true}
+            onClick={() => navigate(`/collisions/all/${startCollision.value}${formatCollisions()}`)}
+          >
+            Hitta alla krockar bland valda fadderier
           </Button>
         </Box>
       </Box>

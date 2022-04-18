@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -10,20 +10,49 @@ import Checkbox from '@mui/material/Checkbox'
 import SelectInput from './SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
 import usePlansContext from '../hooks/usePlansContext'
+import { exportPlan } from '../utils/helpers'
+import { CSVLink } from 'react-csv'
 
 const Export = () => {
   const [checked, setChecked] = useState(false)
+  const [chosenPlans, setchosenPlans] = useState()
+  const [csvData, setCsvData] = useState([])
+  const csvInstance = useRef(null)
   const { plans, publicPlans } = usePlansContext()
+
+  useEffect(() => {
+    if (csvData && csvInstance && csvInstance.current && csvInstance.current.link) {
+      setTimeout(() => {
+        csvInstance.current.link.click()
+        setCsvData([])
+      })
+    }
+  }, [csvData])
+
+  const handleChange = (e) => {
+    setchosenPlans(e)
+  }
+
+  const fetchData = () => {
+    exportPlan(chosenPlans).then((response) => setCsvData(response))
+  }
+
   return (
     <Paper sx={{ padding: 2 }}>
       <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
-        Export (Ej implementerat)
+        Export
       </Typography>
       <Divider />
       <Box component="form" mt={2}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <SelectInput options={plans} placeholder="Dina planer" multiple />
+            <SelectInput
+              options={[...plans, ...publicPlans]}
+              placeholder="Plan"
+              handleChange={handleChange}
+              value={chosenPlans}
+              multiple
+            />
           </Grid>
           {checked && (
             <Grid item xs={12}>
@@ -31,20 +60,27 @@ const Export = () => {
             </Grid>
           )}
         </Grid>
-        <FormControlLabel
+        {/*         <FormControlLabel
           label="Jag vill exportera krockar"
           control={<Checkbox checked={checked} onChange={() => setChecked(!checked)} />}
           sx={{ marginTop: 1 }}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 1 }}
-          startIcon={<GetAppIcon />}
+        /> */}
+        <div
+          onClick={() => {
+            fetchData()
+          }}
         >
-          Exportera
-        </Button>
+          <Button fullWidth variant="contained" sx={{ mt: 1 }} startIcon={<GetAppIcon />}>
+            Exportera
+          </Button>
+        </div>
+        {csvData.length > 0 ? (
+          <CSVLink
+            data={csvData}
+            filename={chosenPlans.length === 1 ? chosenPlans[0].label : 'export.csv'}
+            ref={csvInstance}
+          />
+        ) : undefined}
       </Box>
     </Paper>
   )

@@ -2,8 +2,8 @@ import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { firestore } from '../firebase/config'
 import { corridorsC, locationsValla, roomsC } from './campusValla'
-import { committeesConsensus, kårer } from './committees'
-import { campuses, locations } from './data'
+import { committees, committeesConsensus, kårer } from './committees'
+import { campuses, locations, rooms } from './data'
 
 const moment = extendMoment(Moment)
 
@@ -102,13 +102,19 @@ export const findCollisions = (events, personalPlanId) => {
         items = increaseItemsUse(items, ev2)
         const tooManyItems = addItems(items)
         if (tooManyItems) {
-          result.push(...tooManyItems)
+          tooManyItems.forEach((item) => {
+            if (!result.includes(item)) {
+              result.push(item)
+            }
+          })
           if (!result.includes(ev1)) {
             result.push(ev1)
           }
         }
         if (clashingRooms || hasSameCorridor) {
-          result.push(ev2)
+          if (!result.includes(ev2)) {
+            result.push(ev2)
+          }
           if (!result.includes(ev1)) {
             result.push(ev1)
           }
@@ -117,6 +123,129 @@ export const findCollisions = (events, personalPlanId) => {
     })
   })
   return result
+}
+
+export const findAllCollisions = (events, personalPlanId) => {
+  const result = []
+  events.forEach((ev1) => {
+    let items = {
+      grillar: {
+        sum: ev1?.grillar ?? 0,
+        events: []
+      },
+      bardiskar: {
+        sum: ev1?.bardiskar ?? 0,
+        events: []
+      },
+      banksetK: {
+        sum: ev1?.['bankset-k'] ?? 0,
+        events: []
+      },
+      banksetHG: {
+        sum: ev1?.['bankset-hg'] ?? 0,
+        events: []
+      }
+    }
+    events.forEach((ev2) => {
+      // Hantera krockar i C-huset
+      if (ev1.id !== ev2.id && ev1.planId !== ev2.planId) {
+        // if we arn't looking at the same element
+        const hasSameCorridor =
+          ev1.locationId === ev2.locationId ? collisionCorridorAndRoom(ev1, ev2) : false
+
+        const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
+        const firstRooms = ev1.roomId
+        const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
+        const secondRooms = ev2.roomId
+        const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
+        if (firstEvent.overlaps(secondEvent)) {
+          items = increaseItemsUse(items, ev2)
+          const tooManyItems = addItems(items)
+          if (tooManyItems) {
+            tooManyItems.forEach((item) => {
+              if (!result.includes(item)) {
+                result.push(item)
+              }
+            })
+            if (!result.includes(ev1)) {
+              result.push(ev1)
+            }
+          }
+          if (clashingRooms || hasSameCorridor) {
+            if (!result.includes(ev2)) {
+              result.push(ev2)
+            }
+            if (!result.includes(ev1)) {
+              result.push(ev1)
+            }
+          }
+        }
+      }
+    })
+  })
+  console.log(result)
+  return result
+}
+
+export const exportPlan = async (plans) => {
+  const header = [
+    'ID',
+    'Fadderi',
+    'Aktivitet',
+    'Område',
+    'Plats',
+    'Start',
+    'Slut',
+    'Alkohol',
+    'Mat',
+    'Bardiskar',
+    'Bänkset Kårallen',
+    'Bänkset HG',
+    'Grillar',
+    'Annat bokbart',
+    'Beskrivining',
+    'Länk'
+  ]
+  const res = await getContentById(
+    plans.length === 1 ? [plans[0].value] : plans.map((plan) => plan.value),
+    'events',
+    'planId'
+  )
+  const cvsConversion = res.map((elem) => {
+    const committee = committees.find((com) => com.id === elem.committeeId)
+    const location = Object.values(locations).find((location) => location.id === elem.locationId)
+    const _rooms = elem.roomId.map((room) => rooms.find((r) => r.id === room).text)
+    return [
+      elem.id,
+      committee.text,
+      elem.text,
+      location.text,
+      _rooms,
+      moment(elem.startDate).format('YY-MM-DD HH:mm').toString(),
+      moment(elem.endDate).format('YY-MM-DD HH:mm').toString(),
+      elem.alcohol ? 'TRUE' : 'FALSE',
+      elem.food ? 'TRUE' : 'FALSE',
+      elem.bardiskar ?? '0',
+      elem['bankset-k'] ?? '0',
+      elem['bankset-hg'] ?? '0',
+      elem.grillar ?? '0',
+      elem.annat ?? '',
+      elem.description ?? '',
+      elem.link ?? ''
+    ]
+  })
+  return [header, ...cvsConversion]
+}
+const exportCollisions = (events, personalPlanId) => {
+  const res = findCollisions(events, personalPlanId)
+  const header = ['id', 'committee', 'name', 'location', 'room', 'start', 'end']
+  const cvsConversion = res.map((elem) => {
+    const committee = committees.find((com) => com.id === elem.committeeId)
+    const location = Object.values(locations).find((location) => location.id === elem.locationId)
+    const rooms = elem.roomId.map((room) => rooms.find((r) => r.id == room.id))
+
+    return [elem.id, committee.text, elem.text, location.text, rooms, elem.startDate, elem.endDate]
+  })
 }
 
 export const kårCommittees = (kår) => {
