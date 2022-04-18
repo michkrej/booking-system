@@ -61,7 +61,7 @@ const Overview = () => {
   }, [])
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Nav />
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <>

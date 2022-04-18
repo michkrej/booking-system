@@ -102,13 +102,19 @@ export const findCollisions = (events, personalPlanId) => {
         items = increaseItemsUse(items, ev2)
         const tooManyItems = addItems(items)
         if (tooManyItems) {
-          result.push(...tooManyItems)
+          tooManyItems.forEach((item) => {
+            if (!result.includes(item)) {
+              result.push(item)
+            }
+          })
           if (!result.includes(ev1)) {
             result.push(ev1)
           }
         }
         if (clashingRooms || hasSameCorridor) {
-          result.push(ev2)
+          if (!result.includes(ev2)) {
+            result.push(ev2)
+          }
           if (!result.includes(ev1)) {
             result.push(ev1)
           }
@@ -119,9 +125,75 @@ export const findCollisions = (events, personalPlanId) => {
   return result
 }
 
-export const exportPlan = async (plan) => {
+export const findAllCollisions = (events, personalPlanId) => {
+  const result = []
+  events.forEach((ev1) => {
+    let items = {
+      grillar: {
+        sum: ev1?.grillar ?? 0,
+        events: []
+      },
+      bardiskar: {
+        sum: ev1?.bardiskar ?? 0,
+        events: []
+      },
+      banksetK: {
+        sum: ev1?.['bankset-k'] ?? 0,
+        events: []
+      },
+      banksetHG: {
+        sum: ev1?.['bankset-hg'] ?? 0,
+        events: []
+      }
+    }
+    events.forEach((ev2) => {
+      // Hantera krockar i C-huset
+      if (ev1.id !== ev2.id) {
+        // if we arn't looking at the same element
+        const hasSameCorridor =
+          ev1.locationId === ev2.locationId ? collisionCorridorAndRoom(ev1, ev2) : false
+
+        const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
+        const firstRooms = ev1.roomId
+        const secondEvent = moment.range(new Date(ev2.startDate), new Date(ev2.endDate))
+        const secondRooms = ev2.roomId
+        const clashingRooms = firstRooms.some((room) => secondRooms.includes(room))
+        if (firstEvent.overlaps(secondEvent)) {
+          items = increaseItemsUse(items, ev2)
+          const tooManyItems = addItems(items)
+          if (tooManyItems) {
+            tooManyItems.forEach((item) => {
+              if (!result.includes(item)) {
+                result.push(item)
+              }
+            })
+            if (!result.includes(ev1)) {
+              result.push(ev1)
+            }
+          }
+          if (clashingRooms || hasSameCorridor) {
+            if (!result.includes(ev2)) {
+              result.push(ev2)
+            }
+            if (!result.includes(ev1)) {
+              result.push(ev1)
+            }
+          }
+        }
+      }
+    })
+  })
+  console.log(result)
+  return result
+}
+
+export const exportPlan = async (plans) => {
   const header = ['id', 'committee', 'name', 'location', 'room', 'start', 'end']
-  const res = await getContentById([plan.value], 'events', 'planId')
+  const res = await getContentById(
+    plans.length === 1 ? [plans[0].value] : plans.map((plan) => plan.value),
+    'events',
+    'planId'
+  )
   const cvsConversion = res.map((elem) => {
     const committee = committees.find((com) => com.id === elem.committeeId)
     const location = Object.values(locations).find((location) => location.id === elem.locationId)
@@ -132,8 +204,8 @@ export const exportPlan = async (plan) => {
       elem.text,
       location.text,
       _rooms,
-      moment(elem.startDate).format('HH:mm DD-MM-YYYY').toString(),
-      moment(elem.endDate).format('HH:mm DD-MM-YYYY').toString()
+      moment(elem.startDate).format('YY-MM-DD HH:mm').toString(),
+      moment(elem.endDate).format('YY-MM-DD HH:mm').toString()
     ]
   })
   return [header, ...cvsConversion]

@@ -7,8 +7,14 @@ import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
 import { firestore } from '../firebase/config'
 import { campuses, filterCampusLocations, locations, rooms } from '../utils/data'
-import { useParams } from 'react-router-dom'
-import { defaultCampus, findCollisions, getContentById, sortAlphabetically } from '../utils/helpers'
+import { useLocation, useMatch, useParams } from 'react-router-dom'
+import {
+  defaultCampus,
+  findCollisions,
+  getContentById,
+  sortAlphabetically,
+  findAllCollisions
+} from '../utils/helpers'
 import useAuthContext from '../hooks/useAuthContext'
 
 export const sortedLocations = sortAlphabetically(Object.values(locations))
@@ -18,7 +24,7 @@ const Item = styled('div')(() => ({
   width: '100%'
 }))
 
-const customDataSource = (planIds) => {
+const customDataSource = (planIds, collisionFunction) => {
   return new CustomStore({
     key: 'id',
     load: async () => {
@@ -27,7 +33,7 @@ const customDataSource = (planIds) => {
         console.log('No events to load')
         return []
       } else {
-        return findCollisions(res, planIds.split('+')[0])
+        return collisionFunction(res, planIds.split('+')[0])
       }
     }
   })
@@ -42,6 +48,8 @@ export default function Collisions() {
   const [locations, setLocations] = useState(
     sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
   )
+
+  const findAll = useLocation().pathname.split('/')[2] === 'all'
   const { id } = useParams()
 
   const handleChange = (selectedOption) => {
@@ -134,7 +142,11 @@ export default function Collisions() {
         <Grid item xs={10}>
           <Timeline
             currentLocation={currentLocation}
-            store={customDataSource(id)}
+            store={
+              findAll
+                ? customDataSource(id, findAllCollisions)
+                : customDataSource(id, findCollisions)
+            }
             rooms={filteredRooms}
             locations={Object.values(locations)}
             showCommittee
