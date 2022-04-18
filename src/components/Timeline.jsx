@@ -215,7 +215,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
     )
   }
 
-  const nRooms = rooms.length > 1 ? rooms.length : 6
+  const nRooms = rooms.length > 2 ? rooms.length : 7
   const scheduleHeight = currentLocation ? nRooms * 175 : 1000
   return (
     <>

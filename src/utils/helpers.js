@@ -188,7 +188,24 @@ export const findAllCollisions = (events, personalPlanId) => {
 }
 
 export const exportPlan = async (plans) => {
-  const header = ['id', 'committee', 'name', 'location', 'room', 'start', 'end']
+  const header = [
+    'ID',
+    'Fadderi',
+    'Aktivitet',
+    'Område',
+    'Plats',
+    'Start',
+    'Slut',
+    'Alkohol',
+    'Mat',
+    'Bardiskar',
+    'Bänkset Kårallen',
+    'Bänkset HG',
+    'Grillar',
+    'Annat bokbart',
+    'Beskrivining',
+    'Länk'
+  ]
   const res = await getContentById(
     plans.length === 1 ? [plans[0].value] : plans.map((plan) => plan.value),
     'events',
@@ -205,7 +222,16 @@ export const exportPlan = async (plans) => {
       location.text,
       _rooms,
       moment(elem.startDate).format('YY-MM-DD HH:mm').toString(),
-      moment(elem.endDate).format('YY-MM-DD HH:mm').toString()
+      moment(elem.endDate).format('YY-MM-DD HH:mm').toString(),
+      elem.alcohol ? 'TRUE' : 'FALSE',
+      elem.food ? 'TRUE' : 'FALSE',
+      elem.bardiskar ?? '0',
+      elem['bankset-k'] ?? '0',
+      elem['bankset-hg'] ?? '0',
+      elem.grillar ?? '0',
+      elem.annat ?? '',
+      elem.description ?? '',
+      elem.link ?? ''
     ]
   })
   return [header, ...cvsConversion]
