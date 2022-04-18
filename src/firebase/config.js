@@ -19,5 +19,6 @@ firebase.initializeApp(firebaseConfig)
 export const analytics = firebase.analytics()
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()
+const appCheck = firebase.appCheck('6LdGo4IfAAAAAOD_vLtVHrABhtu40ntNZZKyFXm7', true)
 
 export default firebase
