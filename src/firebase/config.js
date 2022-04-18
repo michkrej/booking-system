@@ -3,6 +3,9 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/analytics'
+import 'firebase/app-check'
+
+if (window.location.hostname == 'localhost') self.FIREBASE_APPCHECK_DEBUG_TOKEN = true
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -19,5 +22,7 @@ firebase.initializeApp(firebaseConfig)
 export const analytics = firebase.analytics()
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()
+const appCheck = firebase.appCheck()
+appCheck.activate('6LdGo4IfAAAAAOD_vLtVHrABhtu40ntNZZKyFXm7', true)
 
 export default firebase
