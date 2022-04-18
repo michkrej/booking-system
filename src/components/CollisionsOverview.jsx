@@ -40,7 +40,7 @@ const CollisionsOverview = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} mt={2}>
               <SelectInput
-                options={[...plans, ...publicPlans]}
+                options={plans}
                 handleChange={handleStartCollison}
                 placeholder="Din plan"
                 value={startCollision}
