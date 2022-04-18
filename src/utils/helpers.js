@@ -148,7 +148,7 @@ export const findAllCollisions = (events, personalPlanId) => {
     }
     events.forEach((ev2) => {
       // Hantera krockar i C-huset
-      if (ev1.id !== ev2.id) {
+      if (ev1.id !== ev2.id && ev1.planId !== ev2.planId) {
         // if we arn't looking at the same element
         const hasSameCorridor =
           ev1.locationId === ev2.locationId ? collisionCorridorAndRoom(ev1, ev2) : false
