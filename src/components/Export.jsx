@@ -75,7 +75,11 @@ const Export = () => {
           </Button>
         </div>
         {csvData.length > 0 ? (
-          <CSVLink data={csvData} filename={chosenPlans.label || 'export.csv'} ref={csvInstance} />
+          <CSVLink
+            data={csvData}
+            filename={chosenPlans.length === 1 ? chosenPlans[0].label : 'export.csv'}
+            ref={csvInstance}
+          />
         ) : undefined}
       </Box>
     </Paper>
