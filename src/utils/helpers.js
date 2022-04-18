@@ -2,8 +2,8 @@ import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { firestore } from '../firebase/config'
 import { corridorsC, locationsValla, roomsC } from './campusValla'
-import { committeesConsensus, kårer } from './committees'
-import { campuses, locations } from './data'
+import { committees, committeesConsensus, kårer } from './committees'
+import { campuses, locations, rooms } from './data'
 
 const moment = extendMoment(Moment)
 
@@ -117,6 +117,28 @@ export const findCollisions = (events, personalPlanId) => {
     })
   })
   return result
+}
+
+export const exportPlan = async (plan) => {
+  const header = ['id', 'committee', 'name', 'location', 'room', 'start', 'end']
+  const res = await getContentById([plan[0].value], 'events', 'planId')
+  const cvsConversion = res.map((elem) => {
+    const committee = committees.find((com) => com.id === elem.committeeId)
+    const location = Object.values(locations).find((location) => location.id === elem.locationId)
+    const _rooms = elem.roomId.map((room) => rooms.find((r) => r.id === room).text)
+    return [elem.id, committee.text, elem.text, location.text, _rooms, elem.startDate, elem.endDate]
+  })
+  return [header, ...cvsConversion]
+}
+const exportCollisions = (events, personalPlanId) => {
+  const res = findCollisions(events, personalPlanId)
+  const header = ['id', 'committee', 'name', 'location', 'room', 'start', 'end']
+  const cvsConversion = res.map((elem) => {
+    const committee = committees.find((com) => com.id === elem.committeeId)
+    const location = Object.values(locations).find((location) => location.id === elem.locationId)
+    const rooms = elem.roomId.map((room) => rooms.find((r) => r.id == room.id))
+    return [elem.id, committee.text, elem.text, location.text, rooms, elem.startDate, elem.endDate]
+  })
 }
 
 export const kårCommittees = (kår) => {

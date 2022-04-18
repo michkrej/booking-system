@@ -10,10 +10,32 @@ import Checkbox from '@mui/material/Checkbox'
 import SelectInput from './SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
 import usePlansContext from '../hooks/usePlansContext'
+import { exportPlan } from '../utils/helpers'
+import { CSVLink, CSVDownload } from 'react-csv'
 
 const Export = () => {
   const [checked, setChecked] = useState(false)
+  const [chosenPlan, setChosenPlan] = useState()
+  const [events, setEvents] = useState([])
   const { plans, publicPlans } = usePlansContext()
+
+  const handleChange = async (e) => {
+    setChosenPlan(e)
+
+    const res = await exportPlan(chosenPlan)
+    setEvents(res)
+  }
+
+  const getExportData = () => {
+    console.log(events)
+    return events
+  }
+
+  const fetchData = async () => {
+    const res = await exportPlan(chosenPlan)
+    setEvents(res)
+  }
+
   return (
     <Paper sx={{ padding: 2 }}>
       <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
@@ -23,7 +45,13 @@ const Export = () => {
       <Box component="form" mt={2}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <SelectInput options={plans} placeholder="Dina planer" multiple />
+            <SelectInput
+              options={plans}
+              placeholder="Dina planer"
+              multiple
+              handleChange={handleChange}
+              value={chosenPlan}
+            />
           </Grid>
           {checked && (
             <Grid item xs={12}>
@@ -37,14 +65,18 @@ const Export = () => {
           sx={{ marginTop: 1 }}
         />
         <Button
-          type="submit"
+          //type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 1 }}
           startIcon={<GetAppIcon />}
+          onClick={() => exportPlan(chosenPlan)}
         >
           Exportera
         </Button>
+        <CSVLink data={events} asyncOnClick={true} onClick={fetchData}>
+          Export
+        </CSVLink>
       </Box>
     </Paper>
   )
