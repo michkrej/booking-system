@@ -121,12 +121,20 @@ export const findCollisions = (events, personalPlanId) => {
 
 export const exportPlan = async (plan) => {
   const header = ['id', 'committee', 'name', 'location', 'room', 'start', 'end']
-  const res = await getContentById([plan[0].value], 'events', 'planId')
+  const res = await getContentById([plan.value], 'events', 'planId')
   const cvsConversion = res.map((elem) => {
     const committee = committees.find((com) => com.id === elem.committeeId)
     const location = Object.values(locations).find((location) => location.id === elem.locationId)
     const _rooms = elem.roomId.map((room) => rooms.find((r) => r.id === room).text)
-    return [elem.id, committee.text, elem.text, location.text, _rooms, elem.startDate, elem.endDate]
+    return [
+      elem.id,
+      committee.text,
+      elem.text,
+      location.text,
+      _rooms,
+      moment(elem.startDate).format('HH:mm DD-MM-YYYY').toString(),
+      moment(elem.endDate).format('HH:mm DD-MM-YYYY').toString()
+    ]
   })
   return [header, ...cvsConversion]
 }
@@ -137,6 +145,7 @@ const exportCollisions = (events, personalPlanId) => {
     const committee = committees.find((com) => com.id === elem.committeeId)
     const location = Object.values(locations).find((location) => location.id === elem.locationId)
     const rooms = elem.roomId.map((room) => rooms.find((r) => r.id == room.id))
+
     return [elem.id, committee.text, elem.text, location.text, rooms, elem.startDate, elem.endDate]
   })
 }
