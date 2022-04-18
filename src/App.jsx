@@ -50,7 +50,7 @@ function App() {
         maxWidth="false"
       >
         <CssBaseline />
-        <Container component="main" pb={5} sx={{ flexGrow: 1 }} maxWidth="xl">
+        <Container component="main" pb={5} sx={{ flexGrow: 1 }} maxWidth="xxl">
           {authFinished && (
             <BrowserRouter>
               <Suspense
@@ -81,6 +81,7 @@ function App() {
                   <Route element={<RequireAuth />}>
                     <Route exact path="/booking/:id" element={<Booking />} />
                     <Route exact path="/collisions/:id" element={<Collisions />} />
+                    <Route exact path="/collisions/all/:id" element={<Collisions />} />
                     <Route exact path="/overview" element={<Overview />} />
                   </Route>
                   <Route

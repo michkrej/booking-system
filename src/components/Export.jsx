@@ -15,7 +15,7 @@ import { CSVLink } from 'react-csv'
 
 const Export = () => {
   const [checked, setChecked] = useState(false)
-  const [chosenPlan, setChosenPlan] = useState()
+  const [chosenPlans, setchosenPlans] = useState()
   const [csvData, setCsvData] = useState([])
   const csvInstance = useRef(null)
   const { plans, publicPlans } = usePlansContext()
@@ -30,11 +30,11 @@ const Export = () => {
   }, [csvData])
 
   const handleChange = (e) => {
-    setChosenPlan(e)
+    setchosenPlans(e)
   }
 
   const fetchData = () => {
-    exportPlan(chosenPlan).then((response) => setCsvData(response))
+    exportPlan(chosenPlans).then((response) => setCsvData(response))
   }
 
   return (
@@ -50,7 +50,8 @@ const Export = () => {
               options={[...plans, ...publicPlans]}
               placeholder="Plan"
               handleChange={handleChange}
-              value={chosenPlan}
+              value={chosenPlans}
+              multiple
             />
           </Grid>
           {checked && (
@@ -74,7 +75,7 @@ const Export = () => {
           </Button>
         </div>
         {csvData.length > 0 ? (
-          <CSVLink data={csvData} filename={chosenPlan.label || 'export.csv'} ref={csvInstance} />
+          <CSVLink data={csvData} filename={chosenPlans.label || 'export.csv'} ref={csvInstance} />
         ) : undefined}
       </Box>
     </Paper>
