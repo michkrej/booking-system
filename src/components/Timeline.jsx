@@ -10,6 +10,11 @@ import { Grid } from '@mui/material'
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
 
+const getHeight = (nRooms, location, isOverview) => {
+  if (isOverview) return nRooms * 10
+  return location ? nRooms * 175 : 1000
+}
+
 const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], locations }) => {
   const { user } = useAuthContext()
   const [groups, setGroups] = useState(['locationId', 'committeeId'])
@@ -216,7 +221,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
   }
 
   const nRooms = rooms.length > 2 ? rooms.length : 7
-  const scheduleHeight = currentLocation ? nRooms * 175 : 1000
+  const scheduleHeight = getHeight(nRooms, currentLocation, groups[0] == 'locationId')
   return (
     <>
       <Scheduler
