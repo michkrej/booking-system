@@ -139,6 +139,7 @@ export default function AllEvents() {
             rooms={filteredRooms}
             locations={Object.values(locations)}
             showCommittee
+            edit={user.admin ?? false}
           />
         </Grid>
       </Grid>

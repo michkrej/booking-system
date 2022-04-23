@@ -142,6 +142,7 @@ export default function Collisions() {
         <Grid item xs={10}>
           <Timeline
             currentLocation={currentLocation}
+            edit={user.admin ?? false}
             store={
               findAll
                 ? customDataSource(id, findAllCollisions)

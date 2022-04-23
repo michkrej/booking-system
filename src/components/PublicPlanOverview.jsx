@@ -37,7 +37,10 @@ const PublicPlanOverview = () => {
                     to={`/booking/${plan.value}`}
                     style={{ color: 'inherit', textDecoration: 'inherit' }}
                   >
-                    <ListItemText>{`${plan.committee} - ${plan.label}`}</ListItemText>
+                    <ListItemText>
+                      {/* {`${plan.committee} - ${plan.label}`} */}
+                      {plan.label}
+                    </ListItemText>
                   </Link>
                 </ListItem>
               )

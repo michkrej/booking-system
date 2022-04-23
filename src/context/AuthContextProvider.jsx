@@ -38,7 +38,8 @@ const AuthContextProvider = ({ children }) => {
               displayName: user.displayName,
               email: user.email,
               emailVerified: user.emailVerified,
-              committeeId: dataRes[0].committeeId
+              committeeId: dataRes[0].committeeId,
+              admin: dataRes[0].admin ?? false
             }
           })
         }

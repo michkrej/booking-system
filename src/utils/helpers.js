@@ -183,7 +183,6 @@ export const findAllCollisions = (events, personalPlanId) => {
       }
     })
   })
-  console.log(result)
   return result
 }
 
