@@ -5,11 +5,14 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import Paper from '@mui/material/Paper'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import usePlansContext from '../hooks/usePlansContext'
+import { Button } from '@mui/material'
+import { formatCollisions } from './CollisionsOverview'
 
 const PublicPlanOverview = () => {
   const { publicPlans } = usePlansContext()
+  const navigate = useNavigate()
 
   return (
     <Paper sx={{ padding: 2, marginTop: 2 }}>
@@ -17,6 +20,7 @@ const PublicPlanOverview = () => {
         <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
           Publika planeringar
         </Typography>
+
         <Divider />
         <List>
           {publicPlans.length === 0 && (
@@ -39,6 +43,14 @@ const PublicPlanOverview = () => {
               )
             })}
         </List>
+        <Divider />
+        <Button
+          onClick={() =>
+            navigate(`/allEvents/${formatCollisions(publicPlans)}`)
+          }
+        >
+          Se alla event
+        </Button>
       </Box>
     </Paper>
   )

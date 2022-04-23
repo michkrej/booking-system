@@ -10,78 +10,83 @@ import SearchIcon from '@mui/icons-material/Search'
 import usePlansContext from '../hooks/usePlansContext'
 import { useNavigate } from 'react-router-dom'
 
-const CollisionsOverview = () => {
-  const [startCollision, setStartCollison] = useState()
-  const [endCollision, setEndCollision] = useState()
-  const { plans = [], publicPlans } = usePlansContext()
-  const navigate = useNavigate()
 
-  const handleStartCollison = (option) => {
-    setStartCollison(option)
-  }
-  const handleEndCollision = (option) => {
-    setEndCollision(option.length === 0 ? undefined : option)
-  }
-
-  const formatCollisions = () => {
+  export const formatCollisions = (endCollision) => {
     let res = ''
     endCollision.forEach((collision) => (res += `+${collision.value}`))
     return res
   }
 
-  return (
-    <Paper sx={{ padding: 2, marginTop: 2 }}>
-      <Box>
-        <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
-          Hitta krockar
-        </Typography>
-        <Divider />
+  const CollisionsOverview = () => {
+    const [startCollision, setStartCollison] = useState()
+    const [endCollision, setEndCollision] = useState()
+    const { plans = [], publicPlans } = usePlansContext()
+    const navigate = useNavigate()
+
+    const handleStartCollison = (option) => {
+      setStartCollison(option)
+    }
+    const handleEndCollision = (option) => {
+      setEndCollision(option.length === 0 ? undefined : option)
+    }
+
+    return (
+      <Paper sx={{ padding: 2, marginTop: 2 }}>
         <Box>
-          <Grid container spacing={2}>
-            <Grid item xs={12} mt={2}>
-              <SelectInput
-                options={plans}
-                handleChange={handleStartCollison}
-                placeholder="Din plan"
-                value={startCollision}
-              />
+          <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
+            Hitta krockar
+          </Typography>
+          <Divider />
+          <Box>
+            <Grid container spacing={2}>
+              <Grid item xs={12} mt={2}>
+                <SelectInput
+                  options={plans}
+                  handleChange={handleStartCollison}
+                  placeholder="Din plan"
+                  value={startCollision}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <SelectInput
+                  options={publicPlans}
+                  handleChange={handleEndCollision}
+                  placeholder="Publika planer"
+                  value={endCollision}
+                  multiple={true}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <SelectInput
-                options={publicPlans}
-                handleChange={handleEndCollision}
-                placeholder="Publika planer"
-                value={endCollision}
-                multiple={true}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2, mb: 2 }}
-            startIcon={<SearchIcon />}
-            disabled={endCollision && startCollision ? false : true}
-            onClick={() => navigate(`/collisions/${startCollision.value}${formatCollisions()}`)}
-          >
-            Hitta endast dina krockar med valda fadderier
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mb: 2 }}
-            startIcon={<SearchIcon />}
-            disabled={endCollision && startCollision ? false : true}
-            onClick={() => navigate(`/collisions/all/${startCollision.value}${formatCollisions()}`)}
-          >
-            Hitta alla krockar bland valda fadderier
-          </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, mb: 2 }}
+              startIcon={<SearchIcon />}
+              disabled={endCollision && startCollision ? false : true}
+              onClick={() =>
+                navigate(`/collisions/${startCollision.value}${formatCollisions(endCollision)}`)
+              }
+            >
+              Hitta endast dina krockar med valda fadderier
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mb: 2 }}
+              startIcon={<SearchIcon />}
+              disabled={endCollision && startCollision ? false : true}
+              onClick={() =>
+                navigate(`/collisions/all/${startCollision.value}${formatCollisions(endCollision)}`)
+              }
+            >
+              Hitta alla krockar bland valda fadderier
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Paper>
-  )
-}
+      </Paper>
+    )
+  }
 
 export default CollisionsOverview

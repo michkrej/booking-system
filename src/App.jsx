@@ -12,6 +12,7 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import RequireAuth from './components/RequireAuth'
 import Nav from './components/Nav'
+import AllEvents from './pages/AllEvents'
 
 const Booking = lazy(() => import('./pages/Booking'))
 const Overview = lazy(() => import('./pages/Overview'))
@@ -83,6 +84,7 @@ function App() {
                     <Route exact path="/collisions/:id" element={<Collisions />} />
                     <Route exact path="/collisions/all/:id" element={<Collisions />} />
                     <Route exact path="/overview" element={<Overview />} />
+                    <Route exact path="/allEvents/:id" element={<AllEvents />} />
                   </Route>
                   <Route
                     path="*"
