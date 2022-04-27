@@ -193,8 +193,10 @@ export const exportPlan = async (plans) => {
     'Aktivitet',
     'Område',
     'Plats',
-    'Start',
-    'Slut',
+    'Startdatum',
+    'Starttid',
+    'Slutdatum',
+    'Sluttid',
     'Alkohol',
     'Mat',
     'Bardiskar',
@@ -213,15 +215,17 @@ export const exportPlan = async (plans) => {
   const cvsConversion = res.map((elem) => {
     const committee = committees.find((com) => com.id === elem.committeeId)
     const location = Object.values(locations).find((location) => location.id === elem.locationId)
-    const _rooms = elem.roomId.map((room) => rooms.find((r) => r.id === room).text)
+    const _rooms = elem.roomId.map((room) => rooms.find((r) => r.id === room)?.text)
     return [
       elem.id,
       committee.text,
       elem.text,
       location.text,
       _rooms,
-      moment(elem.startDate).format('YY-MM-DD HH:mm').toString(),
-      moment(elem.endDate).format('YY-MM-DD HH:mm').toString(),
+      moment(elem.startDate).format('YY-MM-DD'),
+      moment(elem.startDate).format('HH:mm').toString(),
+      moment(elem.endDate).format('YY-MM-DD'),
+      moment(elem.endDate).format('HH:mm').toString(),
       elem.alcohol ? 'TRUE' : 'FALSE',
       elem.food ? 'TRUE' : 'FALSE',
       elem.bardiskar ?? '0',
@@ -234,17 +238,6 @@ export const exportPlan = async (plans) => {
     ]
   })
   return [header, ...cvsConversion]
-}
-const exportCollisions = (events, personalPlanId) => {
-  const res = findCollisions(events, personalPlanId)
-  const header = ['id', 'committee', 'name', 'location', 'room', 'start', 'end']
-  const cvsConversion = res.map((elem) => {
-    const committee = committees.find((com) => com.id === elem.committeeId)
-    const location = Object.values(locations).find((location) => location.id === elem.locationId)
-    const rooms = elem.roomId.map((room) => rooms.find((r) => r.id == room.id))
-
-    return [elem.id, committee.text, elem.text, location.text, rooms, elem.startDate, elem.endDate]
-  })
 }
 
 export const kårCommittees = (kår) => {

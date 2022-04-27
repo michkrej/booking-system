@@ -948,6 +948,11 @@ const roomsI = [
     text: 'IG21',
     id: '3f1a50c0-ce82-4b06-a738-f516f026d087',
     locationId: locationsValla['I-huset'].id
+  },
+  {
+    text: 'I-fiket',
+    id: '03dd5bc2-a10c-4db8-9e9f-52f72a0fb5c9',
+    locationId: locationsValla['I-huset'].id
   }
 ]
 
