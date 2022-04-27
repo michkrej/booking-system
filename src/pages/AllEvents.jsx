@@ -29,6 +29,23 @@ const customDataSource = (planIds) => {
       } else {
         return res
       }
+    },
+    remove: (id) => {
+      try {
+        firestore.collection('events').doc(id).delete()
+      } catch (e) {
+        console.log(e.message)
+      }
+    },
+    update: (id, values) => {
+      try {
+        let docRef = firestore.collection('events').doc(id)
+        return docRef.update({
+          ...values
+        })
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   })
 }
