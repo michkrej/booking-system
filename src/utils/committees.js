@@ -144,6 +144,11 @@ const committeesStuff = [
     text: 'Jur6',
     id: 'bf506d1c-bf9d-4afc-a927-3d0c0d567a9c',
     color: '#45d0e9'
+  },
+  {
+    text: 'MvSek',
+    id: 'cf9ee786-4cbd-41ff-8474-92ab8fad5549',
+    color: '#75d0c9'
   }
 ]
 
