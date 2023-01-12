@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
-import { analytics, auth, firestore } from '../firebase/config'
+import { analytics, auth, db } from '../firebase/config'
+import { collection, where, getDocs } from 'firebase/firestore'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import useAuthContext from './useAuthContext'
 
 const useLogin = () => {
@@ -12,24 +14,30 @@ const useLogin = () => {
     setError(undefined)
     setIsPending(true)
     try {
-      const res = await auth.signInWithEmailAndPassword(email, password)
+      const { user } = await signInWithEmailAndPassword(auth, email, password)
 
-      const dataRes = []
-      const ref = firestore.collection('userDetails')
-      const data = await ref.where('userId', '==', res.user.uid).get()
-      data.docs.forEach((doc) => dataRes.push(doc.data()))
-      if (dataRes.length > 0) {
+      const userDetails = []
+      /**
+       * TODO
+       * Rewrite this to use getDoc instead of getDocs
+       */
+      const userDetailsSnapshot = await getDocs(
+        collection(db, 'userDetails'),
+        where('userId', '==', user.uid)
+      )
+      userDetailsSnapshot.docs.forEach((doc) => userDetails.push(doc.data()))
+      if (userDetails.length > 0) {
         dispatch({
           type: 'LOGIN',
           payload: {
-            uid: res.user.uid,
-            displayName: res.user.displayName,
-            email: res.user.email,
-            emailVerified: res.user.emailVerified,
-            committeeId: dataRes[0].committeeId
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            committeeId: userDetails[0].committeeId
           }
         })
-        analytics.logEvent(`User ${res.user.uid} logged in`)
+        analytics.logEvent(`User ${user.uid} logged in`)
       } else {
         throw Error('The user does not have a committee assigned')
       }

@@ -1,8 +1,9 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { firestore } from '../firebase/config'
+import { db } from '../firebase/config'
 import { committees, committeesConsensus, kårer } from './committees'
 import { campuses, locations, rooms } from './data'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 
 const moment = extendMoment(Moment)
 
@@ -77,7 +78,7 @@ export async function getContentById(ids, path, id) {
   // don't run if there aren't any ids or a path for the collection
   if (!ids || !ids.length || !path) return []
 
-  const collectionPath = firestore.collection(path)
+  const collectionPath = collection(db, path)
   const batches = []
 
   while (ids.length) {
@@ -86,10 +87,9 @@ export async function getContentById(ids, path, id) {
 
     // add the batch request to to a queue
     batches.push(
-      collectionPath
-        .where(id, 'in', [...batch])
-        .get()
-        .then((results) => results.docs.map((result) => ({ id: result.id, ...result.data() })))
+      getDocs(query(collectionPath, where(id, 'in', [...batch]))).then((results) =>
+        results.docs.map((result) => ({ id: result.id, ...result.data() }))
+      )
     )
   }
 

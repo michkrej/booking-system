@@ -1,15 +1,14 @@
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import App from './App'
 import AuthContextProvider from './context/AuthContextProvider'
 import PlansContextProvider from './context/PlanContextProvider'
 
-if (window.location.hostname == 'localhost') self.FIREBASE_APPCHECK_DEBUG_TOKEN = true
-
-ReactDOM.render(
+const container = document.getElementById('root')
+const root = createRoot(container) // createRoot(container!) if you use TypeScript
+root.render(
   <AuthContextProvider>
     <PlansContextProvider>
       <App />
     </PlansContextProvider>
-  </AuthContextProvider>,
-  document.getElementById('root')
+  </AuthContextProvider>
 )

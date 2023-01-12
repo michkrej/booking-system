@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
-import { analytics, auth, firestore } from '../firebase/config'
+import { analytics, auth, db } from '../firebase/config'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { collection, addDoc } from 'firebase/firestore'
+import { logEvent } from 'firebase/analytics'
 import useAuthContext from './useAuthContext'
 
 const useSignup = () => {
@@ -12,14 +15,14 @@ const useSignup = () => {
     setError(undefined)
     setIsPending(true)
     try {
-      const res = await auth.createUserWithEmailAndPassword(email, password)
+      const res = await createUserWithEmailAndPassword(auth, email, password)
 
       if (!res) {
         throw new Error('Could not create user')
       }
 
-      await res.user.updateProfile({ displayName })
-      await firestore.collection('userDetails').add({
+      await updateProfile(res.user, { displayName })
+      await addDoc(collection(db, 'userDetails'), {
         committeeId: committee,
         userId: res.user.uid
       })
@@ -34,7 +37,7 @@ const useSignup = () => {
           committeeId: committee
         }
       })
-      analytics.logEvent(`User ${res.user.uid} created`)
+      logEvent(analytics, `User ${res.user.uid} created`)
       if (!isCancelled) {
         setIsPending(false)
         setError(undefined)
