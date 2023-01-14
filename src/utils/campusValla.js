@@ -737,7 +737,7 @@ const roomsFysik = [
     text: 'FE242',
     id: '0eb7400d-13c4-493e-89e4-1cfc9af1684c',
     locationId: locationsValla['Fysik-huset'].id
-  },
+  }
 ]
 
 const roomsKey = [

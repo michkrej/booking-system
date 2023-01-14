@@ -5,8 +5,6 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Divider from '@mui/material/Divider'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
 import SelectInput from './SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
 import usePlansContext from '../hooks/usePlansContext'
@@ -47,7 +45,7 @@ const Export = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <SelectInput
-              options={[...plans, ...publicPlans]}
+              options={[...(plans || []), ...(publicPlans || [])]}
               placeholder="Plan"
               handleChange={handleChange}
               value={chosenPlans}

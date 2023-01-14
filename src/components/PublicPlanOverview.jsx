@@ -47,11 +47,7 @@ const PublicPlanOverview = () => {
             })}
         </List>
         <Divider />
-        <Button
-          onClick={() =>
-            navigate(`/allEvents/${formatCollisions(publicPlans)}`)
-          }
-        >
+        <Button onClick={() => navigate(`/allEvents/${formatCollisions(publicPlans)}`)}>
           Se alla event
         </Button>
       </Box>

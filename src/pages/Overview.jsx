@@ -18,7 +18,7 @@ import { getContentById } from '../utils/helpers'
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
   const { user } = useAuthContext()
-  const { dispatch } = usePlansContext()
+  const { dispatch, plans } = usePlansContext()
 
   useEffect(() => {
     const getPlans = async () => {
@@ -74,7 +74,7 @@ const Overview = () => {
                 <CircularProgress />
               </Box>
             )}
-            {!isPending && (
+            {!isPending && plans && (
               <Grid container maxWidth="xs" spacing={2}>
                 <Grid item md={6} xs={12}>
                   <PlanOverview userId={user.uid} />
