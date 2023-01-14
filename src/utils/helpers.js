@@ -11,44 +11,36 @@ export const sortAlphabetically = (elem) => {
   return elem.sort((a, b) => ('' + a.text).localeCompare(b.text, 'sv', { numeric: true }))
 }
 
-const corridorIds = Object.values(corridorsC).map((corridor) => corridor.id)
+const LOCATION_ID = locations['C-huset'].id
+const CORRIDOR_IDS = Object.values(corridorsC).map((corridor) => corridor.id)
 
-const collisionCorridorAndRoom = (ev1, ev2) => {
-  if (ev1.locationId === locations['C-huset'].id) {
-    // hitta korridorerna
-    const bookedRooms1 = roomsC.filter((room) => ev1.roomId.includes(room.id))
-    const bookedRooms2 = roomsC.filter((room) => ev2.roomId.includes(room.id))
-    const bookedCorridors1 = ev1.roomId.filter((id) => corridorIds.includes(id))
-    const bookedCorridors2 = ev2.roomId.filter((id) => corridorIds.includes(id))
+const getBookedRooms = (event) => roomsC.filter((room) => event.roomId.includes(room.id))
+const getBookedCorridors = (event) => event.roomId.filter((id) => CORRIDOR_IDS.includes(id))
 
-    //Om ena bokat hela korridoren och den andra en enstaka sal
-    if (
-      bookedRooms1.some((room) => bookedCorridors2.includes(room.corridorId)) ||
-      bookedRooms2.some((room) => bookedCorridors1.includes(room.corridorId))
-    ) {
-      return true
-    }
+const isCollisionBetweenRoomAndCorridor = (event1, event2) => {
+  if (event1.locationId !== LOCATION_ID || event2.locationId !== LOCATION_ID) {
+    return false
   }
-  return false
+
+  const bookedRooms1 = getBookedRooms(event1)
+  const bookedRooms2 = getBookedRooms(event2)
+  const bookedCorridors1 = getBookedCorridors(event1)
+  const bookedCorridors2 = getBookedCorridors(event2)
+
+  return (
+    bookedRooms1.some((room) => bookedCorridors2.includes(room.corridorId)) ||
+    bookedRooms2.some((room) => bookedCorridors1.includes(room.corridorId))
+  )
 }
 
 const increaseItemsUse = (items, event) => {
-  if (event?.grillar) {
-    items.grillar.sum += event.grillar
-    items.grillar.events.push(event)
-  }
-  if (event?.bardiskar) {
-    items.bardiskar.sum += event.bardiskar
-    items.bardiskar.events.push(event)
-  }
-  if (event?.['bankset-hg']) {
-    items.banksetHG.sum += event['bankset-hg']
-    items.banksetHG.events.push(event)
-  }
-  if (event?.['bankset-k']) {
-    items.banksetK.sum += event['bankset-k']
-    items.banksetK.events.push(event)
-  }
+  const itemKeys = Object.keys(items)
+  itemKeys.forEach((key) => {
+    if (event?.[key]) {
+      items[key].sum += event[key]
+      items[key].events.push(event)
+    }
+  })
 
   return items
 }
@@ -91,7 +83,7 @@ export const findCollisions = (events, personalPlanId) => {
     publicPlans.forEach((ev2) => {
       // Hantera krockar i C-huset
       const hasSameCorridor =
-        ev1.locationId === ev2.locationId ? collisionCorridorAndRoom(ev1, ev2) : false
+        ev1.locationId === ev2.locationId ? isCollisionBetweenRoomAndCorridor(ev1, ev2) : false
 
       const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
       const firstRooms = ev1.roomId
@@ -151,7 +143,7 @@ export const findAllCollisions = (events, personalPlanId) => {
       if (ev1.id !== ev2.id && ev1.planId !== ev2.planId) {
         // if we arn't looking at the same element
         const hasSameCorridor =
-          ev1.locationId === ev2.locationId ? collisionCorridorAndRoom(ev1, ev2) : false
+          ev1.locationId === ev2.locationId ? isCollisionBetweenRoomAndCorridor(ev1, ev2) : false
 
         const firstEvent = moment.range(new Date(ev1.startDate), new Date(ev1.endDate))
         const firstRooms = ev1.roomId
