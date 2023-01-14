@@ -5,17 +5,14 @@ import SelectInput from '../components/SelectInput'
 import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
-import { firestore } from '../firebase/config'
 import { campuses, filterCampusLocations, locations, rooms } from '../utils/data'
-import { useLocation, useMatch, useParams } from 'react-router-dom'
-import {
-  defaultCampus,
-  findCollisions,
-  getContentById,
-  sortAlphabetically,
-  findAllCollisions
-} from '../utils/helpers'
+import { useLocation, useParams } from 'react-router-dom'
+import { defaultCampus, getContentById, sortAlphabetically } from '../utils/helpers'
 import useAuthContext from '../hooks/useAuthContext'
+import {
+  findCollisionsBetweenAllEvents,
+  findCollisionsBetweenUserPlanAndPublicPlans
+} from '../utils/collisionHandling'
 
 export const sortedLocations = sortAlphabetically(Object.values(locations))
 
@@ -145,8 +142,8 @@ export default function Collisions() {
             edit={user.admin ?? false}
             store={
               findAll
-                ? customDataSource(id, findAllCollisions)
-                : customDataSource(id, findCollisions)
+                ? customDataSource(id, findCollisionsBetweenAllEvents)
+                : customDataSource(id, findCollisionsBetweenUserPlanAndPublicPlans)
             }
             rooms={filteredRooms}
             locations={Object.values(locations)}
