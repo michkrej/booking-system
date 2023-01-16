@@ -22,11 +22,11 @@ Delete appointment: Delete.
 
 # Version 2
 
-- [ ] Upgrade React to v18
-- [ ] Upgrade Firebase to v9
+- [-] Upgrade React to v18
+- [-] Upgrade Firebase to v9
 - [ ] Remove option of repeating events (keeping this means I need to introduce a lot of additional logic to the collision handling, not doing that)
 - [ ] Only make it possible to have one public plan at a time (so that users don't create individual plans for individual events, yes, they did that)
-- [ ] Refactor collision code to make it more readable
+- [-] Refactor collision code to make it more readable
 - [ ] Ensure that amount of objects (bänkset etc) are correct
 - [ ] Fix and improve styling
 - [ ] Update contact email
