@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import PublicIcon from '@mui/icons-material/Public'
 import { Link } from 'react-router-dom'
-import { firestore } from '../firebase/config'
+import { db } from '../firebase/config'
 import { useNavigate } from 'react-router-dom'
 import LoadingButton from '@mui/lab/LoadingButton'
 import usePlansContext from '../hooks/usePlansContext'
@@ -30,7 +30,7 @@ const PlanOverview = ({ userId }) => {
       if (name.length === 0) {
         throw new Error('Du måste ange ett namn för planen')
       }
-      const res = await firestore.collection('plans').add({ label: name, userId, public: false })
+      const res = await db.collection('plans').add({ label: name, userId, public: false })
       navigate(`/booking/${res.id}`)
       dispatch({
         type: 'CREATE',
@@ -50,7 +50,7 @@ const PlanOverview = ({ userId }) => {
           `Vill du verkligen radera '${plans.find((plan) => plan.value === planValue).label}'`
         )
       ) {
-        await firestore.collection('plans').doc(planValue).delete()
+        await db.collection('plans').doc(planValue).delete()
         dispatch({
           type: 'DELETE',
           payload: {
@@ -70,7 +70,7 @@ const PlanOverview = ({ userId }) => {
         type: 'UPDATE',
         payload: { ...plan, public: newState }
       })
-      await firestore.collection('plans').doc(plan.value).update({ public: newState })
+      await db.collection('plans').doc(plan.value).update({ public: newState })
     } catch (error) {
       console.log(error.message)
     }

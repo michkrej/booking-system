@@ -5,9 +5,10 @@ import SelectInput from '../components/SelectInput'
 import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
-import { firestore } from '../firebase/config'
+import { db } from '../firebase/config'
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
 import { campuses, filterCampusLocations, locations, rooms } from '../utils/data'
-import { useLocation, useMatch, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { defaultCampus, getContentById, sortAlphabetically } from '../utils/helpers'
 import useAuthContext from '../hooks/useAuthContext'
 
@@ -30,19 +31,20 @@ const customDataSource = (planIds) => {
         return res
       }
     },
-    remove: (id) => {
+    remove: async (id) => {
       try {
-        firestore.collection('events').doc(id).delete()
+        await deleteDoc(doc(db, 'events', id))
       } catch (e) {
         console.log(e.message)
       }
     },
-    update: (id, values) => {
+    update: async (id, values) => {
       try {
-        let docRef = firestore.collection('events').doc(id)
-        return docRef.update({
+        const docRef = doc(db, 'events', id)
+        await updateDoc(docRef, {
           ...values
         })
+        return docRef
       } catch (e) {
         console.log(e.message)
       }

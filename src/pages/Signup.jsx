@@ -14,7 +14,6 @@ import InputLabel from '@mui/material/InputLabel'
 import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
-import { useLinkStyles } from './Login'
 import { kårCommittees } from '../utils/helpers'
 import { kårer } from '../utils/committees'
 
@@ -23,8 +22,6 @@ export default function Signup() {
   const [kår, setKår] = useState('')
   const [moreError, setMoreError] = useState(false)
   const { signup, error } = useSignup()
-
-  const classes = useLinkStyles()
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -124,7 +121,7 @@ export default function Signup() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link to="/" variant="body2" className={classes.link}>
+              <Link to="/" variant="body2">
                 Har du redan ett konto? Logga in
               </Link>
             </Grid>

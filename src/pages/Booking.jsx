@@ -7,7 +7,17 @@ import SelectInput from '../components/SelectInput'
 import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
-import { firestore } from '../firebase/config'
+import { db } from '../firebase/config'
+import {
+  query,
+  collection,
+  where,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  doc
+} from 'firebase/firestore'
 
 import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
@@ -30,24 +40,24 @@ const customDataSource = (user) => {
   return new CustomStore({
     key: 'id',
     load: () => {
-      return firestore
-        .collection('events')
-        .where('planId', '==', window.location.pathname.split('/')[2])
-        .get()
-        .then((snapshot) => {
-          if (snapshot.empty) {
-            console.log('No events to load')
-            return []
-          } else {
-            let results = []
-            snapshot.docs.forEach((doc) => {
-              results.push({ id: doc.id, committeeId: user.committee, ...doc.data() })
-            })
-            return results
-          }
-        })
+      const q = query(
+        collection(db, 'events'),
+        where('planId', '==', window.location.pathname.split('/')[2])
+      )
+      return getDocs(q).then((snapshot) => {
+        if (snapshot.empty) {
+          console.log('No events to load')
+          return []
+        } else {
+          let results = []
+          snapshot.docs.forEach((doc) => {
+            results.push({ id: doc.id, committeeId: user.committee, ...doc.data() })
+          })
+          return results
+        }
+      })
     },
-    insert: (values) => {
+    insert: async (values) => {
       const doc = {
         ...values,
         startDate: new Date(values.startDate).toString(),
@@ -56,25 +66,26 @@ const customDataSource = (user) => {
         committeeId: user.committeeId
       }
       try {
-        firestore.collection('events').add(doc)
+        await addDoc(collection(db, 'events'), doc)
       } catch (e) {
         console.log(e.message)
       }
       return values
     },
-    remove: (id) => {
+    remove: async (id) => {
       try {
-        firestore.collection('events').doc(id).delete()
+        await deleteDoc(doc(db, 'events', id))
       } catch (e) {
         console.log(e.message)
       }
     },
-    update: (id, values) => {
+    update: async (id, values) => {
       try {
-        let docRef = firestore.collection('events').doc(id)
-        return docRef.update({
+        const docRef = doc(db, 'events', id)
+        await updateDoc(docRef, {
           ...values
         })
+        return docRef
       } catch (e) {
         console.log(e.message)
       }

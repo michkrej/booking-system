@@ -7,7 +7,8 @@ import Nav from '../components/Nav'
 import Export from '../components/Export'
 import PlanOverview from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
-import { firestore } from '../firebase/config'
+import { db } from '../firebase/config'
+import { collection, where, getDocs } from 'firebase/firestore'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
@@ -24,15 +25,18 @@ const Overview = () => {
     const getPlans = async () => {
       setIsPending(true)
       try {
-        const ref = firestore.collection('plans')
-        const snapshotPersonal = await ref.where('userId', '==', user.uid).get()
-        const snapshotPublic = await ref
-          .where('userId', '!=', user.uid)
-          .where('public', '==', true)
-          .get()
+        const ref = collection(db, 'plans')
+        // use Promise.all to fetch personal and public plans simultaneously
+        const [snapshotPersonal, snapshotPublic] = await Promise.all([
+          getDocs(ref, where('userId', '==', user.uid)),
+          getDocs(ref, where('userId', '!=', user.uid), where('public', '==', true))
+        ])
         const personalPlans = snapshotPersonal.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
         let publicPlans = snapshotPublic.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
 
+        /* 
+          Rewrite this whole thing to so that the commitee is instead saved when setting a plan to public.  
+        */
         // get Committees
         if (publicPlans.length > 0) {
           const userIds = [...new Set(publicPlans.map((plan) => plan.userId))]

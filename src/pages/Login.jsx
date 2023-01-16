@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import makeStyles from '@mui/styles/makeStyles'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -7,19 +6,17 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
+import styled from '@emotion/styled'
 
 import heart from '../images/LinTek_hjarta.png'
 import useLogin from '../hooks/useLogin'
 
-export const useLinkStyles = makeStyles({
-  link: {
-    fontSize: '0.875rem',
-    color: '#E1007A'
-  }
-})
+const StyledLink = styled(Link)(() => ({
+  fontSize: '0.875rem',
+  color: '#E1007A'
+}))
 
 export default function Login() {
-  const classes = useLinkStyles()
   const { login, error } = useLogin()
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -70,14 +67,14 @@ export default function Login() {
           </Button>
           <Grid container>
             <Grid item xs>
-              {/* <Link to="#" variant="body2" className={classes.link}>
+              {/* <StyledLink to="#" variant="body2" className={classes.link}>
                 Glömt lösenord?
-              </Link> */}
+              </StyledLink> */}
             </Grid>
             <Grid item>
-              <Link to="/signup" variant="body2" className={classes.link}>
+              <StyledLink to="/signup" variant="body2">
                 {'Har du inte ett konto? Skapa ett'}
-              </Link>
+              </StyledLink>
             </Grid>
           </Grid>
         </Box>

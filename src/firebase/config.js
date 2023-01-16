@@ -1,11 +1,8 @@
 /* eslint-disable no-undef */
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
-import 'firebase/analytics'
-import 'firebase/app-check'
-
-if (window.location.hostname == 'localhost') self.FIREBASE_APPCHECK_DEBUG_TOKEN = true
+import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
+import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig =
   window.location.hostname == 'localhost'
@@ -27,10 +24,10 @@ const firebaseConfig =
         measurementId: process.env.REACT_APP_FIREBASE_ANALYTICS_ID
       }
 
-firebase.initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig)
 
-export const analytics = firebase.analytics()
-export const auth = firebase.auth()
-export const firestore = firebase.firestore()
+export const analytics = getAnalytics(app)
+export const auth = getAuth(app)
+export const db = getFirestore(app)
 
-export default firebase
+export default app
