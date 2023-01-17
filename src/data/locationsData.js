@@ -1,10 +1,10 @@
-import { locationsUs, roomsUS } from './campusUS/campusUS'
+import { locationsUS, roomsUS } from './campusUS/campusUS'
 import { locationsValla, roomsValla } from './campusValla/campusValla'
 import { locationsOther, roomsOther } from './otherPlaces/_otherLocations'
 
 export const locations = {
   campusValla: locationsValla,
-  campusUS: locationsUs,
+  campusUS: locationsUS,
   others: locationsOther
 }
 

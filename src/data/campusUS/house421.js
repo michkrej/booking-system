@@ -17,8 +17,8 @@ export default [
     text: 'Almen',
     id: 'a11b8b9c-5936-4221-b0a7-77706e6446aa'
   }
-].map(({ text, id }) => ({
+]/* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusUS.house421.id
-}))
+})) */

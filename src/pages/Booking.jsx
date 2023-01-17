@@ -21,8 +21,8 @@ import {
 
 import useAuthContext from '../hooks/useAuthContext'
 import { defaultCampus, sortAlphabetically } from '../utils/helpers'
-import { locationsValla } from '../utils/campusValla'
 import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../data/locationsData'
+import { locationsValla } from '../data/campusValla/campusValla'
 
 export const sortedRooms = sortAlphabetically(rooms)
 

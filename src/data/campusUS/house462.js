@@ -25,8 +25,9 @@ export default [
     text: 'Trombonen',
     id: 'd009a911-0129-4294-8295-4f7656f4844e'
   }
-].map(({ text, id }) => ({
+]/* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusUS.house462.id
 }))
+ */

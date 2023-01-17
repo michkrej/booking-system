@@ -1,9 +1,10 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { db } from '../firebase/config'
-import { committees, committeesConsensus, kårer } from './committees'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { campuses, locations, rooms } from '../data/locationsData'
+import CustomStore from 'devextreme/data/custom_store'
+import { committees, committeesConsensus, kårer } from '../data/committees'
 
 const moment = extendMoment(Moment)
 
@@ -95,4 +96,15 @@ export async function getContentById(ids, path, id) {
 
   // after all of the data is fetched, return it
   return Promise.all(batches).then((content) => content.flat())
+}
+
+export const createCustomDataSource = (
+  load = undefined,
+  remove = undefined,
+  update = undefined
+) => {
+  return new CustomStore({
+    key: 'id',
+    ...(load ? load : {})
+  })
 }

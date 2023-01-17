@@ -37,8 +37,8 @@ export default [
     text: 'Marmor',
     id: '4fc6d69d-2c40-4426-ac5c-2a98ceb49e5c'
   }
-].map(({ text, id }) => ({
+]/* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusUS.house448.id
-}))
+})) */

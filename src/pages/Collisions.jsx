@@ -5,7 +5,6 @@ import SelectInput from '../components/SelectInput'
 import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
-import { campuses, filterCampusLocations, locations, rooms } from '../utils/data'
 import { useLocation, useParams } from 'react-router-dom'
 import { defaultCampus, getContentById, sortAlphabetically } from '../utils/helpers'
 import useAuthContext from '../hooks/useAuthContext'
@@ -13,6 +12,7 @@ import {
   findCollisionsBetweenAllEvents,
   findCollisionsBetweenUserPlanAndPublicPlans
 } from '../utils/collisionHandling'
+import { campuses, filterCampusLocations, locations, rooms } from '../data/locationsData'
 
 export const sortedLocations = sortAlphabetically(Object.values(locations))
 
