@@ -13,7 +13,7 @@ import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
-import { committees } from '../utils/committees'
+import { committees } from '../data/committees'
 import { getContentById } from '../utils/helpers'
 
 const Overview = () => {

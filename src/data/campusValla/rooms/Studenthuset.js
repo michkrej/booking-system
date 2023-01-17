@@ -29,8 +29,8 @@ export default [
     text: 'SH605',
     id: '58b85357-10b8-4331-bc75-89a99450aff3'
   }
-].map(({ text, id }) => ({
+]/* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusValla['Studenthuset'].id
-}))
+})) */

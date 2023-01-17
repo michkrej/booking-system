@@ -33,8 +33,9 @@ export default [
     text: 'Kolven',
     id: 'e07d3fed-c067-42e7-adf5-7b50cf6bab0a'
   }
-].map(({ text, id }) => ({
+]/* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusUS.house420.id
 }))
+ */

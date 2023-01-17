@@ -9,8 +9,8 @@ export default [
     text: 'SkåLand',
     id: '352c3dde-3767-4940-aa63-a4eac42449bf'
   }
-].map(({ text, id }) => ({
+]/* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.others['Utanför campus'].id
-}))
+})) */

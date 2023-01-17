@@ -1,6 +1,4 @@
-import { locations } from '../../locationsData'
-
-const locationId = locations.campusValla['C-huset'].id
+const locationId = '550ddbe9-6fa1-49de-9336-01744c67b233'
 
 export const corridorsC = {
   U: {
@@ -454,11 +452,11 @@ const roomsC = [
     text: 'Colosseum',
     id: '64f74234-8e86-4d99-827c-deb4774c809a'
   }
-].map(({ text, id, corridorId = undefined }) => ({
+] /* .map(({ text, id, corridorId = undefined }) => ({
   text,
   id,
   locationId,
   ...(corridorId ? corridorId : {})
-}))
+})) */
 
 export default roomsC

@@ -1,6 +1,6 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { corridorsC, roomsC } from '../data/campusValla/rooms/C'
+import roomsC, { corridorsC } from '../data/campusValla/rooms/C'
 import { locations } from '../data/locationsData'
 const moment = extendMoment(Moment)
 

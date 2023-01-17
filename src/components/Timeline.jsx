@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import { committees } from '../utils/committees'
 import useAuthContext from '../hooks/useAuthContext'
 import { formatDate } from 'devextreme/localization'
 import { Grid } from '@mui/material'
+import { committees } from '../data/committees'
 
 const currentDate = new Date('2022-08-16T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
