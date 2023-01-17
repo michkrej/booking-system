@@ -2,8 +2,8 @@ import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { db } from '../firebase/config'
 import { committees, committeesConsensus, kårer } from './committees'
-import { campuses, locations, rooms } from './data'
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { campuses, locations, rooms } from '../data/locationsData'
 
 const moment = extendMoment(Moment)
 

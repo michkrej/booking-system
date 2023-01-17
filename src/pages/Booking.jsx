@@ -19,10 +19,10 @@ import {
   doc
 } from 'firebase/firestore'
 
-import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../utils/data'
 import useAuthContext from '../hooks/useAuthContext'
 import { defaultCampus, sortAlphabetically } from '../utils/helpers'
 import { locationsValla } from '../utils/campusValla'
+import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../data/locationsData'
 
 export const sortedRooms = sortAlphabetically(rooms)
 

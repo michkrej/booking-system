@@ -7,10 +7,10 @@ import Timeline from '../components/Timeline'
 import CustomStore from 'devextreme/data/custom_store'
 import { db } from '../firebase/config'
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
-import { campuses, filterCampusLocations, locations, rooms } from '../utils/data'
 import { useParams } from 'react-router-dom'
 import { defaultCampus, getContentById, sortAlphabetically } from '../utils/helpers'
 import useAuthContext from '../hooks/useAuthContext'
+import { campuses, filterCampusLocations, locations, rooms } from '../data/locationsData'
 
 export const sortedLocations = sortAlphabetically(Object.values(locations))
 
