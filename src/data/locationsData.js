@@ -8,6 +8,8 @@ export const locations = {
   others: locationsOther
 }
 
+export const locationsNonGrouped = { ...locationsValla, ...locationsUS, ...locationsOther }
+
 export const rooms = [...roomsValla, ...roomsUS, ...roomsOther]
 
 const VALLA_CAMPUS = {

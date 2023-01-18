@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper'
 import { Link, useNavigate } from 'react-router-dom'
 import usePlansContext from '../hooks/usePlansContext'
 import { Button } from '@mui/material'
-import { formatCollisions } from './CollisionsOverview'
+import { formatCollisions } from '../utils/helpers'
 
 const PublicPlanOverview = () => {
   const { publicPlans } = usePlansContext()

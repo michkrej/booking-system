@@ -1,6 +1,6 @@
 import BookableLocations from './rooms/BookableLocations'
-import A from './rooms/C'
-import B from './rooms/C'
+import A from './rooms/A'
+import B from './rooms/B'
 import C, { corridorsC } from './rooms/C'
 import Fysik from './rooms/Fysik'
 import I from './rooms/I'
