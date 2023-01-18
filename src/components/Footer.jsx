@@ -10,7 +10,7 @@ const Copyright = () => {
       <Link color="inherit" href="https://bokningsplanering.com">
         Bokningsplanering
       </Link>{' '}
-      {new Date().getFullYear()}
+      2022 - {new Date().getFullYear()}
       {'.'}
     </Typography>
   )
@@ -39,12 +39,12 @@ const Footer = () => {
         <Typography variant="body1">
           Vid frågor kontakta{' '}
           <Link
-            href="mailto:ma-lkpg@lintek.liu.se"
+            href="mailto:michkrej@gmail.com"
             rel="noopener noreferrer"
             target="_top"
             color="inherit"
           >
-            ma-lkpg@lintek.liu.se
+            michkrej@gmail.com
           </Link>
         </Typography>
         <Copyright />

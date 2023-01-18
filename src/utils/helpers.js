@@ -2,7 +2,7 @@ import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { db } from '../firebase/config'
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import { campuses, locations, rooms } from '../data/locationsData'
+import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
 import CustomStore from 'devextreme/data/custom_store'
 import { committees, committeesConsensus, kårer } from '../data/committees'
 
@@ -33,34 +33,38 @@ export const exportPlan = async (plans) => {
     'Beskrivining',
     'Länk'
   ]
-  const res = await getContentById(
+  const events = await getContentById(
     plans.length === 1 ? [plans[0].value] : plans.map((plan) => plan.value),
     'events',
     'planId'
   )
-  const cvsConversion = res.map((elem) => {
-    const committee = committees.find((com) => com.id === elem.committeeId)
-    const location = Object.values(locations).find((location) => location.id === elem.locationId)
-    const _rooms = elem.roomId.map((room) => rooms.find((r) => r.id === room)?.text)
+  const cvsConversion = events.map((event) => {
+    const committee = committees.find((com) => com.id === event.committeeId)
+    const location = Object.values(locationsNonGrouped).find(
+      (location) => location.id === event.locationId
+    )
+    const roomNames = event.roomId
+      .map((eventRoomID) => rooms.find((room) => room.id === eventRoomID).text)
+      .join(', ')
     return [
-      elem.id,
+      event.id,
       committee.text,
-      elem.text,
+      event.text,
       location.text,
-      _rooms,
-      moment(elem.startDate).format('YY-MM-DD'),
-      moment(elem.startDate).format('HH:mm').toString(),
-      moment(elem.endDate).format('YY-MM-DD'),
-      moment(elem.endDate).format('HH:mm').toString(),
-      elem.alcohol ? 'TRUE' : 'FALSE',
-      elem.food ? 'TRUE' : 'FALSE',
-      elem.bardiskar ?? '0',
-      elem['bankset-k'] ?? '0',
-      elem['bankset-hg'] ?? '0',
-      elem.grillar ?? '0',
-      elem.annat ?? '',
-      elem.description ?? '',
-      elem.link ?? ''
+      roomNames,
+      moment(event.startDate).format('YY-MM-DD'),
+      moment(event.startDate).format('HH:mm'),
+      moment(event.endDate).format('YY-MM-DD'),
+      moment(event.endDate).format('HH:mm'),
+      event.alcohol ? 'TRUE' : 'FALSE',
+      event.food ? 'TRUE' : 'FALSE',
+      event.bardiskar || '0',
+      event['bankset-k'] || '0',
+      event['bankset-hg'] || '0',
+      event.grillar || '0',
+      event.annat || '',
+      event.description || '',
+      event.link || ''
     ]
   })
   return [header, ...cvsConversion]
@@ -73,6 +77,10 @@ export const kårCommittees = (kår) => {
 export const defaultCampus = (committeeId) => {
   if (committeesConsensus.find((com) => com.id === committeeId)) return campuses[1]
   return campuses[0]
+}
+
+export const formatCollisions = (endCollision) => {
+  return `+${(endCollision || []).map((collision) => collision.value).join('+')}`
 }
 
 export async function getContentById(ids, path, id) {
