@@ -40,7 +40,10 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
 
     let mainGroupItems = form.itemOption('mainGroup').items
     if (mainGroupItems.find((i) => i.itemType === 'group' && i.items[0].dataField === 'allDay')) {
-      mainGroupItems[2].items.splice(0, 1)
+      /**
+       * If you want to add repeating events write mainGroupItems[2].items.splice(0, 1) instead and change index for 'Beskriving' to 4
+       */
+      mainGroupItems.splice(2, 1)
     }
 
     mainGroupItems[0] = {
@@ -52,7 +55,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
     }
     mainGroupItems[1].items[0].label.text = 'Starttid'
     mainGroupItems[1].items[2].label.text = 'Sluttid'
-    mainGroupItems[4].label.text = 'Beskrivning'
+    mainGroupItems[3].label.text = 'Beskrivning'
     let room = form.itemOption('mainGroup.roomId')
     room.editorOptions = {
       ...room.editorOptions,
