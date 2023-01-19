@@ -47,7 +47,7 @@ const PublicPlanOverview = () => {
         </Typography>
         <Divider />
         <Button fullWidth onClick={() => navigate(`/allEvents/${formatCollisions(publicPlans)}`)}>
-          Se bokningar för samtliga planeringar
+          Se samtliga fadderiers planeringar
         </Button>
         <Divider />
         {!publicPlans.length > 0 && (
@@ -66,7 +66,7 @@ const PublicPlanOverview = () => {
                     fullWidth
                     onClick={() => navigate(`/allEvents/${formatCollisions(plans)}`)}
                   >
-                    Se alla bokningar för fadderierna inom {kår}
+                    Se planeringarna för fadderierna inom {kår}
                   </Button>
                   <Divider />
                 </div>
