@@ -41,7 +41,7 @@ const CollisionsOverview = () => {
               <SelectInput
                 options={plans}
                 handleChange={handleStartCollision}
-                placeholder="Din plan"
+                placeholder="Din planering"
                 value={startCollision}
               />
             </Grid>
@@ -49,7 +49,7 @@ const CollisionsOverview = () => {
               <SelectInput
                 options={publicPlans}
                 handleChange={handleEndCollision}
-                placeholder="Publika planer"
+                placeholder="Publika planeringar"
                 value={endCollision}
                 multiple={true}
               />

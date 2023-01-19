@@ -51,12 +51,11 @@ const PublicPlanOverview = () => {
         </Button>
         <Divider />
         {!publicPlans.length > 0 && (
-          <Comment align="center">Här kommer det du att se allas publika planer</Comment>
+          <Comment align="center">Här kommer det du att se allas publika planeringar</Comment>
         )}
         <List>
           {plansPerKår.map((kårData, i) => {
             const [kår, plans] = Object.entries(kårData)[0]
-            console.log(plans)
             if (plans.length > 0) {
               return (
                 <div key={i}>
@@ -66,7 +65,7 @@ const PublicPlanOverview = () => {
                     fullWidth
                     onClick={() => navigate(`/allEvents/${formatCollisions(plans)}`)}
                   >
-                    Se planeringarna för fadderierna inom {kår}
+                    Se planeringar för fadderier inom {kår}
                   </Button>
                   <Divider />
                 </div>

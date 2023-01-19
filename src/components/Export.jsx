@@ -59,7 +59,7 @@ const Export = () => {
           <Grid item xs={12}>
             <SelectInput
               options={createOptionsArray()}
-              placeholder="Plan"
+              placeholder="Planering"
               handleChange={setChosenPlans}
               value={chosenPlans}
               multiple
