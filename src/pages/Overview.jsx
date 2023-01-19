@@ -8,7 +8,7 @@ import Export from '../components/Export'
 import PlanOverview from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
 import { db } from '../firebase/config'
-import { collection, where, getDocs } from 'firebase/firestore'
+import { collection, where, getDocs, query } from 'firebase/firestore'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
@@ -26,26 +26,29 @@ const Overview = () => {
       setIsPending(true)
       try {
         const ref = collection(db, 'plans')
-        // use Promise.all to fetch personal and public plans simultaneously
         const [snapshotPersonal, snapshotPublic] = await Promise.all([
-          getDocs(ref, where('userId', '==', user.uid)),
-          getDocs(ref, where('userId', '!=', user.uid), where('public', '==', true))
+          getDocs(query(ref, where('userId', '==', user.uid))),
+          getDocs(query(ref, where('public', '==', true)))
         ])
-        const personalPlans = snapshotPersonal.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
-        let publicPlans = snapshotPublic.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
+        let personalPlans = snapshotPersonal.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        let publicPlans = snapshotPublic.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
 
         /* 
           Rewrite this whole thing to so that the commitee is instead saved when setting a plan to public.  
         */
         // get Committees
-        if (publicPlans.length > 0) {
-          const userIds = [...new Set(publicPlans.map((plan) => plan.userId))]
+        if (personalPlans.length > 0 || publicPlans.length > 0) {
+          const userIds = [...new Set([...publicPlans.map((plan) => plan.userId), user.uid])]
           const res = await getContentById(userIds, 'userDetails', 'userId')
           const dataRes = res.map((elem) => {
             const committee = committees.find((com) => com.id === elem.committeeId)
             return { name: committee.text, userId: elem.userId }
           })
           publicPlans = publicPlans.map((plan) => ({
+            ...plan,
+            committee: dataRes.find((com) => com.userId === plan.userId).name
+          }))
+          personalPlans = personalPlans.map((plan) => ({
             ...plan,
             committee: dataRes.find((com) => com.userId === plan.userId).name
           }))
