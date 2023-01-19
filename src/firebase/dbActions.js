@@ -2,6 +2,34 @@ import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestor
 import { getContentById } from '../utils/helpers'
 import { db } from './config'
 
+
+// Plan actions
+export const createPlan = async (plan) => {
+  try {
+    const planRef = await addDoc(collection(db, 'plans'), plan) 
+    return planRef
+  } catch (e) {
+    console.log(e.message)
+  }
+}
+
+export const deletePlan = async (id) => {
+    try {
+    await deleteDoc(doc(db, 'plans', id)) 
+  } catch (e) {
+    console.log(e.message)
+  }
+}
+
+export const updatePlan = async (id, newValues) => {
+  try {
+    return await updateDoc(doc(db, 'plans', id), { ...newValues })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// Event actions
 export const loadEvents = async (planIds, collisionFunction = undefined) => {
   const res = await getContentById(planIds.split('+'), 'events', 'planId')
   if (res.length < 1) {

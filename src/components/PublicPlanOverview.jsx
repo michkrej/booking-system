@@ -8,11 +8,36 @@ import Paper from '@mui/material/Paper'
 import { Link, useNavigate } from 'react-router-dom'
 import usePlansContext from '../hooks/usePlansContext'
 import { Button } from '@mui/material'
-import { formatCollisions } from '../utils/helpers'
+import { formatCollisions, sortAlphabetically } from '../utils/helpers'
+import Comment from './Comment'
+import { kårer } from '../data/committees'
 
 const PublicPlanOverview = () => {
-  const { publicPlans } = usePlansContext()
+  const { publicPlans = [] } = usePlansContext()
   const navigate = useNavigate()
+
+  const displayPlansList = (plans, kårCommittees) => {
+    const kårPlans = sortAlphabetically(
+      plans.filter(
+        (plan) =>
+          kårCommittees.filter((committee) => {
+            return committee.text === plan.committee
+          }).length > 0
+      )
+    )
+
+    return kårPlans.map((plan) => (
+      <ListItem key={plan.id}>
+        <Link to={`/booking/${plan.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
+          <ListItemText>{`${plan.committee} - ${plan.label}`}</ListItemText>
+        </Link>
+      </ListItem>
+    ))
+  }
+
+  const plansPerKår = Object.entries(kårer).map(([kår, committees]) => ({
+    [kår]: displayPlansList(publicPlans, committees)
+  }))
 
   return (
     <Paper sx={{ padding: 2, marginTop: 2 }}>
@@ -20,36 +45,35 @@ const PublicPlanOverview = () => {
         <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
           Publika planeringar
         </Typography>
-
         <Divider />
-        <List>
-          {publicPlans.length === 0 && (
-            <p>
-              <i>Här kommer det du att hitta andras planeringar när de markerat dem som publika</i>
-            </p>
-          )}
-          {publicPlans
-            .sort((a, b) => ('' + a.label).localeCompare(b.label, 'sv', { numeric: true }))
-            .map((plan) => {
-              return (
-                <ListItem key={plan.value}>
-                  <Link
-                    to={`/booking/${plan.value}`}
-                    style={{ color: 'inherit', textDecoration: 'inherit' }}
-                  >
-                    <ListItemText>
-                      {/* {`${plan.committee} - ${plan.label}`} */}
-                      {plan.label}
-                    </ListItemText>
-                  </Link>
-                </ListItem>
-              )
-            })}
-        </List>
-        <Divider />
-        <Button onClick={() => navigate(`/allEvents/${formatCollisions(publicPlans)}`)}>
-          Se alla event
+        <Button fullWidth onClick={() => navigate(`/allEvents/${formatCollisions(publicPlans)}`)}>
+          Se bokningar för samtliga planeringar
         </Button>
+        <Divider />
+        {!publicPlans.length > 0 && (
+          <Comment align="center">Här kommer det du att se allas publika planer</Comment>
+        )}
+        <List>
+          {plansPerKår.map((kårData, i) => {
+            const [kår, plans] = Object.entries(kårData)[0]
+            console.log(plans)
+            if (plans.length > 0) {
+              return (
+                <div key={i}>
+                  {plans}
+                  <Divider />
+                  <Button
+                    fullWidth
+                    onClick={() => navigate(`/allEvents/${formatCollisions(plans)}`)}
+                  >
+                    Se alla bokningar för fadderierna inom {kår}
+                  </Button>
+                  <Divider />
+                </div>
+              )
+            } else return null
+          })}
+        </List>
       </Box>
     </Paper>
   )
