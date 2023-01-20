@@ -2,11 +2,10 @@ import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestor
 import { getContentById } from '../utils/helpers'
 import { db } from './config'
 
-
 // Plan actions
 export const createPlan = async (plan) => {
   try {
-    const planRef = await addDoc(collection(db, 'plans'), plan) 
+    const planRef = await addDoc(collection(db, 'plans'), plan)
     return planRef
   } catch (e) {
     console.log(e.message)
@@ -14,8 +13,8 @@ export const createPlan = async (plan) => {
 }
 
 export const deletePlan = async (id) => {
-    try {
-    await deleteDoc(doc(db, 'plans', id)) 
+  try {
+    await deleteDoc(doc(db, 'plans', id))
   } catch (e) {
     console.log(e.message)
   }
@@ -30,6 +29,11 @@ export const updatePlan = async (id, newValues) => {
 }
 
 // Event actions
+/**
+ * TODO
+ * If reading like this gets too expensive: connect to an array
+ * instead and then parse and save array to Firebase on button click
+ */
 export const loadEvents = async (planIds, collisionFunction = undefined) => {
   const res = await getContentById(planIds.split('+'), 'events', 'planId')
   if (res.length < 1) {

@@ -57,7 +57,7 @@ export default [
     text: 'Örat',
     id: 'bded005f-8e83-4fdf-8b1b-0d2084391af6'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.others.Kårhus.id

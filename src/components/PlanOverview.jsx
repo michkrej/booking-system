@@ -15,7 +15,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import PublicIcon from '@mui/icons-material/Public'
 import LoadingButton from '@mui/lab/LoadingButton'
-
 import usePlansContext from '../hooks/usePlansContext'
 import { createPlan, deletePlan, updatePlan } from '../firebase/dbActions'
 import { sortAlphabetically } from '../utils/helpers'
@@ -91,7 +90,7 @@ const PlanOverview = ({ userId }) => {
         <Divider />
         {error && <Error message={error} />}
         <List>
-          {sortAlphabetically(plans).map((plan) => {
+          {sortAlphabetically(plans, true).map((plan) => {
             return (
               <ListItem
                 key={plan.id}

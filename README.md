@@ -30,7 +30,7 @@ Delete appointment: Delete.
 - [ ] Ensure that amount of objects (bänkset etc) are correct
 - [x] Fix and improve styling
 - [x] Update contact email
-- [ ] Add option for resetting password if forgotten
+- [X] Add option for resetting password if forgotten
 
 Finally - before planning starts by the new batch of welcoming committees
 - [ ] Make all plans non-public

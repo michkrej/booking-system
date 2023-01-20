@@ -34,7 +34,7 @@ export default [
     text: 'Kamomill',
     id: '6c448dd9-ef2e-48f8-bc0e-13b6a742dad8'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: '949636dc-997a-4aa2-8582-7c81a12dad4d'

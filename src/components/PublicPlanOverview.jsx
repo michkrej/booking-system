@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper'
 import { Link, useNavigate } from 'react-router-dom'
 import usePlansContext from '../hooks/usePlansContext'
 import { Button } from '@mui/material'
-import { formatCollisions, sortAlphabetically } from '../utils/helpers'
+import { formatCollisions } from '../utils/helpers'
 import Comment from './Comment'
 import { kårer } from '../data/committees'
 
@@ -17,13 +17,11 @@ const PublicPlanOverview = () => {
   const navigate = useNavigate()
 
   const displayPlansList = (plans, kårCommittees) => {
-    const kårPlans = sortAlphabetically(
-      plans.filter(
-        (plan) =>
-          kårCommittees.filter((committee) => {
-            return committee.text === plan.committee
-          }).length > 0
-      )
+    const kårPlans = plans.filter(
+      (plan) =>
+        kårCommittees.filter((committee) => {
+          return committee.text === plan.committee
+        }).length > 0
     )
 
     return kårPlans.map((plan) => (

@@ -24,8 +24,8 @@ const US_CAMPUS = {
 export const campuses = [VALLA_CAMPUS, US_CAMPUS]
 
 const campusLocationsMap = {
-  [VALLA_CAMPUS.value]: { ...locations.campusValla, ...locations.others },
-  [US_CAMPUS.value]: { ...locations.campusUS, ...locations.others }
+  [VALLA_CAMPUS.label]: { ...locations.campusValla, ...locations.others },
+  [US_CAMPUS.label]: { ...locations.campusUS, ...locations.others }
 }
 
 export const filterCampusLocations = (campus) => {
@@ -33,8 +33,8 @@ export const filterCampusLocations = (campus) => {
 }
 
 const campusRoomsMap = {
-  [VALLA_CAMPUS.value]: [...roomsValla, ...roomsOther],
-  [US_CAMPUS.value]: [...roomsUS, ...roomsOther]
+  [VALLA_CAMPUS.label]: [...roomsValla, ...roomsOther],
+  [US_CAMPUS.label]: [...roomsUS, ...roomsOther]
 }
 
 export const filterCampusRooms = (campus) => {

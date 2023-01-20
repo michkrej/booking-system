@@ -85,7 +85,7 @@ export default [
     text: 'Theorell',
     id: '7e05e180-2090-4952-82f6-6d1467baf09d'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusValla['B-huset'].id

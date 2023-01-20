@@ -5,11 +5,16 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
 import CustomStore from 'devextreme/data/custom_store'
 import { committees, committeesConsensus, kårer } from '../data/committees'
+import { deleteEvent, insertEvent, loadEvents, updateEvent } from '../firebase/dbActions'
 
 const moment = extendMoment(Moment)
 
-export const sortAlphabetically = (elem) => {
-  return elem.sort((a, b) => ('' + a.text).localeCompare(b.text, 'sv', { numeric: true }))
+export const sortAlphabetically = (elem, useLabel = false) => {
+  return elem.sort((a, b) =>
+    ('' + (useLabel ? a.label : a.text)).localeCompare(useLabel ? b.label : b.text, 'sv', {
+      numeric: true
+    })
+  )
 }
 
 export const exportPlan = async (plans) => {
@@ -34,7 +39,7 @@ export const exportPlan = async (plans) => {
     'Länk'
   ]
   const events = await getContentById(
-    plans.length === 1 ? [plans[0].value] : plans.map((plan) => plan.value),
+    plans.length === 1 ? [plans[0].id] : plans.map((plan) => plan.id),
     'events',
     'planId'
   )
@@ -80,7 +85,7 @@ export const defaultCampus = (committeeId) => {
 }
 
 export const formatCollisions = (endCollision) => {
-  return `+${(endCollision || []).map((collision) => collision.value).join('+')}`
+  return `+${(endCollision || []).map((collision) => collision.id).join('+')}`
 }
 
 export async function getContentById(ids, path, id) {
@@ -107,12 +112,41 @@ export async function getContentById(ids, path, id) {
 }
 
 export const createCustomDataSource = (
-  load = undefined,
-  remove = undefined,
-  update = undefined
+  user,
+  { load = true, insert = false, remove = false, update = false },
+  collisionFunction = undefined
 ) => {
   return new CustomStore({
     key: 'id',
-    ...(load ? load : {})
+    ...(load
+      ? {
+          load: async () => {
+            return await loadEvents(window.location.pathname.split('/')[2], collisionFunction)
+          }
+        }
+      : {}),
+    ...(insert
+      ? {
+          insert: async (values) => {
+            return await insertEvent(values, user)
+          }
+        }
+      : {}),
+    ...(remove
+      ? {
+          remove: async (id) => {
+            await deleteEvent(id)
+          }
+        }
+      : {}),
+    ...(update
+      ? {
+          update: async (id, values) => {
+            return await updateEvent(id, values)
+          }
+        }
+      : {})
   })
 }
+
+export const delay = (ms) => new Promise((res) => setTimeout(res, ms))

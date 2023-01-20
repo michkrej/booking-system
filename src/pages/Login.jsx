@@ -67,9 +67,9 @@ export default function Login() {
           </Button>
           <Grid container>
             <Grid item xs>
-              {/* <StyledLink to="#" variant="body2" className={classes.link}>
+              <StyledLink to="/resetPassword" variant="body2">
                 Glömt lösenord?
-              </StyledLink> */}
+              </StyledLink>
             </Grid>
             <Grid item>
               <StyledLink to="/signup" variant="body2">

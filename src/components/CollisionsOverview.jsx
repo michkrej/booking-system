@@ -62,7 +62,7 @@ const CollisionsOverview = () => {
             sx={{ mt: 2, mb: 2 }}
             startIcon={<SearchIcon />}
             disabled={isDisabled}
-            onClick={() => navigate(`/collisions/${startCollision.value}${collisionPath}`)}
+            onClick={() => navigate(`/collisions/${startCollision.id}${collisionPath}`)}
           >
             Hitta endast dina krockar med valda fadderier
           </Button>
@@ -73,7 +73,7 @@ const CollisionsOverview = () => {
             sx={{ mb: 2 }}
             startIcon={<SearchIcon />}
             disabled={isDisabled}
-            onClick={() => navigate(`/collisions/all/${startCollision.value}${collisionPath}`)}
+            onClick={() => navigate(`/collisions/all/${startCollision.id}${collisionPath}`)}
           >
             Hitta alla krockar bland valda fadderier
           </Button>
@@ -82,6 +82,5 @@ const CollisionsOverview = () => {
     </Paper>
   )
 }
-
 
 export default CollisionsOverview

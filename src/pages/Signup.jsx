@@ -16,6 +16,12 @@ import { Link } from 'react-router-dom'
 import heart from '../images/LinTek_hjarta.png'
 import { kårer } from '../data/committees'
 import { kårCommittees } from '../utils/helpers'
+import styled from '@emotion/styled'
+
+export const StyledLink = styled(Link)(() => ({
+  fontSize: '0.875rem',
+  color: '#E1007A'
+}))
 
 export default function Signup() {
   const [committee, setCommittee] = useState('')
@@ -121,9 +127,9 @@ export default function Signup() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link to="/" variant="body2">
+              <StyledLink to="/" variant="body2">
                 Har du redan ett konto? Logga in
-              </Link>
+              </StyledLink>
             </Grid>
           </Grid>
         </Box>

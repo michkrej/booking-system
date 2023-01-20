@@ -41,7 +41,7 @@ export default [
     text: 'Åkerö',
     id: 'a7dff6de-31f0-466e-9281-a768761db851'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusUS.house463.id

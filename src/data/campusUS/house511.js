@@ -41,7 +41,7 @@ export default [
     text: 'Kanel',
     id: '587057c8-2a56-4b72-a793-35d702c04ec3'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusUS.house511.id

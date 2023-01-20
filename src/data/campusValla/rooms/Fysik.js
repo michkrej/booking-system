@@ -57,7 +57,7 @@ export default [
     text: 'FE242',
     id: '0eb7400d-13c4-493e-89e4-1cfc9af1684c'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusValla['Fysik-huset'].id

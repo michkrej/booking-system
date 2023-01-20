@@ -17,7 +17,7 @@ export default [
     text: 'Murklan',
     id: '43a6b707-88e1-40ce-9e0a-27d5f7768baa'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: locations.campusUS.house473.id

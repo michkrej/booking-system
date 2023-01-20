@@ -122,7 +122,7 @@ export default [
     text: 'AG26',
     id: 'e7e6bfd8-88bd-42ee-bd60-90547587e2f1'
   }
-]/* .map(({ text, id }) => ({
+] /* .map(({ text, id }) => ({
   text,
   id,
   locationId: locationsValla['A-huset'].id
