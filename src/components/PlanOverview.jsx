@@ -16,12 +16,14 @@ import AddIcon from '@mui/icons-material/Add'
 import PublicIcon from '@mui/icons-material/Public'
 import LoadingButton from '@mui/lab/LoadingButton'
 import usePlansContext from '../hooks/usePlansContext'
+import useAuthContext from '../hooks/useAuthContext'
 import { createPlan, deletePlan, updatePlan } from '../firebase/dbActions'
 import { sortAlphabetically } from '../utils/helpers'
 import Error from './Error'
 import Comment from './Comment'
 
-const PlanOverview = ({ userId }) => {
+const PlanOverview = () => {
+  const { user } = useAuthContext()
   const navigate = useNavigate()
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState()
@@ -34,7 +36,12 @@ const PlanOverview = ({ userId }) => {
     if (name.length === 0) {
       setError('Du måste ange ett namn för planen')
     } else {
-      const planFields = { label: name, userId, public: false }
+      const planFields = {
+        label: name,
+        userId: user.uid,
+        public: false,
+        committeeId: user.committeeId
+      }
       const { id } = await createPlan(planFields)
       navigate(`/booking/${id}`)
       dispatch({
@@ -67,10 +74,15 @@ const PlanOverview = ({ userId }) => {
       setError('Du kan bara ha en publik plan åt gången')
     } else {
       const _public = !plan.public
-      updatePlan(plan.id, { public: _public })
+      const addCommittee = plan.committeeId ? {} : { committeeId: user.committeeId } // adding committee here in case it is an old plan
+      updatePlan(plan.id, { public: _public, ...addCommittee })
       dispatch({
         type: 'UPDATE_PUBLIC',
-        payload: { ...plan, public: _public }
+        payload: {
+          ...plan,
+          public: _public,
+          ...addCommittee
+        }
       })
     }
   }

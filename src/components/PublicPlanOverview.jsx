@@ -20,14 +20,16 @@ const PublicPlanOverview = () => {
     const kårPlans = plans.filter(
       (plan) =>
         kårCommittees.filter((committee) => {
-          return committee.text === plan.committee
+          return committee.id === plan.committeeId
         }).length > 0
     )
 
     return kårPlans.map((plan) => (
       <ListItem key={plan.id}>
         <Link to={`/booking/${plan.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
-          <ListItemText>{`${plan.committee} - ${plan.label}`}</ListItemText>
+          <ListItemText>{`${
+            kårCommittees.find((committee) => committee.id === plan.committeeId).text
+          } - ${plan.label}`}</ListItemText>
         </Link>
       </ListItem>
     ))

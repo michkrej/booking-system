@@ -1,4 +1,13 @@
-import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where
+} from 'firebase/firestore'
 import { getContentById } from '../utils/helpers'
 import { db } from './config'
 
@@ -24,7 +33,25 @@ export const updatePlan = async (id, newValues) => {
   try {
     return await updateDoc(doc(db, 'plans', id), { ...newValues })
   } catch (e) {
-    console.log(e)
+    console.log(e.message)
+  }
+}
+
+export const getAllPlans = async ({ uid }) => {
+  try {
+    const ref = collection(db, 'plans')
+    const [snapshotPersonal, snapshotPublic] = await Promise.all([
+      getDocs(query(ref, where('userId', '==', uid))),
+      getDocs(query(ref, where('public', '==', true)))
+    ])
+    const plans = snapshotPersonal.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    const publicPlans = snapshotPublic.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    return {
+      plans,
+      publicPlans
+    }
+  } catch (e) {
+    console.log(e.message)
   }
 }
 

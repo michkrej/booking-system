@@ -1,42 +1,37 @@
 import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+import { LoadingButton } from '@mui/lab'
 
 import heart from '../images/LinTek_hjarta.png'
 import Error from '../components/Error'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../firebase/config'
-import { Grid } from '@mui/material'
 import { StyledLink } from './Signup'
-import { useNavigate } from 'react-router-dom'
-import { LoadingButton } from '@mui/lab'
-import { delay } from '../utils/helpers'
 
 export default function ForgotPassword() {
   const [error, setError] = useState()
   const [success, setSuccess] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [isPending, setIsPending] = useState(false)
   const [email, setEmail] = useState('')
-  const navigate = useNavigate()
 
-  const handleSubmit = () => {
-    setLoading(true)
+  const handleSubmit = async () => {
+    setIsPending(true)
     setError(undefined)
     setSuccess(undefined)
     sendPasswordResetEmail(auth, email)
       .then(async () => {
+        setIsPending(false)
         setSuccess(true)
-        await delay(500)
-        navigate('/')
       })
       .catch((error) => {
         setError(error.message)
       })
-    setLoading(false)
+    setIsPending(false)
   }
 
   return (
@@ -77,7 +72,7 @@ export default function ForgotPassword() {
             onChange={(e) => setEmail(e.target.value)}
           />
           <LoadingButton
-            loading={loading}
+            loading={isPending}
             disabled={email.length < 1}
             fullWidth
             variant="contained"
