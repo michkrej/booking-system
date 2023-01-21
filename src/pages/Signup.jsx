@@ -11,11 +11,18 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
+import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
-import { kårCommittees } from '../utils/helpers'
-import { kårer } from '../utils/committees'
+import { kårer } from '../data/committees'
+import { kårCommittees, sortAlphabetically } from '../utils/helpers'
+import Comment from '../components/Comment'
+
+export const StyledLink = styled(Link)(() => ({
+  fontSize: '0.875rem',
+  color: '#E1007A'
+}))
 
 export default function Signup() {
   const [committee, setCommittee] = useState('')
@@ -71,6 +78,9 @@ export default function Signup() {
               />
             </Grid>
             <Grid item xs={12}>
+              <Comment align="center">Använd fadderimejlen så kan planeringarna ärvas!</Comment>
+            </Grid>
+            <Grid item xs={12} style={{ paddingTop: 0 }}>
               <TextField
                 required
                 fullWidth
@@ -104,11 +114,16 @@ export default function Signup() {
               </FormControl>
             </Grid>
           </Grid>
-          <Grid item xs={12} sx={{ pt: 2 }}>
+          <Grid item xs={12} alignContent="center" pt={1}>
+            <Comment align="center">
+              Om du tillhör t.ex. kårledningen använd Fadderi - Övrigt
+            </Comment>
+          </Grid>
+          <Grid item xs={12}>
             <FormControl fullWidth required>
               <InputLabel>Fadderi</InputLabel>
               <Select label="Fadderi" value={committee} onChange={handleChange} id="committee">
-                {kårCommittees(kår).map((assignee) => (
+                {sortAlphabetically(kårCommittees(kår)).map((assignee) => (
                   <MenuItem key={assignee.text} value={assignee.id}>
                     {assignee.text}
                   </MenuItem>
@@ -116,14 +131,14 @@ export default function Signup() {
               </Select>
             </FormControl>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }}>
             Skapa konto
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link to="/" variant="body2">
+              <StyledLink to="/" variant="body2">
                 Har du redan ett konto? Logga in
-              </Link>
+              </StyledLink>
             </Grid>
           </Grid>
         </Box>

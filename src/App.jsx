@@ -12,12 +12,11 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import RequireAuth from './components/RequireAuth'
 import Nav from './components/Nav'
-import AllEvents from './pages/AllEvents'
 
-const Booking = lazy(() => import('./pages/Booking'))
 const Overview = lazy(() => import('./pages/Overview'))
 const Signup = lazy(() => import('./pages/Signup'))
-const Collisions = lazy(() => import('./pages/Collisions'))
+const CalendarView = lazy(() => import('./pages/CalendarView'))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 
 export const primary = '#E1007A'
 
@@ -79,12 +78,21 @@ function App() {
                     path="/signup"
                     element={user ? <Navigate to="/overview" /> : <Signup />}
                   />
+                  <Route exact path="/resetPassword" element={<ForgotPassword />} />
                   <Route element={<RequireAuth />}>
-                    <Route exact path="/booking/:id" element={<Booking />} />
-                    <Route exact path="/collisions/:id" element={<Collisions />} />
-                    <Route exact path="/collisions/all/:id" element={<Collisions />} />
+                    <Route exact path="/booking/:id" element={<CalendarView />} />
+                    <Route
+                      exact
+                      path="/collisions/:id"
+                      element={<CalendarView findCollissions />}
+                    />
+                    <Route
+                      exact
+                      path="/collisions/all/:id"
+                      element={<CalendarView findCollissions />}
+                    />
                     <Route exact path="/overview" element={<Overview />} />
-                    <Route exact path="/allEvents/:id" element={<AllEvents />} />
+                    <Route exact path="/allEvents/:id" element={<CalendarView showAllEvents />} />
                   </Route>
                   <Route
                     path="*"

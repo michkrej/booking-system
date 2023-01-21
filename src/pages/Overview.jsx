@@ -7,14 +7,11 @@ import Nav from '../components/Nav'
 import Export from '../components/Export'
 import PlanOverview from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
-import { db } from '../firebase/config'
-import { collection, where, getDocs } from 'firebase/firestore'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
-import { committees } from '../utils/committees'
-import { getContentById } from '../utils/helpers'
+import { getAllPlans } from '../firebase/dbActions'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
@@ -24,43 +21,14 @@ const Overview = () => {
   useEffect(() => {
     const getPlans = async () => {
       setIsPending(true)
-      try {
-        const ref = collection(db, 'plans')
-        // use Promise.all to fetch personal and public plans simultaneously
-        const [snapshotPersonal, snapshotPublic] = await Promise.all([
-          getDocs(ref, where('userId', '==', user.uid)),
-          getDocs(ref, where('userId', '!=', user.uid), where('public', '==', true))
-        ])
-        const personalPlans = snapshotPersonal.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
-        let publicPlans = snapshotPublic.docs.map((doc) => ({ value: doc.id, ...doc.data() }))
-
-        /* 
-          Rewrite this whole thing to so that the commitee is instead saved when setting a plan to public.  
-        */
-        // get Committees
-        if (publicPlans.length > 0) {
-          const userIds = [...new Set(publicPlans.map((plan) => plan.userId))]
-          const res = await getContentById(userIds, 'userDetails', 'userId')
-          const dataRes = res.map((elem) => {
-            const committee = committees.find((com) => com.id === elem.committeeId)
-            return { name: committee.text, userId: elem.userId }
-          })
-          publicPlans = publicPlans.map((plan) => ({
-            ...plan,
-            committee: dataRes.find((com) => com.userId === plan.userId).name
-          }))
-        }
-        publicPlans.sort((a, b) => a.committee - b.committee)
-        dispatch({
-          type: 'LOAD',
-          payload: { plans: personalPlans, publicPlans: publicPlans }
-        })
-        setIsPending(false)
-      } catch (error) {
-        console.log(error.message)
-        setIsPending(false)
-      }
+      const { plans: _plans, publicPlans } = await getAllPlans(user)
+      dispatch({
+        type: 'LOAD',
+        payload: { plans: _plans, publicPlans: publicPlans }
+      })
+      setIsPending(false)
     }
+
     getPlans()
   }, [])
 
@@ -81,7 +49,7 @@ const Overview = () => {
             {!isPending && plans && (
               <Grid container maxWidth="xs" spacing={2}>
                 <Grid item md={6} xs={12}>
-                  <PlanOverview userId={user.uid} />
+                  <PlanOverview />
                   <CollisionsOverview />
                 </Grid>
                 <Grid item md={6} xs={12}>

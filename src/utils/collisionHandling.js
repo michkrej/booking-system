@@ -1,10 +1,10 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { corridorsC, roomsC } from './campusValla'
-import { locations } from './data'
-
+import roomsC, { corridorsC } from '../data/campusValla/rooms/C'
+import { locations } from '../data/locationsData'
 const moment = extendMoment(Moment)
-const LOCATION_ID = locations['C-huset'].id
+
+const LOCATION_ID = locations.campusValla['C-huset'].id
 const CORRIDOR_IDS = Object.values(corridorsC).map((corridor) => corridor.id)
 const MAX_ITEMS = {
   grillar: 9,

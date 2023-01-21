@@ -152,10 +152,17 @@ const committeesStuff = [
   }
 ]
 
-export const committees = [...committeesLinTek, ...committeesStuff, ...committeesConsensus]
+const otherGroup = { text: 'Övrigt', id: 'a16c78ef-6f00-492c-926e-bf1bfe9fce32', color: '#808080' }
+
+export const committees = [
+  ...committeesConsensus,
+  ...committeesLinTek,
+  ...committeesStuff,
+  otherGroup
+]
 
 export const kårer = {
-  LinTek: committeesLinTek,
-  StuFF: committeesStuff,
-  Consensus: committeesConsensus
+  Consensus: [...committeesConsensus, otherGroup],
+  LinTek: [...committeesLinTek, otherGroup],
+  StuFF: [...committeesStuff, otherGroup]
 }

@@ -1,14 +1,20 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { db } from '../firebase/config'
-import { committees, committeesConsensus, kårer } from './committees'
-import { campuses, locations, rooms } from './data'
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
+import CustomStore from 'devextreme/data/custom_store'
+import { committees, committeesConsensus, kårer } from '../data/committees'
+import { deleteEvent, insertEvent, loadEvents, updateEvent } from '../firebase/dbActions'
 
 const moment = extendMoment(Moment)
 
-export const sortAlphabetically = (elem) => {
-  return elem.sort((a, b) => ('' + a.text).localeCompare(b.text, 'sv', { numeric: true }))
+export const sortAlphabetically = (elem, useLabel = false) => {
+  return elem.sort((a, b) =>
+    ('' + (useLabel ? a.label : a.text)).localeCompare(useLabel ? b.label : b.text, 'sv', {
+      numeric: true
+    })
+  )
 }
 
 export const exportPlan = async (plans) => {
@@ -32,34 +38,38 @@ export const exportPlan = async (plans) => {
     'Beskrivining',
     'Länk'
   ]
-  const res = await getContentById(
-    plans.length === 1 ? [plans[0].value] : plans.map((plan) => plan.value),
+  const events = await getContentById(
+    plans.length === 1 ? [plans[0].id] : plans.map((plan) => plan.id),
     'events',
     'planId'
   )
-  const cvsConversion = res.map((elem) => {
-    const committee = committees.find((com) => com.id === elem.committeeId)
-    const location = Object.values(locations).find((location) => location.id === elem.locationId)
-    const _rooms = elem.roomId.map((room) => rooms.find((r) => r.id === room)?.text)
+  const cvsConversion = events.map((event) => {
+    const committee = committees.find((com) => com.id === event.committeeId)
+    const location = Object.values(locationsNonGrouped).find(
+      (location) => location.id === event.locationId
+    )
+    const roomNames = event.roomId
+      .map((eventRoomID) => rooms.find((room) => room.id === eventRoomID).text)
+      .join(', ')
     return [
-      elem.id,
+      event.id,
       committee.text,
-      elem.text,
+      event.text,
       location.text,
-      _rooms,
-      moment(elem.startDate).format('YY-MM-DD'),
-      moment(elem.startDate).format('HH:mm').toString(),
-      moment(elem.endDate).format('YY-MM-DD'),
-      moment(elem.endDate).format('HH:mm').toString(),
-      elem.alcohol ? 'TRUE' : 'FALSE',
-      elem.food ? 'TRUE' : 'FALSE',
-      elem.bardiskar ?? '0',
-      elem['bankset-k'] ?? '0',
-      elem['bankset-hg'] ?? '0',
-      elem.grillar ?? '0',
-      elem.annat ?? '',
-      elem.description ?? '',
-      elem.link ?? ''
+      roomNames,
+      moment(event.startDate).format('YY-MM-DD'),
+      moment(event.startDate).format('HH:mm'),
+      moment(event.endDate).format('YY-MM-DD'),
+      moment(event.endDate).format('HH:mm'),
+      event.alcohol ? 'TRUE' : 'FALSE',
+      event.food ? 'TRUE' : 'FALSE',
+      event.bardiskar || '0',
+      event['bankset-k'] || '0',
+      event['bankset-hg'] || '0',
+      event.grillar || '0',
+      event.annat || '',
+      event.description || '',
+      event.link || ''
     ]
   })
   return [header, ...cvsConversion]
@@ -72,6 +82,10 @@ export const kårCommittees = (kår) => {
 export const defaultCampus = (committeeId) => {
   if (committeesConsensus.find((com) => com.id === committeeId)) return campuses[1]
   return campuses[0]
+}
+
+export const formatCollisions = (endCollision) => {
+  return `+${(endCollision || []).map((collision) => collision.id).join('+')}`
 }
 
 export async function getContentById(ids, path, id) {
@@ -96,3 +110,43 @@ export async function getContentById(ids, path, id) {
   // after all of the data is fetched, return it
   return Promise.all(batches).then((content) => content.flat())
 }
+
+export const createCustomDataSource = (
+  user,
+  { load = true, insert = false, remove = false, update = false },
+  collisionFunction = undefined
+) => {
+  return new CustomStore({
+    key: 'id',
+    ...(load
+      ? {
+          load: async () => {
+            return await loadEvents(window.location.pathname.split('/')[2], collisionFunction)
+          }
+        }
+      : {}),
+    ...(insert
+      ? {
+          insert: async (values) => {
+            return await insertEvent(values, user)
+          }
+        }
+      : {}),
+    ...(remove
+      ? {
+          remove: async (id) => {
+            await deleteEvent(id)
+          }
+        }
+      : {}),
+    ...(update
+      ? {
+          update: async (id, values) => {
+            return await updateEvent(id, values)
+          }
+        }
+      : {})
+  })
+}
+
+export const delay = (ms) => new Promise((res) => setTimeout(res, ms))

@@ -13,13 +13,19 @@ export const plansReducer = (state, action) => {
         publicPlans: action.payload.publicPlans
       }
     case 'DELETE':
-      return { ...state, plans: state.plans.filter((plan) => action.payload.value !== plan.value) }
+      return { ...state, plans: state.plans.filter((plan) => action.payload.id !== plan.id) }
     case 'UPDATE':
       return {
         ...state,
-        plans: state.plans.map((plan) =>
-          plan.value === action.payload.value ? action.payload : plan
-        )
+        plans: state.plans.map((plan) => (plan.id === action.payload.id ? action.payload : plan))
+      }
+    case 'UPDATE_PUBLIC':
+      return {
+        ...state,
+        plans: state.plans.map((plan) => (plan.id === action.payload.id ? action.payload : plan)),
+        publicPlans: action.payload.public
+          ? [...state.publicPlans, action.payload]
+          : state.publicPlans.filter((plan) => plan.id !== action.payload.id)
       }
     default:
       return state

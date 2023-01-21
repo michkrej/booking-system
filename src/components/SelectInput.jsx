@@ -19,7 +19,6 @@ const SelectInput = ({
       isClearable={clearable}
       value={current}
       isMulti={multiple}
-      // styles={customStyles}
       theme={(theme) => ({
         ...theme,
         colors: {

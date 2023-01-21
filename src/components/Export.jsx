@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
@@ -10,13 +9,16 @@ import GetAppIcon from '@mui/icons-material/GetApp'
 import usePlansContext from '../hooks/usePlansContext'
 import { exportPlan } from '../utils/helpers'
 import { CSVLink } from 'react-csv'
+import { LoadingButton } from '@mui/lab'
+import moment from 'moment'
 
 const Export = () => {
-  const [checked, setChecked] = useState(false)
-  const [chosenPlans, setchosenPlans] = useState()
+  const [chosenPlans, setChosenPlans] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [csvData, setCsvData] = useState([])
   const csvInstance = useRef(null)
-  const { plans, publicPlans } = usePlansContext()
+  const { plans = [], publicPlans = [] } = usePlansContext()
 
   useEffect(() => {
     if (csvData && csvInstance && csvInstance.current && csvInstance.current.link) {
@@ -27,12 +29,23 @@ const Export = () => {
     }
   }, [csvData])
 
-  const handleChange = (e) => {
-    setchosenPlans(e)
+  const getCSVData = () => {
+    setLoading(!loading)
+    setError('')
+    exportPlan(chosenPlans)
+      .then((csv) => {
+        setCsvData(csv)
+      })
+      .catch((err) => {
+        setError(err.message)
+      })
+    setLoading(false)
   }
 
-  const fetchData = () => {
-    exportPlan(chosenPlans).then((response) => setCsvData(response))
+  const createOptionsArray = () => {
+    const userPlanIds = plans.map((plan) => plan.id)
+    const filteredPublicPlans = publicPlans.filter(({ id }) => !userPlanIds.includes(id))
+    return [...plans, ...filteredPublicPlans]
   }
 
   return (
@@ -45,40 +58,35 @@ const Export = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <SelectInput
-              options={[...(plans || []), ...(publicPlans || [])]}
-              placeholder="Plan"
-              handleChange={handleChange}
+              options={createOptionsArray()}
+              placeholder="Planering"
+              handleChange={setChosenPlans}
               value={chosenPlans}
               multiple
             />
           </Grid>
-          {checked && (
-            <Grid item xs={12}>
-              <SelectInput options={publicPlans} placeholder="Publika planer" multiple />
-            </Grid>
-          )}
         </Grid>
-        {/*         <FormControlLabel
-          label="Jag vill exportera krockar"
-          control={<Checkbox checked={checked} onChange={() => setChecked(!checked)} />}
-          sx={{ marginTop: 1 }}
-        /> */}
-        <div
-          onClick={() => {
-            fetchData()
-          }}
+        {error && <div>{error}</div>}
+        <LoadingButton
+          fullWidth
+          variant="contained"
+          sx={{ mt: 1 }}
+          startIcon={<GetAppIcon />}
+          disabled={chosenPlans.length === 0}
+          loading={loading}
+          onClick={getCSVData}
         >
-          <Button fullWidth variant="contained" sx={{ mt: 1 }} startIcon={<GetAppIcon />}>
-            Exportera
-          </Button>
-        </div>
-        {csvData.length > 0 ? (
+          Exportera
+        </LoadingButton>
+        {csvData.length > 0 && (
           <CSVLink
             data={csvData}
-            filename={chosenPlans.length === 1 ? chosenPlans[0].label : 'export.csv'}
+            filename={`${moment(new Date()).format('DDMMYYYY')}_${chosenPlans
+              .map(({ label }) => label)
+              .join('_')}`}
             ref={csvInstance}
           />
-        ) : undefined}
+        )}
       </Box>
     </Paper>
   )
