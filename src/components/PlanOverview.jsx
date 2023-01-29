@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import PublicIcon from '@mui/icons-material/Public'
+import EditIcon from '@mui/icons-material/Edit'
 import LoadingButton from '@mui/lab/LoadingButton'
 import usePlansContext from '../hooks/usePlansContext'
 import useAuthContext from '../hooks/useAuthContext'
@@ -32,9 +33,9 @@ const PlanOverview = () => {
   const createNewPlan = async () => {
     setIsPending(true)
     setError(undefined)
-    const name = window.prompt('Vad ska din ny plan heta?')
-    if (name.length === 0) {
-      setError('Du måste ange ett namn för planen')
+    const name = window.prompt('Vad ska din ny planering heta?')
+    if (name.length < 1) {
+      setError('Du måste ange ett namn')
     } else {
       const planFields = {
         label: name,
@@ -71,7 +72,7 @@ const PlanOverview = () => {
     setError(undefined)
     const hasPublicPlan = plans.some((plan) => plan.public)
     if (!plan.public && hasPublicPlan) {
-      setError('Du kan bara ha en publik plan åt gången')
+      setError('Du kan bara ha en publik planering åt gången')
     } else {
       const _public = !plan.public
       const addCommittee = plan.committeeId ? {} : { committeeId: user.committeeId } // adding committee here in case it is an old plan
@@ -85,6 +86,25 @@ const PlanOverview = () => {
         }
       })
     }
+  }
+
+  const changeName = (plan) => {
+    setIsPending(true)
+    setError(undefined)
+    const label = window.prompt('Vad ska din planering byta namn till?')
+    if (label.length < 1) {
+      setError('Du måste ange ett namn')
+    } else {
+      updatePlan(plan.id, { ...plan, label })
+      dispatch({
+        type: 'UPDATE',
+        payload: {
+          ...plan,
+          label
+        }
+      })
+    }
+    setIsPending(false)
   }
 
   return (
@@ -108,11 +128,14 @@ const PlanOverview = () => {
                 key={plan.id}
                 secondaryAction={
                   <>
+                    <IconButton edge="end" aria-label="edit name" onClick={() => changeName(plan)}>
+                      <EditIcon />
+                    </IconButton>
                     <IconButton
                       edge="end"
-                      aria-label="delete"
+                      aria-label="toogle public"
                       onClick={() => togglePublic(plan)}
-                      sx={{ color: plan.public ? 'pink' : 'lightGrey' }}
+                      sx={{ color: plan.public ? 'pink' : 'lightGrey', paddingLeft: 2 }}
                     >
                       <PublicIcon />
                     </IconButton>
@@ -120,6 +143,7 @@ const PlanOverview = () => {
                       edge="end"
                       aria-label="delete"
                       onClick={() => deleteUserPlan(plan.id)}
+                      sx={{ paddingLeft: 2 }}
                     >
                       <DeleteIcon />
                     </IconButton>
