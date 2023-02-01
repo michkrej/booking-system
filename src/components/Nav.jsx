@@ -9,8 +9,10 @@ import IconButton from '@mui/material/IconButton'
 
 import heart from '../images/LinTek_hjarta.png'
 import { useNavigate } from 'react-router-dom'
+import useAuthContext from '../hooks/useAuthContext'
 
 export default function Nav() {
+  const { user } = useAuthContext()
   const { logout } = useLogout()
   const navigate = useNavigate()
 
@@ -27,6 +29,7 @@ export default function Nav() {
             Bokningsplanering
           </Typography>
           <Box>
+            {user.admin && <Button onClick={() => navigate('/admin')}>Admin</Button>}
             <Button onClick={() => navigate('/overview')}>Översikt</Button>
             <IconButton size="large" onClick={logout}>
               <LogoutIcon />

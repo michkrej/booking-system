@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import Divider from '@mui/material/Divider'
@@ -29,6 +29,9 @@ const PlanOverview = () => {
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState()
   const { plans = [], dispatch } = usePlansContext()
+  const location = useLocation()
+
+  const isAdminView = location.pathname === '/admin'
 
   const createNewPlan = async () => {
     setIsPending(true)
@@ -75,7 +78,7 @@ const PlanOverview = () => {
       setError('Du kan bara ha en publik planering åt gången')
     } else {
       const _public = !plan.public
-      const addCommittee = plan.committeeId ? {} : { committeeId: user.committeeId } // adding committee here in case it is an old plan
+      const addCommittee = plan.committeeId || isAdminView ? {} : { committeeId: user.committeeId } // adding committee here in case it is an old plan
       updatePlan(plan.id, { public: _public, ...addCommittee })
       dispatch({
         type: 'UPDATE_PUBLIC',
@@ -160,16 +163,18 @@ const PlanOverview = () => {
             )
           })}
         </List>
-        <LoadingButton
-          onClick={createNewPlan}
-          loading={isPending}
-          loadingPosition="start"
-          startIcon={<AddIcon />}
-          variant="contained"
-          fullWidth
-        >
-          Skapa ny planering
-        </LoadingButton>
+        {!isAdminView && (
+          <LoadingButton
+            onClick={createNewPlan}
+            loading={isPending}
+            loadingPosition="start"
+            startIcon={<AddIcon />}
+            variant="contained"
+            fullWidth
+          >
+            Skapa ny planering
+          </LoadingButton>
+        )}
       </Box>
     </Paper>
   )

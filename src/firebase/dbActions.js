@@ -37,7 +37,7 @@ export const updatePlan = async (id, newValues) => {
   }
 }
 
-export const getAllPlans = async ({ uid }) => {
+export const getUserAndPublicPlans = async ({ uid }) => {
   try {
     const ref = collection(db, 'plans')
     const [snapshotPersonal, snapshotPublic] = await Promise.all([
@@ -53,6 +53,12 @@ export const getAllPlans = async ({ uid }) => {
   } catch (e) {
     console.log(e.message)
   }
+}
+
+export const getAllPlans = () => {
+  return getDocs(collection(db, 'plans')).then((results) =>
+    results.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+  )
 }
 
 // Event actions

@@ -11,26 +11,30 @@ import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
-import { getUserAndPublicPlans } from '../firebase/dbActions'
+import { getAllPlans, getUserAndPublicPlans } from '../firebase/dbActions'
 
-const Overview = () => {
+const Admin = () => {
   const [isPending, setIsPending] = useState(true)
+  const [plans, setPlans] = useState()
   const { user } = useAuthContext()
-  const { dispatch, plans } = usePlansContext()
+  const { dispatch } = usePlansContext()
 
   useEffect(() => {
     const getPlans = async () => {
       setIsPending(true)
-      const { plans: _plans, publicPlans } = await getUserAndPublicPlans(user)
+      const plans = await getAllPlans()
+      setPlans(plans)
       dispatch({
         type: 'LOAD',
-        payload: { plans: _plans, publicPlans: publicPlans }
+        payload: { plans }
       })
       setIsPending(false)
     }
 
     getPlans()
   }, [])
+
+  console.log(plans)
 
   return (
     <Container maxWidth="xl">
@@ -41,23 +45,7 @@ const Overview = () => {
             Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
           </Typography>
           <Box mt={6}>
-            {isPending && (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress />
-              </Box>
-            )}
-            {!isPending && plans && (
-              <Grid container maxWidth="xs" spacing={2}>
-                <Grid item md={6} xs={12}>
-                  <PlanOverview />
-                  <CollisionsOverview />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Export />
-                  <PublicPlanOverview />
-                </Grid>
-              </Grid>
-            )}
+            <PlanOverview />
           </Box>
         </>
       </Box>
@@ -65,4 +53,4 @@ const Overview = () => {
   )
 }
 
-export default Overview
+export default Admin

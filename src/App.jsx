@@ -17,6 +17,7 @@ const Overview = lazy(() => import('./pages/Overview'))
 const Signup = lazy(() => import('./pages/Signup'))
 const CalendarView = lazy(() => import('./pages/CalendarView'))
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
+const Admin = lazy(() => import('./pages/Admin'))
 
 export const primary = '#E1007A'
 
@@ -92,6 +93,7 @@ function App() {
                       element={<CalendarView findCollissions />}
                     />
                     <Route exact path="/overview" element={<Overview />} />
+                    <Route exact path="/admin" element={<Admin />} />
                     <Route exact path="/allEvents/:id" element={<CalendarView showAllEvents />} />
                   </Route>
                   <Route
