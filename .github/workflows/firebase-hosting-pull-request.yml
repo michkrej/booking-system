@@ -14,4 +14,4 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOOKING_SYSTEM_1377D }}'
-          projectId: booking-system-1377d
+          REACT_APP_FIREBASE_PROJECT_ID: booking-system-1377d
