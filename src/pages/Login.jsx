@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -6,15 +5,10 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
-import styled from '@emotion/styled'
 
-import heart from '../images/LinTek_hjarta.png'
+import heart from '../images/LUST.png'
 import useLogin from '../hooks/useLogin'
-
-const StyledLink = styled(Link)(() => ({
-  fontSize: '0.875rem',
-  color: '#E1007A'
-}))
+import StyledLink from '../components/Link'
 
 export default function Login() {
   const { login, error } = useLogin()
@@ -34,7 +28,7 @@ export default function Login() {
           alignItems: 'center'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'white' }} variant="square">
+        <Avatar sx={{ bgcolor: 'white', width: 120, height: 100 }} variant="square">
           <img src={heart} style={{ width: '100%' }} />
         </Avatar>
         <Typography component="h2" variant="h5">

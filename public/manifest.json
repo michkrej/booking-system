@@ -8,18 +8,18 @@
             "type": "image/x-icon"
         },
         {
-            "src": "LinTek_hjarta.png",
+            "src": "lust.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "LinTek_hjarta.png",
+            "src": "lust.png",
             "type": "image/png",
             "sizes": "512x512"
         }
     ],
     "start_url": ".",
     "display": "standalone",
-    "theme_color": "#E1007A",
+    "theme_color": "#670c47",
     "background_color": "#ffffff"
 }

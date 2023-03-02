@@ -18,15 +18,17 @@ const Signup = lazy(() => import('./pages/Signup'))
 const CalendarView = lazy(() => import('./pages/CalendarView'))
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 
-export const primary = '#E1007A'
+export const primary = '#670c47'
+export const secondary = '#bcdfd7'
+export const secondary2 = '#818389'
 
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#E1007A'
+      main: primary
     },
     secondary: {
-      main: '#D786B3'
+      main: secondary
     }
   }
 })
