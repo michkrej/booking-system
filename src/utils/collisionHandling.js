@@ -10,13 +10,17 @@ const MAX_ITEMS = {
   grillar: 9,
   bardiskar: 6,
   'bankset-hg': 20,
-  'bankset-k': 24
+  'bankset-k': 24,
+  trailer: 1,
+  tents: 4,
+  scene: 10,
+  elverk: 1
 }
 
 const createItemsObject = (event) => {
   return Object.keys(MAX_ITEMS).reduce((items, item) => {
     items[item] = {
-      sum: event[item] || 0,
+      sum: typeof event[item] === 'boolean' ? 1 : event[item] || 0,
       events: []
     }
     return items
@@ -29,7 +33,11 @@ const findCollidingEvents = (event1, event2, items) => {
   const increaseItemsUse = (items, event) => {
     Object.keys(items).forEach((item) => {
       if (event?.[item]) {
-        items[item].sum += event[item]
+        if (typeof event[item] === 'boolean') {
+          items[item].sum += 1
+        } else {
+          items[item].sum += event[item]
+        }
         items[item].events.push(event)
       }
     })
