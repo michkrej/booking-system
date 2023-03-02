@@ -1,5 +1,3 @@
-import { locations } from '../locationsData'
-
 export default [
   {
     text: 'Övrigt',
@@ -8,6 +6,14 @@ export default [
   {
     text: 'SkåLand',
     id: '352c3dde-3767-4940-aa63-a4eac42449bf'
+  },
+  {
+    text: 'Ryds motionscentrum',
+    id: '68f91168-7320-427b-a71a-60b0e49d4f29'
+  },
+  {
+    text: 'Konsert och Kongress',
+    id: 'caae84d5-f78a-4e94-9aaf-6fcf0233f0ac'
   }
 ] /* .map(({ text, id }) => ({
   text,

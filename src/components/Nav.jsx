@@ -22,12 +22,26 @@ export default function Nav() {
           <Typography
             variant="h6"
             onClick={() => navigate('/overview')}
-            sx={{ cursor: 'pointer', flexGrow: 1, color: 'black' }}
+            sx={{ cursor: 'pointer', color: 'black' }}
           >
             Bokningsplanering
           </Typography>
-          <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexGrow: 1,
+              justifyContent: 'center'
+            }}
+          >
             <Button onClick={() => navigate('/overview')}>Översikt</Button>
+            <Button
+              target="_blank"
+              href="https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/lkpg_tradgardsforeningen_folder_kartbild.pdf?49b5ff"
+            >
+              Karta Trädgårsföreningen
+            </Button>
+          </Box>
+          <Box>
             <IconButton size="large" onClick={logout}>
               <LogoutIcon />
             </IconButton>

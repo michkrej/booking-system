@@ -10,6 +10,12 @@ const bookableItems = [
     dataField: 'alcohol'
   },
   {
+    label: { text: 'HG - bänkset' },
+    editorType: 'dxNumberBox',
+    dataField: 'bankset-hg',
+    colSpan: 1
+  },
+  {
     label: { text: 'Kårallen - bänkset' },
     editorType: 'dxNumberBox',
     dataField: 'bankset-k',
@@ -25,13 +31,31 @@ const bookableItems = [
     label: { text: 'Kårallen - bardiskar' },
     editorType: 'dxNumberBox',
     dataField: 'bardiskar',
-    colSpan: 2
+    colSpan: 1
   },
   {
-    label: { text: 'HG - bänkset' },
+    label: { text: 'FF - Elverk' },
+    editorType: 'dxCheckBox',
+    dataField: 'elverk',
+    colSpan: 1
+  },
+  {
+    label: { text: 'FF - Släp' },
+    editorType: 'dxCheckBox',
+    dataField: 'trailer',
+    colSpan: 1
+  },
+  {
+    label: { text: 'FF - Tält' },
     editorType: 'dxNumberBox',
-    dataField: 'bankset-hg',
-    colSpan: 2
+    dataField: 'tents',
+    colSpan: 1
+  },
+  {
+    label: { text: 'Scenpodier' },
+    editorType: 'dxNumberBox',
+    dataField: 'scene',
+    colSpan: 1
   },
   {
     label: { text: 'Övriga inventarier för bokningen' },
