@@ -22,6 +22,7 @@ import { createPlan, deletePlan, updatePlan } from '../firebase/dbActions'
 import { sortAlphabetically } from '../utils/helpers'
 import Error from './Error'
 import Comment from './Comment'
+import { secondary, secondary2 } from '../App'
 
 const PlanOverview = () => {
   const { user } = useAuthContext()
@@ -135,7 +136,7 @@ const PlanOverview = () => {
                       edge="end"
                       aria-label="toogle public"
                       onClick={() => togglePublic(plan)}
-                      sx={{ color: plan.public ? 'pink' : 'lightGrey', paddingLeft: 2 }}
+                      sx={{ color: plan.public ? secondary : secondary2, paddingLeft: 2 }}
                     >
                       <PublicIcon />
                     </IconButton>

@@ -7,8 +7,10 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 
-import heart from '../images/LinTek_hjarta.png'
+import heart from '../images/LUST.png'
 import { useNavigate } from 'react-router-dom'
+
+const pages = [{ url: 'overview', name: 'Översikt' }]
 
 export default function Nav() {
   const { logout } = useLogout()
@@ -16,9 +18,9 @@ export default function Nav() {
 
   return (
     <>
-      <AppBar sx={{ backgroundColor: '#eeeeee' }}>
+      <AppBar sx={{ backgroundColor: '#f5f5f5' }}>
         <Toolbar>
-          <img src={heart} style={{ width: '40px', marginRight: '1em' }} />
+          <img src={heart} style={{ width: '120px', marginRight: '1em' }} />
           <Typography
             variant="h6"
             onClick={() => navigate('/overview')}
@@ -26,14 +28,19 @@ export default function Nav() {
           >
             Bokningsplanering
           </Typography>
+
           <Box
             sx={{
               display: 'flex',
               flexGrow: 1,
-              justifyContent: 'center'
+              paddingLeft: 8
             }}
           >
-            <Button onClick={() => navigate('/overview')}>Översikt</Button>
+            {pages.map(({ url, name }) => (
+              <Button key={name} onClick={() => navigate(`/${url}`)}>
+                {name}
+              </Button>
+            ))}
             <Button
               target="_blank"
               href="https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/lkpg_tradgardsforeningen_folder_kartbild.pdf?49b5ff"

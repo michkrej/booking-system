@@ -11,18 +11,12 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
-import styled from '@emotion/styled'
-import { Link } from 'react-router-dom'
 
 import heart from '../images/LinTek_hjarta.png'
 import { kårer } from '../data/committees'
 import { kårCommittees, sortAlphabetically } from '../utils/helpers'
 import Comment from '../components/Comment'
-
-export const StyledLink = styled(Link)(() => ({
-  fontSize: '0.875rem',
-  color: '#E1007A'
-}))
+import StyledLink from '../components/Link'
 
 export default function Signup() {
   const [committee, setCommittee] = useState('')

@@ -11,7 +11,7 @@ import heart from '../images/LinTek_hjarta.png'
 import Error from '../components/Error'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../firebase/config'
-import { StyledLink } from './Signup'
+import StyledLink from '../components/Link'
 
 export default function ForgotPassword() {
   const [error, setError] = useState()
