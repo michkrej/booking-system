@@ -53,8 +53,11 @@ export default function Nav() {
               Karta Trädgårsföreningen
             </Button>
           </Box>
+          <Button target="_blank" href="https://youtu.be/9RDlhOWRlGY">
+            Instruktionsvideo
+          </Button>
           <Button target="_blank" href="https://forms.gle/tW28rpuNSWfQHNCq5">
-            feedback
+            Feedback
           </Button>
           <Box>
             <IconButton size="large" onClick={logout}>
