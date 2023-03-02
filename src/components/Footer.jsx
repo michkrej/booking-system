@@ -37,14 +37,9 @@ const Footer = () => {
         }}
       >
         <Typography variant="body1">
-          Vid frågor kontakta{' '}
-          <Link
-            href="mailto:michkrej@gmail.com"
-            rel="noopener noreferrer"
-            target="_top"
-            color="inherit"
-          >
-            michkrej@gmail.com
+          Om något saknas eller inte fungerar som det ska, fyll i{' '}
+          <Link href="https://forms.gle/tW28rpuNSWfQHNCq5" target="_notarget" color="inherit">
+            feedback-formuläret
           </Link>
         </Typography>
         <Copyright />

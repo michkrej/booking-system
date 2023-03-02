@@ -18,7 +18,12 @@ export default function Nav() {
 
   return (
     <>
-      <AppBar sx={{ backgroundColor: '#f5f5f5' }}>
+      <AppBar
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light' ? theme.palette.grey[200] : theme.palette.grey[800]
+        }}
+      >
         <Toolbar>
           <img src={heart} style={{ width: '120px', marginRight: '1em' }} />
           <Typography
@@ -48,6 +53,9 @@ export default function Nav() {
               Karta Trädgårsföreningen
             </Button>
           </Box>
+          <Button target="_blank" href="https://forms.gle/tW28rpuNSWfQHNCq5">
+            feedback
+          </Button>
           <Box>
             <IconButton size="large" onClick={logout}>
               <LogoutIcon />
