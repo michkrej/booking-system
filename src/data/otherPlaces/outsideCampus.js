@@ -14,6 +14,14 @@ export default [
   {
     text: 'Konsert och Kongress',
     id: 'caae84d5-f78a-4e94-9aaf-6fcf0233f0ac'
+  },
+  {
+    text: 'Vallamassivet',
+    id: '6c12bc19-0be4-40c8-a6ce-461df8e227f9'
+  },
+  {
+    text: 'Stångebrofält',
+    id: '38b49703-feed-4cdd-bde2-234bc63fc852'
   }
 ] /* .map(({ text, id }) => ({
   text,

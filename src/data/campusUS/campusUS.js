@@ -53,6 +53,18 @@ export const locationsUS = {
     id: 'faceed67-e485-4ed8-8aeb-264d72e3be52',
     text: 'Hus 511',
     rooms: house511
+  },
+  'Övriga områden på campus': {
+    id: '56138ae6-f3f4-40cc-88ec-bd1d841e3770',
+    value: '56138ae6-f3f4-40cc-88ec-bd1d841e3770',
+    text: 'Övriga områden på campus',
+    label: 'Övriga områden på campus',
+    rooms: [
+      {
+        text: 'Märkesbacken',
+        id: '5e474e7b-898b-4628-9d4e-8e1edf7b27e0'
+      }
+    ]
   }
 }
 
