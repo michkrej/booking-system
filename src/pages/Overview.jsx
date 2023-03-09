@@ -11,7 +11,7 @@ import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
-import { getAllPlans } from '../firebase/dbActions'
+import { getAdminSettings, getAllPlans } from '../firebase/dbActions'
 import AdminOverview from '../components/Admin'
 
 const Overview = () => {
@@ -23,9 +23,10 @@ const Overview = () => {
     const getPlans = async () => {
       setIsPending(true)
       const { plans: _plans, publicPlans } = await getAllPlans(user)
+      const admin = await getAdminSettings()
       dispatch({
         type: 'LOAD',
-        payload: { plans: _plans, publicPlans: publicPlans }
+        payload: { plans: _plans, publicPlans, admin }
       })
       setIsPending(false)
     }

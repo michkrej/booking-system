@@ -20,12 +20,18 @@ import Error from './Error'
 import { secondary, secondary2 } from '../App'
 import OverviewBlock from './OverviewBlock'
 
+export const adminError = 'Möjligheten att redigera planeringar har låsts av en administratör'
+
 const PlanOverview = () => {
   const { user } = useAuthContext()
   const navigate = useNavigate()
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState()
-  const { plans = [], dispatch } = usePlansContext()
+  const {
+    plans = [],
+    dispatch,
+    admin: { lockPlans }
+  } = usePlansContext()
 
   const createNewPlan = async () => {
     setIsPending(true)
@@ -68,7 +74,9 @@ const PlanOverview = () => {
   const togglePublic = (plan) => {
     setError(undefined)
     const hasPublicPlan = plans.some((plan) => plan.public)
-    if (!plan.public && hasPublicPlan) {
+    if (lockPlans && hasPublicPlan) {
+      // Do nothing
+    } else if (!plan.public && hasPublicPlan) {
       setError('Du kan bara ha en publik planering åt gången')
     } else {
       const _public = !plan.public
@@ -111,6 +119,7 @@ const PlanOverview = () => {
           sker på olika platser. Det behövs endast mer än en planering om du vill flera olika
           versioner eller har kvar planeringar från din företrädare`}
     >
+      {lockPlans && <Error message={adminError} />}
       {error && <Error message={error} />}
       <List>
         {sortAlphabetically(plans, true).map((plan) => {
@@ -157,6 +166,7 @@ const PlanOverview = () => {
         loadingPosition="start"
         startIcon={<AddIcon />}
         variant="contained"
+        disabled={lockPlans}
         fullWidth
       >
         Skapa ny planering

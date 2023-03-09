@@ -16,11 +16,19 @@ import {
   findCollisionsBetweenUserPlanAndPublicPlans
 } from '../utils/collisionHandling'
 import Comment from '../components/Comment'
+import usePlansContext from '../hooks/usePlansContext'
+import { getAdminSettings } from '../firebase/dbActions'
+import { adminError } from '../components/PlanOverview'
+import Error from '../components/Error'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
 const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
   const { user } = useAuthContext()
+  const {
+    dispatch,
+    admin: { lockPlans }
+  } = usePlansContext()
   const { id } = useParams()
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
@@ -29,6 +37,22 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
   const [locations, setLocations] = useState(
     sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
   )
+  const [isPending, setIsPending] = useState(false)
+
+  console.log(user)
+
+  useEffect(() => {
+    const getAdminData = async () => {
+      setIsPending(true)
+      const admin = await getAdminSettings()
+      dispatch({
+        type: 'LOAD',
+        payload: { admin }
+      })
+      setIsPending(false)
+    }
+    getAdminData()
+  }, [!lockPlans])
 
   const getDataSource = () => {
     if (findCollissions) {
@@ -36,7 +60,9 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
       return findAll
         ? createCustomDataSource(id, { load: true }, findCollisionsBetweenAllEvents)
         : createCustomDataSource(id, { load: true }, findCollisionsBetweenUserPlanAndPublicPlans)
-    } else if (showAllEvents) {
+    }
+
+    if (showAllEvents) {
       return createCustomDataSource(id, {
         load: true,
         insert: false, // To work the insert functions needs to be updated, uses the currentUser instead of the owner of the plan
@@ -44,12 +70,25 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
         update: true
       })
     }
+
     return createCustomDataSource(user, {
       load: true,
       insert: true,
       remove: true,
       update: true
     })
+  }
+
+  const canUserEditPlan = () => {
+    console.log(lockPlans)
+    if (user.admin) {
+      return true
+    } else if (lockPlans === null) return false
+    else if (!findCollissions && !showAllEvents && lockPlans !== null && !lockPlans) {
+      return true
+    }
+
+    return false
   }
 
   const handleCampusChange = (option) => {
@@ -98,6 +137,7 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
             - Håll nere shift och scrolla for att scrolla i sidled.
             <br />
           </Comment>
+          {lockPlans && lockPlans !== null && <Error message={adminError} />}
         </Grid>
         <Grid item xs={10}>
           <Timeline
@@ -107,7 +147,7 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
             locations={locations}
             setRooms={setFilteredRooms}
             showCommittee={findCollissions || showAllEvents}
-            edit={(!findCollissions && !showAllEvents) || (showAllEvents && user.admin)}
+            edit={canUserEditPlan()}
           />
         </Grid>
       </Grid>

@@ -10,7 +10,8 @@ export const plansReducer = (state, action) => {
       return {
         ...state,
         plans: action.payload.plans,
-        publicPlans: action.payload.publicPlans
+        publicPlans: action.payload.publicPlans,
+        admin: action.payload.admin
       }
     case 'DELETE':
       return { ...state, plans: state.plans.filter((plan) => action.payload.id !== plan.id) }
@@ -35,10 +36,11 @@ export const plansReducer = (state, action) => {
 const PlansContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(plansReducer, {
     plans: undefined,
-    publicPlans: undefined
+    publicPlans: undefined,
+    admin: { lockPlans: undefined }
   })
 
-  // console.log(state)
+  console.log(state)
   return <PlansContext.Provider value={{ ...state, dispatch }}>{children}</PlansContext.Provider>
 }
 
