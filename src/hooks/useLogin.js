@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { analytics, auth, db } from '../firebase/config'
-import { collection, where, getDocs } from 'firebase/firestore'
+import { collection, where, getDocs, query } from 'firebase/firestore'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import useAuthContext from './useAuthContext'
 
@@ -16,17 +16,11 @@ const useLogin = () => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password)
 
-      const userDetails = []
-      /**
-       * TODO
-       * Rewrite this to use getDoc instead of getDocs
-       */
       const userDetailsSnapshot = await getDocs(
-        collection(db, 'userDetails'),
-        where('userId', '==', user.uid)
+        query(collection(db, 'userDetails'), where('userId', '==', user.uid))
       )
-      userDetailsSnapshot.docs.forEach((doc) => userDetails.push(doc.data()))
-      if (userDetails.length > 0) {
+      if (!userDetailsSnapshot.empty) {
+        const userDetails = userDetailsSnapshot.docs[0].data()
         dispatch({
           type: 'LOGIN',
           payload: {
@@ -34,7 +28,7 @@ const useLogin = () => {
             displayName: user.displayName,
             email: user.email,
             emailVerified: user.emailVerified,
-            committeeId: userDetails[0].committeeId
+            committeeId: userDetails.committeeId
           }
         })
         analytics.logEvent(`User ${user.uid} logged in`)
