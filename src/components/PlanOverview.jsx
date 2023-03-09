@@ -3,13 +3,9 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import Divider from '@mui/material/Divider'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import Paper from '@mui/material/Paper'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
@@ -21,8 +17,8 @@ import useAuthContext from '../hooks/useAuthContext'
 import { createPlan, deletePlan, updatePlan } from '../firebase/dbActions'
 import { sortAlphabetically } from '../utils/helpers'
 import Error from './Error'
-import Comment from './Comment'
 import { secondary, secondary2 } from '../App'
+import OverviewBlock from './OverviewBlock'
 
 const PlanOverview = () => {
   const { user } = useAuthContext()
@@ -109,70 +105,63 @@ const PlanOverview = () => {
   }
 
   return (
-    <Paper sx={{ padding: 2 }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
-          Planeringar
-        </Typography>
-        <Divider />
-        <Comment>
-          En planering kan ses som en google calender, den kan innehålla en jäkla massa event som
+    <OverviewBlock
+      title="Planeringar"
+      comment={`En planering kan ses som en google calender, den kan innehålla en jäkla massa event som
           sker på olika platser. Det behövs endast mer än en planering om du vill flera olika
-          versioner eller har kvar planeringar från din företrädare.
-        </Comment>
-        <Divider />
-        {error && <Error message={error} />}
-        <List>
-          {sortAlphabetically(plans, true).map((plan) => {
-            return (
-              <ListItem
-                key={plan.id}
-                secondaryAction={
-                  <>
-                    <IconButton edge="end" aria-label="edit name" onClick={() => changeName(plan)}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      aria-label="toogle public"
-                      onClick={() => togglePublic(plan)}
-                      sx={{ color: plan.public ? secondary : secondary2, paddingLeft: 2 }}
-                    >
-                      <PublicIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => deleteUserPlan(plan.id)}
-                      sx={{ paddingLeft: 2 }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </>
-                }
+          versioner eller har kvar planeringar från din företrädare`}
+    >
+      {error && <Error message={error} />}
+      <List>
+        {sortAlphabetically(plans, true).map((plan) => {
+          return (
+            <ListItem
+              key={plan.id}
+              secondaryAction={
+                <>
+                  <IconButton edge="end" aria-label="edit name" onClick={() => changeName(plan)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="toogle public"
+                    onClick={() => togglePublic(plan)}
+                    sx={{ color: plan.public ? secondary : secondary2, paddingLeft: 2 }}
+                  >
+                    <PublicIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => deleteUserPlan(plan.id)}
+                    sx={{ paddingLeft: 2 }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </>
+              }
+            >
+              <Link
+                to={`/booking/${plan.id}`}
+                style={{ color: 'inherit', textDecoration: 'inherit' }}
               >
-                <Link
-                  to={`/booking/${plan.id}`}
-                  style={{ color: 'inherit', textDecoration: 'inherit' }}
-                >
-                  <ListItemText>{plan.label}</ListItemText>
-                </Link>
-              </ListItem>
-            )
-          })}
-        </List>
-        <LoadingButton
-          onClick={createNewPlan}
-          loading={isPending}
-          loadingPosition="start"
-          startIcon={<AddIcon />}
-          variant="contained"
-          fullWidth
-        >
-          Skapa ny planering
-        </LoadingButton>
-      </Box>
-    </Paper>
+                <ListItemText>{plan.label}</ListItemText>
+              </Link>
+            </ListItem>
+          )
+        })}
+      </List>
+      <LoadingButton
+        onClick={createNewPlan}
+        loading={isPending}
+        loadingPosition="start"
+        startIcon={<AddIcon />}
+        variant="contained"
+        fullWidth
+      >
+        Skapa ny planering
+      </LoadingButton>
+    </OverviewBlock>
   )
 }
 

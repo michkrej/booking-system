@@ -12,6 +12,7 @@ import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
 import { getAllPlans } from '../firebase/dbActions'
+import AdminOverview from '../components/Admin'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
@@ -40,7 +41,7 @@ const Overview = () => {
           <Typography variant="h4" align="center" mt={8}>
             Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
           </Typography>
-          <Box mt={6}>
+          <Box mt={4}>
             {isPending && (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress />
@@ -49,6 +50,7 @@ const Overview = () => {
             {!isPending && plans && (
               <Grid container maxWidth="xs" spacing={2}>
                 <Grid item md={6} xs={12}>
+                  {user.admin && <AdminOverview />}
                   <PlanOverview />
                   <CollisionsOverview />
                 </Grid>

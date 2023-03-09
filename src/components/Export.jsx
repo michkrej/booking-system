@@ -1,9 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
-import Divider from '@mui/material/Divider'
 import SelectInput from './SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
 import usePlansContext from '../hooks/usePlansContext'
@@ -11,6 +7,7 @@ import { exportPlan } from '../utils/helpers'
 import { CSVLink } from 'react-csv'
 import { LoadingButton } from '@mui/lab'
 import moment from 'moment'
+import OverviewBlock from './OverviewBlock'
 
 const Export = () => {
   const [chosenPlans, setChosenPlans] = useState([])
@@ -49,46 +46,40 @@ const Export = () => {
   }
 
   return (
-    <Paper sx={{ padding: 2 }}>
-      <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
-        Export
-      </Typography>
-      <Divider />
-      <Box component="form" mt={2}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <SelectInput
-              options={createOptionsArray()}
-              placeholder="Planering"
-              handleChange={setChosenPlans}
-              value={chosenPlans}
-              multiple
-            />
-          </Grid>
-        </Grid>
-        {error && <div>{error}</div>}
-        <LoadingButton
-          fullWidth
-          variant="contained"
-          sx={{ mt: 1 }}
-          startIcon={<GetAppIcon />}
-          disabled={chosenPlans.length === 0}
-          loading={loading}
-          onClick={getCSVData}
-        >
-          Exportera
-        </LoadingButton>
-        {csvData.length > 0 && (
-          <CSVLink
-            data={csvData}
-            filename={`${moment(new Date()).format('DDMMYYYY')}_${chosenPlans
-              .map(({ label }) => label)
-              .join('_')}`}
-            ref={csvInstance}
+    <OverviewBlock title="Export">
+      <Grid container spacing={2} mt={0.5}>
+        <Grid item xs={12}>
+          <SelectInput
+            options={createOptionsArray()}
+            placeholder="Planering"
+            handleChange={setChosenPlans}
+            value={chosenPlans}
+            multiple
           />
-        )}
-      </Box>
-    </Paper>
+        </Grid>
+      </Grid>
+      {error && <div>{error}</div>}
+      <LoadingButton
+        fullWidth
+        variant="contained"
+        sx={{ mt: 1 }}
+        startIcon={<GetAppIcon />}
+        disabled={chosenPlans.length === 0}
+        loading={loading}
+        onClick={getCSVData}
+      >
+        Exportera
+      </LoadingButton>
+      {csvData.length > 0 && (
+        <CSVLink
+          data={csvData}
+          filename={`${moment(new Date()).format('DDMMYYYY')}_${chosenPlans
+            .map(({ label }) => label)
+            .join('_')}`}
+          ref={csvInstance}
+        />
+      )}
+    </OverviewBlock>
   )
 }
 
