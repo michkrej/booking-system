@@ -3,13 +3,38 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where
 } from 'firebase/firestore'
 import { getContentById } from '../utils/helpers'
 import { db } from './config'
+
+const key = 'adminValues'
+export const lockAndUnlockPlans = async (newValue) => {
+  try {
+    const planRef = await setDoc(doc(collection(db, 'adminSettings'), key), { lockPlans: newValue })
+    return planRef
+  } catch (e) {
+    console.log(e.message)
+  }
+}
+
+export const getAdminSettings = async () => {
+  const docRef = doc(db, 'adminSettings', key)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    return docSnap.data()
+  } else {
+    // doc.data() will be undefined in this case
+    console.log('No such document!')
+  }
+}
+
 
 // Plan actions
 export const createPlan = async (plan) => {

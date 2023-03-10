@@ -16,11 +16,19 @@ import {
   findCollisionsBetweenUserPlanAndPublicPlans
 } from '../utils/collisionHandling'
 import Comment from '../components/Comment'
+import usePlansContext from '../hooks/usePlansContext'
+import { getAdminSettings } from '../firebase/dbActions'
+import { adminError } from '../components/PlanOverview'
+import Error from '../components/Error'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
-const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
+const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const { user } = useAuthContext()
+  const {
+    dispatch,
+    admin: { lockPlans }
+  } = usePlansContext()
   const { id } = useParams()
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
@@ -29,14 +37,30 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
   const [locations, setLocations] = useState(
     sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
   )
+  const [isPending, setIsPending] = useState(false)
+
+  useEffect(() => {
+    const getAdminData = async () => {
+      setIsPending(true)
+      const admin = await getAdminSettings()
+      dispatch({
+        type: 'LOAD',
+        payload: { admin }
+      })
+      setIsPending(false)
+    }
+    getAdminData()
+  }, [!lockPlans])
 
   const getDataSource = () => {
-    if (findCollissions) {
-      const findAll = useLocation().pathname.split('/')[2] === 'all'
-      return findAll
+    if (findCollisions) {
+      const findAllCollisions = useLocation().pathname.includes('all')
+      return findAllCollisions
         ? createCustomDataSource(id, { load: true }, findCollisionsBetweenAllEvents)
         : createCustomDataSource(id, { load: true }, findCollisionsBetweenUserPlanAndPublicPlans)
-    } else if (showAllEvents) {
+    }
+
+    if (showAllEvents) {
       return createCustomDataSource(id, {
         load: true,
         insert: false, // To work the insert functions needs to be updated, uses the currentUser instead of the owner of the plan
@@ -44,12 +68,23 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
         update: true
       })
     }
+
     return createCustomDataSource(user, {
       load: true,
       insert: true,
       remove: true,
       update: true
     })
+  }
+
+  const canPlanBeEdited = () => {
+    return user.admin || (!lockPlans && !showAllEvents && !findCollisions)
+  }
+
+  const checkIfUserCanEditPlan = () => {
+    if (!canPlanBeEdited()) {
+      return <Error message={adminError} />
+    }
   }
 
   const handleCampusChange = (option) => {
@@ -98,6 +133,7 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
             - Håll nere shift och scrolla for att scrolla i sidled.
             <br />
           </Comment>
+          {checkIfUserCanEditPlan()}
         </Grid>
         <Grid item xs={10}>
           <Timeline
@@ -106,8 +142,8 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
             rooms={filteredRooms}
             locations={locations}
             setRooms={setFilteredRooms}
-            showCommittee={findCollissions || showAllEvents}
-            edit={(!findCollissions && !showAllEvents) || (showAllEvents && user.admin)}
+            showCommittee={findCollisions || showAllEvents}
+            edit={canPlanBeEdited()}
           />
         </Grid>
       </Grid>
@@ -116,7 +152,7 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
 }
 
 CalendarView.propTypes = {
-  findCollissions: PropTypes.bool,
+  findCollisions: PropTypes.bool,
   showAllEvents: PropTypes.bool
 }
 

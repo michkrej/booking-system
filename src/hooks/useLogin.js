@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { analytics, auth, db } from '../firebase/config'
+import { auth, db } from '../firebase/config'
 import { collection, where, getDocs, query } from 'firebase/firestore'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import useAuthContext from './useAuthContext'
@@ -21,6 +21,7 @@ const useLogin = () => {
       )
       if (!userDetailsSnapshot.empty) {
         const userDetails = userDetailsSnapshot.docs[0].data()
+        console.log(userDetails)
         dispatch({
           type: 'LOGIN',
           payload: {
@@ -28,10 +29,10 @@ const useLogin = () => {
             displayName: user.displayName,
             email: user.email,
             emailVerified: user.emailVerified,
-            committeeId: userDetails.committeeId
+            committeeId: userDetails.committeeId,
+            admin: userDetails.admin
           }
         })
-        analytics.logEvent(`User ${user.uid} logged in`)
       } else {
         throw Error('The user does not have a committee assigned')
       }

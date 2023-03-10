@@ -5,13 +5,15 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Nav from '../components/Nav'
 import Export from '../components/Export'
-import PlanOverview from '../components/PlanOverview'
+import PlanOverview, { adminError } from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
-import { getAllPlans } from '../firebase/dbActions'
+import { getAdminSettings, getAllPlans } from '../firebase/dbActions'
+import AdminOverview from '../components/Admin'
+import Error from '../components/Error'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
@@ -22,9 +24,10 @@ const Overview = () => {
     const getPlans = async () => {
       setIsPending(true)
       const { plans: _plans, publicPlans } = await getAllPlans(user)
+      const admin = await getAdminSettings()
       dispatch({
         type: 'LOAD',
-        payload: { plans: _plans, publicPlans: publicPlans }
+        payload: { plans: _plans, publicPlans, admin }
       })
       setIsPending(false)
     }
@@ -40,7 +43,7 @@ const Overview = () => {
           <Typography variant="h4" align="center" mt={8}>
             Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
           </Typography>
-          <Box mt={6}>
+          <Box mt={4}>
             {isPending && (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress />
@@ -49,6 +52,7 @@ const Overview = () => {
             {!isPending && plans && (
               <Grid container maxWidth="xs" spacing={2}>
                 <Grid item md={6} xs={12}>
+                  {user.admin && <AdminOverview />}
                   <PlanOverview />
                   <CollisionsOverview />
                 </Grid>
