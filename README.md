@@ -27,11 +27,11 @@ Delete appointment: Delete.
 - [x] Remove option of repeating events (keeping this means I need to introduce a lot of additional logic to the collision handling, not doing that)
 - [x] Only make it possible to have one public plan at a time (so that users don't create individual plans for individual events, yes, they did that)
 - [x] Refactor collision code to make it more readable
-- [ ] Ensure that amount of objects (bänkset etc) are correct
+- [x] Ensure that amount of objects (bänkset etc) are correct
 - [x] Fix and improve styling
 - [x] Update contact email
 - [X] Add option for resetting password if forgotten
 
 Finally - before planning starts by the new batch of welcoming committees
-- [ ] Make all plans non-public
-- [ ] Review accounts and remove redundant ones
+- [x] Make all plans non-public
+- [x] Review accounts and remove redundant ones
