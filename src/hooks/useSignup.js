@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { auth, db } from '../firebase/config'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, Timestamp } from 'firebase/firestore'
 import useAuthContext from './useAuthContext'
 
 const useSignup = () => {
@@ -23,7 +23,8 @@ const useSignup = () => {
       await updateProfile(res.user, { displayName })
       await addDoc(collection(db, 'userDetails'), {
         committeeId: committee,
-        userId: res.user.uid
+        userId: res.user.uid,
+        createdAt: Timestamp.fromDate(new Date())
       })
 
       dispatch({

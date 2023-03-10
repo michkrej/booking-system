@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
   where
 } from 'firebase/firestore'
@@ -35,11 +36,13 @@ export const getAdminSettings = async () => {
   }
 }
 
-
 // Plan actions
 export const createPlan = async (plan) => {
   try {
-    const planRef = await addDoc(collection(db, 'plans'), plan)
+    const planRef = await addDoc(collection(db, 'plans'), {
+      ...plan,
+      createdAt: Timestamp.fromDate(new Date())
+    })
     return planRef
   } catch (e) {
     console.log(e.message)
@@ -56,7 +59,10 @@ export const deletePlan = async (id) => {
 
 export const updatePlan = async (id, newValues) => {
   try {
-    return await updateDoc(doc(db, 'plans', id), { ...newValues })
+    return await updateDoc(doc(db, 'plans', id), {
+      ...newValues,
+      updatedAt: Timestamp.fromDate(new Date())
+    })
   } catch (e) {
     console.log(e.message)
   }
@@ -102,7 +108,9 @@ export const insertEvent = async (values, user) => {
     startDate: new Date(values.startDate).toString(),
     endDate: new Date(values.endDate).toString(),
     planId: window.location.pathname.split('/')[2],
-    committeeId: user.committeeId
+    committeeId: user.committeeId,
+    userId: user.uid,
+    createdAt: Timestamp.fromDate(new Date())
   }
   try {
     await addDoc(collection(db, 'events'), doc)
@@ -124,7 +132,8 @@ export const updateEvent = async (id, values) => {
   try {
     const docRef = doc(db, 'events', id)
     await updateDoc(doc(db, 'events', id), {
-      ...values
+      ...values,
+      updatedAt: Timestamp.fromDate(new Date())
     })
     return docRef
   } catch (e) {

@@ -21,7 +21,6 @@ const useLogin = () => {
       )
       if (!userDetailsSnapshot.empty) {
         const userDetails = userDetailsSnapshot.docs[0].data()
-        console.log(userDetails)
         dispatch({
           type: 'LOGIN',
           payload: {
