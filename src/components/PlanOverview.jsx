@@ -34,8 +34,9 @@ const PlanOverview = () => {
   } = usePlansContext()
 
   const createNewPlan = async () => {
-    setIsPending(true)
     setError(undefined)
+    if (lockPlans) return
+    setIsPending(true)
     const name = window.prompt('Vad ska din ny planering heta?')
     if (name.length < 1) {
       setError('Du måste ange ett namn')
@@ -60,6 +61,7 @@ const PlanOverview = () => {
   }
 
   const deleteUserPlan = (planId) => {
+    if (lockPlans) return
     if (confirm(`Vill du verkligen radera '${plans.find((plan) => plan.id === planId).label}'`)) {
       deletePlan(planId)
       dispatch({
@@ -73,10 +75,9 @@ const PlanOverview = () => {
 
   const togglePublic = (plan) => {
     setError(undefined)
+    if (lockPlans) return
     const hasPublicPlan = plans.some((plan) => plan.public)
-    if (lockPlans && hasPublicPlan) {
-      // Do nothing
-    } else if (!plan.public && hasPublicPlan) {
+    if (!plan.public && hasPublicPlan) {
       setError('Du kan bara ha en publik planering åt gången')
     } else {
       const _public = !plan.public

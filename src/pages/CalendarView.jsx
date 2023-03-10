@@ -23,7 +23,7 @@ import Error from '../components/Error'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
-const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
+const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const { user } = useAuthContext()
   const {
     dispatch,
@@ -39,8 +39,6 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
   )
   const [isPending, setIsPending] = useState(false)
 
-  console.log(user)
-
   useEffect(() => {
     const getAdminData = async () => {
       setIsPending(true)
@@ -55,9 +53,9 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
   }, [!lockPlans])
 
   const getDataSource = () => {
-    if (findCollissions) {
-      const findAll = useLocation().pathname.split('/')[2] === 'all'
-      return findAll
+    if (findCollisions) {
+      const findAllCollisions = useLocation().pathname.includes('all')
+      return findAllCollisions
         ? createCustomDataSource(id, { load: true }, findCollisionsBetweenAllEvents)
         : createCustomDataSource(id, { load: true }, findCollisionsBetweenUserPlanAndPublicPlans)
     }
@@ -79,16 +77,14 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
     })
   }
 
-  const canUserEditPlan = () => {
-    console.log(lockPlans)
-    if (user.admin) {
-      return true
-    } else if (lockPlans === null) return false
-    else if (!findCollissions && !showAllEvents && lockPlans !== null && !lockPlans) {
-      return true
-    }
+  const canPlanBeEdited = () => {
+    return user.admin || (!lockPlans && !showAllEvents && !findCollisions)
+  }
 
-    return false
+  const checkIfUserCanEditPlan = () => {
+    if (!canPlanBeEdited()) {
+      return <Error message={adminError} />
+    }
   }
 
   const handleCampusChange = (option) => {
@@ -138,6 +134,7 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
             <br />
           </Comment>
           {lockPlans && lockPlans !== null && <Error message={adminError} />}
+          {checkIfUserCanEditPlan()}
         </Grid>
         <Grid item xs={10}>
           <Timeline
@@ -146,8 +143,8 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
             rooms={filteredRooms}
             locations={locations}
             setRooms={setFilteredRooms}
-            showCommittee={findCollissions || showAllEvents}
-            edit={canUserEditPlan()}
+            showCommittee={findCollisions || showAllEvents}
+            edit={canPlanBeEdited()}
           />
         </Grid>
       </Grid>
@@ -156,7 +153,7 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
 }
 
 CalendarView.propTypes = {
-  findCollissions: PropTypes.bool,
+  findCollisions: PropTypes.bool,
   showAllEvents: PropTypes.bool
 }
 

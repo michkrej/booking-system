@@ -4,6 +4,11 @@ import { getAdminSettings, lockAndUnlockPlans } from '../firebase/dbActions'
 import Comment from './Comment'
 import OverviewBlock from './OverviewBlock'
 
+
+/*
+* TODO
+* 1. PlanOverview is not updated when the toggle is changed 
+*/
 const AdminOverview = () => {
   const [checked, setChecked] = useState(false)
 

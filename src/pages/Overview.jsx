@@ -5,7 +5,7 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Nav from '../components/Nav'
 import Export from '../components/Export'
-import PlanOverview from '../components/PlanOverview'
+import PlanOverview, { adminError } from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
@@ -13,6 +13,7 @@ import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
 import { getAdminSettings, getAllPlans } from '../firebase/dbActions'
 import AdminOverview from '../components/Admin'
+import Error from '../components/Error'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)

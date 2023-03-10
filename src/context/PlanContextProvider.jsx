@@ -40,7 +40,7 @@ const PlansContextProvider = ({ children }) => {
     admin: { lockPlans: undefined }
   })
 
-  console.log(state)
+  // console.log(state)
   return <PlansContext.Provider value={{ ...state, dispatch }}>{children}</PlansContext.Provider>
 }
 

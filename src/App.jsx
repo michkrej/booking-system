@@ -83,15 +83,11 @@ function App() {
                   <Route exact path="/resetPassword" element={<ForgotPassword />} />
                   <Route element={<RequireAuth />}>
                     <Route exact path="/booking/:id" element={<CalendarView />} />
-                    <Route
-                      exact
-                      path="/collisions/:id"
-                      element={<CalendarView findCollissions />}
-                    />
+                    <Route exact path="/collisions/:id" element={<CalendarView findCollisions />} />
                     <Route
                       exact
                       path="/collisions/all/:id"
-                      element={<CalendarView findCollissions />}
+                      element={<CalendarView findCollisions />}
                     />
                     <Route exact path="/overview" element={<Overview />} />
                     <Route exact path="/allEvents/:id" element={<CalendarView showAllEvents />} />
