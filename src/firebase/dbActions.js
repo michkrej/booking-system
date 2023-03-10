@@ -9,7 +9,8 @@ import {
   setDoc,
   Timestamp,
   updateDoc,
-  where
+  where,
+  writeBatch
 } from 'firebase/firestore'
 import { getContentById } from '../utils/helpers'
 import { db } from './config'
@@ -52,6 +53,13 @@ export const createPlan = async (plan) => {
 export const deletePlan = async (id) => {
   try {
     await deleteDoc(doc(db, 'plans', id))
+
+    const batch = writeBatch(db)
+    const eventsSnapshot = await getDocs(query(collection(db, 'events'), where('planId', '==', id)))
+    eventsSnapshot.forEach((doc) => {
+      batch.delete(doc.ref)
+    })
+    batch.commit()
   } catch (e) {
     console.log(e.message)
   }
@@ -93,7 +101,7 @@ export const getAllPlans = async ({ uid }) => {
  * instead and then parse and save array to Firebase on button click
  */
 export const loadEvents = async (planIds, collisionFunction = undefined) => {
-  const res = await getContentById(planIds.split('+'), 'events', 'planId')
+  const res = await getContentById(planIds.split('+'), 'events', 'planId') // TODO, do this with writeBatch instead
   if (res.length < 1) {
     console.log('No events to load')
     return []
