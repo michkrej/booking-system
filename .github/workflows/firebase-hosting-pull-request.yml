@@ -12,7 +12,7 @@ jobs:
       - run: npm ci --legacy-peer-deps && CI='' npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         env: 
-          REACT_APP_FIREBASE_PROJECT_ID: booking-system-1377d
+          REACT_APP_FIREBASE_PROJECT_ID: '${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}'
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOOKING_SYSTEM_1377D }}'
