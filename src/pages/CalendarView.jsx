@@ -133,7 +133,6 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
             - Håll nere shift och scrolla for att scrolla i sidled.
             <br />
           </Comment>
-          {lockPlans && lockPlans !== null && <Error message={adminError} />}
           {checkIfUserCanEditPlan()}
         </Grid>
         <Grid item xs={10}>
