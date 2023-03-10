@@ -15,6 +15,7 @@ import {
   findCollisionsBetweenAllEvents,
   findCollisionsBetweenUserPlanAndPublicPlans
 } from '../utils/collisionHandling'
+import Comment from '../components/Comment'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
@@ -89,6 +90,14 @@ const CalendarView = ({ findCollissions = false, showAllEvents = false }) => {
             handleRoomChange={(option) => setCurrentRoom(option)}
             currentRoom={currentRoom}
           />
+          <Comment>
+            Tips!
+            <br />
+            - Du måste välja en plats i dropdownmenyn för att kunna skapa event.
+            <br />
+            - Håll nere shift och scrolla for att scrolla i sidled.
+            <br />
+          </Comment>
         </Grid>
         <Grid item xs={10}>
           <Timeline

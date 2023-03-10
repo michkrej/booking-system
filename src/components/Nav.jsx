@@ -50,7 +50,7 @@ export default function Nav() {
               target="_blank"
               href="https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/lkpg_tradgardsforeningen_folder_kartbild.pdf?49b5ff"
             >
-              Karta Trädgårsföreningen
+              Karta Trädgårdsföreningen
             </Button>
           </Box>
           <Button target="_blank" href="https://youtu.be/9RDlhOWRlGY">
