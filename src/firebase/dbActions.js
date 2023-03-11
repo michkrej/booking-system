@@ -12,8 +12,19 @@ import {
   where,
   writeBatch
 } from 'firebase/firestore'
+import { updateProfile } from 'firebase/auth'
 import { getContentById } from '../utils/helpers'
-import { db } from './config'
+import { auth, db } from './config'
+
+export const updateProfileName = async (newName) => {
+  try {
+    updateProfile(auth.currentUser, {
+      displayName: newName
+    })
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 const key = 'adminValues'
 export const lockAndUnlockPlans = async (newValue) => {

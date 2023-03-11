@@ -5,20 +5,22 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Nav from '../components/Nav'
 import Export from '../components/Export'
-import PlanOverview, { adminError } from '../components/PlanOverview'
+import PlanOverview from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
 import useAuthContext from '../hooks/useAuthContext'
 import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
-import { getAdminSettings, getAllPlans } from '../firebase/dbActions'
+import IconButton from '@mui/material/IconButton'
+import EditIcon from '@mui/icons-material/Edit'
+import { getAdminSettings, getAllPlans, updateProfileName } from '../firebase/dbActions'
 import AdminOverview from '../components/Admin'
-import Error from '../components/Error'
 
 const Overview = () => {
   const [isPending, setIsPending] = useState(true)
   const { user } = useAuthContext()
   const { dispatch, plans } = usePlansContext()
+  const [username, setUsername] = useState(user.displayName)
 
   useEffect(() => {
     const getPlans = async () => {
@@ -35,13 +37,28 @@ const Overview = () => {
     getPlans()
   }, [])
 
+  const editProfileName = () => {
+    const name = window.prompt('Vad vill du att ditt namn ska vara?')
+    if (name.length > 0) {
+      updateProfileName(name)
+      setUsername(name)
+    }
+  }
+
   return (
     <Container maxWidth="xl">
       <Nav />
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <>
           <Typography variant="h4" align="center" mt={8}>
-            Hej {user.displayName}, <br /> välkommen till systemet för bokningsplanering!
+            Hej {username}
+            <Box sx={{ display: 'inline' }}>
+              <IconButton size="small" onClick={editProfileName} sx={{ marginBottom: 3 }}>
+                <EditIcon fontSize="1" />
+              </IconButton>
+            </Box>
+            ,
+            <br /> välkommen till systemet för bokningsplanering!
           </Typography>
           <Box mt={4}>
             {isPending && (
