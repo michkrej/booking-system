@@ -22,6 +22,10 @@ export default [
   {
     text: 'Stångebrofält',
     id: '38b49703-feed-4cdd-bde2-234bc63fc852'
+  },
+  {
+    text: 'Flamman',
+    id: '70437e5a-932a-44cb-b718-cad203e94f50'
   }
 ] /* .map(({ text, id }) => ({
   text,
