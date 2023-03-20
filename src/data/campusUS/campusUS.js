@@ -54,7 +54,7 @@ export const locationsUS = {
     text: 'Hus 511',
     rooms: house511
   },
-  'Övriga områden på campus': {
+  'Övriga områden på campus US': {
     id: '56138ae6-f3f4-40cc-88ec-bd1d841e3770',
     value: '56138ae6-f3f4-40cc-88ec-bd1d841e3770',
     text: 'Övriga områden på campus',

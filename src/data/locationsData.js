@@ -8,7 +8,11 @@ export const locations = {
   others: locationsOther
 }
 
-export const locationsNonGrouped = { ...locationsValla, ...locationsUS, ...locationsOther }
+export const locationsNonGrouped = Object.values({
+  ...locationsValla,
+  ...locationsUS,
+  ...locationsOther
+})
 
 export const rooms = [...roomsValla, ...roomsUS, ...roomsOther]
 

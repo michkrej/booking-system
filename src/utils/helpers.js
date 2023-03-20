@@ -45,9 +45,7 @@ export const exportPlan = async (plans) => {
   )
   const cvsConversion = events.map((event) => {
     const committee = committees.find((com) => com.id === event.committeeId)
-    const location = Object.values(locationsNonGrouped).find(
-      (location) => location.id === event.locationId
-    )
+    const location = locationsNonGrouped.find((location) => location.id === event.locationId)
     const roomNames = event.roomId
       .map((eventRoomID) => rooms.find((room) => room.id === eventRoomID).text)
       .join(', ')
