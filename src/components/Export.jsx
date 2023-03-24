@@ -75,7 +75,7 @@ const Export = () => {
           data={csvData}
           filename={`${moment(new Date()).format('DDMMYYYY')}_${chosenPlans
             .map(({ label }) => label)
-            .join('_')}`}
+            .join('_')}${'.csv'}`}
           ref={csvInstance}
         />
       )}
