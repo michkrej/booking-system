@@ -43,6 +43,7 @@ export const exportPlan = async (plans) => {
     'events',
     'planId'
   )
+  events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
   const cvsConversion = events.map((event) => {
     const committee = committees.find((com) => com.id === event.committeeId)
     const location = locationsNonGrouped.find((location) => location.id === event.locationId)
