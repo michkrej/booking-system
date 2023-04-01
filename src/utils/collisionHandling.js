@@ -7,10 +7,10 @@ const moment = extendMoment(Moment)
 const LOCATION_ID = locations.campusValla['C-huset'].id
 const CORRIDOR_IDS = Object.values(corridorsC).map((corridor) => corridor.id)
 const MAX_ITEMS = {
-  grillar: 9,
+  grillar: 8,
   bardiskar: 6,
   'bankset-hg': 20,
-  'bankset-k': 24,
+  'bankset-k': 25,
   trailer: 1,
   tents: 4,
   scene: 10,
@@ -80,7 +80,9 @@ const findCollidingEvents = (event1, event2, items) => {
   const eventsUseSameRooms = (event1, event2) =>
     event1.roomId.some((room) => event2.roomId.includes(room))
 
-  if (event1.range.overlaps(event1.range)) {
+  const range1 = moment.range(moment(event1.startDate), moment(event1.endDate))
+  const range2 = moment.range(moment(event2.startDate), moment(event2.endDate))
+  if (range1.overlaps(range2)) {
     // check for item collisions
     increaseItemsUse(items, event2)
     const tooManyItems = getEventsWithTooManyItems(items)
@@ -88,7 +90,7 @@ const findCollidingEvents = (event1, event2, items) => {
       tooManyItems.forEach((itemEvent) => {
         collidingEvents.add(itemEvent)
       })
-      collidingEvents.add(event1)
+      // collidingEvents.add(event1) adding this is not necessary since the event should be in tooManyItems, I think
     }
     // check for room or corridor collisions
     if (eventsUseSameRooms(event1, event2) || eventsInSameCorridor(event1, event2)) {
@@ -107,14 +109,10 @@ export const findCollisionsBetweenUserPlanAndPublicPlans = (events, userPlanId) 
 
   // Create arrays for personal and public events
   events.forEach((event) => {
-    const newEvent = {
-      ...event,
-      range: moment.range(new Date(event.startDate), new Date(event.endDate))
-    }
     if (event.planId === userPlanId) {
-      userPlan.push(newEvent)
+      userPlan.push(event)
     } else {
-      publicPlans.push(newEvent)
+      publicPlans.push(event)
     }
   })
 
@@ -144,5 +142,5 @@ export const findCollisionsBetweenAllEvents = (events) => {
       }
     })
   })
-  return []
+  return [...collidingEvents]
 }

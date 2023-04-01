@@ -21,7 +21,7 @@ const PublicPlanOverview = () => {
           return committee.id === plan.committeeId
         }).length > 0
     )
-
+      
     return kårPlans.map((plan) => (
       <ListItem key={plan.id}>
         <Link to={`/booking/${plan.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
@@ -54,7 +54,7 @@ const PublicPlanOverview = () => {
               <div key={i}>
                 {plans}
                 <Divider />
-                <Button fullWidth onClick={() => navigate(`/allEvents/${formatCollisions(plans)}`)}>
+                <Button fullWidth onClick={() => navigate(`/allEvents/${formatCollisions(plans.map(({key}) => ({ id: key })))}`)}>
                   Se planeringar för fadderier inom {kår}
                 </Button>
                 <Divider />

@@ -83,8 +83,8 @@ export const defaultCampus = (committeeId) => {
   return campuses[0]
 }
 
-export const formatCollisions = (endCollision) => {
-  return `+${(endCollision || []).map((collision) => collision.id).join('+')}`
+export const formatCollisions = (collisions) => {
+  return `+${(collisions || []).map((collision) => collision.id).join('+')}`
 }
 
 export async function getContentById(ids, path, id) {
@@ -115,12 +115,19 @@ export const createCustomDataSource = (
   { load = true, insert = false, remove = false, update = false },
   collisionFunction = undefined
 ) => {
+  const urlIndex =
+    window.location.pathname.includes('all') && !window.location.pathname.includes('allEvents')
+      ? 3
+      : 2
   return new CustomStore({
     key: 'id',
     ...(load
       ? {
           load: async () => {
-            return await loadEvents(window.location.pathname.split('/')[2], collisionFunction)
+            return await loadEvents(
+              window.location.pathname.split('/')[urlIndex],
+              collisionFunction
+            )
           }
         }
       : {}),
