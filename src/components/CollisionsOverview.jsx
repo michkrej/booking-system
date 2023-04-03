@@ -9,21 +9,23 @@ import { formatCollisions } from '../utils/helpers'
 import OverviewBlock from './OverviewBlock'
 
 const CollisionsOverview = () => {
-  const [startCollision, setStartCollision] = useState()
-  const [endCollision, setEndCollision] = useState()
+  const [selectedPrivatePlan, setselectedPrivatePlan] = useState()
+  const [selectedPublicPlans, setSelectedPublicPlans] = useState()
   const { plans = [], publicPlans } = usePlansContext()
   const navigate = useNavigate()
 
-  const handleStartCollision = (option) => {
-    setStartCollision(option)
+  const handleselectedPrivatePlan = (option) => {
+    setselectedPrivatePlan(option)
   }
 
-  const handleEndCollision = (option) => {
-    setEndCollision(option.length === 0 ? undefined : option)
+  const handleSelectedPublicPlans = (selectedOptions) => {
+    setSelectedPublicPlans(selectedOptions.length === 0 ? undefined : selectedOptions)
   }
 
-  const isDisabled = !startCollision || !endCollision
-  const collisionPath = formatCollisions(endCollision)
+  const hasAllPlansBeenSelected = () =>
+    selectedPublicPlans?.some(({ label }) => label === 'Samtliga publika planeringar')
+
+  const isDisabled = !selectedPrivatePlan || !selectedPublicPlans
 
   return (
     <OverviewBlock title="Hitta krockar">
@@ -31,17 +33,17 @@ const CollisionsOverview = () => {
         <Grid item xs={12} mt={2}>
           <SelectInput
             options={plans}
-            handleChange={handleStartCollision}
+            handleChange={handleselectedPrivatePlan}
             placeholder="Din planering"
-            value={startCollision}
+            value={selectedPrivatePlan}
           />
         </Grid>
         <Grid item xs={12}>
           <SelectInput
-            options={publicPlans}
-            handleChange={handleEndCollision}
+            options={[...publicPlans, { label: 'Samtliga publika planeringar', value: 1 }]}
+            handleChange={handleSelectedPublicPlans}
             placeholder="Publika planeringar"
-            value={endCollision}
+            value={selectedPublicPlans}
             multiple={true}
           />
         </Grid>
@@ -53,7 +55,9 @@ const CollisionsOverview = () => {
         sx={{ mt: 2, mb: 2 }}
         startIcon={<SearchIcon />}
         disabled={isDisabled}
-        onClick={() => navigate(`/collisions/${startCollision.id}${collisionPath}`)}
+        onClick={() =>
+          navigate(`/collisions/${selectedPrivatePlan.id}${formatCollisions(selectedPublicPlans)}`)
+        }
       >
         Hitta endast dina krockar med valda fadderier
       </Button>
@@ -64,7 +68,13 @@ const CollisionsOverview = () => {
         sx={{ mb: 2 }}
         startIcon={<SearchIcon />}
         disabled={isDisabled}
-        onClick={() => navigate(`/collisions/all/${startCollision.id}${collisionPath}`)}
+        onClick={() =>
+          navigate(
+            `/collisions/all/${selectedPrivatePlan.id}${formatCollisions(
+              hasAllPlansBeenSelected() ? publicPlans : selectedPublicPlans
+            )}`
+          )
+        }
       >
         Hitta alla krockar bland valda fadderier
       </Button>
