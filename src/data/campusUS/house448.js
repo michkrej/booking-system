@@ -1,5 +1,3 @@
-import { locations } from '../locationsData'
-
 export default [
   {
     text: 'Hugo Theorell, HS ',

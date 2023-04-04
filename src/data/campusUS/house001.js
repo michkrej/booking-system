@@ -1,6 +1,3 @@
-import { locations } from '../locationsData'
-import { locationsUS } from './campusUS'
-
 export default [
   {
     text: 'Humle',

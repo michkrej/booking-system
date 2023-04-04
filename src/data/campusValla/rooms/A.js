@@ -1,6 +1,3 @@
-import { locations } from '../../locationsData'
-import { locationsValla } from '../campusValla'
-
 export default [
   {
     text: 'A1',

@@ -1,5 +1,3 @@
-import { locations } from '../locationsData'
-
 export default [
   {
     text: 'HG',
@@ -12,6 +10,10 @@ export default [
   {
     text: 'KK - lilla salen',
     id: 'd1d12a5b-8bcb-47b2-9450-e0d490aa6a96'
+  },
+  {
+    text: 'KK - minsta salen',
+    id: '793633a6-bb8b-4646-b9fb-3a303ea1bbda'
   },
   {
     text: 'KK',
@@ -40,6 +42,10 @@ export default [
   {
     text: 'Kårallen - skrivsalen',
     id: '87668379-c5c9-4171-b9aa-bd41761d8685'
+  },
+  {
+    text: 'Kårallen - innergården',
+    id: '806aa762-4e68-49f7-9258-46e6e047f6d8'
   },
   {
     text: 'Kårallen',

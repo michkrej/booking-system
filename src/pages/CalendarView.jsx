@@ -37,17 +37,14 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const [locations, setLocations] = useState(
     sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
   )
-  const [isPending, setIsPending] = useState(false)
 
   useEffect(() => {
     const getAdminData = async () => {
-      setIsPending(true)
       const admin = await getAdminSettings()
       dispatch({
         type: 'LOAD',
         payload: { admin }
       })
-      setIsPending(false)
     }
     getAdminData()
   }, [!lockPlans])

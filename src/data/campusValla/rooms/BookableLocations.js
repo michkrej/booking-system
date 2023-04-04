@@ -1,5 +1,3 @@
-import { locations } from '../../locationsData'
-
 export default [
   {
     text: 'Område 1',
