@@ -8,7 +8,7 @@ export default [
     id: 'fd86f739-d763-440f-a0da-278ca5df39ae'
   },
   {
-    text: 'BL33',
+    text: 'BL34',
     id: '7d1561b3-9245-434e-ada5-ddde80ba5a4c'
   },
   {
@@ -82,6 +82,14 @@ export default [
   {
     text: 'Theorell',
     id: '7e05e180-2090-4952-82f6-6d1467baf09d'
+  },
+  {
+    text: 'Darwin',
+    id: '7898d425-6349-40c9-999a-cfb205c95999'
+  },
+  {
+    text: 'Linné',
+    id: '30e26fb8-514b-49cb-9b9e-d17d5d5ed5e0'
   }
 ] /* .map(({ text, id }) => ({
   text,

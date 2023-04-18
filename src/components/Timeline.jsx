@@ -7,6 +7,8 @@ import { committees } from '../data/committees'
 import Appointment from './Appointment'
 import bookableItems from '../data/bookableItems'
 
+import './styles.css'
+
 const currentDate = new Date('2023-08-15T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
 
@@ -125,6 +127,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
   return (
     <>
       <Scheduler
+        id="scheduler"
         timeZone="Europe/Stockholm"
         dataSource={store}
         views={views}
@@ -140,7 +143,7 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
         /* TODO: fix tooltip so it shows delete */
         //appointmentTooltipRender={AppointmentTooltip}
         appointmentRender={Appointment}
-        height={scheduleHeight}
+        height={window.innerHeight - 250}
         crossScrollingEnabled={true}
       >
         <Resource

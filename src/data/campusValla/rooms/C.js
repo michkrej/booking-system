@@ -280,6 +280,7 @@ const roomsC = [
 
     corridorId: corridorsC.R.id
   },
+  // TODO - remove this duplicate
   {
     text: 'R22',
     id: 'e893e020-5772-4a53-ac8c-eabcf03545e6',
