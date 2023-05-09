@@ -32,6 +32,10 @@ export default [
     id: 'eb98ae3c-d362-4eb7-a1d0-9cef45e2eca7'
   },
   {
+    text: 'KY27',
+    id: '48accb0f-59bb-4ed1-9f12-438a6330d0f0'
+  },
+  {
     text: 'KY31',
     id: '99f093a9-8739-49c8-9048-1b318f253c90'
   },

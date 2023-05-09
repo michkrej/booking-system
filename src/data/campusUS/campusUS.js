@@ -8,6 +8,13 @@ import house463 from './house463'
 import house473 from './house473'
 import house511 from './house511'
 
+const roomsOther = [
+  {
+    text: 'Märkesbacken',
+    id: '5e474e7b-898b-4628-9d4e-8e1edf7b27e0'
+  }
+]
+
 export const locationsUS = {
   house001: {
     id: '949636dc-997a-4aa2-8582-7c81a12dad4d',
@@ -59,12 +66,7 @@ export const locationsUS = {
     value: '56138ae6-f3f4-40cc-88ec-bd1d841e3770',
     text: 'Övriga områden på campus',
     label: 'Övriga områden på campus',
-    rooms: [
-      {
-        text: 'Märkesbacken',
-        id: '5e474e7b-898b-4628-9d4e-8e1edf7b27e0'
-      }
-    ]
+    rooms: roomsOther
   }
 }
 
@@ -77,5 +79,6 @@ export const roomsUS = [
   ...house462,
   ...house463,
   ...house473,
-  ...house511
+  ...house511,
+  ...roomsOther
 ]
