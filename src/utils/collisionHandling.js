@@ -18,9 +18,10 @@ const MAX_ITEMS = {
 }
 
 /**
- * key: name of item
- * sum: the sum of that specific item
- * events: the event that uses that item
+ * Creates an items object based on the given event.
+ *
+ * @param {object} event - The event object.
+ * @returns {object} - The items object containing information about the event items.
  */
 export const createItemsObject = (event) => {
   const eventItemExists = (item) => event[item] !== undefined
@@ -33,7 +34,12 @@ export const createItemsObject = (event) => {
   }, {})
 }
 
-// Increases the sum of items and adds the event to the events array
+/**
+ * Increases the usage of items based on the given event.
+ *
+ * @param {object} items - The items object to update.
+ * @param {object} event - The event object containing the updated item values.
+ */
 export const increaseItemsUse = (items, event) => {
   Object.keys(items).forEach((item) => {
     if (event?.[item]) {
@@ -47,8 +53,13 @@ export const increaseItemsUse = (items, event) => {
   })
 }
 
-// Iterates trough items and returns the first item that is over the limit
 // TODO: return all items that are over the limit
+/**
+ * Returns the events with too many items based on the given items object.
+ *
+ * @param {object} items - The items object.
+ * @returns {Array|undefined} - An array of events with too many items, or undefined if no events have too many items.
+ */
 export const getEventsWithTooManyItems = (items) => {
   for (let item in items) {
     if (items[item].sum > MAX_ITEMS[item]) {
@@ -58,6 +69,13 @@ export const getEventsWithTooManyItems = (items) => {
   return undefined
 }
 
+/**
+ * Checks if there is a collision between a room and a corridor in the given events.
+ *
+ * @param {object} event1 - The first event object.
+ * @param {object} event2 - The second event object.
+ * @returns {boolean} - Returns true if there is a collision between a room and a corridor, otherwise false.
+ */
 export const isCollisionBetweenRoomAndCorridor = (event1, event2) => {
   if (event1.locationId !== LOCATION_ID || event2.locationId !== LOCATION_ID) {
     return false
@@ -72,16 +90,37 @@ export const isCollisionBetweenRoomAndCorridor = (event1, event2) => {
   )
 }
 
-// Om användare har bokat salar i C-huset, då det går att boka enskilda salar eller hela korridorer
+/**
+ * Checks if the given events are in the same corridor.
+ *
+ * @param {object} event1 - The first event object.
+ * @param {object} event2 - The second event object.
+ * @returns {boolean} - Returns true if the events are in the same corridor and there is a collision between a room and a corridor, otherwise false.
+ */
 export const eventsInSameCorridor = (event1, event2) => {
   return event1.locationId === event2.locationId
     ? isCollisionBetweenRoomAndCorridor(event1, event2)
     : false
 }
 
+/**
+ * Checks if the given events use the same rooms.
+ *
+ * @param {object} event1 - The first event object.
+ * @param {object} event2 - The second event object.
+ * @returns {boolean} - Returns true if the events use at least one common room, otherwise false.
+ */
 export const eventsUseSameRooms = (event1, event2) =>
   event1.roomId.some((room) => event2.roomId.includes(room))
 
+/**
+ * Finds collisions between two events and returns the set of colliding events.
+ *
+ * @param {object} event1 - The first event object.
+ * @param {object} event2 - The second event object.
+ * @param {object} items - The items object.
+ * @returns {Set} - A Set containing the colliding events.
+ */
 export const findCollisionBetweenEvents = (event1, event2, items) => {
   const collidingEvents = new Set()
 
@@ -107,6 +146,14 @@ export const findCollisionBetweenEvents = (event1, event2, items) => {
   return collidingEvents
 }
 
+
+/**
+ * Finds collisions between a user's plan and public plans and returns an array of colliding events.
+ *
+ * @param {Array} events - An array of event objects.
+ * @param {string} userPlanId - The ID of the user's plan.
+ * @returns {Array} - An array of colliding events.
+ */
 export const findCollisionsBetweenUserPlanAndPublicPlans = (events, userPlanId) => {
   let collidingEvents = new Set()
   const userPlan = []
@@ -134,6 +181,12 @@ export const findCollisionsBetweenUserPlanAndPublicPlans = (events, userPlanId) 
   return [...collidingEvents]
 }
 
+/**
+ * Finds collisions between all events and returns an array of colliding events.
+ *
+ * @param {Array} events - An array of event objects.
+ * @returns {Array} - An array of colliding events.
+ */
 export const findCollisionsBetweenAllEvents = (events) => {
   let collidingEvents = new Set()
   events.forEach((event1) => {
