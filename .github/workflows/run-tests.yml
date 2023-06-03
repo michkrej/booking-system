@@ -1,0 +1,13 @@
+name: Run tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+      - name: Run tests
+        run: npm test -- --verbose 2>&1 | tee test.log
+      - name: Show log file
+        run: cat test.log
