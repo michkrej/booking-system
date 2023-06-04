@@ -1,24 +1,17 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
-import IconButton from '@mui/material/IconButton'
-import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
-import PublicIcon from '@mui/icons-material/Public'
-import EditIcon from '@mui/icons-material/Edit'
 import LoadingButton from '@mui/lab/LoadingButton'
 import usePlansContext from '../hooks/usePlansContext'
 import useAuthContext from '../hooks/useAuthContext'
 import { createPlan, deletePlan, updatePlan } from '../firebase/dbActions'
 import { sortAlphabetically } from '../utils/helpers'
 import Error from './Error'
-import { secondary, secondary2 } from '../App'
 import OverviewBlock from './OverviewBlock'
+import PlanListElement from './PlanListElement'
 
 export const adminError = 'Möjligheten att redigera planeringar har låsts av en administratör'
 
@@ -125,39 +118,13 @@ const PlanOverview = () => {
       <List>
         {sortAlphabetically(plans, true).map((plan) => {
           return (
-            <ListItem
+            <PlanListElement
               key={plan.id}
-              secondaryAction={
-                <>
-                  <IconButton edge="end" aria-label="edit name" onClick={() => changeName(plan)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    edge="end"
-                    aria-label="toogle public"
-                    onClick={() => togglePublic(plan)}
-                    sx={{ color: plan.public ? secondary : secondary2, paddingLeft: 2 }}
-                  >
-                    <PublicIcon />
-                  </IconButton>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => deleteUserPlan(plan.id)}
-                    sx={{ paddingLeft: 2 }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </>
-              }
-            >
-              <Link
-                to={`/booking/${plan.id}`}
-                style={{ color: 'inherit', textDecoration: 'inherit' }}
-              >
-                <ListItemText>{plan.label}</ListItemText>
-              </Link>
-            </ListItem>
+              plan={plan}
+              togglePublic={togglePublic}
+              changeName={changeName}
+              deleteUserPlan={deleteUserPlan}
+            />
           )
         })}
       </List>

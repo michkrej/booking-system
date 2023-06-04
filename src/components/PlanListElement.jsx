@@ -1,0 +1,70 @@
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+import PublicIcon from '@mui/icons-material/Public'
+import EditIcon from '@mui/icons-material/Edit'
+import { secondary, secondary2 } from '../App'
+
+const PlanListElement = (props) => {
+  const { plan, lockPlans, changeName, togglePublic, deletePlan } = props
+
+  return (
+    <div>
+      <ListItem
+        key={plan.id}
+        secondaryAction={
+          <>
+            <IconButton
+              edge="end"
+              aria-label="edit name"
+              onClick={() => changeName(plan)}
+              disabled={lockPlans}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="toogle public"
+              disabled={lockPlans}
+              onClick={() => togglePublic(plan)}
+              sx={{ color: plan.public ? secondary : secondary2, paddingLeft: 2 }}
+            >
+              <PublicIcon />
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              disabled={lockPlans}
+              onClick={() => deletePlan(plan.id)}
+              sx={{ paddingLeft: 2 }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </>
+        }
+      >
+        <Link to={`/booking/${plan.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
+          <ListItemText>{plan.label}</ListItemText>
+        </Link>
+      </ListItem>
+    </div>
+  )
+}
+
+PlanListElement.propTypes = {
+  plan: PropTypes.shape({
+    id: PropTypes.string,
+    label: PropTypes.string,
+    public: PropTypes.bool
+  }),
+  lockPlans: PropTypes.bool,
+  changeName: PropTypes.func,
+  togglePublic: PropTypes.func,
+  deletePlan: PropTypes.func
+}
+
+export default PlanListElement
