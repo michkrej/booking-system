@@ -7,7 +7,7 @@ import { committees } from '../data/committees'
 import Appointment from './Appointment'
 import bookableItems from '../data/bookableItems'
 
-import './styles.css'
+import '../styles/timeline.css'
 
 const currentDate = new Date('2023-08-15T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
