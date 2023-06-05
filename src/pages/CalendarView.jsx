@@ -18,8 +18,8 @@ import {
 import Comment from '../components/Comment'
 import usePlansContext from '../hooks/usePlansContext'
 import { getAdminSettings } from '../firebase/dbActions'
-import { adminError } from '../components/PlanOverview'
 import Error from '../components/Error'
+import { adminError } from '../CONSTANTS'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
