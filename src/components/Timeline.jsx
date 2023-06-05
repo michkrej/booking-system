@@ -1,21 +1,13 @@
-/* eslint-disable no-unused-vars */
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
 import useAuthContext from '../hooks/useAuthContext'
 import { committees } from '../data/committees'
 import Appointment from './Appointment'
 import bookableItems from '../data/bookableItems'
+import { currentDate, views } from '../CONSTANTS'
 
 import '../styles/timeline.css'
-
-const currentDate = new Date('2023-08-15T00:00:00.000Z')
-const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
-
-const getHeight = (nRooms, location, isOverview) => {
-  if (isOverview) return nRooms * 10
-  return location ? nRooms * 175 : 1000
-}
 
 const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], locations }) => {
   const { user } = useAuthContext()
@@ -119,11 +111,6 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
     [currentLocation, showCommittee, rooms]
   )
 
-  const nRooms = useMemo(() => (rooms.length > 2 ? rooms.length : 7), [rooms])
-  const scheduleHeight = useMemo(
-    () => getHeight(nRooms, currentLocation, groups[0] === 'locationId'),
-    [nRooms, currentLocation, groups]
-  )
   return (
     <>
       <Scheduler
