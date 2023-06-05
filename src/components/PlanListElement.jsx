@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PublicIcon from '@mui/icons-material/Public'
 import EditIcon from '@mui/icons-material/Edit'
-import { secondary, secondary2 } from '../App'
+import { color } from '../CONSTANTS'
 
 const PlanListElement = (props) => {
   const { plan, lockPlans, changeName, togglePublic, deletePlan } = props
@@ -31,7 +31,7 @@ const PlanListElement = (props) => {
               aria-label="toogle public"
               disabled={lockPlans}
               onClick={() => togglePublic(plan)}
-              sx={{ color: plan.public ? secondary : secondary2, paddingLeft: 2 }}
+              sx={{ color: plan.public ? color.secondary : color.tertiary, paddingLeft: 2 }}
             >
               <PublicIcon />
             </IconButton>
