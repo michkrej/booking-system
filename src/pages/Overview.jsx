@@ -8,42 +8,18 @@ import Export from '../components/Export'
 import PlanOverview from '../components/PlanOverview'
 import CollisionsOverview from '../components/CollisionsOverview'
 import useAuthContext from '../hooks/useAuthContext'
-import usePlansContext from '../hooks/usePlansContext'
 import PublicPlanOverview from '../components/PublicPlanOverview'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
-import { getAdminSettings, getAllPlans, updateProfileName } from '../firebase/dbActions'
 import AdminOverview from '../components/Admin'
+import useGetPlans from '../hooks/planHooks/useGetPlans'
+import useChangeUsername from '../hooks/userHooks/useChangeUsername'
 
 const Overview = () => {
-  const [isPending, setIsPending] = useState(true)
   const { user } = useAuthContext()
-  const { dispatch, plans } = usePlansContext()
-  const [username, setUsername] = useState(user.displayName)
-
-  useEffect(() => {
-    const getPlans = async () => {
-      setIsPending(true)
-      const { plans: _plans, publicPlans } = await getAllPlans(user)
-      const admin = await getAdminSettings()
-      dispatch({
-        type: 'LOAD',
-        payload: { plans: _plans, publicPlans, admin }
-      })
-      setIsPending(false)
-    }
-
-    getPlans()
-  }, [])
-
-  const editProfileName = () => {
-    const name = window.prompt('Vad vill du att ditt namn ska vara?')
-    if (name.length > 0) {
-      updateProfileName(name)
-      setUsername(name)
-    }
-  }
+  const { isPending } = useGetPlans()
+  const { username, changeUsername } = useChangeUsername()
 
   return (
     <Container maxWidth="xl">
@@ -53,7 +29,7 @@ const Overview = () => {
           <Typography variant="h4" align="center" mt={8}>
             Hej {username}
             <Box sx={{ display: 'inline' }}>
-              <IconButton size="small" onClick={editProfileName} sx={{ marginBottom: 3 }}>
+              <IconButton size="small" onClick={changeUsername} sx={{ marginBottom: 3 }}>
                 <EditIcon fontSize="1" />
               </IconButton>
             </Box>
@@ -61,12 +37,11 @@ const Overview = () => {
             <br /> välkommen till systemet för bokningsplanering!
           </Typography>
           <Box mt={4}>
-            {isPending && (
+            {isPending ? (
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress />
               </Box>
-            )}
-            {!isPending && plans && (
+            ) : (
               <Grid container maxWidth="xs" spacing={2}>
                 <Grid item md={6} xs={12}>
                   {user.admin && <AdminOverview />}
