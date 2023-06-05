@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { ListItem, ListItemText } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-const KårPlan = ({ kårCommittees, plan }) => {
+const PublicPlanListElement = ({ kårCommittees, plan }) => {
   return (
     <ListItem key={plan.id}>
       <Link to={`/booking/${plan.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
@@ -14,9 +14,9 @@ const KårPlan = ({ kårCommittees, plan }) => {
   )
 }
 
-KårPlan.propTypes = {
+PublicPlanListElement.propTypes = {
   kårCommittees: PropTypes.array.isRequired,
   plan: PropTypes.object.isRequired
 }
 
-export default KårPlan
+export default PublicPlanListElement

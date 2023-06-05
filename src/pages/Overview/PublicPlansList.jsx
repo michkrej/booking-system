@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import { formatCollisions } from '../utils/helpers'
+import { formatCollisions } from '../../utils/helpers'
 import { Button, List } from '@mui/material'
-import KårPlan from './KårPlan'
-import Comment from './Comment'
+import Comment from '../../components/Comment'
+import PublicPlanListElement from './PublicPlansListElement'
 
-const KårPlanList = ({ kår, kårCommittees, plans }) => {
+const PublicPlanList = ({ kår, kårCommittees, plans }) => {
   const navigate = useNavigate()
 
   const kårPlans = plans.filter(
@@ -31,16 +31,16 @@ const KårPlanList = ({ kår, kårCommittees, plans }) => {
         <Comment align="center">Inga publika planeringar för {kår}</Comment>
       )}
       {kårPlans.map((plan) => (
-        <KårPlan key={plan.id} kårCommittees={kårCommittees} plan={plan} />
+        <PublicPlanListElement key={plan.id} kårCommittees={kårCommittees} plan={plan} />
       ))}
     </List>
   )
 }
 
-KårPlanList.propTypes = {
+PublicPlanList.propTypes = {
   kår: PropTypes.string.isRequired,
   kårCommittees: PropTypes.array.isRequired,
   plans: PropTypes.array.isRequired
 }
 
-export default KårPlanList
+export default PublicPlanList

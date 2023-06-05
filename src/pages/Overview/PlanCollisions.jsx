@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-import SelectInput from './SelectInput'
+import SelectInput from '../../components/SelectInput'
 import SearchIcon from '@mui/icons-material/Search'
-import usePlansContext from '../hooks/context/usePlansContext'
+import usePlansContext from '../../hooks/context/usePlansContext'
 import { useNavigate } from 'react-router-dom'
-import { formatCollisions } from '../utils/helpers'
+import { formatCollisions } from '../../utils/helpers'
 import OverviewBlock from './OverviewBlock'
 
-const CollisionsOverview = () => {
+const PlanCollisions = () => {
   const [selectedPrivatePlan, setSelectedPrivatePlan] = useState()
   const [selectedPublicPlans, setSelectedPublicPlans] = useState()
   const { plans = [], publicPlans = [] } = usePlansContext()
@@ -82,4 +82,4 @@ const CollisionsOverview = () => {
   )
 }
 
-export default CollisionsOverview
+export default PlanCollisions

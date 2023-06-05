@@ -7,9 +7,9 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PublicIcon from '@mui/icons-material/Public'
 import EditIcon from '@mui/icons-material/Edit'
-import { color } from '../CONSTANTS'
+import { color } from '../../CONSTANTS'
 
-const PlanListElement = (props) => {
+const UserPlansListElement = (props) => {
   const { plan, lockPlans, changeName, togglePublic, deletePlan } = props
 
   return (
@@ -55,7 +55,7 @@ const PlanListElement = (props) => {
   )
 }
 
-PlanListElement.propTypes = {
+UserPlansListElement.propTypes = {
   plan: PropTypes.shape({
     id: PropTypes.string,
     label: PropTypes.string,
@@ -67,4 +67,4 @@ PlanListElement.propTypes = {
   deletePlan: PropTypes.func
 }
 
-export default PlanListElement
+export default UserPlansListElement

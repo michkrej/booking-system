@@ -2,15 +2,15 @@ import PropTypes from 'prop-types'
 import List from '@mui/material/List'
 import AddIcon from '@mui/icons-material/Add'
 import LoadingButton from '@mui/lab/LoadingButton'
-import usePlansContext from '../hooks/context/usePlansContext'
-import { sortAlphabetically } from '../utils/helpers'
-import Error from './Error'
+import usePlansContext from '../../hooks/context/usePlansContext'
+import { sortAlphabetically } from '../../utils/helpers'
+import Error from '../../components/Error'
 import OverviewBlock from './OverviewBlock'
-import PlanListElement from './PlanListElement'
-import useEditPlan from '../hooks/plan/useEditPlan'
-import { adminError } from '../CONSTANTS'
+import useEditPlan from '../../hooks/plan/useEditPlan'
+import { adminError } from '../../CONSTANTS'
+import UserPlansListElement from './UserPlansListElement'
 
-const PlanOverview = () => {
+const UserPlans = () => {
   const {
     plans = [],
     admin: { lockPlans }
@@ -38,7 +38,7 @@ const PlanOverview = () => {
       <List>
         {sortedPlans.map((plan) => {
           return (
-            <PlanListElement
+            <UserPlansListElement
               key={plan.id}
               plan={plan}
               lockPlans={lockPlans}
@@ -64,8 +64,8 @@ const PlanOverview = () => {
   )
 }
 
-PlanOverview.propTypes = {
+UserPlans.propTypes = {
   userId: PropTypes.string
 }
 
-export default PlanOverview
+export default UserPlans
