@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
-import Nav from '../components/Nav'
-import Timeline from '../components/Timeline'
+import Nav from '../../components/layout/Nav'
+import Timeline from './Timeline'
 import PropTypes from 'prop-types'
-import useAuthContext from '../hooks/context/useAuthContext'
-import { createCustomDataSource, defaultCampus, sortAlphabetically } from '../utils/helpers'
-import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../data/locationsData'
-import FilterTimelineLocations from '../components/FilterTimelineLocations'
+import useAuthContext from '../../hooks/context/useAuthContext'
+import { createCustomDataSource, defaultCampus, sortAlphabetically } from '../../utils/helpers'
+import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../../data/locationsData'
+import FilterTimelineLocations from './FilterTimelineLocations'
 import { useParams, useLocation } from 'react-router-dom'
 import {
   findCollisionsBetweenAllEvents,
   findCollisionsBetweenUserPlanAndPublicPlans
-} from '../utils/collisionHandling'
-import Comment from '../components/Comment'
-import usePlansContext from '../hooks/context/usePlansContext'
-import { getAdminSettings } from '../firebase/dbActions'
-import Error from '../components/Error'
-import { adminError } from '../CONSTANTS'
+} from '../../utils/collisionHandling'
+import Comment from '../../components/Comment'
+import usePlansContext from '../../hooks/context/usePlansContext'
+import { getAdminSettings } from '../../firebase/dbActions'
+import Error from '../../components/Error'
+import { adminError } from '../../CONSTANTS'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 

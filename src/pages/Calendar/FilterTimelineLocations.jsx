@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { styled } from '@mui/material/styles'
 import Stack from '@mui/material/Stack'
-import SelectInput from './SelectInput'
-import { locationsValla } from '../data/campusValla/campusValla'
+import { locationsValla } from '../../data/campusValla/campusValla'
+import SelectInput from '../../components/SelectInput'
 
 const Item = styled('div')(() => ({
   marginBottom: '1em',

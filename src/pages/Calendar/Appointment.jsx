@@ -1,6 +1,6 @@
 import { formatDate } from 'devextreme/localization'
 import PropTypes from 'prop-types'
-import { committees } from '../data/committees'
+import { committees } from '../../data/committees'
 
 const Appointment = ({ targetedAppointmentData }) => {
   return (
