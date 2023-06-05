@@ -6,7 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
-import Nav from '../../components/Nav'
+import Nav from '../../components/layout/Nav'
 import UserPlans from './UserPlans'
 import PlanCollisions from './PlanCollisions'
 import PublicPlans from './PublicPlans'

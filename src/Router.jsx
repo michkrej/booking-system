@@ -2,15 +2,15 @@ import { Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Box, CircularProgress } from '@mui/material'
 
-import Footer from './components/Footer'
-import Nav from './components/Nav'
+import Footer from './components/layout/Footer'
+import Nav from './components/layout/Nav'
 import useAuthContext from './hooks/context/useAuthContext'
 import RequireAuth from './components/RequireAuth'
 import Login from './pages/Login'
 
 const Overview = lazy(() => import('./pages/Overview'))
 const Signup = lazy(() => import('./pages/Signup'))
-const CalendarView = lazy(() => import('./pages/CalendarView'))
+const CalendarView = lazy(() => import('./pages/Calendar'))
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 
 const Fallback = () => {
