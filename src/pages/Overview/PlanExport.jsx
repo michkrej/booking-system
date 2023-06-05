@@ -1,16 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
-import SelectInput from './SelectInput'
+import SelectInput from '../../components/SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
-import usePlansContext from '../hooks/context/usePlansContext'
-import { exportPlan } from '../utils/helpers'
+import usePlansContext from '../../hooks/context/usePlansContext'
+import { exportPlan } from '../../utils/helpers'
 import { CSVLink } from 'react-csv'
 import { LoadingButton } from '@mui/lab'
 import moment from 'moment'
 import OverviewBlock from './OverviewBlock'
-import Error from './Error'
+import Error from '../../components/Error'
 
-const Export = () => {
+const PlanExport = () => {
   const [chosenPlans, setChosenPlans] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -87,4 +87,4 @@ const Export = () => {
   )
 }
 
-export default Export
+export default PlanExport

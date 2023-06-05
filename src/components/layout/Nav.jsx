@@ -1,5 +1,5 @@
+import { useNavigate } from 'react-router-dom'
 import LogoutIcon from '@mui/icons-material/Logout'
-import useLogout from '../hooks/user/useLogout'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -7,10 +7,9 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 
-import heart from '../images/LUST.png'
-import { useNavigate } from 'react-router-dom'
-
-const pages = [{ url: 'overview', name: 'Översikt' }]
+import heart from '../../images/LUST.png'
+import useLogout from '../../hooks/user/useLogout'
+import { pages } from '../../CONSTANTS'
 
 export default function Nav() {
   const { logout } = useLogout()

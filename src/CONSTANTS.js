@@ -11,4 +11,6 @@ const color = {
   tertiary: '#818389'
 }
 
-export { currentDate, views, adminError, color }
+const pages = [{ url: 'overview', name: 'Översikt' }]
+
+export { currentDate, views, adminError, color, pages }

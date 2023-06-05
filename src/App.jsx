@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box } from '@mui/material'
 import { locale, loadMessages } from 'devextreme/localization'
 
-import Footer from './components/Footer'
+import Footer from './components/layout/Footer'
 import useAuthContext from './hooks/context/useAuthContext'
 import Router from './Router'
 import { color } from './CONSTANTS'
