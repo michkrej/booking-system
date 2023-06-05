@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
@@ -15,10 +14,12 @@ import EditIcon from '@mui/icons-material/Edit'
 import AdminOverview from '../components/Admin'
 import useGetPlans from '../hooks/planHooks/useGetPlans'
 import useChangeUsername from '../hooks/userHooks/useChangeUsername'
+import usePlansContext from '../hooks/usePlansContext'
 
 const Overview = () => {
   const { user } = useAuthContext()
-  const { isPending } = useGetPlans()
+  const { plans } = usePlansContext()
+  const { isPending } = useGetPlans(true)
   const { username, changeUsername } = useChangeUsername()
 
   return (
@@ -42,17 +43,19 @@ const Overview = () => {
                 <CircularProgress />
               </Box>
             ) : (
-              <Grid container maxWidth="xs" spacing={2}>
-                <Grid item md={6} xs={12}>
-                  {user.admin && <AdminOverview />}
-                  <PlanOverview />
-                  <CollisionsOverview />
+              plans && (
+                <Grid container maxWidth="xs" spacing={2}>
+                  <Grid item md={6} xs={12}>
+                    {user.admin && <AdminOverview />}
+                    <PlanOverview />
+                    <CollisionsOverview />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <Export />
+                    <PublicPlanOverview />
+                  </Grid>
                 </Grid>
-                <Grid item md={6} xs={12}>
-                  <Export />
-                  <PublicPlanOverview />
-                </Grid>
-              </Grid>
+              )
             )}
           </Box>
         </>

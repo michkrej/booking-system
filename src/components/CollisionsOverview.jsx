@@ -11,7 +11,7 @@ import OverviewBlock from './OverviewBlock'
 const CollisionsOverview = () => {
   const [selectedPrivatePlan, setSelectedPrivatePlan] = useState()
   const [selectedPublicPlans, setSelectedPublicPlans] = useState()
-  const { plans = [], publicPlans } = usePlansContext()
+  const { plans = [], publicPlans = [] } = usePlansContext()
   const navigate = useNavigate()
 
   const handleselectedPrivatePlan = (option) => {
