@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useSignup from '../hooks/useSignup'
+import useSignup from '../hooks/user/useSignup'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'

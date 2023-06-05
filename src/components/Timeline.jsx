@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import useAuthContext from '../hooks/useAuthContext'
+import useAuthContext from '../hooks/context/useAuthContext'
 import { committees } from '../data/committees'
 import Appointment from './Appointment'
 import bookableItems from '../data/bookableItems'

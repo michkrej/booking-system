@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab'
 import heart from '../images/LinTek_hjarta.png'
 import Error from '../components/Error'
 import StyledLink from '../components/Link'
-import useForgotPassword from '../hooks/userHooks/useForgotPassword'
+import useForgotPassword from '../hooks/user/useForgotPassword'
 import Success from '../components/Success'
 
 export default function ForgotPassword() {

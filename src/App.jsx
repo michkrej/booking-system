@@ -3,15 +3,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, CssBaseline, Box, CircularProgress } from '@mui/material'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { locale, loadMessages } from 'devextreme/localization'
-import seMessages from 'devextreme/localization/messages/sv.json'
-import useAuthContext from './hooks/useAuthContext'
-
-import 'devextreme/dist/css/dx.light.css'
 
 import Footer from './components/Footer'
 import Login from './pages/Login'
 import RequireAuth from './components/RequireAuth'
 import Nav from './components/Nav'
+import useAuthContext from './hooks/context/useAuthContext'
+
+import seMessages from 'devextreme/localization/messages/sv.json'
+import 'devextreme/dist/css/dx.light.css'
 
 const Overview = lazy(() => import('./pages/Overview'))
 const Signup = lazy(() => import('./pages/Signup'))

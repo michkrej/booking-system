@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import usePlansContext from '../usePlansContext'
+import usePlansContext from '../context/usePlansContext'
 import { getAllPlans } from '../../firebase/dbActions'
 import useAdminSettings from '../useAdminSettings'
-import useAuthContext from '../useAuthContext'
+import useAuthContext from '../context/useAuthContext'
 
 const useGetPlans = () => {
   const [isPending, setIsPending] = useState(false)

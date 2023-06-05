@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import usePlansContext from '../usePlansContext'
+import usePlansContext from '../context/usePlansContext'
 import { deletePlan, updatePlan, createPlan as _createPlan } from '../../firebase/dbActions'
-import useAuthContext from '../useAuthContext'
+import useAuthContext from '../context/useAuthContext'
 import { useNavigate } from 'react-router-dom'
 
 const useEditPlan = () => {

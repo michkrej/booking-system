@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import usePlansContext from '../hooks/usePlansContext'
+import usePlansContext from '../hooks/context/usePlansContext'
 import { Button } from '@mui/material'
 import { formatCollisions } from '../utils/helpers'
 import Comment from './Comment'
