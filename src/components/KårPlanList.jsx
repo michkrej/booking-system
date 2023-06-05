@@ -27,7 +27,9 @@ const KårPlanList = ({ kår, kårCommittees, plans }) => {
       >
         Se planeringar för fadderier inom {kår}
       </Button>
-      {kårPlans.length === 0 && <Comment align="center">Inga planeringar för {kår}</Comment>}
+      {kårPlans.length === 0 && (
+        <Comment align="center">Inga publika planeringar för {kår}</Comment>
+      )}
       {kårPlans.map((plan) => (
         <KårPlan key={plan.id} kårCommittees={kårCommittees} plan={plan} />
       ))}

@@ -114,7 +114,7 @@ const PlanOverview = () => {
           versioner eller har kvar planeringar från din företrädare`}
     >
       {lockPlans && <Error message={adminError} />}
-      {error && <Error message={error} />}
+      <Error message={error} />
       <List>
         {sortAlphabetically(plans, true).map((plan) => {
           return (
