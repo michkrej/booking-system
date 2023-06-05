@@ -10,7 +10,12 @@ const useLogin = () => {
   const [error, setError] = useState()
   const { dispatch } = useAuthContext()
 
-  const login = async (email, password) => {
+  const login = async (event) => {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const email = data.get('email')
+    const password = data.get('password')
+
     setError(undefined)
     setIsPending(true)
     try {
