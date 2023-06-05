@@ -1,5 +1,5 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom'
-import useAuthContext from '../hooks/useAuthContext'
+import useAuthContext from '../hooks/context/useAuthContext'
 
 const RequireAuth = () => {
   const { user } = useAuthContext()

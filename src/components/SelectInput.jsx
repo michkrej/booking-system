@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { primary } from '../App'
+import { color } from '../CONSTANTS'
 
 const SelectInput = ({
   handleChange,
@@ -24,10 +24,10 @@ const SelectInput = ({
         ...theme,
         colors: {
           ...theme.colors,
-          primary: primary,
-          primary75: '#670c47b5',
-          primary50: '#670c4778',
-          primary25: '#670c473b'
+          primary: color.primary,
+          primary75: color.primary75,
+          primary50: color.primary50,
+          primary25: color.primary25
         }
       })}
     />

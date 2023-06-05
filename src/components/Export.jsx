@@ -2,12 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import SelectInput from './SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
-import usePlansContext from '../hooks/usePlansContext'
+import usePlansContext from '../hooks/context/usePlansContext'
 import { exportPlan } from '../utils/helpers'
 import { CSVLink } from 'react-csv'
 import { LoadingButton } from '@mui/lab'
 import moment from 'moment'
 import OverviewBlock from './OverviewBlock'
+import Error from './Error'
 
 const Export = () => {
   const [chosenPlans, setChosenPlans] = useState([])
@@ -46,7 +47,10 @@ const Export = () => {
   }
 
   return (
-    <OverviewBlock title="Export">
+    <OverviewBlock
+      title="Export"
+      comment="Exporten är en csv-fil som kan öppnas i Google Drive eller Excel."
+    >
       <Grid container spacing={2} mt={0.5}>
         <Grid item xs={12}>
           <SelectInput
@@ -58,7 +62,7 @@ const Export = () => {
           />
         </Grid>
       </Grid>
-      {error && <div>{error}</div>}
+      <Error error={error} />
       <LoadingButton
         fullWidth
         variant="contained"

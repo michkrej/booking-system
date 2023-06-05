@@ -1,5 +1,5 @@
 import LogoutIcon from '@mui/icons-material/Logout'
-import useLogout from '../hooks/useLogout'
+import useLogout from '../hooks/user/useLogout'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'

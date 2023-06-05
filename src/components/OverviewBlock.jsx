@@ -14,7 +14,7 @@ const OverviewBlock = ({ title, comment, children }) => {
         <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
           {title}
         </Typography>
-        <Divider />
+        <Divider sx={{ marginBottom: 1 }} />
         {comment && (
           <div>
             <Comment>{comment}</Comment>

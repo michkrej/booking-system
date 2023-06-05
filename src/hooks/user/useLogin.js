@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { auth, db } from '../firebase/config'
+import { auth, db } from '../../firebase/config'
 import { collection, where, getDocs, query } from 'firebase/firestore'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import useAuthContext from './useAuthContext'
+import useAuthContext from '../context/useAuthContext'
 
 const useLogin = () => {
   const [isCancelled, setIsCancelled] = useState(false)
@@ -10,7 +10,12 @@ const useLogin = () => {
   const [error, setError] = useState()
   const { dispatch } = useAuthContext()
 
-  const login = async (email, password) => {
+  const login = async (event) => {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const email = data.get('email')
+    const password = data.get('password')
+
     setError(undefined)
     setIsPending(true)
     try {

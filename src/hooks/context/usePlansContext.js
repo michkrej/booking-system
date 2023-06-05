@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { PlansContext } from '../context/PlanContextProvider'
+import { PlansContext } from '../../context/PlanContextProvider'
 
 const usePlansContext = () => {
   const context = useContext(PlansContext)

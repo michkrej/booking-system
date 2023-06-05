@@ -7,16 +7,12 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 
 import heart from '../images/LUST.png'
-import useLogin from '../hooks/useLogin'
+import useLogin from '../hooks/user/useLogin'
 import StyledLink from '../components/Link'
+import Error from '../components/Error'
 
 export default function Login() {
   const { login, error } = useLogin()
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    login(data.get('email'), data.get('password'))
-  }
 
   return (
     <Container component="div" maxWidth="xs">
@@ -34,8 +30,8 @@ export default function Login() {
         <Typography component="h2" variant="h5">
           Logga in
         </Typography>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Error message={error} />
+        <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

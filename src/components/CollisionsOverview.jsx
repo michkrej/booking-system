@@ -3,19 +3,19 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import SelectInput from './SelectInput'
 import SearchIcon from '@mui/icons-material/Search'
-import usePlansContext from '../hooks/usePlansContext'
+import usePlansContext from '../hooks/context/usePlansContext'
 import { useNavigate } from 'react-router-dom'
 import { formatCollisions } from '../utils/helpers'
 import OverviewBlock from './OverviewBlock'
 
 const CollisionsOverview = () => {
-  const [selectedPrivatePlan, setselectedPrivatePlan] = useState()
+  const [selectedPrivatePlan, setSelectedPrivatePlan] = useState()
   const [selectedPublicPlans, setSelectedPublicPlans] = useState()
-  const { plans = [], publicPlans } = usePlansContext()
+  const { plans = [], publicPlans = [] } = usePlansContext()
   const navigate = useNavigate()
 
   const handleselectedPrivatePlan = (option) => {
-    setselectedPrivatePlan(option)
+    setSelectedPrivatePlan(option)
   }
 
   const handleSelectedPublicPlans = (selectedOptions) => {

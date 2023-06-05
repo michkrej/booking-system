@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useSignup from '../hooks/useSignup'
+import useSignup from '../hooks/user/useSignup'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -17,11 +17,12 @@ import { kårer } from '../data/committees'
 import { kårCommittees, sortAlphabetically } from '../utils/helpers'
 import Comment from '../components/Comment'
 import StyledLink from '../components/Link'
+import Error from '../components/Error'
 
 export default function Signup() {
   const [committee, setCommittee] = useState('')
   const [kår, setKår] = useState('')
-  const [moreError, setMoreError] = useState(false)
+  const [moreError, setMoreError] = useState()
   const { signup, error } = useSignup()
 
   const handleSubmit = (event) => {
@@ -56,8 +57,8 @@ export default function Signup() {
         <Typography component="h2" variant="h5">
           Skapa konto
         </Typography>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {!error && moreError && <p style={{ color: 'red' }}>{moreError}</p>}
+        <Error message={error} />
+        <Error message={moreError} />
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

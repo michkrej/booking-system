@@ -9,29 +9,16 @@ import { LoadingButton } from '@mui/lab'
 
 import heart from '../images/LinTek_hjarta.png'
 import Error from '../components/Error'
-import { sendPasswordResetEmail } from 'firebase/auth'
-import { auth } from '../firebase/config'
 import StyledLink from '../components/Link'
+import useForgotPassword from '../hooks/user/useForgotPassword'
+import Success from '../components/Success'
 
 export default function ForgotPassword() {
-  const [error, setError] = useState()
-  const [success, setSuccess] = useState(false)
-  const [isPending, setIsPending] = useState(false)
   const [email, setEmail] = useState('')
+  const { isPending, error, success, forgotPassword } = useForgotPassword()
 
   const handleSubmit = async () => {
-    setIsPending(true)
-    setError(undefined)
-    setSuccess(undefined)
-    sendPasswordResetEmail(auth, email)
-      .then(async () => {
-        setIsPending(false)
-        setSuccess(true)
-      })
-      .catch((error) => {
-        setError(error.message)
-      })
-    setIsPending(false)
+    forgotPassword(email)
   }
 
   return (
@@ -50,15 +37,8 @@ export default function ForgotPassword() {
         <Typography component="h2" variant="h5">
           Återställ lösenord
         </Typography>
-        {error && <Error message={error} />}
-        {success && (
-          <Typography
-            variant="subtitle2"
-            sx={{ color: 'green', marginTop: '1rem', alignSelf: 'center' }}
-          >
-            Mejl har skickats!
-          </Typography>
-        )}
+        <Error message={error} />
+        <Success message={success} />
         <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -77,7 +57,6 @@ export default function ForgotPassword() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            onClick={handleSubmit}
           >
             Skicka återställningsmejl
           </LoadingButton>

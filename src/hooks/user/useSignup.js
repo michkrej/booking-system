@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { auth, db } from '../firebase/config'
+import { auth, db } from '../../firebase/config'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { collection, addDoc, Timestamp } from 'firebase/firestore'
-import useAuthContext from './useAuthContext'
+import useAuthContext from '../context/useAuthContext'
 
 const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false)

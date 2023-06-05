@@ -4,9 +4,7 @@ import Grid from '@mui/material/Grid'
 import Nav from '../components/Nav'
 import Timeline from '../components/Timeline'
 import PropTypes from 'prop-types'
-
-import useAuthContext from '../hooks/useAuthContext'
-
+import useAuthContext from '../hooks/context/useAuthContext'
 import { createCustomDataSource, defaultCampus, sortAlphabetically } from '../utils/helpers'
 import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../data/locationsData'
 import FilterTimelineLocations from '../components/FilterTimelineLocations'
@@ -16,10 +14,10 @@ import {
   findCollisionsBetweenUserPlanAndPublicPlans
 } from '../utils/collisionHandling'
 import Comment from '../components/Comment'
-import usePlansContext from '../hooks/usePlansContext'
+import usePlansContext from '../hooks/context/usePlansContext'
 import { getAdminSettings } from '../firebase/dbActions'
-import { adminError } from '../components/PlanOverview'
 import Error from '../components/Error'
+import { adminError } from '../CONSTANTS'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
