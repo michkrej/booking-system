@@ -16,12 +16,6 @@ A collision can occur when:
 5. Start the application: `npm start`
 6. Access the app in your browser at: `http://localhost:3000`
 
-## Contributing
-I'm mostly maintaining the Boookig System by myself. But if you for any reason would like to cintribute, please follow these guidelines:
-1. Fork the repository and create a new branch.
-2. Implement your changes while maintaining code quality and adherence to the project's style guide.
-3. Write clear commit messages and provide a descriptive pull request.
-
 ## Roadmap
 - [ ] Adding unit tests for all components
 - [ ] Revise code according to SOLID
