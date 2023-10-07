@@ -11,7 +11,7 @@ const SettingsAdmin = () => {
   const { checked, lockPlans } = useAdminSettings()
 
   return (
-    <OverviewBlock title="Admin">
+    <OverviewBlock title="Admin" variant="outlined" elevation={0}>
       <Grid container>
         <Grid item mt={1}>
           <div>

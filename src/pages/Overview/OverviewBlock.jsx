@@ -7,9 +7,9 @@ import Paper from '@mui/material/Paper'
 
 import Comment from '../../components/Comment'
 
-const OverviewBlock = ({ title, comment, children }) => {
+const OverviewBlock = ({ title, comment, children, variant = 'elevation', elevation = 5 }) => {
   return (
-    <Paper sx={{ padding: 2, marginBlock: 2 }}>
+    <Paper sx={{ padding: 2, marginBlock: 2 }} variant={variant} elevation={elevation}>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Typography variant="h6" sx={{ fontWeight: 600, textTransform: 'uppercase' }}>
           {title}
@@ -30,7 +30,9 @@ const OverviewBlock = ({ title, comment, children }) => {
 OverviewBlock.propTypes = {
   title: PropTypes.string.isRequired,
   comment: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+  variant: PropTypes.string,
+  elevation: PropTypes.number
 }
 
 export default OverviewBlock
