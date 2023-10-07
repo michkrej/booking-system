@@ -3,14 +3,14 @@ import List from '@mui/material/List'
 import AddIcon from '@mui/icons-material/Add'
 import LoadingButton from '@mui/lab/LoadingButton'
 import usePlansContext from '../../hooks/context/usePlansContext'
-import { sortAlphabetically } from '../../utils/helpers'
+import { getActiveYear, sortAlphabetically } from '../../utils/helpers'
 import Error from '../../components/Error'
 import OverviewBlock from './OverviewBlock'
 import useEditPlan from '../../hooks/plan/useEditPlan'
 import { adminError } from '../../CONSTANTS'
 import UserPlansListElement from './UserPlansListElement'
 
-const UserPlans = () => {
+const UserPlans = ({ year }) => {
   const {
     plans = [],
     admin: { lockPlans }
@@ -25,6 +25,7 @@ const UserPlans = () => {
   } = useEditPlan()
 
   const sortedPlans = sortAlphabetically(plans, true)
+  const currentYear = getActiveYear()
 
   return (
     <OverviewBlock
@@ -35,37 +36,47 @@ const UserPlans = () => {
     >
       {lockPlans && <Error message={adminError} />}
       <Error message={error} />
-      <List>
-        {sortedPlans.map((plan) => {
-          return (
-            <UserPlansListElement
-              key={plan.id}
-              plan={plan}
-              lockPlans={lockPlans}
-              togglePublic={togglePublicPlan}
-              changeName={changePlanName}
-              deletePlan={deletePlan}
-            />
-          )
-        })}
-      </List>
-      <LoadingButton
-        onClick={createPlan}
-        loading={isPending}
-        loadingPosition="start"
-        startIcon={<AddIcon />}
-        variant="contained"
-        disabled={lockPlans}
-        fullWidth
-      >
-        Skapa ny planering
-      </LoadingButton>
+      {year >= currentYear ? (
+        <>
+          <List>
+            {sortedPlans.map((plan) => {
+              return (
+                <UserPlansListElement
+                  key={plan.id}
+                  plan={plan}
+                  lockPlans={lockPlans}
+                  togglePublic={togglePublicPlan}
+                  changeName={changePlanName}
+                  deletePlan={deletePlan}
+                />
+              )
+            })}
+          </List>
+          <LoadingButton
+            onClick={() => createPlan(year)}
+            loading={isPending}
+            loadingPosition="start"
+            startIcon={<AddIcon />}
+            variant="contained"
+            disabled={lockPlans}
+            fullWidth
+          >
+            Skapa ny planering
+          </LoadingButton>
+        </>
+      ) : (
+        <List>
+          {sortedPlans.map((plan) => (
+            <UserPlansListElement key={plan.id} plan={plan} />
+          ))}
+        </List>
+      )}
     </OverviewBlock>
   )
 }
 
 UserPlans.propTypes = {
-  userId: PropTypes.string
+  year: PropTypes.number.isRequired
 }
 
 export default UserPlans

@@ -18,36 +18,45 @@ const UserPlansListElement = (props) => {
         key={plan.id}
         secondaryAction={
           <>
-            <IconButton
-              edge="end"
-              aria-label="edit name"
-              onClick={() => changeName(plan)}
-              disabled={lockPlans}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="toogle public"
-              disabled={lockPlans}
-              onClick={() => togglePublic(plan)}
-              sx={{ color: plan.public ? color.secondary : color.tertiary, paddingLeft: 2 }}
-            >
-              <PublicIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              disabled={lockPlans}
-              onClick={() => deletePlan(plan.id)}
-              sx={{ paddingLeft: 2 }}
-            >
-              <DeleteIcon />
-            </IconButton>
+            {changeName && (
+              <IconButton
+                edge="end"
+                aria-label="edit name"
+                onClick={() => changeName(plan)}
+                disabled={lockPlans}
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+            {togglePublic && (
+              <IconButton
+                edge="end"
+                aria-label="toogle public"
+                disabled={lockPlans}
+                onClick={() => togglePublic(plan)}
+                sx={{ color: plan.public ? color.secondary : color.tertiary, paddingLeft: 2 }}
+              >
+                <PublicIcon />
+              </IconButton>
+            )}
+            {deletePlan && (
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                disabled={lockPlans}
+                onClick={() => deletePlan(plan.id)}
+                sx={{ paddingLeft: 2 }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
           </>
         }
       >
-        <Link to={`/booking/${plan.id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
+        <Link
+          to={`/booking/${plan.id}/${plan.year}`}
+          style={{ color: 'inherit', textDecoration: 'inherit' }}
+        >
           <ListItemText>{plan.label}</ListItemText>
         </Link>
       </ListItem>
@@ -59,7 +68,8 @@ UserPlansListElement.propTypes = {
   plan: PropTypes.shape({
     id: PropTypes.string,
     label: PropTypes.string,
-    public: PropTypes.bool
+    public: PropTypes.bool,
+    year: PropTypes.number
   }),
   lockPlans: PropTypes.bool,
   changeName: PropTypes.func,

@@ -63,7 +63,7 @@ const useEditPlan = () => {
     }
   }
 
-  const createPlan = async () => {
+  const createPlan = async (year) => {
     setError(undefined)
     setIsPending(true)
     const name = window.prompt('Vad ska din ny planering heta?')
@@ -74,7 +74,8 @@ const useEditPlan = () => {
         label: name,
         userId: user.uid,
         public: false,
-        committeeId: user.committeeId
+        committeeId: user.committeeId,
+        year: year
       }
       const { id } = await _createPlan(planFields)
       dispatch({

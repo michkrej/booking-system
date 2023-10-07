@@ -5,7 +5,12 @@ import Nav from '../../components/layout/Nav'
 import Timeline from './Timeline'
 import PropTypes from 'prop-types'
 import useAuthContext from '../../hooks/context/useAuthContext'
-import { createCustomDataSource, defaultCampus, sortAlphabetically } from '../../utils/helpers'
+import {
+  createCustomDataSource,
+  defaultCampus,
+  getActiveYear,
+  sortAlphabetically
+} from '../../utils/helpers'
 import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../../data/locationsData'
 import FilterTimelineLocations from './FilterTimelineLocations'
 import { useParams, useLocation } from 'react-router-dom'
@@ -18,16 +23,19 @@ import usePlansContext from '../../hooks/context/usePlansContext'
 import { getAdminSettings } from '../../firebase/dbActions'
 import Error from '../../components/Error'
 import { adminError } from '../../CONSTANTS'
+import useGetPlans from '../../hooks/plan/useGetPlans'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
 const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
+  const { id, year } = useParams()
   const { user } = useAuthContext()
   const {
     dispatch,
-    admin: { lockPlans }
+    admin: { lockPlans },
+    plans
   } = usePlansContext()
-  const { id } = useParams()
+  const { getUserPlans } = useGetPlans(parseInt(year))
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
   const [campus, setCampus] = useState(defaultCampus(user.committeeId))
@@ -40,12 +48,25 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
     const getAdminData = async () => {
       const admin = await getAdminSettings()
       dispatch({
-        type: 'LOAD',
+        type: 'ADD_ADMIN_SETTINGS',
         payload: { admin }
       })
     }
     getAdminData()
   }, [!lockPlans])
+
+  useEffect(() => {
+    if (!plans) getUserPlans()
+  }, [])
+  
+  const planIsLocked = lockPlans && !showAllEvents && !findCollisions
+
+  const planIsOld =
+    plans &&
+    plans.find((plan) => plan.id === id) &&
+    plans.find((plan) => plan.id === id).year !== getActiveYear()
+
+  const planCanBeEdited = plans && !planIsLocked && !planIsOld
 
   const getDataSource = () => {
     if (findCollisions) {
@@ -64,6 +85,15 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
       })
     }
 
+    if (planIsLocked || planIsOld) {
+      return createCustomDataSource(user, {
+        load: true,
+        insert: false,
+        remove: false,
+        update: false
+      })
+    }
+
     return createCustomDataSource(user, {
       load: true,
       insert: true,
@@ -72,15 +102,6 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
     })
   }
 
-  const canPlanBeEdited = () => {
-    return user.admin || (!lockPlans && !showAllEvents && !findCollisions)
-  }
-
-  const checkIfUserCanEditPlan = () => {
-    if (!canPlanBeEdited()) {
-      return <Error message={adminError} />
-    }
-  }
 
   const handleCampusChange = (option) => {
     setLocations(sortAlphabetically(Object.values(filterCampusLocations(option.label))))
@@ -108,40 +129,43 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   return (
     <Container maxWidth="false">
       <Nav id="nav" />
-      <Grid container spacing={2} sx={{ mt: 4 }}>
-        <Grid item xs={2}>
-          <FilterTimelineLocations
-            campuses={campuses}
-            handleCampusChange={handleCampusChange}
-            campus={campus}
-            locations={locations}
-            handleLocationChange={(option) => setCurrentLocation(option)}
-            currentLocation={currentLocation}
-            handleRoomChange={(option) => setCurrentRoom(option)}
-            currentRoom={currentRoom}
-          />
-          <Comment>
-            Tips!
-            <br />
-            - Du måste välja en plats i dropdownmenyn för att kunna skapa event.
-            <br />
-            - Håll nere shift och scrolla for att scrolla i sidled.
-            <br />
-          </Comment>
-          {checkIfUserCanEditPlan()}
+      {plans && (
+        <Grid container spacing={2} sx={{ mt: 4 }}>
+          <Grid item xs={2}>
+            <FilterTimelineLocations
+              campuses={campuses}
+              handleCampusChange={handleCampusChange}
+              campus={campus}
+              locations={locations}
+              handleLocationChange={(option) => setCurrentLocation(option)}
+              currentLocation={currentLocation}
+              handleRoomChange={(option) => setCurrentRoom(option)}
+              currentRoom={currentRoom}
+            />
+            <Comment>
+              Tips!
+              <br />
+              - Du måste välja en plats i dropdownmenyn för att kunna skapa event.
+              <br />
+              - Håll nere shift och scrolla for att scrolla i sidled.
+              <br />
+            </Comment>
+            {planIsLocked && <Error message={adminError} />}
+            {planIsOld && <Error message="Du kan inte redigera en gammal planering" />}
+          </Grid>
+          <Grid item xs={10}>
+            <Timeline
+              currentLocation={currentLocation}
+              store={getDataSource()}
+              rooms={filteredRooms}
+              locations={locations}
+              setRooms={setFilteredRooms}
+              showCommittee={findCollisions || showAllEvents}
+              edit={planCanBeEdited}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={10}>
-          <Timeline
-            currentLocation={currentLocation}
-            store={getDataSource()}
-            rooms={filteredRooms}
-            locations={locations}
-            setRooms={setFilteredRooms}
-            showCommittee={findCollisions || showAllEvents}
-            edit={canPlanBeEdited()}
-          />
-        </Grid>
-      </Grid>
+      )}
     </Container>
   )
 }

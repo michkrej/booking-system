@@ -11,6 +11,7 @@
     "devextreme": "22.2.3",
     "devextreme-react": "22.2.3",
     "firebase": "^9.15.0",
+    "framer-motion": "^10.16.4",
     "moment": "^2.29.4",
     "moment-range": "^4.0.2",
     "prop-types": "^15.8.1",

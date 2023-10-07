@@ -87,12 +87,12 @@ export const updatePlan = async (id, newValues) => {
   }
 }
 
-export const getAllPlans = async ({ uid }) => {
+export const getAllPlans = async ({ uid }, year) => {
   try {
     const ref = collection(db, 'plans')
     const [snapshotPersonal, snapshotPublic] = await Promise.all([
-      getDocs(query(ref, where('userId', '==', uid))),
-      getDocs(query(ref, where('public', '==', true)))
+      getDocs(query(ref, where('userId', '==', uid), where('year', '==', year))),
+      getDocs(query(ref, where('public', '==', true), where('year', '==', year)))
     ])
     const plans = snapshotPersonal.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     const publicPlans = snapshotPublic.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
@@ -100,6 +100,18 @@ export const getAllPlans = async ({ uid }) => {
       plans,
       publicPlans
     }
+  } catch (e) {
+    console.log(e.message)
+  }
+}
+
+export const getUserPlans = async ({ uid }, year) => {
+  try {
+    const snapshot = await getDocs(
+      query(collection(db, 'plans'), where('userId', '==', uid), where('year', '==', year))
+    )
+    const plans = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    return plans
   } catch (e) {
     console.log(e.message)
   }

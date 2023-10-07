@@ -13,6 +13,8 @@ export const plansReducer = (state, action) => {
         publicPlans: action.payload.publicPlans,
         admin: action.payload.admin
       }
+    case 'ADD_ADMIN_SETTINGS':
+      return { ...state, admin: action.payload }
     case 'DELETE':
       return { ...state, plans: state.plans.filter((plan) => action.payload.id !== plan.id) }
     case 'UPDATE':

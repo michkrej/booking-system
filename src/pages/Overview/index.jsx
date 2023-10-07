@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
-import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
+import { Paper, Tab, Tabs } from '@mui/material'
+import { TabContext } from '@mui/lab'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import Nav from '../../components/layout/Nav'
 import UserPlans from './UserPlans'
@@ -15,18 +18,39 @@ import SettingsAdmin from './SettingsAdmin'
 import useAuthContext from '../../hooks/context/useAuthContext'
 import useGetPlans from '../../hooks/plan/useGetPlans'
 import useChangeUsername from '../../hooks/user/useChangeUsername'
-import usePlansContext from '../../hooks/context/usePlansContext'
+import { getActiveYear, getYears } from '../../utils/helpers'
+
+const item = {
+  hidden: { opacity: 0, transiton: { duration: 0.2 } },
+  show: { opacity: 1, transiton: { duration: 0.2 } }
+}
 
 const Overview = () => {
+  const [currentYear, setCurrentYear] = useState(getActiveYear())
+  const years = getYears()
+
   const { user } = useAuthContext()
-  const { plans } = usePlansContext()
-  const { isPending } = useGetPlans(true)
   const { username, changeUsername } = useChangeUsername()
+
+  const { isPending } = useGetPlans(currentYear)
+
+  const defaultActiveTab = years.findIndex((year) => year === currentYear).toString()
+  const [currentTab, setCurrentTab] = useState(defaultActiveTab)
+
+  const handleTabChange = (_, yearIndex) => {
+    setCurrentTab(yearIndex.toString())
+    setCurrentYear(years[parseInt(yearIndex)])
+  }
 
   return (
     <Container maxWidth="xl">
       <Nav />
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
         <>
           <Typography variant="h4" align="center" mt={8}>
             Hej {username}
@@ -39,25 +63,43 @@ const Overview = () => {
             <br /> välkommen till systemet för bokningsplanering!
           </Typography>
           <Box mt={4}>
-            {isPending ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress />
-              </Box>
-            ) : (
-              plans && (
-                <Grid container maxWidth="xs" spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    {user.admin && <SettingsAdmin />}
-                    <UserPlans />
-                    <PlanCollisions />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <PlanExport />
-                    <PublicPlans />
-                  </Grid>
-                </Grid>
-              )
-            )}
+            <TabContext value={currentTab}>
+              {user.admin && <SettingsAdmin />}
+              <Tabs value={currentTab} onChange={handleTabChange}>
+                {years.map((year, index) => (
+                  <Tab label={year} value={index.toString()} key={year} />
+                ))}
+              </Tabs>
+
+              <Paper
+                elevation={0}
+                variant="outlined"
+                sx={{ padding: '2rem', minHeight: '60vh', height: '100%' }}
+              >
+                <AnimatePresence mode="wait">
+                  {!isPending ? (
+                    <motion.div
+                      key="overviewGrid"
+                      variants={item}
+                      initial="hidden"
+                      animate="show"
+                      exit="hidden"
+                    >
+                      <Grid container spacing={2} sx={{ height: '100%' }}>
+                        <Grid item md={6} xs={12}>
+                          <UserPlans year={currentYear} />
+                          <PlanCollisions year={currentYear} />
+                        </Grid>
+                        <Grid item md={6} xs={12}>
+                          <PlanExport year={currentYear} />
+                          <PublicPlans year={currentYear} />
+                        </Grid>
+                      </Grid>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
+              </Paper>
+            </TabContext>
           </Box>
         </>
       </Box>
