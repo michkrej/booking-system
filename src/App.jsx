@@ -41,7 +41,15 @@ function App() {
         maxWidth="false"
       >
         <CssBaseline />
-        <Container component="main" pb={5} sx={{ flexGrow: 1 }} maxWidth="xxl">
+        <Container
+          component="main"
+          sx={{
+            flexGrow: 1,
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light' ? theme.palette.grey[200] : theme.palette.grey[800]
+          }}
+          maxWidth="xxl"
+        >
           {authFinished && <Router />}
         </Container>
         <Footer />
