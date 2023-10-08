@@ -15,8 +15,28 @@ const PublicPlanList = ({ kår, kårCommittees, plans }) => {
       }).length > 0
   )
 
+  // Sort plans based on name of committee
+  kårPlans.sort((a, b) => {
+    // If the name starts with 'Övriga' it should be last
+    const committeeA = kårCommittees.find((committee) => committee.id === a.committeeId)
+    const committeeB = kårCommittees.find((committee) => committee.id === b.committeeId)
+
+    // If the name starts with 'Övriga' it should be last, otherwise sort alphabetically
+    if (committeeA.text.startsWith('Övriga') | committeeB.text.startsWith('Övriga')) {
+      return -1
+    }
+
+    if (committeeA.text < committeeB.text) {
+      return -1
+    }
+    if (committeeA.text > committeeB.text) {
+      return 1
+    }
+    return 0
+  })
+
   return (
-    <List>
+    <>
       <Button
         fullWidth
         variant="contained"
@@ -25,15 +45,17 @@ const PublicPlanList = ({ kår, kårCommittees, plans }) => {
           navigate(`/allEvents/${formatCollisions(kårPlans.map(({ key }) => ({ id: key })))}`)
         }
       >
-        Se planeringar för fadderier inom {kår}
+        Se alla planeringar
       </Button>
-      {kårPlans.length === 0 && (
-        <Comment align="center">Inga publika planeringar för {kår}</Comment>
-      )}
-      {kårPlans.map((plan) => (
-        <PublicPlanListElement key={plan.id} kårCommittees={kårCommittees} plan={plan} />
-      ))}
-    </List>
+      <List>
+        {kårPlans.length === 0 && (
+          <Comment align="center">Inga publika planeringar för {kår}</Comment>
+        )}
+        {kårPlans.map((plan) => (
+          <PublicPlanListElement key={plan.id} kårCommittees={kårCommittees} plan={plan} />
+        ))}
+      </List>
+    </>
   )
 }
 

@@ -29,8 +29,10 @@ export const updateProfileName = async (newName) => {
 const key = 'adminValues'
 export const lockAndUnlockPlans = async (newValue) => {
   try {
-    const planRef = await setDoc(doc(collection(db, 'adminSettings'), key), { lockPlans: newValue })
-    return planRef
+    const ref = await setDoc(doc(collection(db, 'adminSettings'), key), {
+      lockPlans: newValue
+    })
+    return ref
   } catch (e) {
     console.log(e.message)
   }

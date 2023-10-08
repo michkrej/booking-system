@@ -9,12 +9,11 @@ import OverviewBlock from './OverviewBlock'
 import useEditPlan from '../../hooks/plan/useEditPlan'
 import { adminError } from '../../CONSTANTS'
 import UserPlansListElement from './UserPlansListElement'
+import useAdminSettings from '../../hooks/useAdminSettings'
 
 const UserPlans = ({ year }) => {
-  const {
-    plans = [],
-    admin: { lockPlans }
-  } = usePlansContext()
+  const { plans = [] } = usePlansContext()
+  const { checked: lockPlans } = useAdminSettings()
   const {
     changePlanName,
     _deletePlan: deletePlan,
@@ -32,7 +31,7 @@ const UserPlans = ({ year }) => {
       title="Planeringar"
       comment={`En planering kan ses som en google calender, den kan innehålla en jäkla massa event som
           sker på olika platser. Det behövs endast mer än en planering om du vill flera olika
-          versioner eller har kvar planeringar från din företrädare`}
+          versioner.`}
     >
       {lockPlans && <Error message={adminError} />}
       <Error message={error} />

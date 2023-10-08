@@ -24,17 +24,15 @@ import { getAdminSettings } from '../../firebase/dbActions'
 import Error from '../../components/Error'
 import { adminError } from '../../CONSTANTS'
 import useGetPlans from '../../hooks/plan/useGetPlans'
+import useAdminSettings from '../../hooks/useAdminSettings'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
 const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const { id, year } = useParams()
   const { user } = useAuthContext()
-  const {
-    dispatch,
-    admin: { lockPlans },
-    plans
-  } = usePlansContext()
+  const { dispatch, plans } = usePlansContext()
+  const { checked: lockPlans } = useAdminSettings()
   const { getUserPlans } = useGetPlans(parseInt(year))
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
@@ -58,7 +56,7 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   useEffect(() => {
     if (!plans) getUserPlans()
   }, [])
-  
+
   const planIsLocked = lockPlans && !showAllEvents && !findCollisions
 
   const planIsOld =
@@ -101,7 +99,6 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
       update: true
     })
   }
-
 
   const handleCampusChange = (option) => {
     setLocations(sortAlphabetically(Object.values(filterCampusLocations(option.label))))

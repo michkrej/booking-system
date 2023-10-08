@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import usePlansContext from '../../hooks/context/usePlansContext'
-import { Button, Tab, Tabs } from '@mui/material'
+import { Button, List, Tab, Tabs } from '@mui/material'
 import { formatCollisions } from '../../utils/helpers'
 import Comment from '../../components/Comment'
 import { committees, kårer } from '../../data/committees'
@@ -37,11 +37,13 @@ const PublicPlans = () => {
             variant="contained"
             onClick={() => navigate(`/allEvents/${formatCollisions(publicPlans)}`)}
           >
-            Se samtliga fadderiers planeringar
+            Se alla planeringar
           </Button>
-          {publicPlans.map((plan) => (
-            <PublicPlanListElement key={plan.id} plan={plan} kårCommittees={committees} />
-          ))}
+          <List>
+            {publicPlans.map((plan) => (
+              <PublicPlanListElement key={plan.id} plan={plan} kårCommittees={committees} />
+            ))}
+          </List>
         </TabPanel>
         {Object.entries(kårer).map(([kår, committees], i) => (
           <TabPanel key={kår} value={i.toString()}>

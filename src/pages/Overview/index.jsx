@@ -19,6 +19,7 @@ import useAuthContext from '../../hooks/context/useAuthContext'
 import useGetPlans from '../../hooks/plan/useGetPlans'
 import useChangeUsername from '../../hooks/user/useChangeUsername'
 import { getActiveYear, getYears } from '../../utils/helpers'
+import { committees, kårer } from '../../data/committees'
 
 const item = {
   hidden: { opacity: 0, transiton: { duration: 0.2 } },
@@ -42,6 +43,12 @@ const Overview = () => {
     setCurrentYear(years[parseInt(yearIndex)])
   }
 
+  const userKår = Object.entries(kårer).find(([_, committees]) => {
+    return committees.find((committee) => committee.id === user.committeeId)
+  })[0]
+
+  const userIsAdmin = user.admin
+
   return (
     <Container maxWidth="xl">
       <Nav />
@@ -61,6 +68,14 @@ const Overview = () => {
             </Box>
             ,
             <br /> välkommen till systemet för bokningsplanering!
+          </Typography>
+          <Typography variant="h6" align="center" mt={2}>
+            {userIsAdmin
+              ? 'Du är admin!'
+              : !userIsAdmin &&
+                `Du tillhör kåren ${userKår} och fadderiet ${
+                  committees.find((committee) => committee.id === user.committeeId).text
+                }`}
           </Typography>
           <Box mt={4}>
             <TabContext value={currentTab}>
@@ -89,9 +104,9 @@ const Overview = () => {
                         <Grid item md={6} xs={12}>
                           <UserPlans year={currentYear} />
                           <PlanCollisions year={currentYear} />
+                          <PlanExport year={currentYear} />
                         </Grid>
                         <Grid item md={6} xs={12}>
-                          <PlanExport year={currentYear} />
                           <PublicPlans year={currentYear} />
                         </Grid>
                       </Grid>
