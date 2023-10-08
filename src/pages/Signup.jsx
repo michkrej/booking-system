@@ -51,7 +51,7 @@ export default function Signup() {
         }}
       >
         <Avatar sx={{ bgcolor: 'transparent', width: 120, height: 100 }} variant="square">
-          <img src="LUST.png" style={{ width: '100%' }} />
+          <img src="./assets/LUST.png" style={{ width: '100%' }} />
         </Avatar>
         <Typography component="h2" variant="h5">
           Skapa konto
