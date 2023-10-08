@@ -158,8 +158,9 @@ export const createCustomDataSource = (
 export const delay = (ms) => new Promise((res) => setTimeout(res, ms))
 
 export const getYears = () => {
+  const startYear = 2023
   const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: currentYear - 2022 + 1 }, (_, i) => i + 2022)
+  const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => i + startYear)
   // Conditionally extend years with one year if the date is past october 1st
   if (new Date().getMonth() >= 9) {
     years.push(currentYear + 1)
