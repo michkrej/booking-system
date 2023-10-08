@@ -7,7 +7,7 @@ const color = {
   primary75: '#670c47b5',
   primary50: '#670c4778',
   primary25: '#670c473b',
-  secondary: '#bcdfd7',
+  secondary: '#60a595',
   tertiary: '#818389'
 }
 
