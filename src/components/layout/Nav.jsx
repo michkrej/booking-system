@@ -23,7 +23,7 @@ export default function Nav() {
         }}
       >
         <Toolbar>
-          <img src={'LUST.png'} style={{ width: '120px', marginRight: '1em' }} />
+          <img src={'./assets/LUST.png'} style={{ width: '120px', marginRight: '1em' }} />
           <Typography
             variant="h6"
             onClick={() => navigate('/overview')}
