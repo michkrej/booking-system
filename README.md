@@ -17,12 +17,9 @@ A collision can occur when:
 6. Access the app in your browser at: `http://localhost:3000`
 
 ## Roadmap
-- [ ] Adding unit tests for all components
-- [ ] Revise code according to SOLID
 - [ ] Admin-overview for editing plans and users
 - [ ] Plan merging
 - [ ] Localization
-- [ ] Darkmode
 
 ## Useful commands when using the Booking System
 - Horizontal scroll: shift + scroll.
