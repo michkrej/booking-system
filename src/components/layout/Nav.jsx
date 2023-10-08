@@ -7,7 +7,6 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 
-import heart from '../../images/LUST.png'
 import useLogout from '../../hooks/user/useLogout'
 import { pages } from '../../CONSTANTS'
 
@@ -24,7 +23,7 @@ export default function Nav() {
         }}
       >
         <Toolbar>
-          <img src={heart} style={{ width: '120px', marginRight: '1em' }} />
+          <img src={'LUST.png'} style={{ width: '120px', marginRight: '1em' }} />
           <Typography
             variant="h6"
             onClick={() => navigate('/overview')}

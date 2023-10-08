@@ -12,7 +12,6 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 
-import heart from '../images/LinTek_hjarta.png'
 import { kårer } from '../data/committees'
 import { kårCommittees, sortAlphabetically } from '../utils/helpers'
 import Comment from '../components/Comment'
@@ -51,8 +50,8 @@ export default function Signup() {
           alignItems: 'center'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'white' }} variant="square">
-          <img src={heart} style={{ width: '100%' }} />
+        <Avatar sx={{ bgcolor: 'transparent', width: 120, height: 100 }} variant="square">
+          <img src="LUST.png" style={{ width: '100%' }} />
         </Avatar>
         <Typography component="h2" variant="h5">
           Skapa konto

@@ -7,7 +7,6 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import { LoadingButton } from '@mui/lab'
 
-import heart from '../images/LinTek_hjarta.png'
 import Error from '../components/Error'
 import StyledLink from '../components/Link'
 import useForgotPassword from '../hooks/user/useForgotPassword'
@@ -31,8 +30,8 @@ export default function ForgotPassword() {
           alignItems: 'center'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'white' }} variant="square">
-          <img src={heart} style={{ width: '100%' }} />
+        <Avatar sx={{ bgcolor: 'transparent', width: 120, height: 100 }} variant="square">
+          <img src="LUST.png" style={{ width: '100%' }} />
         </Avatar>
         <Typography component="h2" variant="h5">
           Återställ lösenord

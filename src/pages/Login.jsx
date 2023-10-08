@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 
-import heart from '../images/LUST.png'
 import useLogin from '../hooks/user/useLogin'
 import StyledLink from '../components/Link'
 import Error from '../components/Error'
@@ -24,8 +23,8 @@ export default function Login() {
           alignItems: 'center'
         }}
       >
-        <Avatar sx={{ bgcolor: 'white', width: 120, height: 100 }} variant="square">
-          <img src={heart} style={{ width: '100%' }} />
+        <Avatar sx={{ bgcolor: 'transparent', width: 120, height: 100 }} variant="square">
+          <img src="LUST.png" style={{ width: '100%' }} />
         </Avatar>
         <Typography component="h2" variant="h5">
           Logga in
