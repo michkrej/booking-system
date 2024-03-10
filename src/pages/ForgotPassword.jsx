@@ -56,6 +56,8 @@ export default function ForgotPassword() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            type="submit"
+            onClick={handleSubmit}
           >
             Skicka återställningsmejl
           </LoadingButton>
