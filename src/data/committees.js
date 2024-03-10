@@ -101,7 +101,7 @@ const committeesStuff = [
     color: '#ec3cd4'
   },
   {
-    text: 'HRarkin',
+    text: 'HRarkiet',
     id: '6e5decbe-706d-4455-b3de-2011b3d2b266',
     color: '#83dc13'
   },
