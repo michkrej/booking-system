@@ -1,4 +1,3 @@
-const currentDate = new Date('2023-08-15T00:00:00.000Z')
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
 const adminError = 'Möjligheten att skapa och redigera planeringar har låsts av en administratör'
 
@@ -13,4 +12,4 @@ const color = {
 
 const pages = [{ url: 'overview', name: 'Översikt' }]
 
-export { currentDate, views, adminError, color, pages }
+export { views, adminError, color, pages }

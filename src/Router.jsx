@@ -44,7 +44,6 @@ const Router = () => {
           <Route exact path="/resetPassword" element={<ForgotPassword />} />
           <Route element={<RequireAuth />}>
             <Route exact path="/booking/:id/:year" element={<CalendarView />} />
-            <Route exact path="/booking/:id" element={<CalendarView />} />
             <Route exact path="/collisions/:id" element={<CalendarView findCollisions />} />
             <Route exact path="/collisions/all/:id" element={<CalendarView findCollisions />} />
             <Route exact path="/overview" element={<Overview />} />

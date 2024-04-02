@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
 import useAuthContext from '../../hooks/context/useAuthContext'
 import Appointment from './Appointment'
 import bookableItems from '../../data/bookableItems'
-import { currentDate, views } from '../../CONSTANTS'
+import { views } from '../../CONSTANTS'
 import { committees } from '../../data/committees'
 
 import '../../styles/timeline.css'
 
-const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], locations }) => {
+const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], locations, year }) => {
   const { user } = useAuthContext()
   const [groups, setGroups] = useState(['locationId', 'committeeId'])
 
@@ -111,6 +111,12 @@ const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], loc
     [currentLocation, showCommittee, rooms]
   )
 
+  const currentDate = useMemo(() => {
+    const date = new Date(year, 7, 15)
+    date.setDate(date.getDate() - date.getDay() + 1)
+    return date
+  }, [year])
+
   return (
     <>
       <Scheduler
@@ -154,7 +160,8 @@ Timeline.propTypes = {
   edit: PropTypes.bool,
   showCommittee: PropTypes.bool,
   rooms: PropTypes.array,
-  locations: PropTypes.array
+  locations: PropTypes.array,
+  year: PropTypes.number
 }
 
 export default Timeline

@@ -85,14 +85,15 @@ const useEditPlan = () => {
           ...planFields
         }
       })
-      setNewPlanId(id)
+      navigate(`/booking/${id}/${year}`)
+      //setNewPlanId(id)
     }
     setIsPending(false)
   }
 
-  useEffect(() => {
-    if (newPlanId) navigate(`/booking/${newPlanId}`)
-  }, [newPlanId])
+  /*   useEffect(() => {
+    if (newPlanId) navigate(`/booking/${newPlanId}/${year}`)
+  }, [newPlanId]) */
 
   return { changePlanName, togglePublicPlan, _deletePlan, createPlan, isPending, error }
 }

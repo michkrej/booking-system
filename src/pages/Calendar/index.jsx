@@ -159,6 +159,7 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
               setRooms={setFilteredRooms}
               showCommittee={findCollisions || showAllEvents}
               edit={planCanBeEdited}
+              year={year}
             />
           </Grid>
         </Grid>
