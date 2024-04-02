@@ -3,7 +3,8 @@ const replace = require('replace-in-file')
 const { argv } = require('yargs')
 const { v4: uuidv4 } = require('uuid')
 
-// node /Users/michk/Documents/Programming/booking-system/scripts/generateId.js -f ./src/utils/data.js
+// Standing in the root of the project, run the following command:
+// node scripts/generateId.js -f src/**/*.js
 async function runScript() {
   try {
     if (argv.f) {
@@ -28,7 +29,7 @@ async function runScript() {
 }
 
 runScript().then(
-  (a) => process.exit(),
+  () => process.exit(),
   (err) => {
     console.log(err)
     process.exit(1)

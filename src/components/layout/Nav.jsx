@@ -46,9 +46,15 @@ export default function Nav() {
             ))}
             <Button
               target="_blank"
+              href="https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/orienteringskarta-tradgardsforeningen?496563"
+            >
+              Karta TF 2024
+            </Button>
+            <Button
+              target="_blank"
               href="https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/lkpg_tradgardsforeningen_folder_kartbild.pdf?49b5ff"
             >
-              Karta Trädgårdsföreningen
+              Karta TF 2023
             </Button>
           </Box>
           <Button target="_blank" href="https://youtu.be/9RDlhOWRlGY">
