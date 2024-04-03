@@ -44,10 +44,14 @@ const Router = () => {
           <Route exact path="/resetPassword" element={<ForgotPassword />} />
           <Route element={<RequireAuth />}>
             <Route exact path="/booking/:id/:year" element={<CalendarView />} />
-            <Route exact path="/collisions/:id" element={<CalendarView findCollisions />} />
-            <Route exact path="/collisions/all/:id" element={<CalendarView findCollisions />} />
+            <Route exact path="/collisions/:id/:year" element={<CalendarView findCollisions />} />
+            <Route
+              exact
+              path="/collisions/all/:id/:year"
+              element={<CalendarView findCollisions />}
+            />
             <Route exact path="/overview" element={<Overview />} />
-            <Route exact path="/allEvents/:id" element={<CalendarView showAllEvents />} />
+            <Route exact path="/allEvents/:id/:year" element={<CalendarView showAllEvents />} />
           </Route>
           <Route
             path="*"

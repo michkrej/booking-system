@@ -35,7 +35,9 @@ const PublicPlans = () => {
           <Button
             fullWidth
             variant="contained"
-            onClick={() => navigate(`/allEvents/${formatCollisions(publicPlans)}`)}
+            onClick={() =>
+              navigate(`/allEvents/${formatCollisions(publicPlans)}/${publicPlans[0].year}`)
+            }
           >
             Se alla planeringar
           </Button>

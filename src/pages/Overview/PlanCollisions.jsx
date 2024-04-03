@@ -56,7 +56,11 @@ const PlanCollisions = () => {
         startIcon={<SearchIcon />}
         disabled={isDisabled}
         onClick={() =>
-          navigate(`/collisions/${selectedPrivatePlan.id}${formatCollisions(selectedPublicPlans)}`)
+          navigate(
+            `/collisions/${selectedPrivatePlan.id}${formatCollisions(selectedPublicPlans)}/${
+              selectedPrivatePlan.year
+            }`
+          )
         }
       >
         Hitta endast dina krockar med valda fadderier
@@ -72,7 +76,7 @@ const PlanCollisions = () => {
           navigate(
             `/collisions/all/${selectedPrivatePlan.id}${formatCollisions(
               hasAllPlansBeenSelected() ? publicPlans : selectedPublicPlans
-            )}`
+            )}/${selectedPrivatePlan.year}`
           )
         }
       >

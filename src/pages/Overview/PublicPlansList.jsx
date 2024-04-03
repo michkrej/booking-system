@@ -42,7 +42,9 @@ const PublicPlanList = ({ kår, kårCommittees, plans }) => {
         variant="contained"
         disabled={kårPlans.length === 0}
         onClick={() =>
-          navigate(`/allEvents/${formatCollisions(kårPlans.map(({ key }) => ({ id: key })))}`)
+          navigate(
+            `/allEvents/${formatCollisions(kårPlans.map(({ id }) => ({ id })))}/${kårPlans[0].year}`
+          )
         }
       >
         Se alla planeringar
