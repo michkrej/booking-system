@@ -73,7 +73,7 @@ export const locationsValla = {
     label: 'Övriga områden på campus',
     rooms: Other
   }
-}
+} as const
 
 export const roomsValla = [
   ...A,

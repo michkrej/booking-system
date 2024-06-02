@@ -1,3 +1,5 @@
+import { Room } from '../../../utils/interfaces'
+
 export default [
   {
     text: 'Zenit',
@@ -39,8 +41,4 @@ export default [
     text: 'Campushallen',
     id: 'd5950789-a6f9-4cd6-9cbf-6ec88c94bc52'
   }
-] /* .map(({ text, id }) => ({
-  text,
-  id,
-  locationId: locations.campusValla['Övriga områden på campus'].id
-})) */
+] as Room[]

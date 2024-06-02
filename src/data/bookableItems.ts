@@ -63,6 +63,6 @@ const bookableItems = [
     dataField: 'annat',
     colSpan: 2
   }
-]
+] as const
 
 export default bookableItems

@@ -1,3 +1,5 @@
+import { ConsensusCommitee, LintekCommitee, StuffCommitee } from '../utils/interfaces'
+
 export const committeesLinTek = [
   {
     text: 'STABEN',
@@ -39,7 +41,7 @@ export const committeesLinTek = [
     id: '8d413659-a663-467d-84a0-415c53751817',
     color: '#FF0000'
   }
-]
+] satisfies { text: LintekCommitee; id: string; color: string }[]
 
 export const committeesConsensus = [
   {
@@ -87,7 +89,7 @@ export const committeesConsensus = [
     id: '91005ff2-030d-41ca-8b3e-788ea5161cae',
     color: '#5a8fc2'
   }
-]
+] satisfies { text: ConsensusCommitee; id: string; color: string }[]
 
 const committeesStuff = [
   {
@@ -150,9 +152,13 @@ const committeesStuff = [
     id: 'cf9ee786-4cbd-41ff-8474-92ab8fad5549',
     color: '#75d0c9'
   }
-]
+] satisfies { text: StuffCommitee; id: string; color: string }[]
 
-const otherGroup = { text: 'Övrigt', id: 'a16c78ef-6f00-492c-926e-bf1bfe9fce32', color: '#808080' }
+const otherGroup = {
+  text: 'Övrigt',
+  id: 'a16c78ef-6f00-492c-926e-bf1bfe9fce32',
+  color: '#808080'
+} as const
 
 export const committees = [
   ...committeesConsensus,

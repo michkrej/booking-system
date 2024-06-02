@@ -1,3 +1,5 @@
+import { Room } from '../../../utils/interfaces'
+
 const locationId = '550ddbe9-6fa1-49de-9336-01744c67b233'
 
 export const corridorsC = {
@@ -26,7 +28,7 @@ export const corridorsC = {
     id: '74897fa9-0158-4e46-8501-6e7a36b50753',
     locationId
   }
-}
+} as const
 
 const roomsC = [
   ...Object.values(corridorsC),
@@ -453,11 +455,6 @@ const roomsC = [
     text: 'Colosseum',
     id: '64f74234-8e86-4d99-827c-deb4774c809a'
   }
-] /* .map(({ text, id, corridorId = undefined }) => ({
-  text,
-  id,
-  locationId,
-  ...(corridorId ? corridorId : {})
-})) */
+] as Room[]
 
 export default roomsC
