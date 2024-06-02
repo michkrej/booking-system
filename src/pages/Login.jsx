@@ -10,6 +10,8 @@ import useLogin from '../hooks/user/useLogin'
 import StyledLink from '../components/Link'
 import Error from '../components/Error'
 
+import LUST from '../assets/LUST.png'
+
 export default function Login() {
   const { login, error } = useLogin()
 
@@ -24,7 +26,7 @@ export default function Login() {
         }}
       >
         <Avatar sx={{ bgcolor: 'transparent', width: 120, height: 100 }} variant="square">
-          <img src="./assets/LUST.png" style={{ width: '100%' }} />
+          <img src={LUST} style={{ width: '100%' }} />
         </Avatar>
         <Typography component="h2" variant="h5">
           Logga in

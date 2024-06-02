@@ -1,6 +1,7 @@
 {
   "name": "booking-system-lintek",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -19,17 +20,15 @@
     "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.6.2",
-    "react-scripts": "^5.0.1",
     "react-select": "^5.7.0",
     "replace-in-file": "^6.3.5",
-    "uuid": "^9.0.0",
-    "yargs": "^17.6.2"
+    "uuid": "^9.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
     "lint": "eslint ./src/**/*.{jsx,js}",
     "lint:fix": "eslint --fix ./src/**/*.{jsx,js}",
     "check": "prettier --check ./src/**/*.{jsx,js}",
@@ -58,10 +57,17 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.0",
-    "prettier": "^2.8.2"
+    "jsdom": "^24.0.0",
+    "prettier": "^2.8.2",
+    "vite": "^5.2.8",
+    "vite-plugin-svgr": "^4.2.0",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.4.0",
+    "yargs": "^17.6.2"
   }
 }

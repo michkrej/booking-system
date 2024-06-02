@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton'
 import useLogout from '../../hooks/user/useLogout'
 import { pages } from '../../CONSTANTS'
 
+import LUST from '../../assets/LUST.png'
+
 export default function Nav() {
   const { logout } = useLogout()
   const navigate = useNavigate()
@@ -23,7 +25,7 @@ export default function Nav() {
         }}
       >
         <Toolbar>
-          <img src={'./assets/LUST.png'} style={{ width: '120px', marginRight: '1em' }} />
+          <img src={LUST} style={{ width: '120px', marginRight: '1em' }} />
           <Typography
             variant="h6"
             onClick={() => navigate('/overview')}
