@@ -64,6 +64,7 @@
     "eslint-plugin-react": "^7.32.0",
     "jsdom": "^24.0.0",
     "prettier": "^2.8.2",
+    "typescript": "^5.4.5",
     "vite": "^5.2.8",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.2",
