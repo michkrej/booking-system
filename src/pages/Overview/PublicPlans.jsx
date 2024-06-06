@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import usePlansContext from '../../hooks/context/usePlansContext'
 import { Button, List, Tab, Tabs } from '@mui/material'
 import { formatCollisions } from '../../utils/helpers'
 import Comment from '../../components/Comment'
@@ -9,9 +8,10 @@ import OverviewBlock from './OverviewBlock'
 import PublicPlanList from './PublicPlansList'
 import { TabContext, TabPanel } from '@mui/lab'
 import PublicPlanListElement from './PublicPlansListElement'
+import { usePublicPlans } from '../../state/store'
 
 const PublicPlans = () => {
-  const { publicPlans = [] } = usePlansContext()
+  const publicPlans = usePublicPlans()
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = useState(Object.keys(kårer).length.toString())
 

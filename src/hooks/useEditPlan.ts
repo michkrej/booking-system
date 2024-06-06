@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import usePlansContext from './context/usePlansContext'
-import { useUser } from '@/state/store'
+import { usePlanActions, useUser, useUserPlans } from '@/state/store'
 import { Plan } from '@/utils/interfaces'
 import { plansService } from '@/services'
 
 export const useEditPlan = () => {
-  const { dispatch, plans } = usePlansContext()
+  const userPlans = useUserPlans()
   const { user } = useUser()
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
+  const { userPlanDeleted, userPlanUpdated, userPlanCreated } = usePlanActions()
 
   const changePlanName = (plan: Plan) => {
     setIsPending(true)
@@ -19,43 +19,30 @@ export const useEditPlan = () => {
     if (!label) {
       setError('Du måste ange ett namn')
     } else {
-      plansService.updatePlanDetails(plan.id, { label })
-      dispatch({
-        type: 'UPDATE',
-        payload: {
-          ...plan,
-          label
-        }
+      plansService.updatePlanDetails(plan.id, { label }).then(() => {
+        userPlanUpdated({ label, id: plan.id })
       })
     }
     setIsPending(false)
   }
 
-  const _deletePlan = (id: string) => {
-    if (confirm(`Vill du verkligen radera '${plans.find((plan) => plan.id === id).label}'`)) {
-      plansService.deletePlan(id)
-      dispatch({
-        type: 'DELETE',
-        payload: {
-          id: id
-        }
+  const deletePlan = async (id: string) => {
+    const planToDelete = userPlans.find((plan) => plan.id === id)
+    if (planToDelete && confirm(`Vill du verkligen radera '${planToDelete.label}'`)) {
+      plansService.deletePlan(id).then(() => {
+        userPlanDeleted(id)
       })
     }
   }
 
   const togglePublicPlan = (plan: Plan) => {
     setError(null)
-    const hasPublicPlan = plans.some((plan) => plan.public)
+    const hasPublicPlan = userPlans.some((plan) => plan.public)
     if (!plan.public && hasPublicPlan) {
       setError('Du kan bara ha en publik planering åt gången')
     } else {
-      plansService.updatePlanDetails(plan.id, { public: !plan.public })
-      dispatch({
-        type: 'UPDATE_PUBLIC',
-        payload: {
-          ...plan,
-          public: !plan.public
-        }
+      plansService.updatePlanDetails(plan.id, { public: !plan.public }).then(() => {
+        userPlanUpdated({ id: plan.id, public: !plan.public })
       })
     }
   }
@@ -67,30 +54,19 @@ export const useEditPlan = () => {
     if (!name) {
       setError('Du måste ange ett namn')
     } else {
-      const planFields = {
+      const newPlan = await plansService.createPlan({
         label: name,
         userId: user.userId,
         public: false,
         committeeId: user.committeeId,
         year: year,
         events: []
-      }
-      const newPlanId = await plansService.createPlan(planFields)
-      if (!newPlanId) {
-        setError('Något gick fel')
-        return
-      }
-      dispatch({
-        type: 'CREATE',
-        payload: {
-          newPlanId,
-          ...planFields
-        }
       })
-      navigate(`/booking/${newPlanId}/${year}`)
+      userPlanCreated(newPlan)
+      navigate(`/booking/${newPlan.id}/${year}`)
     }
     setIsPending(false)
   }
 
-  return { changePlanName, togglePublicPlan, _deletePlan, createPlan, isPending, error }
+  return { changePlanName, togglePublicPlan, deletePlan, createPlan, isPending, error }
 }

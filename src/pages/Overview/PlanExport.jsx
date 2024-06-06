@@ -2,13 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
 import SelectInput from '../../components/SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
-import usePlansContext from '../../hooks/context/usePlansContext'
 import { exportPlan } from '../../utils/helpers'
 import { CSVLink } from 'react-csv'
 import { LoadingButton } from '@mui/lab'
 import moment from 'moment'
 import OverviewBlock from './OverviewBlock'
 import Error from '../../components/Error'
+import { usePublicPlans, useUserPlans } from '../../state/store'
 
 const PlanExport = () => {
   const [chosenPlans, setChosenPlans] = useState([])
@@ -16,7 +16,8 @@ const PlanExport = () => {
   const [error, setError] = useState('')
   const [csvData, setCsvData] = useState([])
   const csvInstance = useRef(null)
-  const { plans = [], publicPlans = [] } = usePlansContext()
+  const userPlans = useUserPlans()
+  const publicPlans = usePublicPlans()
 
   useEffect(() => {
     if (csvData && csvInstance && csvInstance.current && csvInstance.current.link) {
@@ -41,9 +42,9 @@ const PlanExport = () => {
   }
 
   const createOptionsArray = () => {
-    const userPlanIds = plans.map((plan) => plan.id)
+    const userPlanIds = userPlans.map((plan) => plan.id)
     const filteredPublicPlans = publicPlans.filter(({ id }) => !userPlanIds.includes(id))
-    return [...plans, ...filteredPublicPlans]
+    return [...userPlans, ...filteredPublicPlans]
   }
 
   return (

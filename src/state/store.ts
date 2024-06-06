@@ -2,27 +2,54 @@ import { create } from 'zustand'
 import { Plan, User } from '../utils/interfaces'
 import { devtools, persist } from 'zustand/middleware'
 import type {} from '@redux-devtools/extension' // required for devtools typing
+
 interface StoreState {
   user: User | null
-  userPlans: Plan[] | null
-  publicPlans: Plan[] | null
+  userPlans: Plan[]
+  publicPlans: Plan[]
   planEditLocked: boolean
 
   userUpdated: (user: User | null) => void
   changedPlanEditLock: (newValue: boolean) => void
+  userPlansLoaded: (plans: Plan[]) => void
+  publicPlansLoaded: (plans: Plan[]) => void
+  userPlanDeleted: (planId: string) => void
+  userPlanUpdated: (plan: Partial<Plan>) => void
+  userPlanCreated: (plan: Plan) => void
 }
 
 const useStore = create<StoreState>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         user: null,
-        userPlans: null,
-        publicPlans: null,
+        userPlans: [],
+        publicPlans: [],
         planEditLocked: false,
 
         changedPlanEditLock: (newValue) => set({ planEditLocked: newValue }),
-        userUpdated: (user) => set({ user })
+        userUpdated: (user) => set({ user }),
+        userPlansLoaded: (plans) => set({ userPlans: plans }),
+        publicPlansLoaded: (plans) => set({ publicPlans: plans }),
+        userPlanDeleted: (planId) => {
+          const plans = get().userPlans.filter((plan) => plan.id !== planId)
+          set({ userPlans: plans })
+        },
+        userPlanUpdated: (plan) => {
+          const plans = get().userPlans.map((p) => {
+            if (p.id === plan.id) {
+              return {
+                ...p,
+                ...plan
+              }
+            }
+            return p
+          })
+          set({ userPlans: plans })
+        },
+        userPlanCreated: (plan) => {
+          set({ userPlans: [...get().userPlans, plan] })
+        }
       }),
       {
         name: 'app-storage'
@@ -33,13 +60,18 @@ const useStore = create<StoreState>()(
 
 export const useUser = () => {
   const user = useStore((state) => state.user)
-  const userUpdated = useStore((state) => state.userUpdated)
 
   if (!user) {
     throw new Error('User not found')
   }
 
-  return { user, userUpdated }
+  return { user }
+}
+
+export const useUserUpdated = () => {
+  const userUpdated = useStore((state) => state.userUpdated)
+
+  return { userUpdated }
 }
 
 export const useHasUser = () => {
@@ -51,4 +83,32 @@ export const usePlanEditLock = () => {
   const planEditLocked = useStore((state) => state.planEditLocked)
 
   return { planEditLocked, changedPlanEditLock }
+}
+
+export const useUserPlans = () => {
+  const userPlans = useStore((state) => state.userPlans)
+
+  return userPlans ?? []
+}
+
+export const usePublicPlans = () => {
+  const publicPlans = useStore((state) => state.publicPlans)
+
+  return publicPlans ?? []
+}
+
+export const usePlanActions = () => {
+  const userPlansLoaded = useStore((state) => state.userPlansLoaded)
+  const publicPlansLoaded = useStore((state) => state.publicPlansLoaded)
+  const userPlanDeleted = useStore((state) => state.userPlanDeleted)
+  const userPlanUpdated = useStore((state) => state.userPlanUpdated)
+  const userPlanCreated = useStore((state) => state.userPlanCreated)
+
+  return {
+    userPlansLoaded,
+    publicPlansLoaded,
+    userPlanDeleted,
+    userPlanUpdated,
+    userPlanCreated
+  }
 }

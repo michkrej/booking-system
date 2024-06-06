@@ -13,21 +13,19 @@ import {
   findCollisionsBetweenUserPlanAndPublicPlans
 } from '../../utils/collisionHandling'
 import Comment from '../../components/Comment'
-import usePlansContext from '../../hooks/context/usePlansContext'
 import Error from '../../components/Error'
 import { adminError } from '../../CONSTANTS'
 import useGetPlans from '../../hooks/useGetPlans'
 import { useAdminSettings } from '../../hooks'
 import { createCustomDataSource } from '../../utils/createCustomDataSource'
-import { useUser } from '../../state/store'
-import { adminService } from '../../services/admin.service'
+import { useUser, useUserPlans } from '../../state/store'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
 const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const { id, year } = useParams()
   const { user } = useUser()
-  const { dispatch, plans } = usePlansContext()
+  const plans = useUserPlans()
   const { planEditLocked } = useAdminSettings()
   const { getUserPlans } = useGetPlans(parseInt(year))
   const [currentLocation, setCurrentLocation] = useState()
@@ -37,19 +35,6 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const [locations, setLocations] = useState(
     sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
   )
-
-  console.log(plans)
-
-  useEffect(() => {
-    const getAdminData = async () => {
-      const admin = await adminService.getAdminSettings()
-      dispatch({
-        type: 'ADD_ADMIN_SETTINGS',
-        payload: { admin }
-      })
-    }
-    getAdminData()
-  }, [!planEditLocked])
 
   useEffect(() => {
     if (!plans) getUserPlans()

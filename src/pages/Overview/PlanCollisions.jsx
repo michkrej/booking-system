@@ -3,15 +3,16 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import SelectInput from '../../components/SelectInput'
 import SearchIcon from '@mui/icons-material/Search'
-import usePlansContext from '../../hooks/context/usePlansContext'
 import { useNavigate } from 'react-router-dom'
 import { formatCollisions } from '../../utils/helpers'
 import OverviewBlock from './OverviewBlock'
+import { usePublicPlans, useUserPlans } from '../../state/store'
 
 const PlanCollisions = () => {
   const [selectedPrivatePlan, setSelectedPrivatePlan] = useState()
   const [selectedPublicPlans, setSelectedPublicPlans] = useState()
-  const { plans = [], publicPlans = [] } = usePlansContext()
+  const userPlans = useUserPlans()
+  const publicPlans = usePublicPlans()
   const navigate = useNavigate()
 
   const handleselectedPrivatePlan = (option) => {
@@ -32,7 +33,7 @@ const PlanCollisions = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} mt={2}>
           <SelectInput
-            options={plans}
+            options={userPlans}
             handleChange={handleselectedPrivatePlan}
             placeholder="Din planering"
             value={selectedPrivatePlan}

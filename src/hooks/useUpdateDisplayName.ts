@@ -1,8 +1,9 @@
 import { authService } from '@/services'
-import { useUser } from '@/state/store'
+import { useUser, useUserUpdated } from '@/state/store'
 
 export const useUpdateDisplayName = () => {
-  const { user, userUpdated } = useUser()
+  const { user } = useUser()
+  const { userUpdated } = useUserUpdated()
 
   const updateDisplayName = () => {
     const newName = window.prompt('Vad vill du att ditt namn ska vara?')

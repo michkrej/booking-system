@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import List from '@mui/material/List'
 import AddIcon from '@mui/icons-material/Add'
 import LoadingButton from '@mui/lab/LoadingButton'
-import usePlansContext from '../../hooks/context/usePlansContext'
 import { getActiveYear, sortAlphabetically } from '../../utils/helpers'
 import Error from '../../components/Error'
 import OverviewBlock from './OverviewBlock'
@@ -10,9 +9,10 @@ import { adminError } from '../../CONSTANTS'
 import UserPlansListElement from './UserPlansListElement'
 import { useAdminSettings } from '../../hooks'
 import { useEditPlan } from '../../hooks'
+import { useUserPlans } from '../../state/store'
 
 const UserPlans = ({ year }) => {
-  const { plans = [] } = usePlansContext()
+  const userPlans = useUserPlans()
   const { planEditLocked } = useAdminSettings()
   const {
     changePlanName,
@@ -23,7 +23,7 @@ const UserPlans = ({ year }) => {
     isPending
   } = useEditPlan()
 
-  const sortedPlans = sortAlphabetically(plans, true)
+  const sortedPlans = sortAlphabetically(userPlans, true)
   const currentYear = getActiveYear()
 
   return (

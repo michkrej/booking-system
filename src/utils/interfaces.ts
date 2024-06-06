@@ -1,3 +1,5 @@
+import { FieldValue } from 'firebase/firestore'
+
 export type Room = {
   text: string
   id: string
@@ -20,8 +22,8 @@ export interface EditablePlanDetails {
 }
 
 export interface DBPlan extends EditablePlanDetails {
-  createdAt: string
-  updatedAt: string
+  createdAt: FieldValue
+  updatedAt: FieldValue
   userId: string
   year: number
   events: PlanEvent[]

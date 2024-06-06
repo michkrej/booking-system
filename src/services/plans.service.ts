@@ -19,14 +19,19 @@ import { db } from './config'
 interface CreatePlanParams extends Omit<Plan, 'createdAt' | 'updatedAt' | 'id'> {}
 const createPlan = async (plan: CreatePlanParams) => {
   try {
-    const planRef = await addDoc(collection(db, 'plans'), {
+    const newPlanDoc = {
       ...plan,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
-    })
-    return planRef.id
+    }
+    const planRef = await addDoc(collection(db, 'plans'), newPlanDoc)
+    return {
+      id: planRef.id,
+      ...newPlanDoc
+    }
   } catch (e) {
     console.log(getErrorMessage(e))
+    throw e
   }
 }
 
@@ -45,10 +50,10 @@ export const getAllPlans = async (user: User, year: number) => {
       getDocs(query(ref, where('userId', '==', user.userId), where('year', '==', year))),
       getDocs(query(ref, where('public', '==', true), where('year', '==', year)))
     ])
-    const userPlans = snapshotPersonal.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-    const publicPlans = snapshotPublic.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    const userPlans = snapshotPersonal.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Plan[]
+    const publicPlans = snapshotPublic.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Plan[]
     return {
-      plans: userPlans,
+      userPlans,
       publicPlans
     }
   } catch (e) {
@@ -62,10 +67,11 @@ export const getUserPlans = async (user: User, year: number) => {
     const snapshot = await getDocs(
       query(collection(db, 'plans'), where('userId', '==', user.userId), where('year', '==', year))
     )
-    const plans = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    const plans = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Plan[]
     return plans
   } catch (e) {
     console.log(getErrorMessage(e))
+    throw e
   }
 }
 
