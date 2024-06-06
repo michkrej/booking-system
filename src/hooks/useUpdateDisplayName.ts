@@ -1,5 +1,5 @@
 import { useUpdateUser, useUser } from '../state/store'
-import { authService } from '../firebase/auth.service'
+import { authService } from '../services/auth.service'
 
 export const useUpdateDisplayName = () => {
   const user = useUser()

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { authService } from '../firebase/auth.service'
+import { authService } from '../services/auth.service'
 
 export const useResetPassword = () => {
   const [isPending, setIsPending] = useState(false)

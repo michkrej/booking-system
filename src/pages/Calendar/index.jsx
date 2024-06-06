@@ -16,11 +16,11 @@ import Comment from '../../components/Comment'
 import usePlansContext from '../../hooks/context/usePlansContext'
 import Error from '../../components/Error'
 import { adminError } from '../../CONSTANTS'
-import useGetPlans from '../../hooks/plan/useGetPlans'
-import { useAdminSettings } from '../../hooks/useAdminSettings'
+import useGetPlans from '../../hooks/useGetPlans'
+import { useAdminSettings } from '../../hooks'
 import { createCustomDataSource } from '../../utils/createCustomDataSource'
 import { useUser } from '../../state/store'
-import { adminService } from '../../firebase/admin.service'
+import { adminService } from '../../services/admin.service'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 

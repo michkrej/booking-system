@@ -1,6 +1,6 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { db } from '../firebase/config'
+import { db } from '../services/config'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
 import { committees, committeesConsensus, kårer } from '../data/committees'

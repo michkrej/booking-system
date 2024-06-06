@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 
-import { useEmailLogin } from '../hooks/useEmailLogin'
+import { useEmailLogin } from '../hooks'
 import StyledLink from '../components/Link'
 import Error from '../components/Error'
 

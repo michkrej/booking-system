@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAppStore } from '../state/store'
-import { authService } from '../firebase/auth.service'
+import { authService } from '../services/auth.service'
 import { getErrorMessage } from '../utils/error.util'
 
 export const useSignOut = () => {

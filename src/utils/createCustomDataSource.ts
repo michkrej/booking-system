@@ -1,5 +1,5 @@
 import CustomStore from 'devextreme/data/custom_store'
-import { PlansService } from '../firebase/plans.service'
+import { PlansService } from '../services/plans.service'
 import { Plan, PlanEvent, User } from './interfaces'
 
 interface CustomDataSourceOptions {

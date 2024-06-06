@@ -8,7 +8,7 @@ import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 
 import { pages } from '../../CONSTANTS'
-import { useSignOut } from '../../hooks/useSignOut'
+import { useSignOut } from '../../hooks'
 
 import LUST from '../../assets/LUST.png'
 

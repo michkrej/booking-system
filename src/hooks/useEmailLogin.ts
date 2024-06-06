@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { authService } from '../firebase/auth.service'
+import { authService } from '../services/auth.service'
 import { getErrorMessage } from '../utils/error.util'
 import { useAppStore } from '../state/store'
 

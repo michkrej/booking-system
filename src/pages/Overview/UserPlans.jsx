@@ -8,8 +8,8 @@ import Error from '../../components/Error'
 import OverviewBlock from './OverviewBlock'
 import { adminError } from '../../CONSTANTS'
 import UserPlansListElement from './UserPlansListElement'
-import { useAdminSettings } from '../../hooks/useAdminSettings'
-import { useEditPlan } from '../../hooks/plan/useEditPlan'
+import { useAdminSettings } from '../../hooks'
+import { useEditPlan } from '../../hooks'
 
 const UserPlans = ({ year }) => {
   const { plans = [] } = usePlansContext()

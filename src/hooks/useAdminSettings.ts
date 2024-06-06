@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { adminService } from '../firebase/admin.service'
+import { adminService } from '../services/admin.service'
 import { useAppStore } from '../state/store'
 
 export const useAdminSettings = () => {

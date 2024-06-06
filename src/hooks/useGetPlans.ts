@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import usePlansContext from '../context/usePlansContext'
-import { useAdminSettings } from '../useAdminSettings'
-import { PlansService } from '../../firebase/plans.service'
-import { useUser } from '../../state/store'
+import usePlansContext from './context/usePlansContext'
+import { useAdminSettings } from './useAdminSettings'
+import { PlansService } from '../services/plans.service'
+import { useUser } from '../state/store'
 
-const useGetPlans = (year: number) => {
+export const useGetPlans = (year: number) => {
   const [isPending, setIsPending] = useState(false)
   const { dispatch } = usePlansContext()
   const { planEditLocked } = useAdminSettings()
@@ -40,5 +40,3 @@ const useGetPlans = (year: number) => {
 
   return { isPending, getUserPlans }
 }
-
-export default useGetPlans

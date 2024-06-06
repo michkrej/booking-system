@@ -1,7 +1,7 @@
 import { Grid, Switch } from '@mui/material'
 import Comment from '../../components/Comment'
 import OverviewBlock from './OverviewBlock'
-import { useAdminSettings } from '../../hooks/useAdminSettings'
+import { useAdminSettings } from '../../hooks'
 
 /*
  * TODO

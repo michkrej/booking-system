@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
-import usePlansContext from '../context/usePlansContext'
-import { PlansService } from '../../firebase/plans.service'
+import { useState } from 'react'
+import usePlansContext from './context/usePlansContext'
+import { PlansService } from '../services/plans.service'
 import { useNavigate } from 'react-router-dom'
-import { Plan } from '../../utils/interfaces'
-import { useUser } from '../../state/store'
+import { Plan } from '../utils/interfaces'
+import { useUser } from '../state/store'
 
 export const useEditPlan = () => {
   const { dispatch, plans } = usePlansContext()

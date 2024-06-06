@@ -9,7 +9,7 @@ import { LoadingButton } from '@mui/lab'
 
 import Error from '../components/Error'
 import StyledLink from '../components/Link'
-import { useResetPassword } from '../hooks/useResetPassword'
+import { useResetPassword } from '../hooks'
 import Success from '../components/Success'
 
 export default function ForgotPassword() {
