@@ -8,12 +8,12 @@ import Error from '../../components/Error'
 import OverviewBlock from './OverviewBlock'
 import { adminError } from '../../CONSTANTS'
 import UserPlansListElement from './UserPlansListElement'
-import useAdminSettings from '../../hooks/useAdminSettings'
+import { useAdminSettings } from '../../hooks/useAdminSettings'
 import { useEditPlan } from '../../hooks/plan/useEditPlan'
 
 const UserPlans = ({ year }) => {
   const { plans = [] } = usePlansContext()
-  const { checked: lockPlans } = useAdminSettings()
+  const { planEditLocked } = useAdminSettings()
   const {
     changePlanName,
     _deletePlan: deletePlan,
@@ -33,7 +33,7 @@ const UserPlans = ({ year }) => {
           sker på olika platser. Det behövs endast mer än en planering om du vill flera olika
           versioner.`}
     >
-      {lockPlans && <Error message={adminError} />}
+      {planEditLocked && <Error message={adminError} />}
       <Error message={error} />
       {year >= currentYear ? (
         <>
@@ -43,7 +43,7 @@ const UserPlans = ({ year }) => {
                 <UserPlansListElement
                   key={plan.id}
                   plan={plan}
-                  lockPlans={lockPlans}
+                  lockPlans={planEditLocked}
                   togglePublic={togglePublicPlan}
                   changeName={changePlanName}
                   deletePlan={deletePlan}
@@ -57,7 +57,7 @@ const UserPlans = ({ year }) => {
             loadingPosition="start"
             startIcon={<AddIcon />}
             variant="contained"
-            disabled={lockPlans}
+            disabled={planEditLocked}
             fullWidth
           >
             Skapa ny planering

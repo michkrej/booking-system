@@ -36,11 +36,7 @@ export const exportPlan = async (plans) => {
     'Beskrivining',
     'Länk'
   ]
-  const events = await getContentById(
-    plans.length === 1 ? [plans[0].id] : plans.map((plan) => plan.id),
-    'events',
-    'planId'
-  )
+  const events = plans.flatMap((plan) => plan.events)
   events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
   const cvsConversion = events.map((event) => {
     const committee = committees.find((com) => com.id === event.committeeId)
@@ -83,29 +79,6 @@ export const defaultCampus = (committeeId) => {
 
 export const formatCollisions = (collisions) => {
   return `+${(collisions || []).map((collision) => collision.id).join('+')}`
-}
-
-export async function getContentById(ids, path, id) {
-  // don't run if there aren't any ids or a path for the collection
-  if (!ids || !ids.length || !path) return []
-
-  const collectionPath = collection(db, path)
-  const batches = []
-
-  while (ids.length) {
-    // firestore limits batches to 10
-    const batch = ids.splice(0, 10)
-
-    // add the batch request to to a queue
-    batches.push(
-      getDocs(query(collectionPath, where(id, 'in', [...batch]))).then((results) =>
-        results.docs.map((result) => ({ id: result.id, ...result.data() }))
-      )
-    )
-  }
-
-  // after all of the data is fetched, return it
-  return Promise.all(batches).then((content) => content.flat())
 }
 
 export const delay = (ms) => new Promise((res) => setTimeout(res, ms))

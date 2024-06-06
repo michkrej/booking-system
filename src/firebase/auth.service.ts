@@ -2,7 +2,8 @@ import {
   signInWithEmailAndPassword,
   signOut as _signOut,
   createUserWithEmailAndPassword,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from 'firebase/auth'
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore'
 import { auth, db } from './config'
@@ -21,7 +22,6 @@ const signUpWithEmailAndPassword = async (
     const userDetailsDoc = {
       committeeId,
       email,
-      displayName,
       userId: user.uid,
       admin: false,
       createdAt: serverTimestamp()
@@ -31,6 +31,7 @@ const signUpWithEmailAndPassword = async (
 
     return {
       ...userDetailsDoc,
+      displayName,
       emailVerified: user.emailVerified
     }
   } catch (error) {
@@ -73,8 +74,35 @@ const signOut = async () => {
   }
 }
 
+const resetPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email)
+  } catch (error) {
+    console.log(getErrorMessage(error))
+    throw error
+  }
+}
+
+const updateUserDisplayName = async (newName: string) => {
+  const user = auth.currentUser
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  try {
+    updateProfile(user, {
+      displayName: newName
+    })
+  } catch (error) {
+    console.log(getErrorMessage(error))
+  }
+}
+
 export const authService = {
   signUpWithEmailAndPassword,
   loginWithEmailAndPassword,
+  updateUserDisplayName,
+  resetPassword,
   signOut
 }

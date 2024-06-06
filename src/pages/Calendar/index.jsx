@@ -14,13 +14,13 @@ import {
 } from '../../utils/collisionHandling'
 import Comment from '../../components/Comment'
 import usePlansContext from '../../hooks/context/usePlansContext'
-import { getAdminSettings } from '../../firebase/dbActions'
 import Error from '../../components/Error'
 import { adminError } from '../../CONSTANTS'
 import useGetPlans from '../../hooks/plan/useGetPlans'
-import useAdminSettings from '../../hooks/useAdminSettings'
+import { useAdminSettings } from '../../hooks/useAdminSettings'
 import { createCustomDataSource } from '../../utils/createCustomDataSource'
 import { useUser } from '../../state/store'
+import { adminService } from '../../firebase/admin.service'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
@@ -28,7 +28,7 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const { id, year } = useParams()
   const user = useUser()
   const { dispatch, plans } = usePlansContext()
-  const { checked: lockPlans } = useAdminSettings()
+  const { planEditLocked } = useAdminSettings()
   const { getUserPlans } = useGetPlans(parseInt(year))
   const [currentLocation, setCurrentLocation] = useState()
   const [currentRoom, setCurrentRoom] = useState()
@@ -42,20 +42,20 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
 
   useEffect(() => {
     const getAdminData = async () => {
-      const admin = await getAdminSettings()
+      const admin = await adminService.getAdminSettings()
       dispatch({
         type: 'ADD_ADMIN_SETTINGS',
         payload: { admin }
       })
     }
     getAdminData()
-  }, [!lockPlans])
+  }, [!planEditLocked])
 
   useEffect(() => {
     if (!plans) getUserPlans()
   }, [])
 
-  const planIsLocked = lockPlans && !showAllEvents && !findCollisions
+  const planIsLocked = planEditLocked && !showAllEvents && !findCollisions
 
   const planIsOld =
     plans &&

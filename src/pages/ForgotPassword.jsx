@@ -9,12 +9,12 @@ import { LoadingButton } from '@mui/lab'
 
 import Error from '../components/Error'
 import StyledLink from '../components/Link'
-import useForgotPassword from '../hooks/user/useForgotPassword'
+import { useResetPassword } from '../hooks/useResetPassword'
 import Success from '../components/Success'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
-  const { isPending, error, success, forgotPassword } = useForgotPassword()
+  const { isPending, error, success, forgotPassword } = useResetPassword()
 
   const handleSubmit = async () => {
     forgotPassword(email)

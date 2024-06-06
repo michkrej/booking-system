@@ -26,8 +26,7 @@ interface StoreState {
   updateUser: (user: User | null) => void
   updateUserPlans: (userPlans: Plan[]) => void
   updatePublicPlans: (publicPlans: Plan[]) => void
-  lockPlanEdit: () => void
-  unlockPlanEdit: () => void
+  updatePlanLock: (newValue: boolean) => void
   setAuthFinished: () => void
 }
 
@@ -44,8 +43,7 @@ const useAppStoreBase = create<StoreState>()(
         updateUser: (user) => set({ user }),
         updateUserPlans: (userPlans) => set({ userPlans }),
         updatePublicPlans: (publicPlans) => set({ publicPlans }),
-        lockPlanEdit: () => set({ planEditLocked: true }),
-        unlockPlanEdit: () => set({ planEditLocked: false }),
+        updatePlanLock: (newValue) => set({ planEditLocked: newValue }),
         setAuthFinished: () => set({ authFinished: true })
       }),
       {
@@ -71,4 +69,8 @@ const useHasUser = () => {
   return useAppStore.use.user() !== null
 }
 
-export { useAppStore, useUser, useHasUser }
+const useUpdateUser = () => {
+  return useAppStore.use.updateUser()
+}
+
+export { useAppStore, useUser, useHasUser, useUpdateUser }

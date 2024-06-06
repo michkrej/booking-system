@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import usePlansContext from '../context/usePlansContext'
-import useAdminSettings from '../useAdminSettings'
+import { useAdminSettings } from '../useAdminSettings'
 import { PlansService } from '../../firebase/plans.service'
 import { useUser } from '../../state/store'
 
 const useGetPlans = (year: number) => {
   const [isPending, setIsPending] = useState(false)
   const { dispatch } = usePlansContext()
-  const { checked } = useAdminSettings()
+  const { planEditLocked } = useAdminSettings()
   const user = useUser()
 
   const getPlans = async () => {
@@ -16,7 +16,7 @@ const useGetPlans = (year: number) => {
       const { plans: _plans, publicPlans } = await PlansService.getAllPlans(user, year)
       dispatch({
         type: 'LOAD',
-        payload: { plans: _plans, publicPlans, admin: checked }
+        payload: { plans: _plans, publicPlans, admin: planEditLocked }
       })
     } catch (e) {
       // do something
@@ -29,7 +29,7 @@ const useGetPlans = (year: number) => {
     const plans = await PlansService.getUserPlans(user, year)
     dispatch({
       type: 'LOAD',
-      payload: { plans, admin: checked }
+      payload: { plans, admin: planEditLocked }
     })
     setIsPending(false)
   }

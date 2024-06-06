@@ -16,7 +16,7 @@ import PublicPlans from './PublicPlans'
 import PlanExport from './PlanExport'
 import SettingsAdmin from './SettingsAdmin'
 import useGetPlans from '../../hooks/plan/useGetPlans'
-import useChangeUsername from '../../hooks/user/useChangeUsername'
+import { useUpdateDisplayName } from '../../hooks/useUpdateDisplayName'
 import { getActiveYear, getYears } from '../../utils/helpers'
 import { committees, kårer } from '../../data/committees'
 import { useUser } from '../../state/store'
@@ -31,7 +31,7 @@ const Overview = () => {
   const years = getYears()
 
   const user = useUser()
-  const { username, changeUsername } = useChangeUsername()
+  const { updateDisplayName } = useUpdateDisplayName()
 
   const { isPending } = useGetPlans(currentYear)
 
@@ -60,9 +60,9 @@ const Overview = () => {
       >
         <>
           <Typography variant="h4" align="center" mt={8}>
-            Hej {username}
+            Hej {user.displayName}
             <Box sx={{ display: 'inline' }}>
-              <IconButton size="small" onClick={changeUsername} sx={{ marginBottom: 3 }}>
+              <IconButton size="small" onClick={updateDisplayName} sx={{ marginBottom: 3 }}>
                 <EditIcon fontSize="1" />
               </IconButton>
             </Box>
