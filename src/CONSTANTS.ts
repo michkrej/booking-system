@@ -1,4 +1,5 @@
 const views = ['timelineDay', 'timelineWeek', 'timelineMonth']
+
 const adminError = 'Möjligheten att skapa och redigera planeringar har låsts av en administratör'
 
 const color = {

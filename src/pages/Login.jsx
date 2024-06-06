@@ -6,14 +6,22 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 
-import useLogin from '../hooks/user/useLogin'
+import { useEmailLogin } from '../hooks/useEmailLogin'
 import StyledLink from '../components/Link'
 import Error from '../components/Error'
 
 import LUST from '../assets/LUST.png'
 
 export default function Login() {
-  const { login, error } = useLogin()
+  const { login, error } = useEmailLogin()
+
+  const handleLogin = (event) => {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get('email')
+    const password = formData.get('password')
+    login(email, password)
+  }
 
   return (
     <Container component="div" maxWidth="xs">
@@ -32,7 +40,7 @@ export default function Login() {
           Logga in
         </Typography>
         <Error message={error} />
-        <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

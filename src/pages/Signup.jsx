@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useSignup from '../hooks/user/useSignup'
+import { useEmailSignUp } from '../hooks/useEmailSignUp'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -19,25 +19,25 @@ import StyledLink from '../components/Link'
 import Error from '../components/Error'
 
 export default function Signup() {
-  const [committee, setCommittee] = useState('')
+  const [committeeId, setCommitteeId] = useState('')
   const [kår, setKår] = useState('')
   const [moreError, setMoreError] = useState()
-  const { signup, error } = useSignup()
+  const { signup, error } = useEmailSignUp()
 
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
 
-    if (kår === '' || committee === '' || data.get('firstName').trim() === '') {
+    if (kår === '' || committeeId === '' || data.get('firstName').trim() === '') {
       setMoreError('You have missed to fill out some field')
     } else {
       setMoreError(false)
-      signup(data.get('email'), data.get('password'), data.get('firstName'), committee)
+      signup(data.get('email'), data.get('password'), data.get('firstName'), committeeId)
     }
   }
 
   const handleChange = (event) => {
-    setCommittee(event.target.value)
+    setCommitteeId(event.target.value)
   }
 
   return (
@@ -116,7 +116,7 @@ export default function Signup() {
           <Grid item xs={12}>
             <FormControl fullWidth required>
               <InputLabel>Fadderi</InputLabel>
-              <Select label="Fadderi" value={committee} onChange={handleChange} id="committee">
+              <Select label="Fadderi" value={committeeId} onChange={handleChange} id="committee">
                 {sortAlphabetically(kårCommittees(kår)).map((assignee) => (
                   <MenuItem key={assignee.text} value={assignee.id}>
                     {assignee.text}

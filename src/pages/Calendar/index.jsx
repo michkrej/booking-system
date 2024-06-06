@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid'
 import Nav from '../../components/layout/Nav'
 import Timeline from './Timeline'
 import PropTypes from 'prop-types'
-import useAuthContext from '../../hooks/context/useAuthContext'
 import { defaultCampus, getActiveYear, sortAlphabetically } from '../../utils/helpers'
 import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../../data/locationsData'
 import FilterTimelineLocations from './FilterTimelineLocations'
@@ -21,12 +20,13 @@ import { adminError } from '../../CONSTANTS'
 import useGetPlans from '../../hooks/plan/useGetPlans'
 import useAdminSettings from '../../hooks/useAdminSettings'
 import { createCustomDataSource } from '../../utils/createCustomDataSource'
+import { useUser } from '../../state/store'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
 const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const { id, year } = useParams()
-  const { user } = useAuthContext()
+  const user = useUser()
   const { dispatch, plans } = usePlansContext()
   const { checked: lockPlans } = useAdminSettings()
   const { getUserPlans } = useGetPlans(parseInt(year))

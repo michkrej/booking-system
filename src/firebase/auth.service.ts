@@ -1,0 +1,80 @@
+import {
+  signInWithEmailAndPassword,
+  signOut as _signOut,
+  createUserWithEmailAndPassword,
+  updateProfile
+} from 'firebase/auth'
+import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore'
+import { auth, db } from './config'
+import { getErrorMessage } from '../utils/error.util'
+import { User } from '../utils/interfaces'
+
+const signUpWithEmailAndPassword = async (
+  email: string,
+  password: string,
+  displayName: string,
+  committeeId: string
+) => {
+  try {
+    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
+    const userDetailsDoc = {
+      committeeId,
+      email,
+      displayName,
+      userId: user.uid,
+      admin: false,
+      createdAt: serverTimestamp()
+    }
+    await updateProfile(user, { displayName })
+    await addDoc(collection(db, 'userDetails'), userDetailsDoc)
+
+    return {
+      ...userDetailsDoc,
+      emailVerified: user.emailVerified
+    }
+  } catch (error) {
+    console.log(getErrorMessage(error))
+    throw error
+  }
+}
+
+const loginWithEmailAndPassword = async (email: string, password: string) => {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password)
+    const userDetailsSnapshot = await getDocs(
+      query(collection(db, 'userDetails'), where('userId', '==', user.uid))
+    )
+    if (!userDetailsSnapshot.empty) {
+      const userDetails = userDetailsSnapshot.docs[0].data()
+      return {
+        userId: user.uid,
+        displayName: user.displayName ?? null,
+        email: user.email ?? email,
+        emailVerified: user.emailVerified,
+        committeeId: userDetails.committeeId,
+        admin: userDetails.admin ?? false
+      } satisfies User
+    } else {
+      throw Error('The user does not have a committee assigned')
+    }
+  } catch (error) {
+    console.log(getErrorMessage(error))
+    throw error
+  }
+}
+
+const signOut = async () => {
+  try {
+    await _signOut(auth)
+  } catch (error) {
+    console.log(getErrorMessage(error))
+    throw error
+  }
+}
+
+export const authService = {
+  signUpWithEmailAndPassword,
+  loginWithEmailAndPassword,
+  signOut
+}

@@ -87,6 +87,9 @@ export type StuffCommitee =
 
 export interface User {
   userId: string
+  displayName: string | null
+  email: string
+  emailVerified: boolean
   committeeId: string
-  admin?: boolean
+  admin: boolean
 }

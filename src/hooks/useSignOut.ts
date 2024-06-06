@@ -1,29 +1,29 @@
 import { useState, useEffect } from 'react'
-import { auth } from '../../firebase/config'
-import { signOut } from 'firebase/auth'
-import useAuthContext from '../context/useAuthContext'
+import { useAppStore } from '../state/store'
+import { authService } from '../firebase/auth.service'
+import { getErrorMessage } from '../utils/error.util'
 
-const useLogout = () => {
+export const useSignOut = () => {
   const [isCancelled, setIsCancelled] = useState(false)
   const [isPending, setIsPending] = useState(false)
-  const [error, setError] = useState()
-  const { dispatch } = useAuthContext()
+  const [error, setError] = useState<string | null>(null)
+  const updateUser = useAppStore.use.updateUser()
 
   const logout = async () => {
-    setError(undefined)
+    setError(null)
     setIsPending(true)
     try {
-      await signOut(auth)
-      dispatch({ type: 'LOGOUT' })
+      await authService.signOut()
+      updateUser(null)
 
       if (!isCancelled) {
         setIsPending(false)
-        setError(undefined)
       }
     } catch (error) {
       if (!isCancelled) {
-        console.log(error.message)
-        setError(error.message)
+        const errorMessage = getErrorMessage(error)
+        console.log(errorMessage)
+        setError(errorMessage)
         setIsPending(false)
       }
     }
@@ -37,5 +37,3 @@ const useLogout = () => {
 
   return { logout, isPending, error }
 }
-
-export default useLogout

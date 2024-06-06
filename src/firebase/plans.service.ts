@@ -13,9 +13,8 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 
 import { getErrorMessage } from '../utils/error.util'
-import { DBPlan, EditablePlanDetails, Plan, PlanEvent } from '../utils/interfaces'
+import { DBPlan, EditablePlanDetails, Plan, PlanEvent, User } from '../utils/interfaces'
 import { db } from './config'
-import { User } from 'firebase/auth'
 
 interface CreatePlanParams extends Omit<Plan, 'createdAt' | 'updatedAt' | 'id'> {}
 const createPlan = async (plan: CreatePlanParams) => {
@@ -43,7 +42,7 @@ export const getAllPlans = async (user: User, year: number) => {
   try {
     const ref = collection(db, 'plans')
     const [snapshotPersonal, snapshotPublic] = await Promise.all([
-      getDocs(query(ref, where('userId', '==', user.uid), where('year', '==', year))),
+      getDocs(query(ref, where('userId', '==', user.userId), where('year', '==', year))),
       getDocs(query(ref, where('public', '==', true), where('year', '==', year)))
     ])
     const userPlans = snapshotPersonal.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
@@ -61,7 +60,7 @@ export const getAllPlans = async (user: User, year: number) => {
 export const getUserPlans = async (user: User, year: number) => {
   try {
     const snapshot = await getDocs(
-      query(collection(db, 'plans'), where('userId', '==', user.uid), where('year', '==', year))
+      query(collection(db, 'plans'), where('userId', '==', user.userId), where('year', '==', year))
     )
     const plans = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     return plans

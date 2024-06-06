@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import usePlansContext from '../context/usePlansContext'
 import { PlansService } from '../../firebase/plans.service'
-import useAuthContext from '../context/useAuthContext'
 import { useNavigate } from 'react-router-dom'
 import { Plan } from '../../utils/interfaces'
+import { useUser } from '../../state/store'
 
 export const useEditPlan = () => {
   const { dispatch, plans } = usePlansContext()
-  const { user } = useAuthContext()
+  const user = useUser()
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
@@ -69,7 +69,7 @@ export const useEditPlan = () => {
     } else {
       const planFields = {
         label: name,
-        userId: user.uid,
+        userId: user,
         public: false,
         committeeId: user.committeeId,
         year: year,

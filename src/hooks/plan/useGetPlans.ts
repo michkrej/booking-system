@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import usePlansContext from '../context/usePlansContext'
 import useAdminSettings from '../useAdminSettings'
-import useAuthContext from '../context/useAuthContext'
 import { PlansService } from '../../firebase/plans.service'
+import { useUser } from '../../state/store'
 
 const useGetPlans = (year: number) => {
   const [isPending, setIsPending] = useState(false)
   const { dispatch } = usePlansContext()
-  const { user } = useAuthContext()
   const { checked } = useAdminSettings()
+  const user = useUser()
 
   const getPlans = async () => {
     setIsPending(true)

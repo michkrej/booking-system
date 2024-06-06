@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { updateProfileName } from '../../firebase/dbActions'
-import useAuthContext from '../context/useAuthContext'
+import { useUser } from '../../state/store'
 
 const useChangeUsername = () => {
-  const { user } = useAuthContext()
+  const user = useUser()
   const [username, setUsername] = useState(user.displayName)
 
   const changeUsername = () => {

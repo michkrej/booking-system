@@ -7,13 +7,13 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 
-import useLogout from '../../hooks/user/useLogout'
 import { pages } from '../../CONSTANTS'
+import { useSignOut } from '../../hooks/useSignOut'
 
 import LUST from '../../assets/LUST.png'
 
 export default function Nav() {
-  const { logout } = useLogout()
+  const { logout } = useSignOut()
   const navigate = useNavigate()
 
   return (

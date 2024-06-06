@@ -15,11 +15,11 @@ import PlanCollisions from './PlanCollisions'
 import PublicPlans from './PublicPlans'
 import PlanExport from './PlanExport'
 import SettingsAdmin from './SettingsAdmin'
-import useAuthContext from '../../hooks/context/useAuthContext'
 import useGetPlans from '../../hooks/plan/useGetPlans'
 import useChangeUsername from '../../hooks/user/useChangeUsername'
 import { getActiveYear, getYears } from '../../utils/helpers'
 import { committees, kårer } from '../../data/committees'
+import { useUser } from '../../state/store'
 
 const item = {
   hidden: { opacity: 0, transiton: { duration: 0.2 } },
@@ -30,7 +30,7 @@ const Overview = () => {
   const [currentYear, setCurrentYear] = useState(getActiveYear())
   const years = getYears()
 
-  const { user } = useAuthContext()
+  const user = useUser()
   const { username, changeUsername } = useChangeUsername()
 
   const { isPending } = useGetPlans(currentYear)

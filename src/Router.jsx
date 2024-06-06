@@ -4,9 +4,9 @@ import { Box, CircularProgress } from '@mui/material'
 
 import Footer from './components/layout/Footer'
 import Nav from './components/layout/Nav'
-import useAuthContext from './hooks/context/useAuthContext'
 import RequireAuth from './components/RequireAuth'
 import Login from './pages/Login'
+import { useHasUser, useUser } from './state/store'
 
 const Overview = lazy(() => import('./pages/Overview'))
 const Signup = lazy(() => import('./pages/Signup'))
@@ -33,14 +33,18 @@ const Fallback = () => {
 }
 
 const Router = () => {
-  const { user } = useAuthContext()
+  const hasUser = useHasUser()
 
   return (
     <BrowserRouter>
       <Suspense fallback={<Fallback />}>
         <Routes>
-          <Route exact path="/" element={user ? <Navigate to="/overview" /> : <Login />} />
-          <Route exact path="/signup" element={user ? <Navigate to="/overview" /> : <Signup />} />
+          <Route exact path="/" element={hasUser ? <Navigate to="/overview" /> : <Login />} />
+          <Route
+            exact
+            path="/signup"
+            element={hasUser ? <Navigate to="/overview" /> : <Signup />}
+          />
           <Route exact path="/resetPassword" element={<ForgotPassword />} />
           <Route element={<RequireAuth />}>
             <Route exact path="/booking/:id/:year" element={<CalendarView />} />

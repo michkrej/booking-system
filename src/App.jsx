@@ -4,7 +4,6 @@ import { Container, CssBaseline, Box } from '@mui/material'
 import { locale, loadMessages } from 'devextreme/localization'
 
 import Footer from './components/layout/Footer'
-import useAuthContext from './hooks/context/useAuthContext'
 import Router from './Router'
 import { color } from './CONSTANTS'
 
@@ -23,8 +22,6 @@ export const theme = createTheme({
 })
 
 function App() {
-  const { authFinished } = useAuthContext()
-
   useEffect(() => {
     loadMessages(seMessages)
     locale(navigator.language)
@@ -50,7 +47,7 @@ function App() {
           }}
           maxWidth="xxl"
         >
-          {authFinished && <Router />}
+          <Router />
         </Container>
         <Footer />
       </Box>

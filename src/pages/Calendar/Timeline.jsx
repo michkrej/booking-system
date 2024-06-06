@@ -1,16 +1,16 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Scheduler, { Resource, Scrolling } from 'devextreme-react/scheduler'
 import PropTypes from 'prop-types'
-import useAuthContext from '../../hooks/context/useAuthContext'
 import Appointment from './Appointment'
 import bookableItems from '../../data/bookableItems'
 import { views } from '../../CONSTANTS'
 import { committees } from '../../data/committees'
 
 import '../../styles/timeline.css'
+import { useUser } from '../../state/store'
 
 const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], locations, year }) => {
-  const { user } = useAuthContext()
+  const user = useUser()
   const [groups, setGroups] = useState(['locationId', 'committeeId'])
 
   useEffect(() => {

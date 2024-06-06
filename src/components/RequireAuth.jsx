@@ -1,11 +1,11 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom'
-import useAuthContext from '../hooks/context/useAuthContext'
+import { useHasUser } from '../state/store'
 
 const RequireAuth = () => {
-  const { user } = useAuthContext()
+  const hasUser = useHasUser()
   const location = useLocation()
 
-  if (!user) {
+  if (!hasUser) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
