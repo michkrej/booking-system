@@ -8,10 +8,8 @@ interface StoreState {
   publicPlans: Plan[] | null
   planEditLocked: boolean
 
-  actions: {
-    userUpdated: (user: User | null) => void
-    changedPlanEditLock: (newValue: boolean) => void
-  }
+  userUpdated: (user: User | null) => void
+  changedPlanEditLock: (newValue: boolean) => void
 }
 
 const useStore = create<StoreState>()(
@@ -23,10 +21,8 @@ const useStore = create<StoreState>()(
         publicPlans: null,
         planEditLocked: false,
 
-        actions: {
-          userUpdated: (user) => set({ user }),
-          changedPlanEditLock: (newValue) => set({ planEditLocked: newValue })
-        }
+        changedPlanEditLock: (newValue) => set({ planEditLocked: newValue }),
+        userUpdated: (user) => set({ user })
       }),
       {
         name: 'app-storage'
@@ -35,11 +31,9 @@ const useStore = create<StoreState>()(
   )
 )
 
-export const useStoreActions = () => useStore((state) => state.actions)
-
 export const useUser = () => {
   const user = useStore((state) => state.user)
-  const userUpdated = useStore((state) => state.actions.userUpdated)
+  const userUpdated = useStore((state) => state.userUpdated)
 
   if (!user) {
     throw new Error('User not found')
@@ -53,7 +47,7 @@ export const useHasUser = () => {
 }
 
 export const usePlanEditLock = () => {
-  const changedPlanEditLock = useStore((state) => state.actions.changedPlanEditLock)
+  const changedPlanEditLock = useStore((state) => state.changedPlanEditLock)
   const planEditLocked = useStore((state) => state.planEditLocked)
 
   return { planEditLocked, changedPlanEditLock }
