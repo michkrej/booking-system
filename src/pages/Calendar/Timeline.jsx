@@ -10,7 +10,7 @@ import '../../styles/timeline.css'
 import { useUser } from '../../state/store'
 
 const Timeline = ({ currentLocation, store, edit, showCommittee, rooms = [], locations, year }) => {
-  const user = useUser()
+  const { user } = useUser()
   const [groups, setGroups] = useState(['locationId', 'committeeId'])
 
   useEffect(() => {

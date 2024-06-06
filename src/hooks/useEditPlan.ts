@@ -7,7 +7,7 @@ import { useUser } from '../state/store'
 
 export const useEditPlan = () => {
   const { dispatch, plans } = usePlansContext()
-  const user = useUser()
+  const { user } = useUser()
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()

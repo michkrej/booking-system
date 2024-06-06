@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { authService } from '../services/auth.service'
-import { useAppStore } from '../state/store'
+import { useUser } from '../state/store'
 import { getErrorMessage } from '../utils/error.util'
 
 export const useEmailSignUp = () => {
   const [isCancelled, setIsCancelled] = useState(false)
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const updateUser = useAppStore.use.updateUser()
+  const { userUpdated } = useUser()
 
   const signup = async (
     email: string,
@@ -24,7 +24,7 @@ export const useEmailSignUp = () => {
         displayName,
         committeeId
       )
-      updateUser(user)
+      userUpdated(user)
 
       if (!isCancelled) {
         setIsPending(false)

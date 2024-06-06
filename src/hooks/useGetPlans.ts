@@ -8,7 +8,7 @@ export const useGetPlans = (year: number) => {
   const [isPending, setIsPending] = useState(false)
   const { dispatch } = usePlansContext()
   const { planEditLocked } = useAdminSettings()
-  const user = useUser()
+  const { user } = useUser()
 
   const getPlans = async () => {
     setIsPending(true)

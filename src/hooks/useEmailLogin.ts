@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { authService } from '../services/auth.service'
 import { getErrorMessage } from '../utils/error.util'
-import { useAppStore } from '../state/store'
+import { useUser } from '../state/store'
 
 export const useEmailLogin = () => {
   const [isCancelled, setIsCancelled] = useState(false)
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const updateUser = useAppStore.use.updateUser()
+  const { userUpdated } = useUser()
 
   const login = async (email: string, password: string) => {
     setError(null)
@@ -15,7 +15,7 @@ export const useEmailLogin = () => {
     try {
       const user = await authService.loginWithEmailAndPassword(email, password)
       console.log(user)
-      updateUser(user)
+      userUpdated(user)
 
       if (!isCancelled) {
         setIsPending(false)

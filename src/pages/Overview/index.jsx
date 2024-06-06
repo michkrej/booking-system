@@ -29,7 +29,7 @@ const Overview = () => {
   const [currentYear, setCurrentYear] = useState(getActiveYear())
   const years = getYears()
 
-  const user = useUser()
+  const { user } = useUser()
   const { updateDisplayName } = useUpdateDisplayName()
 
   const { isPending } = useGetPlans(currentYear)

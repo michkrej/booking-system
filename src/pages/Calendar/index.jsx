@@ -26,7 +26,7 @@ const allRoomsSorted = sortAlphabetically(rooms)
 
 const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const { id, year } = useParams()
-  const user = useUser()
+  const { user } = useUser()
   const { dispatch, plans } = usePlansContext()
   const { planEditLocked } = useAdminSettings()
   const { getUserPlans } = useGetPlans(parseInt(year))

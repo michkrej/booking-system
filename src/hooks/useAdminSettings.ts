@@ -1,20 +1,19 @@
 import { useEffect } from 'react'
 import { adminService } from '../services/admin.service'
-import { useAppStore } from '../state/store'
+import { usePlanEditLock } from '../state/store'
 
 export const useAdminSettings = () => {
-  const updatePlanLock = useAppStore.use.updatePlanLock()
-  const planEditLocked = useAppStore.use.planEditLocked()
+  const { changedPlanEditLock, planEditLocked } = usePlanEditLock()
 
   const lockPlans = (e: React.ChangeEvent<HTMLInputElement>) => {
     adminService.lockAndUnlockPlans(e.target.checked)
-    updatePlanLock(e.target.checked)
+    changedPlanEditLock(e.target.checked)
   }
 
   useEffect(() => {
     const getAdminSettings = async () => {
       const { lockPlans } = await adminService.getAdminSettings()
-      updatePlanLock(lockPlans)
+      changedPlanEditLock(lockPlans)
     }
 
     getAdminSettings()
