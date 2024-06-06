@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import Grid from '@mui/material/Grid'
-import SelectInput from '../../components/SelectInput'
+import { SelectInput } from '../../components/SelectInput'
 import GetAppIcon from '@mui/icons-material/GetApp'
 import { exportPlan } from '../../utils/helpers'
 import { CSVLink } from 'react-csv'
 import { LoadingButton } from '@mui/lab'
 import moment from 'moment'
 import OverviewBlock from './OverviewBlock'
-import Error from '../../components/Error'
+import Error from '../../components/error'
 import { usePublicPlans, useUserPlans } from '../../state/store'
 
 const PlanExport = () => {

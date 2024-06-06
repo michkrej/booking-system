@@ -1,13 +1,12 @@
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
-import { db } from '../services/config'
-import { collection, getDocs, query, where } from 'firebase/firestore'
 import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
 import { committees, committeesConsensus, kårer } from '../data/committees'
+import { PlanEvent } from './interfaces'
 
 const moment = extendMoment(Moment)
 
-export const sortAlphabetically = (elem, useLabel = false) => {
+export const sortAlphabetically = (elem: any[], useLabel = false) => {
   return elem.sort((a, b) =>
     ('' + (useLabel ? a.label : a.text)).localeCompare(useLabel ? b.label : b.text, 'sv', {
       numeric: true
@@ -68,20 +67,20 @@ export const exportPlan = async (plans) => {
   return [header, ...cvsConversion]
 }
 
-export const kårCommittees = (kår) => {
+export const kårCommittees = (kår: 'Consensus' | 'StuFF' | 'LinTek') => {
   return kårer[kår] || kårer.LinTek
 }
 
-export const defaultCampus = (committeeId) => {
+export const defaultCampus = (committeeId: string) => {
   if (committeesConsensus.find((com) => com.id === committeeId)) return campuses[1]
   return campuses[0]
 }
 
-export const formatCollisions = (collisions) => {
+export const formatCollisions = (collisions: PlanEvent[]) => {
   return `+${(collisions || []).map((collision) => collision.id).join('+')}`
 }
 
-export const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 export const getYears = () => {
   const startYear = 2023

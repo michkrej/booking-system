@@ -13,9 +13,9 @@ import {
   findCollisionsBetweenUserPlanAndPublicPlans
 } from '../../utils/collisionHandling'
 import Comment from '../../components/Comment'
-import Error from '../../components/Error'
+import Error from '../../components/error'
 import { adminError } from '../../CONSTANTS'
-import useGetPlans from '../../hooks/useGetPlans'
+import { useGetPlans } from '../../hooks/useGetPlans'
 import { useAdminSettings } from '../../hooks'
 import { createCustomDataSource } from '../../utils/createCustomDataSource'
 import { useUser, useUserPlans } from '../../state/store'

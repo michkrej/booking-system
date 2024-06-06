@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-import SelectInput from '../../components/SelectInput'
+import { SelectInput } from '../../components/SelectInput'
 import SearchIcon from '@mui/icons-material/Search'
 import { useNavigate } from 'react-router-dom'
 import { formatCollisions } from '../../utils/helpers'

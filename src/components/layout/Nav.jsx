@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import LogoutIcon from '@mui/icons-material/Logout'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import AppBar from '@mui/material/AppBar'
@@ -9,6 +8,7 @@ import IconButton from '@mui/material/IconButton'
 
 import { pages } from '../../CONSTANTS'
 import { useSignOut } from '../../hooks'
+import { Button } from './../ui/button'
 
 import LUST from '../../assets/LUST.png'
 

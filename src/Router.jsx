@@ -1,33 +1,21 @@
 import { Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Box, CircularProgress } from '@mui/material'
 
-import Footer from './components/layout/Footer'
-import Nav from './components/layout/Nav'
 import RequireAuth from './components/RequireAuth'
 import Login from './pages/Login'
+import { SignUpPage } from './pages/signup.page'
 import { useHasUser, useUser } from './state/store'
 
-const Overview = lazy(() => import('./pages/Overview'))
-const Signup = lazy(() => import('./pages/Signup'))
+/* const Overview = lazy(() => import('./pages/Overview'))
 const CalendarView = lazy(() => import('./pages/Calendar'))
-const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword')) */
 
 const Fallback = () => {
   return (
     <>
-      <Nav />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh'
-        }}
-      >
-        <CircularProgress />
-      </Box>
-      <Footer />
+      {/* <Nav /> */}
+      hello
+      {/* <Footer /> */}
     </>
   )
 }
@@ -39,13 +27,13 @@ const Router = () => {
     <BrowserRouter>
       <Suspense fallback={<Fallback />}>
         <Routes>
-          <Route exact path="/" element={hasUser ? <Navigate to="/overview" /> : <Login />} />
+          <Route exact path="/" element={/* hasUser ? <Navigate to="/overview" /> : */ <Login />} />
           <Route
             exact
             path="/signup"
-            element={hasUser ? <Navigate to="/overview" /> : <Signup />}
+            element={/* hasUser ? <Navigate to="/overview" /> : */ <SignUpPage />}
           />
-          <Route exact path="/resetPassword" element={<ForgotPassword />} />
+          {/*<Route exact path="/resetPassword" element={<ForgotPassword />} />
           <Route element={<RequireAuth />}>
             <Route exact path="/booking/:id/:year" element={<CalendarView />} />
             <Route exact path="/collisions/:id/:year" element={<CalendarView findCollisions />} />
@@ -56,7 +44,7 @@ const Router = () => {
             />
             <Route exact path="/overview" element={<Overview />} />
             <Route exact path="/allEvents/:id/:year" element={<CalendarView showAllEvents />} />
-          </Route>
+          </Route> */}
           <Route
             path="*"
             element={

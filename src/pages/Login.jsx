@@ -1,16 +1,9 @@
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-
 import { useEmailLogin } from '../hooks'
-import StyledLink from '../components/Link'
-import Error from '../components/Error'
-
-import LUST from '../assets/LUST.png'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Link } from 'react-router-dom'
 
 export default function Login() {
   const { login, error } = useEmailLogin()
@@ -24,60 +17,42 @@ export default function Login() {
   }
 
   return (
-    <Container component="div" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}
-      >
-        <Avatar sx={{ bgcolor: 'transparent', width: 120, height: 100 }} variant="square">
-          <img src={LUST} style={{ width: '100%' }} />
-        </Avatar>
-        <Typography component="h2" variant="h5">
-          Logga in
-        </Typography>
-        <Error message={error} />
-        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Din e-mail"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Lösenord"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Logga in
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <StyledLink to="/resetPassword" variant="body2">
-                Glömt lösenord?
-              </StyledLink>
-            </Grid>
-            <Grid item>
-              <StyledLink to="/signup" variant="body2">
-                {'Har du inte ett konto? Skapa ett'}
-              </StyledLink>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </Container>
+    <div className="flex min-h-screen w-full items-center justify-center">
+      <Card className="mx-auto max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>Enter your email below to login to your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="m@example.com" required />
+            </div>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <Link to="#" className="ml-auto inline-block text-sm underline">
+                  Forgot your password?
+                </Link>
+              </div>
+              <Input id="password" type="password" required />
+            </div>
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+            <Button variant="outline" className="w-full">
+              Login with Google
+            </Button>
+          </div>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{' '}
+            <Link to="/signup" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

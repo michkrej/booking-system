@@ -7,7 +7,7 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import { LoadingButton } from '@mui/lab'
 
-import Error from '../components/Error'
+import Error from '../components/error'
 import StyledLink from '../components/Link'
 import { useResetPassword } from '../hooks'
 import Success from '../components/Success'

@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import { Paper, Tab, Tabs } from '@mui/material'
 import { TabContext } from '@mui/lab'
-import { motion, AnimatePresence } from 'framer-motion'
 
 import Nav from '../../components/layout/Nav'
 import UserPlans from './UserPlans'
@@ -19,11 +18,6 @@ import { useUpdateDisplayName, useGetPlans } from '../../hooks'
 import { getActiveYear, getYears } from '../../utils/helpers'
 import { committees, kårer } from '../../data/committees'
 import { useUser } from '../../state/store'
-
-const item = {
-  hidden: { opacity: 0, transiton: { duration: 0.2 } },
-  show: { opacity: 1, transiton: { duration: 0.2 } }
-}
 
 const Overview = () => {
   const [currentYear, setCurrentYear] = useState(getActiveYear())
@@ -90,28 +84,20 @@ const Overview = () => {
                 variant="outlined"
                 sx={{ padding: '2rem', minHeight: '60vh', height: '100%' }}
               >
-                <AnimatePresence mode="wait">
-                  {!isPending ? (
-                    <motion.div
-                      key="overviewGrid"
-                      variants={item}
-                      initial="hidden"
-                      animate="show"
-                      exit="hidden"
-                    >
-                      <Grid container spacing={2} sx={{ height: '100%' }}>
-                        <Grid item md={6} xs={12}>
-                          <UserPlans year={currentYear} />
-                          <PlanCollisions year={currentYear} />
-                          <PlanExport year={currentYear} />
-                        </Grid>
-                        <Grid item md={6} xs={12}>
-                          <PublicPlans year={currentYear} />
-                        </Grid>
+                {!isPending ? (
+                  <div>
+                    <Grid container spacing={2} sx={{ height: '100%' }}>
+                      <Grid item md={6} xs={12}>
+                        <UserPlans year={currentYear} />
+                        <PlanCollisions year={currentYear} />
+                        <PlanExport year={currentYear} />
                       </Grid>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
+                      <Grid item md={6} xs={12}>
+                        <PublicPlans year={currentYear} />
+                      </Grid>
+                    </Grid>
+                  </div>
+                ) : null}
               </Paper>
             </TabContext>
           </Box>
