@@ -12,8 +12,8 @@ import {
 } from 'firebase/firestore'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getErrorMessage } from '../utils/error.util'
-import { DBPlan, EditablePlanDetails, Plan, PlanEvent, User } from '../utils/interfaces'
+import { getErrorMessage } from '@/utils/error.util'
+import { EditablePlanDetails, Plan, PlanEvent, User } from '@/utils/interfaces'
 import { db } from './config'
 
 interface CreatePlanParams extends Omit<Plan, 'createdAt' | 'updatedAt' | 'id'> {}
@@ -142,7 +142,7 @@ const deletePlanEvent = async (plan: Plan, eventId: string) => {
   }
 }
 
-export const PlansService = {
+export const plansService = {
   createPlan,
   deletePlan,
   getAllPlans,

@@ -1,5 +1,5 @@
 import CustomStore from 'devextreme/data/custom_store'
-import { PlansService } from '../services/plans.service'
+import { plansService } from '../services/plans.service'
 import { Plan, PlanEvent, User } from './interfaces'
 
 interface CustomDataSourceOptions {
@@ -35,7 +35,7 @@ export const createCustomDataSource = (params: CustomDataSourceParams) => {
     insert: async (values) => {
       if (insert && values) {
         const planId = window.location.pathname.split('/')[2]
-        return await PlansService.addPlanEvent(planId, {
+        return await plansService.addPlanEvent(planId, {
           ...values,
           committeeId: user.committeeId
         })
@@ -46,14 +46,14 @@ export const createCustomDataSource = (params: CustomDataSourceParams) => {
       if (remove && id) {
         const planId = window.location.pathname.split('/')[2]
         const plan = plans.filter((plan) => plan.id === planId)[0]
-        await PlansService.deletePlanEvent(plan, id)
+        await plansService.deletePlanEvent(plan, id)
       }
     },
     update: async (id: string, values) => {
       if (update && id && values) {
         const planId = window.location.pathname.split('/')[2]
         const plan = plans.filter((plan) => plan.id === planId)[0]
-        return await PlansService.updatePlanEvent(plan, { ...values, id })
+        return await plansService.updatePlanEvent(plan, { ...values, id })
       }
       return null
     }

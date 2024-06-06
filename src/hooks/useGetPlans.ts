@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import usePlansContext from './context/usePlansContext'
 import { useAdminSettings } from './useAdminSettings'
-import { PlansService } from '../services/plans.service'
-import { useUser } from '../state/store'
+import { useUser } from '@/state/store'
+import { plansService } from '@/services'
 
 export const useGetPlans = (year: number) => {
   const [isPending, setIsPending] = useState(false)
@@ -13,7 +13,7 @@ export const useGetPlans = (year: number) => {
   const getPlans = async () => {
     setIsPending(true)
     try {
-      const { plans: _plans, publicPlans } = await PlansService.getAllPlans(user, year)
+      const { plans: _plans, publicPlans } = await plansService.getAllPlans(user, year)
       dispatch({
         type: 'LOAD',
         payload: { plans: _plans, publicPlans, admin: planEditLocked }
@@ -26,7 +26,7 @@ export const useGetPlans = (year: number) => {
 
   const getUserPlans = async () => {
     setIsPending(true)
-    const plans = await PlansService.getUserPlans(user, year)
+    const plans = await plansService.getUserPlans(user, year)
     dispatch({
       type: 'LOAD',
       payload: { plans, admin: planEditLocked }

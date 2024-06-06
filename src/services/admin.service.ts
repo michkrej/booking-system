@@ -1,6 +1,6 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { db } from './config'
-import { getErrorMessage } from '../utils/error.util'
+import { getErrorMessage } from '@/utils/error.util'
 
 const KEY = 'adminValues'
 

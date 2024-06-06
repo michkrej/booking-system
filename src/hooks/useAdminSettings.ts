@@ -1,6 +1,6 @@
+import { adminService } from '@/services'
+import { usePlanEditLock } from '@/state/store'
 import { useEffect } from 'react'
-import { adminService } from '../services/admin.service'
-import { usePlanEditLock } from '../state/store'
 
 export const useAdminSettings = () => {
   const { changedPlanEditLock, planEditLocked } = usePlanEditLock()

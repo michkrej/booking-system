@@ -1,5 +1,5 @@
-import { useUser } from '../state/store'
-import { authService } from '../services/auth.service'
+import { authService } from '@/services'
+import { useUser } from '@/state/store'
 
 export const useUpdateDisplayName = () => {
   const { user, userUpdated } = useUser()

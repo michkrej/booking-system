@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { authService } from '../services/auth.service'
-import { useUser } from '../state/store'
-import { getErrorMessage } from '../utils/error.util'
+
+import { authService } from '@/services'
+import { useUser } from '@/state/store'
+import { getErrorMessage } from '@/utils/error.util'
 
 export const useEmailSignUp = () => {
   const [isCancelled, setIsCancelled] = useState(false)

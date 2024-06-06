@@ -7,8 +7,8 @@ import {
 } from 'firebase/auth'
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore'
 import { auth, db } from './config'
-import { getErrorMessage } from '../utils/error.util'
-import { User } from '../utils/interfaces'
+import { getErrorMessage } from '@/utils/error.util'
+import { User } from '@/utils/interfaces'
 
 const signUpWithEmailAndPassword = async (
   email: string,

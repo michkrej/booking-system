@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import usePlansContext from './context/usePlansContext'
-import { PlansService } from '../services/plans.service'
 import { useNavigate } from 'react-router-dom'
-import { Plan } from '../utils/interfaces'
-import { useUser } from '../state/store'
+import usePlansContext from './context/usePlansContext'
+import { useUser } from '@/state/store'
+import { Plan } from '@/utils/interfaces'
+import { plansService } from '@/services'
 
 export const useEditPlan = () => {
   const { dispatch, plans } = usePlansContext()
@@ -19,7 +19,7 @@ export const useEditPlan = () => {
     if (!label) {
       setError('Du måste ange ett namn')
     } else {
-      PlansService.updatePlanDetails(plan.id, { label })
+      plansService.updatePlanDetails(plan.id, { label })
       dispatch({
         type: 'UPDATE',
         payload: {
@@ -33,7 +33,7 @@ export const useEditPlan = () => {
 
   const _deletePlan = (id: string) => {
     if (confirm(`Vill du verkligen radera '${plans.find((plan) => plan.id === id).label}'`)) {
-      PlansService.deletePlan(id)
+      plansService.deletePlan(id)
       dispatch({
         type: 'DELETE',
         payload: {
@@ -49,7 +49,7 @@ export const useEditPlan = () => {
     if (!plan.public && hasPublicPlan) {
       setError('Du kan bara ha en publik planering åt gången')
     } else {
-      PlansService.updatePlanDetails(plan.id, { public: !plan.public })
+      plansService.updatePlanDetails(plan.id, { public: !plan.public })
       dispatch({
         type: 'UPDATE_PUBLIC',
         payload: {
@@ -69,13 +69,13 @@ export const useEditPlan = () => {
     } else {
       const planFields = {
         label: name,
-        userId: user,
+        userId: user.userId,
         public: false,
         committeeId: user.committeeId,
         year: year,
         events: []
       }
-      const newPlanId = await PlansService.createPlan(planFields)
+      const newPlanId = await plansService.createPlan(planFields)
       if (!newPlanId) {
         setError('Något gick fel')
         return

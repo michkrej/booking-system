@@ -22,6 +22,19 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Paths */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components": ["./src/components/"],
+      "@hooks": ["./src/hooks/"],
+      "@pages": ["./src/pages/"],
+      "@state": ["./src/state/"],
+      "@utils": ["./src/utils/"],
+      "@data": ["./src/data/"]
+    }
   }
 }

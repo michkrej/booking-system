@@ -1,7 +1,7 @@
+import { authService } from '@/services'
+import { useUser } from '@/state/store'
+import { getErrorMessage } from '@/utils/error.util'
 import { useEffect, useState } from 'react'
-import { authService } from '../services/auth.service'
-import { getErrorMessage } from '../utils/error.util'
-import { useUser } from '../state/store'
 
 export const useEmailLogin = () => {
   const [isCancelled, setIsCancelled] = useState(false)

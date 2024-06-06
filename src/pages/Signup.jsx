@@ -13,10 +13,12 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 
 import { kårer } from '../data/committees'
-import { kårCommittees, sortAlphabetically } from '../utils/helpers'
-import Comment from '../components/Comment'
-import StyledLink from '../components/Link'
-import Error from '../components/Error'
+import { kårCommittees, sortAlphabetically } from '@/utils/helpers'
+import Comment from '@/components/Comment'
+import StyledLink from '@/components/Link'
+import Error from '@/components/Error'
+
+import LUST from '../assets/LUST.png'
 
 export default function Signup() {
   const [committeeId, setCommitteeId] = useState('')
@@ -51,7 +53,7 @@ export default function Signup() {
         }}
       >
         <Avatar sx={{ bgcolor: 'transparent', width: 120, height: 100 }} variant="square">
-          <img src="./assets/LUST.png" style={{ width: '100%' }} />
+          <img src={LUST} style={{ width: '100%' }} />
         </Avatar>
         <Typography component="h2" variant="h5">
           Skapa konto
