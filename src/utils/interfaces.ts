@@ -13,27 +13,34 @@ export type CorridorC = Record<
   }
 >
 
-export type Plan = {
-  id: string
-  committeeId: string
-  createdAt: string
+export interface EditablePlanDetails {
   label: string
   public: boolean
+  committeeId: string
+}
+
+export interface DBPlan extends EditablePlanDetails {
+  createdAt: string
+  updatedAt: string
   userId: string
   year: number
+  events: PlanEvent[]
+}
+
+export interface Plan extends DBPlan {
+  id: string
 }
 
 export type PlanEvent = {
   id: string
   allDay: boolean
   committeeId: string
+  planId: string
   startDate: string
   endDate: string
   locationId: string
-  planId: string
   roomId: string[]
   text: string
-  userId: string
 
   createdAt: Date
   updatedAt: Date
@@ -77,3 +84,9 @@ export type StuffCommitee =
   | 'Players'
   | 'Jur6'
   | 'MvSek'
+
+export interface User {
+  userId: string
+  committeeId: string
+  admin?: boolean
+}

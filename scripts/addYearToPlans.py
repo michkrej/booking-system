@@ -3,12 +3,12 @@ from firebase_admin import credentials, firestore
 from datetime import datetime
 
 # Initialize Firebase Admin SDK
-PRODUCTION = True
+PRODUCTION = False
 
 if PRODUCTION:
     cred = credentials.Certificate("./scripts/booking-system-1377d-firebase-adminsdk-d9uwz-a4b3602dab.json")
 else:
-    cred = credentials.Certificate("./scripts/booking-system-dev-2a562-firebase-adminsdk-qemcg-a6eb9a8ea7.json")
+    cred = credentials.Certificate("./scripts/booking-system-dev-2a562-firebase-adminsdk-qemcg-0d9adb22d0.json")
 firebase_admin.initialize_app(cred)
 
 # Initialize Firestore database

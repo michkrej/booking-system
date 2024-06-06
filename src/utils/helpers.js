@@ -3,9 +3,7 @@ import { extendMoment } from 'moment-range'
 import { db } from '../firebase/config'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
-import CustomStore from 'devextreme/data/custom_store'
 import { committees, committeesConsensus, kårer } from '../data/committees'
-import { deleteEvent, insertEvent, loadEvents, updateEvent } from '../firebase/dbActions'
 
 const moment = extendMoment(Moment)
 
@@ -108,51 +106,6 @@ export async function getContentById(ids, path, id) {
 
   // after all of the data is fetched, return it
   return Promise.all(batches).then((content) => content.flat())
-}
-
-export const createCustomDataSource = (
-  user,
-  { load = true, insert = false, remove = false, update = false },
-  collisionFunction = undefined
-) => {
-  const urlIndex =
-    window.location.pathname.includes('all') && !window.location.pathname.includes('allEvents')
-      ? 3
-      : 2
-  return new CustomStore({
-    key: 'id',
-    ...(load
-      ? {
-          load: async () => {
-            return await loadEvents(
-              window.location.pathname.split('/')[urlIndex],
-              collisionFunction
-            )
-          }
-        }
-      : {}),
-    ...(insert
-      ? {
-          insert: async (values) => {
-            return await insertEvent(values, user)
-          }
-        }
-      : {}),
-    ...(remove
-      ? {
-          remove: async (id) => {
-            await deleteEvent(id)
-          }
-        }
-      : {}),
-    ...(update
-      ? {
-          update: async (id, values) => {
-            return await updateEvent(id, values)
-          }
-        }
-      : {})
-  })
 }
 
 export const delay = (ms) => new Promise((res) => setTimeout(res, ms))

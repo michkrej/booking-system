@@ -5,12 +5,7 @@ import Nav from '../../components/layout/Nav'
 import Timeline from './Timeline'
 import PropTypes from 'prop-types'
 import useAuthContext from '../../hooks/context/useAuthContext'
-import {
-  createCustomDataSource,
-  defaultCampus,
-  getActiveYear,
-  sortAlphabetically
-} from '../../utils/helpers'
+import { defaultCampus, getActiveYear, sortAlphabetically } from '../../utils/helpers'
 import { campuses, filterCampusLocations, filterCampusRooms, rooms } from '../../data/locationsData'
 import FilterTimelineLocations from './FilterTimelineLocations'
 import { useParams, useLocation } from 'react-router-dom'
@@ -25,6 +20,7 @@ import Error from '../../components/Error'
 import { adminError } from '../../CONSTANTS'
 import useGetPlans from '../../hooks/plan/useGetPlans'
 import useAdminSettings from '../../hooks/useAdminSettings'
+import { createCustomDataSource } from '../../utils/createCustomDataSource'
 
 const allRoomsSorted = sortAlphabetically(rooms)
 
@@ -41,6 +37,8 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
   const [locations, setLocations] = useState(
     sortAlphabetically(Object.values(filterCampusLocations(campus.label)))
   )
+
+  console.log(plans)
 
   useEffect(() => {
     const getAdminData = async () => {
@@ -70,33 +68,55 @@ const CalendarView = ({ findCollisions = false, showAllEvents = false }) => {
     if (findCollisions) {
       const findAllCollisions = useLocation().pathname.includes('all')
       return findAllCollisions
-        ? createCustomDataSource(id, { load: true }, findCollisionsBetweenAllEvents)
-        : createCustomDataSource(id, { load: true }, findCollisionsBetweenUserPlanAndPublicPlans)
+        ? createCustomDataSource({
+            user,
+            options: { load: true },
+            collisionFunction: findCollisionsBetweenAllEvents,
+            plans
+          })
+        : createCustomDataSource({
+            user,
+            options: { load: true },
+            collisionFunction: findCollisionsBetweenUserPlanAndPublicPlans,
+            plans
+          })
     }
 
     if (showAllEvents) {
-      return createCustomDataSource(id, {
-        load: true,
-        insert: false, // To work the insert functions needs to be updated, uses the currentUser instead of the owner of the plan
-        remove: true,
-        update: true
+      return createCustomDataSource({
+        user,
+        options: {
+          load: true,
+          insert: false, // To work the insert functions needs to be updated, uses the currentUser instead of the owner of the plan
+          remove: true,
+          update: true
+        },
+        plans
       })
     }
 
     if (planIsLocked || planIsOld) {
-      return createCustomDataSource(user, {
-        load: true,
-        insert: false,
-        remove: false,
-        update: false
+      return createCustomDataSource({
+        user,
+        options: {
+          load: true,
+          insert: false,
+          remove: false,
+          update: false
+        },
+        plans
       })
     }
 
-    return createCustomDataSource(user, {
-      load: true,
-      insert: true,
-      remove: true,
-      update: true
+    return createCustomDataSource({
+      user,
+      options: {
+        load: true,
+        insert: true,
+        remove: true,
+        update: true
+      },
+      plans: plans.filter((plan) => plan.id === id)
     })
   }
 

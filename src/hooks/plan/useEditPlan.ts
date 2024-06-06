@@ -1,25 +1,25 @@
 import { useEffect, useState } from 'react'
 import usePlansContext from '../context/usePlansContext'
-import { deletePlan, updatePlan, createPlan as _createPlan } from '../../firebase/dbActions'
+import { PlansService } from '../../firebase/plans.service'
 import useAuthContext from '../context/useAuthContext'
 import { useNavigate } from 'react-router-dom'
+import { Plan } from '../../utils/interfaces'
 
-const useEditPlan = () => {
+export const useEditPlan = () => {
   const { dispatch, plans } = usePlansContext()
   const { user } = useAuthContext()
   const [isPending, setIsPending] = useState(false)
-  const [error, setError] = useState(undefined)
-  const [newPlanId, setNewPlanId] = useState(undefined)
+  const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
 
-  const changePlanName = (plan) => {
+  const changePlanName = (plan: Plan) => {
     setIsPending(true)
-    setError(undefined)
+    setError(null)
     const label = window.prompt('Vad ska din planering byta namn till?')
-    if (label.length < 1) {
+    if (!label) {
       setError('Du måste ange ett namn')
     } else {
-      updatePlan(plan.id, { ...plan, label })
+      PlansService.updatePlanDetails(plan.id, { label })
       dispatch({
         type: 'UPDATE',
         payload: {
@@ -31,9 +31,9 @@ const useEditPlan = () => {
     setIsPending(false)
   }
 
-  const _deletePlan = (id) => {
+  const _deletePlan = (id: string) => {
     if (confirm(`Vill du verkligen radera '${plans.find((plan) => plan.id === id).label}'`)) {
-      deletePlan(id)
+      PlansService.deletePlan(id)
       dispatch({
         type: 'DELETE',
         payload: {
@@ -43,31 +43,28 @@ const useEditPlan = () => {
     }
   }
 
-  const togglePublicPlan = (plan) => {
-    setError(undefined)
+  const togglePublicPlan = (plan: Plan) => {
+    setError(null)
     const hasPublicPlan = plans.some((plan) => plan.public)
     if (!plan.public && hasPublicPlan) {
       setError('Du kan bara ha en publik planering åt gången')
     } else {
-      const _public = !plan.public
-      const addCommittee = plan.committeeId ? {} : { committeeId: user.committeeId } // adding committee here in case it is an old plan
-      updatePlan(plan.id, { public: _public, ...addCommittee })
+      PlansService.updatePlanDetails(plan.id, { public: !plan.public })
       dispatch({
         type: 'UPDATE_PUBLIC',
         payload: {
           ...plan,
-          public: _public,
-          ...addCommittee
+          public: !plan.public
         }
       })
     }
   }
 
-  const createPlan = async (year) => {
-    setError(undefined)
+  const createPlan = async (year: number) => {
+    setError(null)
     setIsPending(true)
     const name = window.prompt('Vad ska din ny planering heta?')
-    if (name.length < 1) {
+    if (!name) {
       setError('Du måste ange ett namn')
     } else {
       const planFields = {
@@ -75,27 +72,25 @@ const useEditPlan = () => {
         userId: user.uid,
         public: false,
         committeeId: user.committeeId,
-        year: year
+        year: year,
+        events: []
       }
-      const { id } = await _createPlan(planFields)
+      const newPlanId = await PlansService.createPlan(planFields)
+      if (!newPlanId) {
+        setError('Något gick fel')
+        return
+      }
       dispatch({
         type: 'CREATE',
         payload: {
-          id,
+          newPlanId,
           ...planFields
         }
       })
-      navigate(`/booking/${id}/${year}`)
-      //setNewPlanId(id)
+      navigate(`/booking/${newPlanId}/${year}`)
     }
     setIsPending(false)
   }
 
-  /*   useEffect(() => {
-    if (newPlanId) navigate(`/booking/${newPlanId}/${year}`)
-  }, [newPlanId]) */
-
   return { changePlanName, togglePublicPlan, _deletePlan, createPlan, isPending, error }
 }
-
-export default useEditPlan

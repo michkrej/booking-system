@@ -20,4 +20,11 @@ export const analytics = getAnalytics(app)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 
+export const Firebase = {
+  app,
+  analytics,
+  auth,
+  db
+}
+
 export default app

@@ -6,10 +6,10 @@ import usePlansContext from '../../hooks/context/usePlansContext'
 import { getActiveYear, sortAlphabetically } from '../../utils/helpers'
 import Error from '../../components/Error'
 import OverviewBlock from './OverviewBlock'
-import useEditPlan from '../../hooks/plan/useEditPlan'
 import { adminError } from '../../CONSTANTS'
 import UserPlansListElement from './UserPlansListElement'
 import useAdminSettings from '../../hooks/useAdminSettings'
+import { useEditPlan } from '../../hooks/plan/useEditPlan'
 
 const UserPlans = ({ year }) => {
   const { plans = [] } = usePlansContext()
