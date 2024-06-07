@@ -2,8 +2,7 @@ import { Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import RequireAuth from './components/RequireAuth'
-import Login from './pages/Login'
-import { SignUpPage } from './pages/signup.page'
+import { LoginPage } from './pages/login.page'
 import { useHasUser, useUser } from './state/store'
 
 /* const Overview = lazy(() => import('./pages/Overview'))
@@ -27,11 +26,10 @@ const Router = () => {
     <BrowserRouter>
       <Suspense fallback={<Fallback />}>
         <Routes>
-          <Route exact path="/" element={/* hasUser ? <Navigate to="/overview" /> : */ <Login />} />
           <Route
             exact
-            path="/signup"
-            element={/* hasUser ? <Navigate to="/overview" /> : */ <SignUpPage />}
+            path="/"
+            element={/* hasUser ? <Navigate to="/overview" /> : */ <LoginPage />}
           />
           {/*<Route exact path="/resetPassword" element={<ForgotPassword />} />
           <Route element={<RequireAuth />}>
