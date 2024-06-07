@@ -1,3 +1,4 @@
+import { kårer } from '@/data/committees'
 import { FieldValue } from 'firebase/firestore'
 
 export type Room = {
@@ -61,6 +62,7 @@ export type PlanEvent = {
   scene?: number
   elverk?: number
 }
+export type Kår = keyof typeof kårer
 
 export type LintekCommitee = 'STABEN' | 'URF' | 'YF' | 'MPiRE' | 'TackLING' | 'CM' | 'GF' | 'TEKKEN'
 export type ConsensusCommitee =

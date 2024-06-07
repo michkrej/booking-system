@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { authService } from '@/services'
 import { useUserUpdated } from '@/state/store'
 import { getErrorMessage } from '@/utils/error.util'
+import { toast } from 'sonner'
 
 export const useEmailSignUp = () => {
   const [isCancelled, setIsCancelled] = useState(false)
@@ -18,6 +19,7 @@ export const useEmailSignUp = () => {
   ) => {
     setError(null)
     setIsPending(true)
+    setIsCancelled(false)
     try {
       const user = await authService.signUpWithEmailAndPassword(
         email,
@@ -34,17 +36,18 @@ export const useEmailSignUp = () => {
     } catch (error) {
       if (!isCancelled) {
         const errorMessage = getErrorMessage(error)
-        console.log(errorMessage)
         setError(errorMessage)
         setIsPending(false)
+        toast.error(errorMessage)
       }
     }
   }
-  useEffect(() => {
+  /*  useEffect(() => {
     return () => {
+      console.log('cleanup')
       setIsCancelled(true)
     }
-  }, [])
+  }, []) */
 
   return { error, isPending, signup }
 }
