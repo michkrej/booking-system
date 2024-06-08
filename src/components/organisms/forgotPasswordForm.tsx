@@ -1,10 +1,9 @@
-import { useEmailLogin } from '@/hooks/useEmailLogin'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+
+import { Input } from '@/components/ui/input'
 import {
   Form,
   FormControl,
@@ -14,34 +13,35 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { LoadingButton } from '@/components/molecules/loadingButton'
+import { useResetPassword } from '@/hooks'
 
 const formSchema = z.object({
-  email: z.string().min(1, 'E-postadress saknas').email('Felaktig e-postadress'),
-  password: z.string().min(8, 'Lösenord saknas')
+  email: z.string().min(1, 'E-postadress saknas').email('Felaktig e-postadress')
 })
 
-export const LoginForm = () => {
-  const { login, isPending } = useEmailLogin()
+export const ForgotPasswordForm = () => {
+  const { resetPassword, isPending } = useResetPassword()
   const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: ''
+      email: ''
     }
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
-    login(values.email, values.password)
+    resetPassword(values.email).then(() => {
+      navigate('/')
+    })
   }
   return (
     <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
       <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Logga in</h1>
+        <h1 className="text-3xl font-bold">Återställ lösenord</h1>
         <p className="text-balance text-muted-foreground">
-          Ange din e-post och lösenord för att logga in
+          Ange din e-post för att återställa ditt lösenord
         </p>
       </div>
       <div className="grid gap-4">
@@ -61,43 +61,16 @@ export const LoginForm = () => {
                 </FormItem>
               )}
             />
-
-            {/* Password Field */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center">
-                    <FormLabel htmlFor="password">Lösenord</FormLabel>
-                    <Link to="/forgot-password" className="ml-auto inline-block text-sm underline">
-                      Glömt ditt lösenord?
-                    </Link>
-                  </div>
-                  <FormControl>
-                    <Input id="password" type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <LoadingButton loading={isPending} className="w-full" type="submit">
-              Logga in
+              Skicka återställningslänk
             </LoadingButton>
           </form>
         </Form>
-        <Button variant="outline" className="w-full">
-          Logga in med Google
-        </Button>
       </div>
-
       <div className="text-center text-sm">
-        Har du inget konto?{' '}
-        <span
-          onClick={() => navigate('/', { state: { showSignUp: true } })}
-          className="cursor-pointer underline"
-        >
-          Skapa konto
+        Klar?{' '}
+        <span onClick={() => navigate('/')} className="cursor-pointer underline">
+          Logga in
         </span>
       </div>
     </div>

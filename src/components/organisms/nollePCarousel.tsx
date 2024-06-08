@@ -31,9 +31,20 @@ const images = [
   image_2019_13
 ]
 
-export const NollePCarousel = () => {
+type NollePCarouselProps = {
+  active?: boolean
+}
+
+export const NollePCarousel = ({ active = true }: NollePCarouselProps) => {
   return (
-    <Carousel plugins={[Autoplay({ delay: 5000, jump: true })]} className="h-full">
+    <Carousel
+      plugins={[Autoplay({ delay: 5000, jump: true })]}
+      opts={{
+        loop: true,
+        active
+      }}
+      className="h-full"
+    >
       <CarouselContent className="h-full">
         {images.map((image, index) => (
           <CarouselItem key={index}>

@@ -1,27 +1,30 @@
 import { authService } from '@/services'
+import { getErrorMessage } from '@/utils/error.util'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export const useResetPassword = () => {
   const [isPending, setIsPending] = useState(false)
-  const [error, setError] = useState<string | null>()
-  const [success, setSuccess] = useState<string | null>()
 
   const resetPassword = async (email: string) => {
     setIsPending(true)
-    setError(undefined)
-    setSuccess(undefined)
 
     authService
       .resetPassword(email)
       .then(async () => {
-        setIsPending(false)
-        setSuccess('Ett mail har skickats till din e-postadress')
+        toast.success('Ett mail har skickats till din e-postadress', {
+          duration: 1000 * 10
+        })
       })
       .catch((error) => {
-        setError(error.message)
+        const errorMessage = getErrorMessage(error)
+        console.log(errorMessage)
+        toast.error(errorMessage, {
+          duration: 1000 * 10
+        })
       })
     setIsPending(false)
   }
 
-  return { resetPassword, isPending, error, success }
+  return { resetPassword, isPending }
 }
