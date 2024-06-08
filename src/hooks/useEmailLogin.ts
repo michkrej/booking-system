@@ -2,6 +2,7 @@ import { authService } from '@/services'
 import { useUserUpdated } from '@/state/store'
 import { getErrorMessage } from '@/utils/error.util'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 export const useEmailLogin = () => {
   const [isCancelled, setIsCancelled] = useState(false)
@@ -26,6 +27,7 @@ export const useEmailLogin = () => {
         console.log(errorMessage)
         setError(errorMessage)
         setIsPending(false)
+        toast.error(errorMessage)
       }
     }
   }
@@ -36,5 +38,5 @@ export const useEmailLogin = () => {
     }
   }, [])
 
-  return { login, isPending, error }
+  return { login, isPending }
 }

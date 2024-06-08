@@ -45,13 +45,8 @@ export const NollePCarousel = () => {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <div className="fixed bottom-2 right-2 text-white">
-        <a
-          href="https://ceciliaolsson.com/home"
-          className="hover:shadow hover:font-semibold transition-all"
-        >
-          Fotograf: Cecilia Olsson
-        </a>
+      <div className="fixed bottom-0 right-0 p-2 text-sm text-white transition-all hover:bg-white/50 hover:text-black">
+        <a href="https://ceciliaolsson.com/home">Fotograf: Cecilia Olsson</a>
       </div>
     </Carousel>
   )

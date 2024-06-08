@@ -1,8 +1,7 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { LoaderCircle } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -27,6 +26,7 @@ import {
 } from '@/components/ui/form'
 import { useEmailSignUp } from '@/hooks'
 import { Kår } from '@/utils/interfaces'
+import { LoadingButton } from '../molecules/loadingButton'
 
 const formSchema = z
   .object({
@@ -59,14 +59,15 @@ export const SignUpForm = () => {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values)
     signup(values.email, values.password, values.username, values.fadderi)
   }
 
+  const kårIsOther = form.watch('kår') === 'Övrigt'
+  const kårisEmpty = form.watch('kår') === ''
+
   return (
-    <div className="mx-auto grid w-[400px] gap-6">
+    <div className="mx-auto grid w-[300px] gap-6 md:w-[450px]">
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Skapa konto</h1>
         <p className="text-balance text-muted-foreground">
@@ -75,16 +76,16 @@ export const SignUpForm = () => {
       </div>
       <div className="grid gap-4">
         <Form {...form}>
-          <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <form className="grid gap-4 md:col-span-2" onSubmit={form.handleSubmit(onSubmit)}>
             {/* Username Field */}
             <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="md:col-span-2">
                   <FormLabel>Förnamn</FormLabel>
                   <FormControl>
-                    <Input id="username" placeholder="Namn" required {...field} />
+                    <Input id="username" placeholder="Namn" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,55 +96,44 @@ export const SignUpForm = () => {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="md:col-span-2">
                   <FormLabel>E-post</FormLabel>
                   <FormControl>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      required
-                      {...field}
-                    />
+                    <Input id="email" type="email" placeholder="m@example.com" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Tips: använd din fadderimejl så att din efterträdare kan använda samma konto
-                  </FormDescription>
+                  <FormDescription>Tips: använd din fadderimejl</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <div className="grid gap-4 grid-cols-2">
-              {/* Password Field */}
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Lösenord</FormLabel>
-                    <FormControl>
-                      <Input id="password" type="password" required {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Password Confirmation Field */}
-              <FormField
-                control={form.control}
-                name="passwordControl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bekräfta lösenord</FormLabel>
-                    <FormControl>
-                      <Input id="passwordControl" type="password" required {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            {/* Password Field */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Lösenord</FormLabel>
+                  <FormControl>
+                    <Input id="password" type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Password Confirmation Field */}
+            <FormField
+              control={form.control}
+              name="passwordControl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bekräfta lösenord</FormLabel>
+                  <FormControl>
+                    <Input id="passwordControl" type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Kår Select Field */}
             <FormField
               control={form.control}
@@ -151,18 +141,31 @@ export const SignUpForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Kår</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={(val) => {
+                      console.log(val)
+                      field.onChange(val)
+                      if (val === 'Övrigt') {
+                        form.setValue('fadderi', kårer.Övrigt[0].id)
+                      } else {
+                        form.setValue('fadderi', '')
+                      }
+                    }}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Kår" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.keys(kårer).map((val) => (
-                        <SelectItem key={val} value={val}>
-                          {val}
-                        </SelectItem>
-                      ))}
+                      {Object.keys(kårer).map((val) => {
+                        return (
+                          <SelectItem key={val} value={val}>
+                            {val}
+                          </SelectItem>
+                        )
+                      })}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -176,10 +179,14 @@ export const SignUpForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Fadderi</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={kårIsOther || kårisEmpty}
+                  >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Fadderi" />
+                        <SelectValue placeholder={'Fadderi'} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -192,21 +199,18 @@ export const SignUpForm = () => {
                       )}
                     </SelectContent>
                   </Select>
-                  <FormDescription>Om du tillhör t.ex. kårledningen använd Övrigt</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             {/* Submit Button */}
-            <Button type="submit" className="w-full relative" disabled={isPending}>
-              {isPending ? (
-                <LoaderCircle className="w-5 h-5 mr-2 animate-spin absolute left-1/4" />
-              ) : null}
+            <LoadingButton loading={isPending} type="submit" className="w-full md:col-span-2">
               Skapa ett konto
-            </Button>
+            </LoadingButton>
           </form>
         </Form>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full md:col-span-2">
           Registrera dig med Google
         </Button>
       </div>
@@ -214,7 +218,7 @@ export const SignUpForm = () => {
         Hade du redan ett konto?{' '}
         <span
           onClick={() => navigate('/', { state: { showSignUp: false } })}
-          className="underline cursor-pointer"
+          className="cursor-pointer underline"
         >
           Logga in
         </span>

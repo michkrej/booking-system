@@ -2,7 +2,7 @@ import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
 import { committees, committeesConsensus, kårer } from '../data/committees'
-import { PlanEvent } from './interfaces'
+import { Kår, PlanEvent } from './interfaces'
 
 const moment = extendMoment(Moment)
 
@@ -67,7 +67,7 @@ export const exportPlan = async (plans) => {
   return [header, ...cvsConversion]
 }
 
-export const kårCommittees = (kår: 'Consensus' | 'StuFF' | 'LinTek') => {
+export const kårCommittees = (kår: Kår) => {
   return kårer[kår] || kårer.LinTek
 }
 

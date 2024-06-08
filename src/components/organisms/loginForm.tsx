@@ -13,14 +13,15 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
+import { LoadingButton } from '@/components/molecules/loadingButton'
 
 const formSchema = z.object({
-  email: z.string().email('Felaktig e-postadress').min(1, 'E-postadress saknas'),
+  email: z.string().min(1, 'E-postadress saknas').email('Felaktig e-postadress'),
   password: z.string().min(8, 'Lösenord saknas')
 })
 
 export const LoginForm = () => {
-  const { login } = useEmailLogin()
+  const { login, isPending } = useEmailLogin()
   const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -32,13 +33,11 @@ export const LoginForm = () => {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values)
     login(values.email, values.password)
   }
   return (
-    <div className="mx-auto grid w-[350px] gap-6">
+    <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Logga in</h1>
         <p className="text-balance text-muted-foreground">
@@ -56,13 +55,7 @@ export const LoginForm = () => {
                 <FormItem>
                   <FormLabel>E-post</FormLabel>
                   <FormControl>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      required
-                      {...field}
-                    />
+                    <Input id="email" type="email" placeholder="m@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,15 +70,15 @@ export const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Lösenord</FormLabel>
                   <FormControl>
-                    <Input id="password" type="password" required {...field} />
+                    <Input id="password" type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
+            <LoadingButton loading={isPending} className="w-full" type="submit">
               Logga in
-            </Button>
+            </LoadingButton>
           </form>
         </Form>
         <Button variant="outline" className="w-full">
@@ -97,7 +90,7 @@ export const LoginForm = () => {
         Har du inget konto?{' '}
         <span
           onClick={() => navigate('/', { state: { showSignUp: true } })}
-          className="underline cursor-pointer"
+          className="cursor-pointer underline"
         >
           Skapa konto
         </span>

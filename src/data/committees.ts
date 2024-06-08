@@ -170,5 +170,6 @@ export const committees = [
 export const kårer = {
   Consensus: [...committeesConsensus, otherGroup],
   LinTek: [...committeesLinTek, otherGroup],
-  StuFF: [...committeesStuff, otherGroup]
+  StuFF: [...committeesStuff, otherGroup],
+  Övrigt: [otherGroup]
 }

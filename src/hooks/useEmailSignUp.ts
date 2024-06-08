@@ -42,6 +42,8 @@ export const useEmailSignUp = () => {
       }
     }
   }
+
+  // NOTE: causes weird behavior locally since I'm using strict mode - component is unmounted and mounted again
   /*  useEffect(() => {
     return () => {
       console.log('cleanup')
@@ -49,5 +51,5 @@ export const useEmailSignUp = () => {
     }
   }, []) */
 
-  return { error, isPending, signup }
+  return { isPending, signup }
 }

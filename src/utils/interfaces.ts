@@ -78,7 +78,7 @@ export type ConsensusCommitee =
 export type StuffCommitee =
   | 'FOUL'
   | 'SM'
-  | 'HRarkin'
+  | 'HRarkiet'
   | 'KoMPaSS'
   | 'Kognitivet'
   | 'FBI'
