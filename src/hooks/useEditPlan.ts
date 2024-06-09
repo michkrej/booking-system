@@ -1,72 +1,96 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { usePlanActions, useUser, useUserPlans } from '@/state/store'
+import { useHasPublicPlan, usePlanActions, usePlanYear, useUser } from '@/state/store'
 import { Plan } from '@/utils/interfaces'
 import { plansService } from '@/services'
+import { getErrorMessage } from '@/utils/error.util'
+import { toast } from 'sonner'
 
 export const useEditPlan = () => {
-  const userPlans = useUserPlans()
   const { user } = useUser()
   const [isPending, setIsPending] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const navigate = useNavigate()
-  const { userPlanDeleted, userPlanUpdated, userPlanCreated } = usePlanActions()
+  const { userPlanDeleted, userPlanUpdated, userPlanCreated, userPlanPublicToggled } =
+    usePlanActions()
+  const planYear = usePlanYear()
+  const hasPublicPlan = useHasPublicPlan()
 
-  const changePlanName = (plan: Plan) => {
+  const changePlanName = async (plan: Plan, name: string) => {
     setIsPending(true)
-    setError(null)
-    const label = window.prompt('Vad ska din planering byta namn till?')
-    if (!label) {
-      setError('Du måste ange ett namn')
-    } else {
-      plansService.updatePlanDetails(plan.id, { label }).then(() => {
-        userPlanUpdated({ label, id: plan.id })
+    const oldPlanName = plan.label
+    plansService
+      .updatePlanDetails(plan.id, { label: name })
+      .then((updatedPlan) => {
+        userPlanUpdated({ label: name, id: plan.id, updatedAt: updatedPlan?.updatedAt })
+        toast.success(`Planeringen '${oldPlanName}' bytte namn till '${name}'`)
       })
-    }
+      .catch((e) => {
+        const errorMessage = getErrorMessage(e)
+        toast.error(errorMessage)
+      })
     setIsPending(false)
   }
 
-  const deletePlan = async (id: string) => {
-    const planToDelete = userPlans.find((plan) => plan.id === id)
-    if (planToDelete && confirm(`Vill du verkligen radera '${planToDelete.label}'`)) {
-      plansService.deletePlan(id).then(() => {
-        userPlanDeleted(id)
+  const deletePlan = async (plan: Plan) => {
+    setIsPending(true)
+    plansService
+      .deletePlan(plan.id)
+      .then(() => {
+        toast.success(`Planeringen '${plan.label}' har raderats`)
+        userPlanDeleted(plan.id)
       })
-    }
+      .catch((e) => {
+        const errorMessage = getErrorMessage(e)
+        toast.error(errorMessage)
+      })
+    setIsPending(false)
   }
 
   const togglePublicPlan = (plan: Plan) => {
-    setError(null)
-    const hasPublicPlan = userPlans.some((plan) => plan.public)
     if (!plan.public && hasPublicPlan) {
-      setError('Du kan bara ha en publik planering åt gången')
+      toast.error('Du kan bara ha en publik planering åt gången')
     } else {
-      plansService.updatePlanDetails(plan.id, { public: !plan.public }).then(() => {
-        userPlanUpdated({ id: plan.id, public: !plan.public })
-      })
+      setIsPending(true)
+      plansService
+        .updatePlanDetails(plan.id, { public: !plan.public })
+        .then(() => {
+          toast.success(`Planeringen '${plan.label}' är nu ${!plan.public ? 'publik' : 'privat'}`)
+          userPlanPublicToggled(plan.id)
+        })
+        .catch((e) => {
+          const errorMessage = getErrorMessage(e)
+          toast.error(errorMessage)
+        })
+      setIsPending(false)
     }
   }
 
-  const createPlan = async (year: number) => {
-    setError(null)
+  const createPlan = async (name: string) => {
     setIsPending(true)
-    const name = window.prompt('Vad ska din ny planering heta?')
-    if (!name) {
-      setError('Du måste ange ett namn')
-    } else {
-      const newPlan = await plansService.createPlan({
+    plansService
+      .createPlan({
         label: name,
         userId: user.userId,
         public: false,
         committeeId: user.committeeId,
-        year: year,
+        year: planYear,
         events: []
       })
-      userPlanCreated(newPlan)
-      navigate(`/booking/${newPlan.id}/${year}`)
-    }
+      .then((newPlan) => {
+        userPlanCreated({
+          ...newPlan,
+          label: newPlan.label,
+          id: newPlan.id,
+          createdAt: newPlan.createdAt,
+          updatedAt: newPlan.updatedAt
+        })
+        toast.success('Planeringen skapades')
+        //navigate(`/booking/${newPlan.id}/${planYear}`)
+      })
+      .catch((e) => {
+        const errorMessage = getErrorMessage(e)
+        toast.error(errorMessage)
+      })
     setIsPending(false)
   }
 
-  return { changePlanName, togglePublicPlan, deletePlan, createPlan, isPending, error }
+  return { changePlanName, togglePublicPlan, deletePlan, createPlan, isPending }
 }

@@ -1,13 +1,10 @@
 import { useEffect } from 'react'
-
-import { locale, loadMessages } from 'devextreme/localization'
-
-import Router from './Router'
-import { color } from './CONSTANTS'
-
-import seMessages from 'devextreme/localization/messages/sv.json'
-import 'devextreme/dist/css/dx.light.css'
 import { Toaster } from 'sonner'
+import { locale, loadMessages } from 'devextreme/localization'
+import seMessages from 'devextreme/localization/messages/sv.json'
+
+import { TooltipProvider } from '@/components/ui/tooltip'
+import Router from './Router'
 
 function App() {
   useEffect(() => {
@@ -16,12 +13,13 @@ function App() {
   }, [])
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <main>
-        <Router />
-        <Toaster />
-      </main>
-      {/* <Footer /> */}
+    <div className="flex min-h-screen flex-col">
+      <TooltipProvider>
+        <main>
+          <Router />
+          <Toaster />
+        </main>
+      </TooltipProvider>
     </div>
   )
 }

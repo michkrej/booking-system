@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import { authService } from '@/services'
-import { useUserUpdated } from '@/state/store'
+import { usePlanActions, useUserUpdated } from '@/state/store'
 import { getErrorMessage } from '@/utils/error.util'
 
 export const useSignOut = () => {
@@ -9,6 +9,7 @@ export const useSignOut = () => {
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { userUpdated } = useUserUpdated()
+  const { userPlansLoaded, publicPlansLoaded } = usePlanActions()
 
   const logout = async () => {
     setError(null)
@@ -16,6 +17,8 @@ export const useSignOut = () => {
     try {
       await authService.signOut()
       userUpdated(null)
+      userPlansLoaded([])
+      publicPlansLoaded([])
 
       if (!isCancelled) {
         setIsPending(false)

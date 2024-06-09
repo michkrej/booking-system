@@ -34,7 +34,9 @@ export const useUserUpdated = () => {
 }
 
 export const useHasUser = () => {
-  return useBoundStore((state) => state.user !== null)
+  const user = useBoundStore((state) => state.user)
+
+  return user !== null
 }
 
 export const usePlanEditLock = () => {
@@ -57,12 +59,29 @@ export const usePlanActions = () => {
   const userPlanDeleted = useBoundStore((state) => state.userPlanDeleted)
   const userPlanUpdated = useBoundStore((state) => state.userPlanUpdated)
   const userPlanCreated = useBoundStore((state) => state.userPlanCreated)
+  const userPlanPublicToggled = useBoundStore((state) => state.planPublicToggled)
 
   return {
     userPlansLoaded,
     publicPlansLoaded,
     userPlanDeleted,
     userPlanUpdated,
-    userPlanCreated
+    userPlanCreated,
+    userPlanPublicToggled
   }
+}
+
+export const usePlanYear = () => {
+  return useBoundStore((state) => state.planYear)
+}
+
+export const usePlanYearActions = () => {
+  const incrementPlanYear = useBoundStore((state) => state.incrementPlanYear)
+  const decrementPlanYear = useBoundStore((state) => state.decrementPlanYear)
+
+  return { incrementPlanYear, decrementPlanYear }
+}
+
+export const useHasPublicPlan = () => {
+  return useBoundStore((state) => state.hasPublicPlan)
 }

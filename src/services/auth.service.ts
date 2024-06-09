@@ -5,7 +5,7 @@ import {
   updateProfile,
   sendPasswordResetEmail
 } from 'firebase/auth'
-import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import { auth, db } from './config'
 import { getErrorMessage } from '@/utils/error.util'
 import { User } from '@/utils/interfaces'
@@ -24,7 +24,7 @@ const signUpWithEmailAndPassword = async (
       email,
       userId: user.uid,
       admin: false,
-      createdAt: serverTimestamp()
+      createdAt: new Date()
     }
     await updateProfile(user, { displayName })
     await addDoc(collection(db, 'userDetails'), userDetailsDoc)

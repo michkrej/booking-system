@@ -1,17 +1,29 @@
-import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { LoginForm } from '@/components/organisms/loginForm'
 import { NollePCarousel } from '@/components/organisms/nollePCarousel'
 import { SignUpForm } from '@/components/organisms/signUpForm'
 import { SiteLogo } from '@/components/atoms/siteLogo'
 import { SiteFooter } from '@/components/molecules/siteFooter'
+import { useHasUser } from '@/state'
 
 export function LoginPage() {
   const { state } = useLocation()
+  const navigate = useNavigate()
+  const hasUser = useHasUser()
+
+  console.log('LoginPage', hasUser)
+
+  useEffect(() => {
+    if (hasUser) {
+      navigate('/dashboard')
+    }
+  }, [hasUser])
 
   return (
     <>
-      <div className="w-full md:grid lg:min-h-screen lg:grid-cols-2">
+      <div className="relative w-full md:grid lg:min-h-screen lg:grid-cols-2">
         <div className="fixed top-0">
           <SiteLogo />
         </div>

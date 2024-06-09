@@ -1,9 +1,22 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import { NollePCarousel } from '@/components/organisms/nollePCarousel'
 import { SiteLogo } from '@/components/atoms/siteLogo'
 import { SiteFooter } from '@/components/molecules/siteFooter'
 import { ForgotPasswordForm } from '@/components/organisms/forgotPasswordForm'
+import { useHasUser } from '@/state'
 
 export function ForgotPasswordPage() {
+  const navigate = useNavigate()
+  const hasUser = useHasUser()
+
+  useEffect(() => {
+    if (hasUser) {
+      navigate('/dashboard')
+    }
+  }, [hasUser])
+
   return (
     <>
       <div className="w-full md:grid lg:min-h-screen lg:grid-cols-2">

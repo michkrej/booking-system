@@ -1,14 +1,10 @@
 import { Suspense, lazy } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom'
 
-import RequireAuth from './components/RequireAuth'
 import { LoginPage } from './pages/login.page'
 import { ForgotPasswordPage } from './pages/forgotPassword.page'
-import { useHasUser, useUser } from './state/store'
-
-/* const Overview = lazy(() => import('./pages/Overview'))
-const CalendarView = lazy(() => import('./pages/Calendar'))
-const ForgotPassword = lazy(() => import('./pages/ForgotPassword')) */
+import { DashboardPage } from './pages/dashboard.page'
+import { useHasUser } from './state/store'
 
 const Fallback = () => {
   return (
@@ -20,6 +16,21 @@ const Fallback = () => {
   )
 }
 
+const RequireAuth = () => {
+  const hasUser = useHasUser()
+  const location = useLocation()
+
+  if (!hasUser) {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page. Not that it matters much in this case.
+    return <Navigate to="/" state={{ from: location }} />
+  }
+
+  return <Outlet />
+}
+
 const Router = () => {
   const hasUser = useHasUser()
 
@@ -29,6 +40,9 @@ const Router = () => {
         <Routes>
           <Route exact path="/" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
           {/*<Route exact path="/resetPassword" element={<ForgotPassword />} />
           <Route element={<RequireAuth />}>
             <Route exact path="/booking/:id/:year" element={<CalendarView />} />

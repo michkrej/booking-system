@@ -23,8 +23,8 @@ export interface EditablePlanDetails {
 }
 
 export interface DBPlan extends EditablePlanDetails {
-  createdAt: FieldValue
-  updatedAt: FieldValue
+  createdAt: Date
+  updatedAt: Date
   userId: string
   year: number
   events: PlanEvent[]

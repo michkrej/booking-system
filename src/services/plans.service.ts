@@ -5,8 +5,12 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  limit,
+  limitToLast,
+  orderBy,
   query,
   serverTimestamp,
+  Timestamp,
   updateDoc,
   where
 } from 'firebase/firestore'
@@ -21,8 +25,8 @@ const createPlan = async (plan: CreatePlanParams) => {
   try {
     const newPlanDoc = {
       ...plan,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
     const planRef = await addDoc(collection(db, 'plans'), newPlanDoc)
     return {
@@ -45,15 +49,35 @@ export const deletePlan = async (planId: string) => {
 
 export const getAllPlans = async (user: User, year: number) => {
   try {
+    console.log('Fetching all plans')
     const ref = collection(db, 'plans')
     const [snapshotPersonal, snapshotPublic] = await Promise.all([
-      getDocs(query(ref, where('userId', '==', user.userId), where('year', '==', year))),
-      getDocs(query(ref, where('public', '==', true), where('year', '==', year)))
+      getDocs(
+        query(
+          ref,
+          where('userId', '==', user.userId),
+          where('year', '==', year),
+          orderBy('updatedAt', 'desc')
+          //limit(6)
+        )
+      ),
+      getDocs(
+        query(
+          ref,
+          where('public', '==', true),
+          where('year', '==', year),
+          orderBy('updatedAt', 'desc')
+        )
+      )
     ])
     const userPlans = snapshotPersonal.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Plan[]
     const publicPlans = snapshotPublic.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Plan[]
     return {
-      userPlans,
+      userPlans: userPlans.map((plan) => {
+        return {
+          ...plan
+        }
+      }),
       publicPlans
     }
   } catch (e) {
@@ -68,6 +92,7 @@ export const getUserPlans = async (user: User, year: number) => {
       query(collection(db, 'plans'), where('userId', '==', user.userId), where('year', '==', year))
     )
     const plans = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Plan[]
+    console.log(plans)
     return plans
   } catch (e) {
     console.log(getErrorMessage(e))
@@ -76,13 +101,19 @@ export const getUserPlans = async (user: User, year: number) => {
 }
 
 const updatePlanDetails = async (id: string, newValues: Partial<EditablePlanDetails>) => {
+  const now = new Date()
   try {
     await updateDoc(doc(db, 'plans', id), {
       ...newValues,
-      updatedAt: serverTimestamp()
+      updatedAt: now
     })
+    return {
+      ...newValues,
+      updatedAt: now
+    }
   } catch (e) {
     console.log(getErrorMessage(e))
+    throw e
   }
 }
 
@@ -127,7 +158,7 @@ const updatePlanEvent = async (plan: Plan, event: Partial<PlanEvent>) => {
   try {
     await updateDoc(doc(db, 'plans', planId), {
       events: newEvents,
-      updatedAt: serverTimestamp()
+      updatedAt: new Date()
     })
     return updatedEvent
   } catch (e) {
@@ -141,7 +172,7 @@ const deletePlanEvent = async (plan: Plan, eventId: string) => {
     const newEvents = plan.events.filter((event) => event.id !== eventId)
     await updateDoc(doc(db, 'plans', plan.id), {
       events: newEvents,
-      updatedAt: serverTimestamp()
+      updatedAt: new Date()
     })
   } catch (e) {
     console.log(getErrorMessage(e))

@@ -3,6 +3,7 @@ import { StrictMode } from 'react'
 
 import App from './App'
 
+import 'devextreme/dist/css/dx.light.css'
 import '@fontsource-variable/inter'
 import './global.css'
 
