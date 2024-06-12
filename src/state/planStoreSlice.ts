@@ -64,7 +64,7 @@ const createPlanStoreSlice: StateCreator<
     set({ userPlans: plans })
   },
   userPlanCreated: (plan) => {
-    set({ userPlans: [...get().userPlans, plan] })
+    set({ userPlans: [plan, ...get().userPlans] })
   },
   incrementPlanYear: () =>
     set((state) => {

@@ -1,22 +1,18 @@
-import { Globe, GlobeLock } from 'lucide-react'
-
-import { useEditPlan, useGetPlans } from '@/hooks'
+import { useGetPlans } from '@/hooks'
 import { formatDate } from '@/lib/utils'
 import { useUserPlans } from '@/state'
 import { PlanChangeNameButton } from '../molecules/planChangeNameButton'
 import { PlanDeleteButton } from '../molecules/planDeleteButton'
+import { PlanTogglePublicButton } from '../molecules/planTogglePublicButton'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Separator } from '../ui/separator'
 import { Skeleton } from '../ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { PlanTogglePublicButton } from '../molecules/planTogglePublicButton'
 
 const loadingTableEntries = Array.from({ length: 4 }, (_, i) => i)
 
 export const UserPlansListCard = () => {
   const userPlans = useUserPlans()
-  const { togglePublicPlan } = useEditPlan()
   const { isPending } = useGetPlans()
 
   return (
@@ -29,6 +25,7 @@ export const UserPlansListCard = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Namn</TableHead>
+              <TableHead>Antal bokningar</TableHead>
               <TableHead>Skapad</TableHead>
               <TableHead>Uppdaterad</TableHead>
               <TableHead />
@@ -42,6 +39,7 @@ export const UserPlansListCard = () => {
                   return (
                     <TableRow key={plan.id}>
                       <TableCell>{plan.label}</TableCell>
+                      <TableCell>{plan.events.length}</TableCell>
                       <TableCell>{createdAt}</TableCell>
                       <TableCell>{updatedAt}</TableCell>
                       <TableCell className="flex items-center justify-end gap-4">

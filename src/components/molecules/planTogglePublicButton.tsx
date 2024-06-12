@@ -16,8 +16,13 @@ export const PlanTogglePublicButton = ({ plan }: PlanTogglePublicButtonProps) =>
           className="text-sn rounded-full p-1 text-primary/60 transition-colors hover:bg-primary/30 hover:text-primary/100"
           onClick={() => togglePublicPlan(plan)}
         >
-          {isPending ? <Loader className="animate-spin" /> : null}
-          {plan.public && !isPending ? <GlobeLock /> : <Globe />}
+          {isPending ? (
+            <Loader className="animate-spin" />
+          ) : plan.public ? (
+            <GlobeLock />
+          ) : (
+            <Globe />
+          )}
         </div>
       </TooltipTrigger>
       <TooltipContent>Gör planering {`${plan.public ? 'privat' : 'publik'}`}</TooltipContent>

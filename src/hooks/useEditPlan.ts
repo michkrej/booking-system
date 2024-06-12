@@ -21,12 +21,13 @@ export const useEditPlan = () => {
       .then((updatedPlan) => {
         userPlanUpdated({ label: name, id: plan.id, updatedAt: updatedPlan?.updatedAt })
         toast.success(`Planeringen '${oldPlanName}' bytte namn till '${name}'`)
+        setIsPending(false)
       })
       .catch((e) => {
         const errorMessage = getErrorMessage(e)
         toast.error(errorMessage)
+        setIsPending(false)
       })
-    setIsPending(false)
   }
 
   const deletePlan = async (plan: Plan) => {
@@ -36,12 +37,13 @@ export const useEditPlan = () => {
       .then(() => {
         toast.success(`Planeringen '${plan.label}' har raderats`)
         userPlanDeleted(plan.id)
+        setIsPending(false)
       })
       .catch((e) => {
         const errorMessage = getErrorMessage(e)
         toast.error(errorMessage)
+        setIsPending(false)
       })
-    setIsPending(false)
   }
 
   const togglePublicPlan = (plan: Plan) => {
@@ -54,12 +56,13 @@ export const useEditPlan = () => {
         .then(() => {
           toast.success(`Planeringen '${plan.label}' är nu ${!plan.public ? 'publik' : 'privat'}`)
           userPlanPublicToggled(plan.id)
+          setIsPending(false)
         })
         .catch((e) => {
           const errorMessage = getErrorMessage(e)
           toast.error(errorMessage)
+          setIsPending(false)
         })
-      setIsPending(false)
     }
   }
 
@@ -83,13 +86,14 @@ export const useEditPlan = () => {
           updatedAt: newPlan.updatedAt
         })
         toast.success('Planeringen skapades')
+        setIsPending(false)
         //navigate(`/booking/${newPlan.id}/${planYear}`)
       })
       .catch((e) => {
         const errorMessage = getErrorMessage(e)
         toast.error(errorMessage)
+        setIsPending(false)
       })
-    setIsPending(false)
   }
 
   return { changePlanName, togglePublicPlan, deletePlan, createPlan, isPending }

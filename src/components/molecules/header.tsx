@@ -20,21 +20,21 @@ export const Header = () => {
         <Link to="/dashboard">
           <SiteLogo />
         </Link>
-        <div className="h-10 border-r" />
+        <div className="h-8 border-r" />
         <Link to="#" className="text-foreground transition-colors hover:text-foreground">
           Dashboard
         </Link>
         <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Orders
+          Krockar
         </Link>
         <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Products
+          Publika planeringar
         </Link>
         <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Customers
+          Karta TF
         </Link>
         <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Analytics
+          Admin
         </Link>
       </nav>
       <div className="flex items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
@@ -46,11 +46,12 @@ export const Header = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>Mitt konto</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            {/* TODO - implementera Settings sidan, man ska kunna byta namn, ändra lösenord mm */}
+            <DropdownMenuItem>Inställningar</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>Logga ut</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
