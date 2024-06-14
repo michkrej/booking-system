@@ -11,12 +11,19 @@ import {
 import { Button } from '../ui/button'
 import { SiteLogo } from '../atoms/siteLogo'
 import { useSignOut } from '@/hooks'
+import { usePlanYear, useUser } from '@/state'
+import { siteConfig } from '@/config/site'
 
 export const Header = () => {
   const { logout } = useSignOut()
+  const planYear = usePlanYear()
+  const { user } = useUser()
+
+  const TF_URL = planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023
+
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-      <nav className="flex flex-row items-center gap-4 text-sm font-medium md:gap-5 lg:gap-6">
+      <nav className="flex flex-1 flex-row items-center gap-4 text-sm font-medium md:gap-5 lg:gap-6">
         <Link to="/dashboard">
           <SiteLogo />
         </Link>
@@ -24,19 +31,37 @@ export const Header = () => {
         <Link to="#" className="text-foreground transition-colors hover:text-foreground">
           Dashboard
         </Link>
-        <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Krockar
-        </Link>
-        <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Publika planeringar
-        </Link>
-        <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Karta TF
-        </Link>
-        <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
-          Admin
-        </Link>
+        <a
+          href={TF_URL}
+          className="text-muted-foreground transition-colors hover:text-foreground"
+          target="_blank"
+        >
+          Karta Trädgårdsföreningen
+        </a>
+
+        {user.admin && (
+          <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
+            Admin
+          </Link>
+        )}
+        <div className="ml-auto flex flex-row items-center gap-4 md:gap-5 lg:gap-6">
+          <a
+            href={siteConfig.links.instructionVideo}
+            className="text-muted-foreground transition-colors hover:text-foreground"
+            target="_blank"
+          >
+            Instruktionsvideo
+          </a>
+          <a
+            href={siteConfig.links.feedback}
+            className="text-muted-foreground transition-colors hover:text-foreground"
+            target="_blank"
+          >
+            Feedback
+          </a>
+        </div>
       </nav>
+
       <div className="flex items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
