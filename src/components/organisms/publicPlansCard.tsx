@@ -15,6 +15,7 @@ import { formatDate, getCommittee } from '@/lib/utils'
 import { usePublicPlans, useUser } from '@/state'
 import { Kår, Plan } from '@/utils/interfaces'
 import { Button } from '../ui/button'
+import { ExportPlansButton } from '../molecules/exportPlansButton'
 
 type TabCommitteeSectionProps = {
   kår: Kår
@@ -93,10 +94,7 @@ export const PublicPlansCard = () => {
           <TabsTrigger value="stuff">StuFF</TabsTrigger>
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-            <File className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only">Export</span>
-          </Button>
+          <ExportPlansButton />
         </div>
       </div>
       {/* SECTION - all */}

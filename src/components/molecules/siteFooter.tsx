@@ -4,7 +4,7 @@ import { IntroductionPopover } from '../organisms/introductionPopover'
 export function SiteFooter() {
   return (
     <footer className="w-full p-1 md:px-2">
-      <div className="flex flex-row items-center gap-4 md:h-12 md:flex-row">
+      <div className="flex flex-row items-center gap-3 md:h-12 md:flex-row">
         <IntroductionPopover />
         <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
           Byggt av{' '}

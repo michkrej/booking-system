@@ -22,7 +22,7 @@ export function LoginPage() {
   }, [hasUser])
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40 md:overflow-y-hidden lg:grid lg:grid-cols-2">
+    <div className="flex min-h-screen w-full flex-col md:overflow-y-hidden lg:grid lg:grid-cols-2">
       <div className="fixed top-0 m-2">
         <SiteLogo />
       </div>

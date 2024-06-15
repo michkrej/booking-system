@@ -21,10 +21,22 @@ export const PlanChangeYearCard = () => {
       <CardFooter className="flex justify-end gap-4">
         <div className="text-xs text-muted-foreground">Byt år:</div>
         <div>
-          <Button variant="outline" size="sm" disabled={isMinYear} onClick={decrementPlanYear}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-sm"
+            disabled={isMinYear}
+            onClick={decrementPlanYear}
+          >
             <ChevronLeft />
           </Button>
-          <Button variant="outline" size="sm" disabled={isMaxYear} onClick={incrementPlanYear}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-sm"
+            disabled={isMaxYear}
+            onClick={incrementPlanYear}
+          >
             <ChevronRight />
           </Button>
         </div>
