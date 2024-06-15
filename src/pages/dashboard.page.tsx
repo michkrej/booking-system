@@ -97,7 +97,7 @@ export function DashboardPage() {
             <FindCollisionsCard />
           </div>
         </div>
-        {/* <PublicPlansCard /> */}
+        <PublicPlansCard />
       </main>
       <SiteFooter />
     </div>

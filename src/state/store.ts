@@ -79,6 +79,17 @@ export const usePublicGroupedPlans = () => {
   return groupedPlans
 }
 
+export const useNonUserPublicPlans = () => {
+  const publicPlans = useBoundStore((state) => state.publicPlans) ?? []
+  const user = useBoundStore((state) => state.user)
+
+  if (!user) {
+    return []
+  }
+
+  return publicPlans.filter((plan) => plan.userId !== user.userId)
+}
+
 export const usePlanActions = () => {
   const userPlansLoaded = useBoundStore((state) => state.userPlansLoaded)
   const publicPlansLoaded = useBoundStore((state) => state.publicPlansLoaded)

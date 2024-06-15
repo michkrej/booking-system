@@ -10,7 +10,13 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { useCollisionsExist, usePublicGroupedPlans, usePublicPlans, useUserPlans } from '@/state'
+import {
+  useCollisionsExist,
+  useNonUserPublicPlans,
+  usePublicGroupedPlans,
+  usePublicPlans,
+  useUserPlans
+} from '@/state'
 import { formatDate, getCommittee } from '@/lib/utils'
 import {
   Table,
@@ -24,7 +30,7 @@ import { findCollisionsBetweenPlans } from '@/utils/collisionHandling'
 import { useMemo, useState } from 'react'
 
 export const FindCollisionsCard = () => {
-  const publicPlans = usePublicPlans()
+  const publicPlans = useNonUserPublicPlans()
   const userPlans = useUserPlans()
   const { collisionsExist } = useCollisionsExist()
   const [selectedUserPlan, setSelectedUserPlan] = useState<Plan>()
@@ -36,20 +42,23 @@ export const FindCollisionsCard = () => {
           <CardTitle>Hitta krockar</CardTitle>
           <CardDescription>Hitta krockar mellan fadderiers bokningar</CardDescription>
         </div>
-        <Select
-          onValueChange={(val) => setSelectedUserPlan(userPlans.find((plan) => plan.id === val))}
-        >
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Välj planering..." />
-          </SelectTrigger>
-          <SelectContent>
-            {userPlans.map((plan) => (
-              <SelectItem key={plan.id} value={plan.id}>
-                {plan.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex space-x-2">
+          <Select
+            onValueChange={(val) => setSelectedUserPlan(userPlans.find((plan) => plan.id === val))}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Välj planering..." />
+            </SelectTrigger>
+            <SelectContent>
+              {userPlans.map((plan) => (
+                <SelectItem key={plan.id} value={plan.id}>
+                  {plan.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button>Hitta</Button>
+        </div>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-6">
         <CollisionsTable publicPlans={publicPlans} userPlan={selectedUserPlan} />
