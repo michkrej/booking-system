@@ -1,15 +1,6 @@
 import { useEffect, useMemo } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { Progress } from '@/components/ui/progress'
 import { Header } from '@/components/molecules/header'
@@ -21,11 +12,6 @@ import { UserPlansListCard } from '@/components/organisms/userPlansListCard'
 import { usePlanYear, useUser } from '@/state'
 import { PlanChangeYearCard } from '@/components/organisms/planChangeYearCard'
 import { getCommittee } from '@/lib/utils'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { Kår } from '@/utils/interfaces'
-import { kårCommittees } from '@/utils/helpers'
 import { FindCollisionsCard } from '@/components/organisms/findCollisionsCard'
 
 const NOLLE_P_START = new Date('2024-08-20')

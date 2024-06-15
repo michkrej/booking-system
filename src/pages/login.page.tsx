@@ -22,25 +22,24 @@ export function LoginPage() {
   }, [hasUser])
 
   return (
-    <>
-      <div className="relative w-full md:grid lg:min-h-screen lg:grid-cols-2">
-        <div className="fixed top-0">
-          <SiteLogo />
-        </div>
-        <div className="relative mt-20 flex items-center justify-center lg:mt-0">
-          {!state?.showSignUp ? <LoginForm /> : <SignUpForm />}
-          <div className="absolute bottom-0 hidden w-full justify-center lg:flex">
-            <SiteFooter />
-          </div>
-        </div>
-
-        <div className="relative hidden h-full w-full lg:block">
-          <NollePCarousel />
+    <div className="flex min-h-screen w-full flex-col bg-muted/40 md:overflow-y-hidden lg:grid lg:grid-cols-2">
+      <div className="fixed top-0 m-2">
+        <SiteLogo />
+      </div>
+      <div className="relative mt-20 flex items-center justify-center lg:mt-0">
+        {!state?.showSignUp ? <LoginForm /> : <SignUpForm />}
+        <div className="absolute bottom-0 hidden w-full justify-center lg:flex">
+          <SiteFooter />
         </div>
       </div>
-      <div className="fixed bottom-0 mt-10 lg:hidden">
+
+      <div className="relative hidden h-full w-full lg:block">
+        <NollePCarousel />
+      </div>
+
+      <div className="mt-auto lg:hidden">
         <SiteFooter />
       </div>
-    </>
+    </div>
   )
 }

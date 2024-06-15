@@ -45,13 +45,13 @@ export const Header = () => {
           </Link>
         )}
         <div className="ml-auto flex flex-row items-center gap-4 md:gap-5 lg:gap-6">
-          <a
+          {/*  <a
             href={siteConfig.links.instructionVideo}
             className="text-muted-foreground transition-colors hover:text-foreground"
             target="_blank"
           >
             Instruktionsvideo
-          </a>
+          </a> */}
           <a
             href={siteConfig.links.feedback}
             className="text-muted-foreground transition-colors hover:text-foreground"

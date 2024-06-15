@@ -5,6 +5,7 @@ export const siteConfig = {
   description:
     'Planera bokning av diverse lokaler och utrustning inför mottagningen på Linköpings Universitet. Systemet hittar automaiskt krockar mellan fadderiers bokningar för att underlätta planeringen.',
   links: {
+    linkedin: 'www.linkedin.com/in/michelle-krejci',
     github: 'https://github.com/michkrej/booking-system',
     portfolio: 'https://michalkrejci.com',
     instructionVideo: 'https://youtu.be/9RDlhOWRlGY',

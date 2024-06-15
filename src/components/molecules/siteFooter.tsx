@@ -1,13 +1,15 @@
 import { siteConfig } from '@/config/site'
+import { IntroductionPopover } from '../organisms/introductionPopover'
 
 export function SiteFooter() {
   return (
-    <footer className="bottom-0 w-full md:px-6">
-      <div className="flex flex-col items-center justify-between gap-4 md:h-12 md:flex-row">
+    <footer className="w-full p-1 md:px-2">
+      <div className="flex flex-row items-center gap-4 md:h-12 md:flex-row">
+        <IntroductionPopover />
         <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
           Byggt av{' '}
           <a
-            href={siteConfig.links.portfolio}
+            href={siteConfig.links.linkedin}
             target="_blank"
             rel="noreferrer"
             className="font-medium underline underline-offset-4"
