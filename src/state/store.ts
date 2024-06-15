@@ -4,7 +4,6 @@ import type {} from '@redux-devtools/extension' // required for devtools typing
 
 import { createUserStoreSlice, UserStoreSlice } from './userStoreSlice'
 import { createPlanStoreSlice, PlanStoreSlice } from './planStoreSlice'
-import { kårCommittees } from '@/utils/helpers'
 import { getCommittee } from '@/lib/utils'
 import { Plan } from '@/utils/interfaces'
 

@@ -67,13 +67,13 @@ export const exportPlan = async (plans) => {
   return [header, ...cvsConversion]
 }
 
-export const kårCommittees = (kår: Kår) => {
-  return kårer[kår] || kårer.LinTek
+export const getCommitteesForKår = (kår: Kår) => {
+  return kårer[kår]
 }
 
 export const defaultCampus = (committeeId: string) => {
-  if (committeesConsensus.find((com) => com.id === committeeId)) return campuses[1]
-  return campuses[0]
+  if (Object.keys(committeesConsensus).includes(committeeId)) return campuses.US
+  return campuses.Valla
 }
 
 export const formatCollisions = (collisions: PlanEvent[]) => {

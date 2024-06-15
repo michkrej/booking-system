@@ -13,7 +13,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { kårer } from '@/data/committees'
-import { kårCommittees, sortAlphabetically } from '@/utils/helpers'
+import { getCommitteesForKår, sortAlphabetically } from '@/utils/helpers'
 
 import {
   Form,
@@ -64,7 +64,7 @@ export const SignUpForm = () => {
   }
 
   const kårIsOther = form.watch('kår') === 'Övrigt'
-  const kårisEmpty = form.watch('kår') === ''
+  const kårIsEmpty = form.watch('kår') === ''
 
   return (
     <div className="mx-auto grid w-[300px] gap-6 md:w-[450px]">
@@ -85,7 +85,7 @@ export const SignUpForm = () => {
                 <FormItem className="md:col-span-2">
                   <FormLabel>Förnamn</FormLabel>
                   <FormControl>
-                    <Input id="username" placeholder="Namn" {...field} />
+                    <Input id="username" placeholder="Namn" autoComplete="username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -99,7 +99,13 @@ export const SignUpForm = () => {
                 <FormItem className="md:col-span-2">
                   <FormLabel>E-post</FormLabel>
                   <FormControl>
-                    <Input id="email" type="email" placeholder="m@example.com" {...field} />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      autoComplete="email"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>Tips: använd din fadderimejl</FormDescription>
                   <FormMessage />
@@ -114,7 +120,7 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Lösenord</FormLabel>
                   <FormControl>
-                    <Input id="password" type="password" {...field} />
+                    <Input id="password" type="password" autoComplete="new-password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -128,7 +134,12 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Bekräfta lösenord</FormLabel>
                   <FormControl>
-                    <Input id="passwordControl" type="password" {...field} />
+                    <Input
+                      id="passwordControl"
+                      type="password"
+                      autoComplete="new-password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,7 +157,10 @@ export const SignUpForm = () => {
                       console.log(val)
                       field.onChange(val)
                       if (val === 'Övrigt') {
-                        form.setValue('fadderi', kårer.Övrigt[0].id)
+                        form.setValue(
+                          'fadderi',
+                          kårer.Övrigt['a16c78ef-6f00-492c-926e-bf1bfe9fce32'].id
+                        )
                       } else {
                         form.setValue('fadderi', '')
                       }
@@ -176,32 +190,33 @@ export const SignUpForm = () => {
             <FormField
               control={form.control}
               name="fadderi"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Fadderi</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    disabled={kårIsOther || kårisEmpty}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={'Fadderi'} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {sortAlphabetically(kårCommittees(form.getValues().kår as Kår)).map(
-                        (assignee) => (
+              render={({ field }) => {
+                const committees = getCommitteesForKår(form.getValues().kår as Kår) || {}
+                return (
+                  <FormItem>
+                    <FormLabel>Fadderi</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={kårIsOther || kårIsEmpty}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={'Fadderi'} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {sortAlphabetically(Object.values(committees)).map((assignee) => (
                           <SelectItem key={assignee.text} value={assignee.id}>
                             {assignee.text}
                           </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
             />
 
             {/* Submit Button */}

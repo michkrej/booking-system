@@ -25,7 +25,11 @@ const US_CAMPUS = {
   label: 'US',
   value: 1
 } as const
-export const campuses = [VALLA_CAMPUS, US_CAMPUS]
+
+export const campuses = {
+  [VALLA_CAMPUS.label]: VALLA_CAMPUS,
+  [US_CAMPUS.label]: US_CAMPUS
+}
 
 type CampusName = typeof VALLA_CAMPUS.label | typeof US_CAMPUS.label
 
