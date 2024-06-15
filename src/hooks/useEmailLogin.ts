@@ -29,6 +29,8 @@ export const useEmailLogin = () => {
         setIsPending(false)
         toast.error(errorMessage)
       }
+    } finally {
+      setIsPending(false)
     }
   }
 

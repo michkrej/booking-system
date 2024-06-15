@@ -19,6 +19,7 @@ import { LoadingButton } from './loadingButton'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import { Button } from '../ui/button'
 
 const formSchema = z.object({
   newPlanName: z.string().min(1, 'Du måste ange ett nytt namn för planeringen')
@@ -51,7 +52,7 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
     <Dialog open={open} onOpenChange={() => setOpen((prev) => !prev)}>
       <DialogTrigger>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <div className="text-sn rounded-full p-1 text-primary/60 transition-colors hover:bg-primary/30 hover:text-primary/100">
               <Pencil />
             </div>

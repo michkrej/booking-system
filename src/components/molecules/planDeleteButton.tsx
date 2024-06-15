@@ -30,7 +30,7 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
     <Dialog>
       <DialogTrigger>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <div className="text-sn rounded-full p-1 text-primary/60 transition-colors hover:bg-primary/30 hover:text-primary/100">
               <Trash />
             </div>

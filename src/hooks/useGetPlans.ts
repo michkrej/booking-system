@@ -28,5 +28,20 @@ export const useGetPlans = () => {
     setIsPending(false)
   }
 
-  return { isPending, getUserPlans, getPublicAndUserPlans }
+  const getPublicPlans = (year: number) => {
+    setIsPending(true)
+    plansService
+      .getPublicPlans(user, year)
+      .then((plans) => {
+        publicPlansLoaded(plans)
+      })
+      .catch((e) => {
+        // do something
+      })
+      .finally(() => {
+        setIsPending(false)
+      })
+  }
+
+  return { isPending, getUserPlans, getPublicAndUserPlans, getPublicPlans }
 }

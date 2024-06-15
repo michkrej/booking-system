@@ -55,7 +55,13 @@ export const LoginForm = () => {
                 <FormItem>
                   <FormLabel>E-post</FormLabel>
                   <FormControl>
-                    <Input id="email" type="email" placeholder="m@example.com" {...field} />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      autoComplete="email"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -70,12 +76,21 @@ export const LoginForm = () => {
                 <FormItem>
                   <div className="flex items-center">
                     <FormLabel htmlFor="password">Lösenord</FormLabel>
-                    <Link to="/forgot-password" className="ml-auto inline-block text-sm underline">
+                    <Link
+                      to="/forgot-password"
+                      className="ml-auto inline-block text-sm underline"
+                      tabIndex={-1}
+                    >
                       Glömt ditt lösenord?
                     </Link>
                   </div>
                   <FormControl>
-                    <Input id="password" type="password" {...field} />
+                    <Input
+                      id="password"
+                      type="password"
+                      autoComplete="current-password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

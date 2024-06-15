@@ -21,19 +21,50 @@ import { UserPlansListCard } from '@/components/organisms/userPlansListCard'
 import { usePlanYear, useUser } from '@/state'
 import { PlanChangeYearCard } from '@/components/organisms/planChangeYearCard'
 import { getCommittee } from '@/lib/utils'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+import { Kår } from '@/utils/interfaces'
+import { kårCommittees } from '@/utils/helpers'
+import { FindCollisionsCard } from '@/components/organisms/findCollisionsCard'
+
+const NOLLE_P_START = new Date('2024-08-20')
+const PREV_NOLLE_P_END = new Date('2023-8-31')
+
+const getWeeksLeftToNolleP = () => {
+  const now = new Date()
+  const diff = NOLLE_P_START.getTime() - now.getTime()
+  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7))
+  return weeks
+}
+
+const getTotalWeeksToNolleP = () => {
+  const diff = NOLLE_P_START.getTime() - PREV_NOLLE_P_END.getTime()
+  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7))
+  return weeks
+}
+
+const getPercentageProgress = () => {
+  const weeksToNolleP = getWeeksLeftToNolleP()
+  const totalWeeksToNolleP = getTotalWeeksToNolleP()
+  const progress = Math.round(((totalWeeksToNolleP - weeksToNolleP) / totalWeeksToNolleP) * 100)
+  return progress
+}
 
 export function DashboardPage() {
   const { user } = useUser()
   const planYear = usePlanYear()
-  const { getPublicAndUserPlans } = useGetPlans()
+  const { getUserPlans, getPublicPlans, getPublicAndUserPlans } = useGetPlans()
 
   useEffect(() => {
     getPublicAndUserPlans(planYear)
   }, [planYear])
 
   const committee = useMemo(() => getCommittee(user.committeeId), [user.committeeId])
-
   const bgColor = committee?.color ? `bg-[${committee.color}]` : 'bg-primary'
+
+  const weeksToNolleP = getWeeksLeftToNolleP()
+  const progress = getPercentageProgress()
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -42,7 +73,7 @@ export function DashboardPage() {
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
             <CreateNewPlanCard />
-            <Card>
+            {/*           <Card>
               <CardHeader>
                 <CardDescription>{user.displayName}</CardDescription>
                 <CardTitle className="text-4xl">{committee?.text}</CardTitle>
@@ -51,21 +82,22 @@ export function DashboardPage() {
                 <span>Färg: </span>
                 <div className={`m-2 h-10 w-16 rounded border ${bgColor}`}></div>
               </CardContent>
-            </Card>
-            <PlanChangeYearCard />
-            <UserPlansListCard />
+            </Card> */}
             <Card>
               <CardHeader className="pb-10">
                 <CardDescription>Veckor till mottagning</CardDescription>
-                <CardTitle className="text-4xl">33</CardTitle>
+                <CardTitle className="text-4xl">{weeksToNolleP}</CardTitle>
               </CardHeader>
               <CardContent className="justify-end place-self-end justify-self-end">
-                <Progress value={25} aria-label="25% increase" />
+                <Progress value={progress} aria-label="25% increase" />
               </CardContent>
             </Card>
+            <PlanChangeYearCard />
+            <UserPlansListCard />
+            <FindCollisionsCard />
           </div>
         </div>
-        <PublicPlansCard />
+        {/* <PublicPlansCard /> */}
       </main>
       <SiteFooter />
     </div>

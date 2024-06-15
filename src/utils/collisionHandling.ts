@@ -175,23 +175,30 @@ export const findCollisionBetweenEvents = (
  * @param {string} userPlanId - The ID of the user's plan.
  * @returns {Array} - An array of colliding events.
  */
-export const findCollisionsBetweenUserPlanAndPublicPlans = (plans: Plan[]) => {
+export const findCollisionsBetweenUserPlanAndPublicPlans = (
+  userPlan: Plan,
+  publicPlans: Plan[]
+): PlanEvent[] => {
   let collidingEvents = new Set()
 
-  const userPlan = plans[0].events
-  const publicPlans = plans.slice(1).flatMap((plan) => plan.events)
+  const userEvents = userPlan.events
+  const publicEvents = publicPlans.flatMap((plan) => plan.events)
 
   // check for collisions between personal and public events
-  userPlan.forEach((userEvent) => {
+  userEvents.forEach((userEvent) => {
     const items = createItemsObject(userEvent)
-    publicPlans.forEach((publicEvent) => {
+    publicEvents.forEach((publicEvent) => {
       collidingEvents = new Set([
         ...collidingEvents,
         ...findCollisionBetweenEvents(userEvent, publicEvent, items)
       ])
     })
   })
-  return [...collidingEvents]
+  return [...collidingEvents] as PlanEvent[]
+}
+
+export const findCollisionsBetweenPlans = (userPlan: Plan, publicPlan: Plan) => {
+  return findCollisionsBetweenUserPlanAndPublicPlans(userPlan, [publicPlan])
 }
 
 /**

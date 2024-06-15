@@ -51,7 +51,7 @@ export const CreateNewPlanCard = () => {
       </CardHeader>
       <CardFooter>
         <Dialog>
-          <DialogTrigger>
+          <DialogTrigger asChild>
             <Button>Skapa ny planering</Button>
           </DialogTrigger>
           <DialogContent>

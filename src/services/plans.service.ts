@@ -100,6 +100,26 @@ export const getUserPlans = async (user: User, year: number) => {
   }
 }
 
+export const getPublicPlans = async (user: User, year: number) => {
+  try {
+    const snapshot = await getDocs(
+      query(
+        collection(db, 'plans'),
+        where('userId', '!=', user.userId),
+        where('public', '==', true),
+        where('year', '==', year),
+        orderBy('userId'),
+        orderBy('updatedAt', 'desc')
+      )
+    )
+    const plans = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Plan[]
+    return plans
+  } catch (e) {
+    console.log(getErrorMessage(e))
+    throw e
+  }
+}
+
 const updatePlanDetails = async (id: string, newValues: Partial<EditablePlanDetails>) => {
   const now = new Date()
   try {
@@ -184,6 +204,7 @@ export const plansService = {
   deletePlan,
   getAllPlans,
   getUserPlans,
+  getPublicPlans,
   updatePlanDetails,
   addPlanEvent,
   updatePlanEvent,
