@@ -1,5 +1,4 @@
-import { kårer } from '@/data/committees'
-import { FieldValue } from 'firebase/firestore'
+import { committees, kårer } from '@/data/committees'
 
 export type Room = {
   text: string
@@ -19,7 +18,7 @@ export type CorridorC = Record<
 export interface EditablePlanDetails {
   label: string
   public: boolean
-  committeeId: string
+  committeeId: keyof typeof committees
 }
 
 export interface DBPlan extends EditablePlanDetails {
@@ -37,7 +36,7 @@ export interface Plan extends DBPlan {
 export type PlanEvent = {
   id: string
   allDay: boolean
-  committeeId: string
+  committeeId: keyof typeof committees
   planId: string
   startDate: string
   endDate: string
@@ -94,6 +93,6 @@ export interface User {
   displayName: string | null
   email: string
   emailVerified: boolean
-  committeeId: string
+  committeeId: keyof typeof committees
   admin: boolean
 }

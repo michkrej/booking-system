@@ -22,6 +22,7 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@states': path.resolve(__dirname, './src/state'),
       '@utils': path.resolve(__dirname, './src/utils'),
+      '@data': path.resolve(__dirname, './src/data'),
       process: 'process/browser',
       util: 'util'
     }

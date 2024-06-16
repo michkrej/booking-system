@@ -1,10 +1,9 @@
-import { useEmailLogin } from '@/hooks/useEmailLogin'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+
+import { LoadingButton } from '@/components/molecules/loadingButton'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -13,7 +12,9 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { LoadingButton } from '@/components/molecules/loadingButton'
+import { Input } from '@/components/ui/input'
+import { useEmailLogin } from '@/hooks/useEmailLogin'
+import { useForm } from 'react-hook-form'
 
 const formSchema = z.object({
   email: z.string().min(1, 'E-postadress saknas').email('Felaktig e-postadress'),
@@ -53,7 +54,7 @@ export const LoginForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>E-post</FormLabel>
+                  <FormLabel htmlFor="email">E-post</FormLabel>
                   <FormControl>
                     <Input
                       id="email"

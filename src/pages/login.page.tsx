@@ -13,8 +13,6 @@ export function LoginPage() {
   const navigate = useNavigate()
   const hasUser = useHasUser()
 
-  console.log('LoginPage', hasUser)
-
   useEffect(() => {
     if (hasUser) {
       navigate('/dashboard')

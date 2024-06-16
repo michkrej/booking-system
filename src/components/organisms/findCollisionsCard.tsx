@@ -1,8 +1,6 @@
-import { Kår, Plan, PlanEvent } from '@/utils/interfaces'
+import { Plan, PlanEvent } from '@/utils/interfaces'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import { Checkbox } from '../ui/checkbox'
-import { Label } from '../ui/label'
 import {
   Select,
   SelectContent,
@@ -10,13 +8,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import {
-  useCollisionsExist,
-  useNonUserPublicPlans,
-  usePublicGroupedPlans,
-  usePublicPlans,
-  useUserPlans
-} from '@/state'
+import { useCollisionsExist, useNonUserPublicPlans, useUserPlans } from '@/state'
 import { formatDate, getCommittee } from '@/lib/utils'
 import {
   Table,

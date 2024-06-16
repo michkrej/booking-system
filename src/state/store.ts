@@ -4,8 +4,6 @@ import type {} from '@redux-devtools/extension' // required for devtools typing
 
 import { createUserStoreSlice, UserStoreSlice } from './userStoreSlice'
 import { createPlanStoreSlice, PlanStoreSlice } from './planStoreSlice'
-import { getCommittee } from '@/lib/utils'
-import { Plan } from '@/utils/interfaces'
 
 const useBoundStore = create<UserStoreSlice & PlanStoreSlice>()(
   devtools(
@@ -53,29 +51,6 @@ export const useUserPlans = () => {
 
 export const usePublicPlans = () => {
   return useBoundStore((state) => state.publicPlans) ?? []
-}
-
-export const usePublicGroupedPlans = () => {
-  const publicPlans = useBoundStore((state) => state.publicPlans) ?? []
-
-  // group by committee
-  const groupedPlans = publicPlans.reduce(
-    (acc, plan) => {
-      const committee = getCommittee(plan.committeeId)
-      if (!committee || !committee.kår) {
-        return acc
-      }
-
-      const kår = committee.kår
-      const plans = acc[kår] || []
-      plans.push(plan)
-      acc[kår] = plans
-      return acc
-    },
-    {} as Record<string, Plan[]>
-  )
-
-  return groupedPlans
 }
 
 export const useNonUserPublicPlans = () => {

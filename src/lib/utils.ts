@@ -31,6 +31,6 @@ export const formatDate = (date: Timestamp | Date | { seconds: number; nanosecon
   })
 }
 
-export const getCommittee = (committeeId: string) => {
-  return committees.find((committee) => committee.id === committeeId)
+export const getCommittee = (committeeId: keyof typeof committees) => {
+  return committees[committeeId]
 }
