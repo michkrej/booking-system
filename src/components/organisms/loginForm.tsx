@@ -77,13 +77,13 @@ export const LoginForm = () => {
                 <FormItem>
                   <div className="flex items-center">
                     <FormLabel htmlFor="password">Lösenord</FormLabel>
-                    <Link
-                      to="/forgot-password"
+                    <span
+                      onClick={() => navigate('/', { state: { mode: 'forgotPassword' } })}
                       className="ml-auto inline-block text-sm underline"
                       tabIndex={-1}
                     >
                       Glömt ditt lösenord?
-                    </Link>
+                    </span>
                   </div>
                   <FormControl>
                     <Input
@@ -110,7 +110,7 @@ export const LoginForm = () => {
       <div className="text-center text-sm">
         Har du inget konto?{' '}
         <span
-          onClick={() => navigate('/', { state: { showSignUp: true } })}
+          onClick={() => navigate('/', { state: { mode: 'signup' } })}
           className="cursor-pointer underline"
         >
           Skapa konto

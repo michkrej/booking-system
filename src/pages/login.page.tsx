@@ -7,6 +7,7 @@ import { SignUpForm } from '@/components/organisms/signUpForm'
 import { SiteLogo } from '@/components/atoms/siteLogo'
 import { SiteFooter } from '@/components/molecules/siteFooter'
 import { useHasUser } from '@/state'
+import { ForgotPasswordForm } from '@/components/organisms/forgotPasswordForm'
 
 export function LoginPage() {
   const { state } = useLocation()
@@ -25,7 +26,13 @@ export function LoginPage() {
         <SiteLogo />
       </div>
       <div className="relative mt-20 flex items-center justify-center lg:mt-0">
-        {!state?.showSignUp ? <LoginForm /> : <SignUpForm />}
+        {state?.mode === 'login' ? (
+          <LoginForm />
+        ) : state?.mode === 'signup' ? (
+          <SignUpForm />
+        ) : (
+          <ForgotPasswordForm />
+        )}
         <div className="absolute bottom-0 hidden w-full justify-center lg:flex">
           <SiteFooter />
         </div>

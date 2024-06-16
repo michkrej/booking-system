@@ -232,7 +232,7 @@ export const SignUpForm = () => {
       <div className="text-center text-sm">
         Hade du redan ett konto?{' '}
         <span
-          onClick={() => navigate('/', { state: { showSignUp: false } })}
+          onClick={() => navigate('/', { state: { mode: 'login' } })}
           className="cursor-pointer underline"
         >
           Logga in

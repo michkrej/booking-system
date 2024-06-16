@@ -6,7 +6,6 @@ import { Toaster } from 'sonner'
 
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { DashboardPage } from './pages/dashboard.page'
-import { ForgotPasswordPage } from './pages/forgotPassword.page'
 import { LoginPage } from './pages/login.page'
 import { useHasUser } from './state/store'
 
@@ -37,7 +36,6 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route element={<RequireAuth />}>
               <Route path="/dashboard" element={<DashboardPage />} />
             </Route>

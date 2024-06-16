@@ -69,7 +69,10 @@ export const ForgotPasswordForm = () => {
       </div>
       <div className="text-center text-sm">
         Klar?{' '}
-        <span onClick={() => navigate('/')} className="cursor-pointer underline">
+        <span
+          onClick={() => navigate('/', { state: { mode: 'login' } })}
+          className="cursor-pointer underline"
+        >
           Logga in
         </span>
       </div>
