@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
-import { getAnalytics } from 'firebase/analytics'
+import { getAuth, connectAuthEmulator } from 'firebase/auth'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -14,7 +13,14 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_APP_ANALYTICS_ID
 }
 
-export const app = initializeApp(firebaseConfig)
-export const analytics = getAnalytics(app)
-export const auth = getAuth(app)
-export const db = getFirestore(app)
+const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
+const db = getFirestore(app)
+
+if (window.location.hostname === 'localhost') {
+  console.log('Running with emulators on localhost')
+  connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+  connectFirestoreEmulator(db, 'localhost', 8080)
+}
+
+export { auth, db }

@@ -26,3 +26,7 @@ yarn-debug.log*
 yarn-error.log*
 /.firebase
 firestore.rules
+firestore.indexes.json
+/firebase-export
+firestore-debug.log
+ui-debug.log
