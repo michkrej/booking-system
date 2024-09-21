@@ -26,12 +26,12 @@ export function LoginPage() {
         <SiteLogo />
       </div>
       <div className="relative mt-20 flex items-center justify-center lg:mt-0">
-        {state?.mode === 'login' ? (
-          <LoginForm />
+        {state?.mode === 'forgotPassword' ? (
+          <ForgotPasswordForm />
         ) : state?.mode === 'signup' ? (
           <SignUpForm />
         ) : (
-          <ForgotPasswordForm />
+          <LoginForm />
         )}
         <div className="absolute bottom-0 hidden w-full justify-center lg:flex">
           <SiteFooter />
