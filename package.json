@@ -43,7 +43,7 @@
     "zustand": "^4.5.2"
   },
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
