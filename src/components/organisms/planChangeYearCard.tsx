@@ -1,24 +1,30 @@
-import { usePlanYear, usePlanYearActions } from '@/state'
-import { Button } from '../ui/button'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import { useMemo } from 'react'
-import { MAX_YEAR, MIN_YEAR } from '@/state/planStoreSlice'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { usePlanYear, usePlanYearActions } from "@/state";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { useMemo } from "react";
+import { MAX_YEAR, MIN_YEAR } from "@/state/planStoreSlice";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const PlanChangeYearCard = () => {
-  const planYear = usePlanYear()
-  const { incrementPlanYear, decrementPlanYear } = usePlanYearActions()
+  const { planYear } = usePlanYear();
+  const { incrementPlanYear, decrementPlanYear } = usePlanYearActions();
 
-  const isMaxYear = useMemo(() => planYear >= MAX_YEAR, [planYear])
-  const isMinYear = useMemo(() => planYear <= MIN_YEAR, [planYear])
+  const isMaxYear = useMemo(() => planYear >= MAX_YEAR, [planYear]);
+  const isMinYear = useMemo(() => planYear <= MIN_YEAR, [planYear]);
 
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardHeader className="pb-7">
         <CardDescription>Planeringar för året</CardDescription>
-        <CardTitle className="text-4xl">{planYear}</CardTitle>
+        <CardTitle>{planYear}</CardTitle>
       </CardHeader>
-      <CardFooter className="flex justify-end gap-4">
+      <CardFooter className="flex items-center justify-end gap-x-4">
         <div className="text-xs text-muted-foreground">Byt år:</div>
         <div>
           <Button
@@ -42,5 +48,5 @@ export const PlanChangeYearCard = () => {
         </div>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};

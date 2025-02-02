@@ -1,91 +1,90 @@
-import { useEffect, useMemo } from 'react'
+import { differenceInMilliseconds, format } from "date-fns";
+import { sv } from "date-fns/locale";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Layout } from "@/components/molecules/layout";
+import { CreateNewPlanCard } from "@/components/organisms/createNewPlanCard";
+import { FindCollisionsCard } from "@/components/organisms/findCollisionsCard";
+import { PlanChangeYearCard } from "@/components/organisms/planChangeYearCard";
+import { PublicPlansCard } from "@/components/organisms/publicPlansCard";
+import { UserPlansListCard } from "@/components/organisms/userPlansListCard";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { useMottagningStart, useUser } from "@/state";
 
-import { Progress } from '@/components/ui/progress'
-import { Header } from '@/components/molecules/header'
-import { PublicPlansCard } from '@/components/organisms/publicPlansCard'
-import { SiteFooter } from '@/components/molecules/siteFooter'
-import { useGetPlans } from '@/hooks'
-import { CreateNewPlanCard } from '@/components/organisms/createNewPlanCard'
-import { UserPlansListCard } from '@/components/organisms/userPlansListCard'
-import { usePlanYear, useUser } from '@/state'
-import { PlanChangeYearCard } from '@/components/organisms/planChangeYearCard'
-import { getCommittee } from '@/lib/utils'
-import { FindCollisionsCard } from '@/components/organisms/findCollisionsCard'
+export const getWeeksLeftToNolleP = (startDate: Date) => {
+  const now = new Date();
+  const diff = differenceInMilliseconds(startDate, now);
+  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7));
+  return weeks;
+};
 
-const NOLLE_P_START = new Date('2024-08-20')
-const PREV_NOLLE_P_END = new Date('2023-8-31')
+export const getTotalWeeksToNolleP = (startDate: Date) => {
+  const endDate = new Date(`${new Date().getFullYear() - 1}-08-31`);
+  const diff = differenceInMilliseconds(startDate, endDate);
+  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7));
+  return weeks;
+};
 
-const getWeeksLeftToNolleP = () => {
-  const now = new Date()
-  const diff = NOLLE_P_START.getTime() - now.getTime()
-  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7))
-  return weeks
-}
-
-const getTotalWeeksToNolleP = () => {
-  const diff = NOLLE_P_START.getTime() - PREV_NOLLE_P_END.getTime()
-  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7))
-  return weeks
-}
-
-const getPercentageProgress = () => {
-  const weeksToNolleP = getWeeksLeftToNolleP()
-  const totalWeeksToNolleP = getTotalWeeksToNolleP()
-  const progress = Math.round(((totalWeeksToNolleP - weeksToNolleP) / totalWeeksToNolleP) * 100)
-  return progress
-}
+export const getPercentageProgress = (startDate: Date) => {
+  const weeksToNolleP = getWeeksLeftToNolleP(startDate);
+  const totalWeeksToNolleP = getTotalWeeksToNolleP(startDate);
+  const progress = Math.round(
+    ((totalWeeksToNolleP - weeksToNolleP) / totalWeeksToNolleP) * 100,
+  );
+  return progress;
+};
 
 export function DashboardPage() {
-  const { user } = useUser()
-  const planYear = usePlanYear()
-  const { getUserPlans, getPublicPlans, getPublicAndUserPlans } = useGetPlans()
-
-  useEffect(() => {
-    getPublicAndUserPlans(planYear)
-  }, [planYear])
-
-  const committee = useMemo(() => getCommittee(user.committeeId), [user.committeeId])
-  const bgColor = committee?.color ? `bg-[${committee.color}]` : 'bg-primary'
-
-  const weeksToNolleP = getWeeksLeftToNolleP()
-  const progress = getPercentageProgress()
-
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <Header />
-      <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-        <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-            <CreateNewPlanCard />
-            {/*           <Card>
-              <CardHeader>
-                <CardDescription>{user.displayName}</CardDescription>
-                <CardTitle className="text-4xl">{committee?.text}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center justify-end">
-                <span>Färg: </span>
-                <div className={`m-2 h-10 w-16 rounded border ${bgColor}`}></div>
-              </CardContent>
-            </Card> */}
-            <Card>
-              <CardHeader className="pb-10">
-                <CardDescription>Veckor till mottagning</CardDescription>
-                <CardTitle className="text-4xl">{weeksToNolleP}</CardTitle>
-              </CardHeader>
-              <CardContent className="justify-end place-self-end justify-self-end">
-                <Progress value={progress} aria-label="25% increase" />
-              </CardContent>
-            </Card>
-            <PlanChangeYearCard />
-            <UserPlansListCard />
-            <FindCollisionsCard />
-          </div>
+    <Layout>
+      <div className="grid-auto-rows grid grid-cols-7 gap-4">
+        <div className="col-span-5 grid grid-cols-4 gap-4">
+          <CreateNewPlanCard />
+          <TimeUntilMottagningCard />
+          <PlanChangeYearCard />
+          <UserPlansListCard />
+          <FindCollisionsCard />
         </div>
         <PublicPlansCard />
-      </main>
-      <SiteFooter />
-    </div>
-  )
+      </div>
+    </Layout>
+  );
 }
+
+const TimeUntilMottagningCard = () => {
+  const { mottagningStart } = useMottagningStart();
+  const { kår } = useUser();
+
+  if (kår === "Övrigt") return null;
+
+  const weeksToNolleP = getWeeksLeftToNolleP(mottagningStart[kår]);
+  const progress = getPercentageProgress(mottagningStart[kår]);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardDescription>Mottagnigen för {kår} börjar</CardDescription>
+        <div className="flex items-center gap-2">
+          <CardTitle>
+            {format(mottagningStart[kår], "P", { locale: sv })}
+          </CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent className="text-center">
+        <p>
+          <span>{weeksToNolleP}</span> veckor kvar
+        </p>
+      </CardContent>
+      <CardFooter>
+        <Progress value={progress} />
+      </CardFooter>
+    </Card>
+  );
+};

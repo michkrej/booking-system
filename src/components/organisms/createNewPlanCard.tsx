@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import {
   Dialog,
@@ -9,44 +9,57 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
-import { useEditPlan } from '@/hooks'
-import { LoadingButton } from '../molecules/loadingButton'
-import { Button } from '../ui/button'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useEditPlan } from "@/hooks";
+import { LoadingButton } from "../molecules/loadingButton";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
 
 const formSchema = z.object({
-  planName: z.string().min(1, 'Du måste ange ett namn för planeringen')
-})
+  planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
+});
 
 export const CreateNewPlanCard = () => {
-  const { createPlan, isPending } = useEditPlan()
+  const { createPlan, isPending } = useEditPlan();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      planName: ''
-    }
-  })
+      planName: "",
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    console.log(values);
     createPlan(values.planName).then(() => {
-      form.reset()
+      form.reset();
       // redirect to the new plan here
-    })
+    });
   }
 
   return (
-    <Card className="sm:col-span-2">
+    <Card className="col-span-2">
       <CardHeader className="pb-3">
         <CardTitle>Planeringar</CardTitle>
         <CardDescription className="max-w-lg text-balance leading-relaxed">
-          En planering kan ses som en google calender, den kan innehålla flera event som sker på
-          olika platser.
+          En planering kan ses som en google calender, den kan innehålla flera
+          event som sker på olika platser.
         </CardDescription>
       </CardHeader>
       <CardFooter>
@@ -56,12 +69,15 @@ export const CreateNewPlanCard = () => {
           </DialogTrigger>
           <DialogContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="grid gap-4"
+              >
                 <DialogHeader>
                   <DialogTitle>Skapa ny planering</DialogTitle>
                   <DialogDescription>
-                    En planering kan ses som en google calender, den kan innehålla flera event som
-                    sker på olika platser.
+                    En planering kan ses som en google calender, den kan
+                    innehålla flera event som sker på olika platser.
                   </DialogDescription>
                 </DialogHeader>
                 <FormField
@@ -83,7 +99,11 @@ export const CreateNewPlanCard = () => {
                   )}
                 />
                 <DialogFooter>
-                  <LoadingButton type="submit" loading={isPending} className="mt-4">
+                  <LoadingButton
+                    type="submit"
+                    loading={isPending}
+                    className="mt-4"
+                  >
                     Skapa
                   </LoadingButton>
                 </DialogFooter>
@@ -93,5 +113,5 @@ export const CreateNewPlanCard = () => {
         </Dialog>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};

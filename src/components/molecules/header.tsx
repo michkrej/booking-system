@@ -1,25 +1,26 @@
-import { CircleUser, Package2 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { CircleUser, Package2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '../ui/dropdown-menu'
-import { Button } from '../ui/button'
-import { SiteLogo } from '../atoms/siteLogo'
-import { useSignOut } from '@/hooks'
-import { usePlanYear, useUser } from '@/state'
-import { siteConfig } from '@/config/site'
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { SiteLogo } from "../atoms/siteLogo";
+import { useSignOut } from "@/hooks";
+import { usePlanYear, useUser } from "@/state";
+import { siteConfig } from "@/config/site";
 
 export const Header = () => {
-  const { logout } = useSignOut()
-  const planYear = usePlanYear()
-  const { user } = useUser()
+  const { logout } = useSignOut();
+  const { planYear } = usePlanYear();
+  const { user } = useUser();
 
-  const TF_URL = planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023
+  const TF_URL =
+    planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023;
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -28,7 +29,10 @@ export const Header = () => {
           <SiteLogo />
         </Link>
         <div className="h-8 border-r" />
-        <Link to="#" className="text-foreground transition-colors hover:text-foreground">
+        <Link
+          to="/dashboard"
+          className="text-foreground transition-colors hover:text-foreground"
+        >
           Dashboard
         </Link>
         <a
@@ -40,7 +44,10 @@ export const Header = () => {
         </a>
 
         {user.admin && (
-          <Link to="#" className="text-muted-foreground transition-colors hover:text-foreground">
+          <Link
+            to="/admin"
+            className="text-muted-foreground transition-colors hover:text-foreground"
+          >
             Admin
           </Link>
         )}
@@ -81,5 +88,5 @@ export const Header = () => {
         </DropdownMenu>
       </div>
     </header>
-  )
-}
+  );
+};

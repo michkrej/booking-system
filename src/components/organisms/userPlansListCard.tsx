@@ -1,22 +1,27 @@
-import { useGetPlans } from '@/hooks'
-import { formatDate } from '@/lib/utils'
-import { useUserPlans } from '@/state'
-import { PlanChangeNameButton } from '../molecules/planChangeNameButton'
-import { PlanDeleteButton } from '../molecules/planDeleteButton'
-import { PlanTogglePublicButton } from '../molecules/planTogglePublicButton'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
-import { Separator } from '../ui/separator'
-import { Skeleton } from '../ui/skeleton'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import { formatDate } from "@/lib/utils";
+import { PlanChangeNameButton } from "../molecules/planChangeNameButton";
+import { PlanDeleteButton } from "../molecules/planDeleteButton";
+import { PlanTogglePublicButton } from "../molecules/planTogglePublicButton";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Separator } from "../ui/separator";
+import { Skeleton } from "../ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { useUserPlans } from "@/hooks";
 
-const loadingTableEntries = Array.from({ length: 4 }, (_, i) => i)
+const loadingTableEntries = Array.from({ length: 4 }, (_, i) => i);
 
 export const UserPlansListCard = () => {
-  const userPlans = useUserPlans()
-  const { isPending } = useGetPlans()
+  const { isPending, userPlans } = useUserPlans();
 
   return (
-    <Card className="sm:col-span-4">
+    <Card className="col-span-full">
       <CardHeader className="pb-3">
         <CardTitle>Dina planeringar</CardTitle>
       </CardHeader>
@@ -34,8 +39,8 @@ export const UserPlansListCard = () => {
           <TableBody>
             {!isPending
               ? userPlans.map((plan) => {
-                  const createdAt = formatDate(plan.createdAt)
-                  const updatedAt = formatDate(plan.updatedAt)
+                  const createdAt = formatDate(plan.createdAt);
+                  const updatedAt = formatDate(plan.updatedAt);
                   return (
                     <TableRow key={plan.id}>
                       <TableCell>{plan.label}</TableCell>
@@ -49,11 +54,9 @@ export const UserPlansListCard = () => {
                         <PlanTogglePublicButton plan={plan} />
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 })
-              : null}
-            {isPending
-              ? loadingTableEntries.map((index) => (
+              : loadingTableEntries.map((index) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Skeleton className="h-4 w-full" />
@@ -68,8 +71,7 @@ export const UserPlansListCard = () => {
                       <Skeleton className="h-4 w-full" />
                     </TableCell>
                   </TableRow>
-                ))
-              : null}
+                ))}
             {!userPlans.length && !isPending ? (
               <TableRow>
                 <TableCell colSpan={4}>Du har inga planeringar än...</TableCell>
@@ -79,5 +81,5 @@ export const UserPlansListCard = () => {
         </Table>
       </CardContent>
     </Card>
-  )
-}
+  );
+};

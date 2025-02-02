@@ -1,9 +1,11 @@
-import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
-import type {} from '@redux-devtools/extension' // required for devtools typing
+import type {} from "@redux-devtools/extension"; // required for devtools typing
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
-import { createUserStoreSlice, UserStoreSlice } from './userStoreSlice'
-import { createPlanStoreSlice, PlanStoreSlice } from './planStoreSlice'
+import { committees } from "@/data/committees";
+import { type Kår, type User } from "@/utils/interfaces";
+import { createPlanStoreSlice, type PlanStoreSlice } from "./planStoreSlice";
+import { createUserStoreSlice, type UserStoreSlice } from "./userStoreSlice";
 
 const useBoundStore = create<UserStoreSlice & PlanStoreSlice>()(
   devtools(
@@ -11,66 +13,72 @@ const useBoundStore = create<UserStoreSlice & PlanStoreSlice>()(
       (...a) => {
         return {
           ...createUserStoreSlice(...a),
-          ...createPlanStoreSlice(...a)
-        }
+          ...createPlanStoreSlice(...a),
+        };
       },
-      { name: 'app-storage' }
-    )
-  )
-)
+      { name: "app-storage" },
+    ),
+  ),
+);
 
-export const useUser = () => {
-  const user = useBoundStore((state) => state.user)
+export const useUser = (): { user: User; kår: Kår } => {
+  const user = useBoundStore((state) => state.user);
 
   if (!user) {
-    throw new Error('User not found')
+    throw new Error("User not found");
   }
 
-  return { user }
-}
+  const kår = committees[user.committeeId].kår;
+
+  return { user, kår };
+};
 
 export const useUserUpdated = () => {
-  return { userUpdated: useBoundStore((state) => state.userUpdated) }
-}
+  return { userUpdated: useBoundStore((state) => state.userUpdated) };
+};
 
 export const useHasUser = () => {
-  const user = useBoundStore((state) => state.user)
+  const user = useBoundStore((state) => state.user);
 
-  return user !== null
-}
+  return user !== null;
+};
 
 export const usePlanEditLock = () => {
-  const changedPlanEditLock = useBoundStore((state) => state.changedPlanEditLock)
-  const planEditLocked = useBoundStore((state) => state.planEditLocked)
-  return { planEditLocked, changedPlanEditLock }
-}
+  const changedPlanEditLock = useBoundStore(
+    (state) => state.changedPlanEditLock,
+  );
+  const planEditLocked = useBoundStore((state) => state.planEditLocked);
+  return { planEditLocked, changedPlanEditLock };
+};
 
 export const useUserPlans = () => {
-  return useBoundStore((state) => state.userPlans) ?? []
-}
+  return useBoundStore((state) => state.userPlans) ?? [];
+};
 
 export const usePublicPlans = () => {
-  return useBoundStore((state) => state.publicPlans) ?? []
-}
+  return useBoundStore((state) => state.publicPlans) ?? [];
+};
 
 export const useNonUserPublicPlans = () => {
-  const publicPlans = useBoundStore((state) => state.publicPlans) ?? []
-  const user = useBoundStore((state) => state.user)
+  const publicPlans = useBoundStore((state) => state.publicPlans) ?? [];
+  const user = useBoundStore((state) => state.user);
 
   if (!user) {
-    return []
+    return [];
   }
 
-  return publicPlans.filter((plan) => plan.userId !== user.userId)
-}
+  return publicPlans.filter((plan) => plan.userId !== user.userId);
+};
 
 export const usePlanActions = () => {
-  const userPlansLoaded = useBoundStore((state) => state.userPlansLoaded)
-  const publicPlansLoaded = useBoundStore((state) => state.publicPlansLoaded)
-  const userPlanDeleted = useBoundStore((state) => state.userPlanDeleted)
-  const userPlanUpdated = useBoundStore((state) => state.userPlanUpdated)
-  const userPlanCreated = useBoundStore((state) => state.userPlanCreated)
-  const userPlanPublicToggled = useBoundStore((state) => state.planPublicToggled)
+  const userPlansLoaded = useBoundStore((state) => state.userPlansLoaded);
+  const publicPlansLoaded = useBoundStore((state) => state.publicPlansLoaded);
+  const userPlanDeleted = useBoundStore((state) => state.userPlanDeleted);
+  const userPlanUpdated = useBoundStore((state) => state.userPlanUpdated);
+  const userPlanCreated = useBoundStore((state) => state.userPlanCreated);
+  const userPlanPublicToggled = useBoundStore(
+    (state) => state.planPublicToggled,
+  );
 
   return {
     userPlansLoaded,
@@ -78,28 +86,40 @@ export const usePlanActions = () => {
     userPlanDeleted,
     userPlanUpdated,
     userPlanCreated,
-    userPlanPublicToggled
-  }
-}
+    userPlanPublicToggled,
+  };
+};
 
 export const usePlanYear = () => {
-  return useBoundStore((state) => state.planYear)
-}
+  return {
+    planYear: useBoundStore((state) => state.planYear),
+  };
+};
 
 export const usePlanYearActions = () => {
-  const incrementPlanYear = useBoundStore((state) => state.incrementPlanYear)
-  const decrementPlanYear = useBoundStore((state) => state.decrementPlanYear)
+  const incrementPlanYear = useBoundStore((state) => state.incrementPlanYear);
+  const decrementPlanYear = useBoundStore((state) => state.decrementPlanYear);
+  const setMottagningStart = useBoundStore((state) => state.setMottagningStart);
 
-  return { incrementPlanYear, decrementPlanYear }
-}
+  return { incrementPlanYear, decrementPlanYear, setMottagningStart };
+};
 
 export const useHasPublicPlan = () => {
-  return useBoundStore((state) => state.hasPublicPlan)
-}
+  return useBoundStore((state) => state.hasPublicPlan);
+};
 
 export const useCollisionsExist = () => {
-  const collisionsExist = useBoundStore((state) => state.collisionsExist)
-  const toggleCollisionsExist = useBoundStore((state) => state.toggleCollisionsExist)
+  const collisionsExist = useBoundStore((state) => state.collisionsExist);
+  const toggleCollisionsExist = useBoundStore(
+    (state) => state.toggleCollisionsExist,
+  );
 
-  return { collisionsExist, toggleCollisionsExist }
-}
+  return { collisionsExist, toggleCollisionsExist };
+};
+
+export const useMottagningStart = () => {
+  return {
+    mottagningStart: useBoundStore((state) => state.mottagningStart),
+    setMottagningStart: useBoundStore((state) => state.setMottagningStart),
+  };
+};
