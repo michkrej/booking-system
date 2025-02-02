@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { useAdminSettings } from "@/hooks";
 import { useMottagningStart, usePlanEditLock } from "@/state";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
@@ -26,7 +27,7 @@ export const AdminPage = () => {
             </CardDescription>
           </CardHeader>
         </Card>
-        <BookableItemsCard />
+        {/* <BookableItemsCard /> */}
         <MottagningStartDateCard />
         <LockPlanEditingCard />
       </div>
@@ -35,7 +36,8 @@ export const AdminPage = () => {
 };
 
 const MottagningStartDateCard = () => {
-  const { mottagningStart, setMottagningStart } = useMottagningStart();
+  const { mottagningStart } = useMottagningStart();
+  const { updateMottagningStart } = useAdminSettings();
 
   return (
     <Card>
@@ -50,21 +52,27 @@ const MottagningStartDateCard = () => {
           <p>Consensus: </p>
           <DatePicker
             date={mottagningStart.Consensus}
-            setDate={(date) => setMottagningStart(date, "Consensus")}
+            setDate={(date) =>
+              updateMottagningStart.mutate({ date, kår: "Consensus" })
+            }
           />
         </div>
         <div className="grid grid-cols-[100px_auto] gap-2">
           <p>Stuff: </p>
           <DatePicker
             date={mottagningStart.StuFF}
-            setDate={(date) => setMottagningStart(date, "StuFF")}
+            setDate={(date) =>
+              updateMottagningStart.mutate({ date, kår: "StuFF" })
+            }
           />
         </div>
         <div className="grid grid-cols-[100px_auto] gap-2">
           <p>LinTek: </p>
           <DatePicker
             date={mottagningStart.LinTek}
-            setDate={(date) => setMottagningStart(date, "LinTek")}
+            setDate={(date) =>
+              updateMottagningStart.mutate({ date, kår: "LinTek" })
+            }
           />
         </div>
       </CardContent>
@@ -73,7 +81,8 @@ const MottagningStartDateCard = () => {
 };
 
 const LockPlanEditingCard = () => {
-  const { planEditLocked, changedPlanEditLock } = usePlanEditLock();
+  const { lockPlans } = useAdminSettings();
+  const { planEditLocked } = usePlanEditLock();
 
   return (
     <Card>
@@ -90,7 +99,7 @@ const LockPlanEditingCard = () => {
           <p>Lås redigering av bokningar</p>
           <Switch
             checked={planEditLocked}
-            onChange={changedPlanEditLock}
+            onCheckedChange={lockPlans.mutate}
             className="h-6 w-10 rounded-full bg-gray-200"
           />
         </div>

@@ -6,14 +6,19 @@ import { committees } from "@/data/committees";
 import { type Kår, type User } from "@/utils/interfaces";
 import { createPlanStoreSlice, type PlanStoreSlice } from "./planStoreSlice";
 import { createUserStoreSlice, type UserStoreSlice } from "./userStoreSlice";
+import { type AdminStoreSlice, createAdminStoreSlice } from "./adminStoreSlice";
+import { set } from "date-fns";
 
-const useBoundStore = create<UserStoreSlice & PlanStoreSlice>()(
+const useBoundStore = create<
+  UserStoreSlice & PlanStoreSlice & AdminStoreSlice
+>()(
   devtools(
     persist(
       (...a) => {
         return {
           ...createUserStoreSlice(...a),
           ...createPlanStoreSlice(...a),
+          ...createAdminStoreSlice(...a),
         };
       },
       { name: "app-storage" },
@@ -44,11 +49,12 @@ export const useHasUser = () => {
 };
 
 export const usePlanEditLock = () => {
-  const changedPlanEditLock = useBoundStore(
-    (state) => state.changedPlanEditLock,
-  );
-  const planEditLocked = useBoundStore((state) => state.planEditLocked);
-  return { planEditLocked, changedPlanEditLock };
+  const setPlanEditLock = useBoundStore((state) => state.setPlanEditLock);
+
+  return {
+    planEditLocked: useBoundStore((state) => state.planEditLocked),
+    setPlanEditLock,
+  };
 };
 
 export const useUserPlans = () => {
@@ -122,4 +128,10 @@ export const useMottagningStart = () => {
     mottagningStart: useBoundStore((state) => state.mottagningStart),
     setMottagningStart: useBoundStore((state) => state.setMottagningStart),
   };
+};
+
+export const useSetAdminSettings = () => {
+  const setAdminSettings = useBoundStore((state) => state.setAdminSettings);
+
+  return setAdminSettings;
 };

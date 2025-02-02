@@ -14,7 +14,6 @@ interface PlanStoreSlice {
   publicPlans: Plan[];
   hasPublicPlan: boolean;
   collisionsExist: boolean;
-  mottagningStart: Record<Kår, Date>;
 
   userPlansLoaded: (plans: Plan[]) => void;
   publicPlansLoaded: (plans: Plan[]) => void;
@@ -25,19 +24,7 @@ interface PlanStoreSlice {
   decrementPlanYear: () => void;
   planPublicToggled: (planId: string) => void;
   toggleCollisionsExist: () => void;
-  setMottagningStart: (date: Date, kår: Kår) => void;
 }
-
-const getMottagningStartWeek = () => {
-  const firstDayOfWeek34 = startOfWeek(
-    setWeek(new Date(CURRENT_YEAR, 0, 1), 34),
-    {
-      weekStartsOn: 1,
-    },
-  );
-
-  return new Date(firstDayOfWeek34);
-};
 
 const createPlanStoreSlice: StateCreator<
   PlanStoreSlice & UserStoreSlice,
@@ -46,12 +33,7 @@ const createPlanStoreSlice: StateCreator<
   PlanStoreSlice
 > = (set, get) => ({
   planYear: CURRENT_YEAR,
-  mottagningStart: {
-    Consensus: getMottagningStartWeek(),
-    StuFF: getMottagningStartWeek(),
-    LinTek: getMottagningStartWeek(),
-    Övrigt: getMottagningStartWeek(),
-  },
+
   userPlans: [],
   publicPlans: [],
   hasPublicPlan: false,
@@ -123,14 +105,6 @@ const createPlanStoreSlice: StateCreator<
   },
   toggleCollisionsExist: () => {
     set((state) => ({ collisionsExist: !state.collisionsExist }));
-  },
-  setMottagningStart: (date, kår) => {
-    set({
-      mottagningStart: {
-        ...get().mottagningStart,
-        [kår]: date,
-      },
-    });
   },
 });
 

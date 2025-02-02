@@ -1,13 +1,11 @@
-import { User } from '@/utils/interfaces'
-import { StateCreator } from 'zustand'
-import { PlanStoreSlice } from './planStoreSlice'
+import { type User } from "@/utils/interfaces";
+import { type StateCreator } from "zustand";
+import { type PlanStoreSlice } from "./planStoreSlice";
 
 interface UserStoreSlice {
-  user: User | null
-  planEditLocked: boolean
+  user: User | null;
 
-  userUpdated: (user: User | null) => void
-  changedPlanEditLock: () => void
+  userUpdated: (user: User | null) => void;
 }
 
 const createUserStoreSlice: StateCreator<
@@ -17,11 +15,9 @@ const createUserStoreSlice: StateCreator<
   UserStoreSlice
 > = (set) => ({
   user: null,
-  planEditLocked: false,
 
-  changedPlanEditLock: () => set((state) => ({ planEditLocked: !state.planEditLocked })),
-  userUpdated: (user) => set({ user })
-})
+  userUpdated: (user) => set({ user }),
+});
 
-export { createUserStoreSlice }
-export type { UserStoreSlice }
+export { createUserStoreSlice };
+export type { UserStoreSlice };

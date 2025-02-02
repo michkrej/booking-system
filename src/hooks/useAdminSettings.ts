@@ -1,35 +1,66 @@
-import { adminService } from '@/services'
-import { usePlanEditLock } from '@/state/store'
-import { useEffect } from 'react'
-import { toast } from 'sonner'
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { adminService, type AdminSettings } from "@/services";
+import {
+  useMottagningStart,
+  usePlanEditLock,
+  useSetAdminSettings,
+} from "@/state/store";
+import { type Kår } from "@/utils/interfaces";
+import { useEffect } from "react";
 
 export const useAdminSettings = () => {
-  const { changedPlanEditLock, planEditLocked } = usePlanEditLock()
+  const setAdminSettings = useSetAdminSettings();
+  const { setPlanEditLock } = usePlanEditLock();
+  const { setMottagningStart } = useMottagningStart();
 
-  const lockPlans = (e: React.ChangeEvent<HTMLInputElement>) => {
-    adminService
-      .lockAndUnlockPlans(e.target.checked)
-      .then(() => {
-        const lockedOrUnlocked = e.target.checked
-        changedPlanEditLock()
-        if (lockedOrUnlocked) toast.success('Plan editing unlocked')
-        else toast.success('Plan editing locked')
-      })
-      .catch(() => {
-        toast.error('Failed to lock/unlock plans')
-      })
-  }
+  const { data: adminSettings } = useQuery<AdminSettings>({
+    queryKey: ["adminSettings"],
+    queryFn: () => adminService.getAdminSettings(),
+  });
 
   useEffect(() => {
-    const getAdminSettings = async () => {
-      const { lockPlans } = await adminService.getAdminSettings()
-      if (lockPlans !== planEditLocked) {
-        changedPlanEditLock()
-      }
+    if (adminSettings) {
+      setAdminSettings({
+        lockPlans: adminSettings.lockPlans,
+        mottagningStart: {
+          Consensus: adminSettings.mottagningStart.Consensus.toDate(),
+          StuFF: adminSettings.mottagningStart.StuFF.toDate(),
+          LinTek: adminSettings.mottagningStart.LinTek.toDate(),
+          Övrigt: new Date(), // this field is not used in the app, I'm too lazy to remove it
+        },
+        bookableItems: adminSettings.bookableItems,
+      });
     }
+  }, [adminSettings, setAdminSettings]);
 
-    getAdminSettings()
-  }, [])
+  const lockPlans = useMutation({
+    mutationFn: (newValue: boolean) =>
+      adminService.lockAndUnlockPlans(newValue),
+    onSuccess: (value) => {
+      setPlanEditLock(value);
+      toast.success("Låst redigering av bokningar");
+    },
+    onError: () => {
+      toast.error("Kunde inte låsa/upplåsa redigering av bokningar");
+    },
+  });
 
-  return { planEditLocked, lockPlans }
-}
+  const updateMottagningStart = useMutation({
+    mutationFn: ({ date, kår }: { date: Date; kår: Kår }) =>
+      adminService.updateMottagningStart(date, kår),
+    onSuccess: (value) => {
+      setMottagningStart(value.date, value.kår);
+      toast.success(`Mottagningsstart för ${value.kår} ändrad`);
+    },
+    onError: () => {
+      toast.error("Kunde inte ändra mottagningsstart");
+    },
+  });
+
+  return {
+    lockPlans,
+    updateMottagningStart,
+  };
+};
