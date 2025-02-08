@@ -13,7 +13,12 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 import { getErrorMessage } from "@/utils/error.util";
-import { EditablePlanDetails, Plan, PlanEvent, User } from "@/utils/interfaces";
+import {
+  type EditablePlanDetails,
+  type Plan,
+  type PlanEvent,
+  type User,
+} from "@/utils/interfaces";
 import { db } from "./config";
 
 interface CreatePlanParams
@@ -52,7 +57,7 @@ export const getAllPlans = async (user: User, year: number) => {
       getDocs(
         query(
           ref,
-          where("userId", "==", user.userId),
+          where("userId", "==", user.id),
           where("year", "==", year),
           orderBy("updatedAt", "desc"),
           //limit(6)
@@ -94,7 +99,7 @@ export const getUserPlans = async (user: User, year: number) => {
     const snapshot = await getDocs(
       query(
         collection(db, "plans"),
-        where("userId", "==", user.userId),
+        where("userId", "==", user.id),
         where("year", "==", year),
       ),
     );
@@ -114,7 +119,7 @@ export const getPublicPlans = async (user: User, year: number) => {
     const snapshot = await getDocs(
       query(
         collection(db, "plans"),
-        //where("userId", "!=", user.userId),
+        //where("userId", "!=", user.id),
         where("public", "==", true),
         where("year", "==", year),
         orderBy("userId"),

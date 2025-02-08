@@ -1,41 +1,42 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
 
-import { LoadingButton } from '@/components/molecules/loadingButton'
-import { Button } from '@/components/ui/button'
+import { LoadingButton } from "@/components/molecules/loadingButton";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { useEmailLogin } from '@/hooks/useEmailLogin'
-import { useForm } from 'react-hook-form'
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useLogin } from "@/hooks/useLogin";
 
 const formSchema = z.object({
-  email: z.string().min(1, 'E-postadress saknas').email('Felaktig e-postadress'),
-  password: z.string().min(8, 'Lösenord saknas')
-})
+  email: z
+    .string()
+    .min(1, "E-postadress saknas")
+    .email("Felaktig e-postadress"),
+  password: z.string().min(8, "Lösenord saknas"),
+});
 
 export const LoginForm = () => {
-  const { login, isPending } = useEmailLogin()
-  const navigate = useNavigate()
+  const { loginWithEmailAndPassword, loginWithGoogle, isPending } = useLogin();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: ''
-    }
-  })
+      email: "",
+      password: "",
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    login(values.email, values.password)
+    void loginWithEmailAndPassword(values.email, values.password);
   }
   return (
     <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
@@ -78,8 +79,10 @@ export const LoginForm = () => {
                   <div className="flex items-center">
                     <FormLabel htmlFor="password">Lösenord</FormLabel>
                     <span
-                      onClick={() => navigate('/', { state: { mode: 'forgotPassword' } })}
-                      className="ml-auto inline-block text-sm underline"
+                      onClick={() =>
+                        navigate("/", { state: { mode: "forgotPassword" } })
+                      }
+                      className="ml-auto inline-block text-sm underline hover:cursor-pointer"
                       tabIndex={-1}
                     >
                       Glömt ditt lösenord?
@@ -102,20 +105,25 @@ export const LoginForm = () => {
             </LoadingButton>
           </form>
         </Form>
-        <Button variant="outline" className="w-full">
+        <LoadingButton
+          variant="outline"
+          className="w-full"
+          onClick={loginWithGoogle}
+          loading={isPending}
+        >
           Logga in med Google
-        </Button>
+        </LoadingButton>
       </div>
 
       <div className="text-center text-sm">
-        Har du inget konto?{' '}
+        Har du inget konto?{" "}
         <span
-          onClick={() => navigate('/', { state: { mode: 'signup' } })}
+          onClick={() => navigate("/", { state: { mode: "signup" } })}
           className="cursor-pointer underline"
         >
           Skapa konto
         </span>
       </div>
     </div>
-  )
-}
+  );
+};

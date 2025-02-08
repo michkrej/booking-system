@@ -1,4 +1,4 @@
-import { committees, kårer } from "@/data/committees";
+import { type committees, type kårer } from "@/data/committees";
 
 export type Room = {
   text: string;
@@ -96,11 +96,13 @@ export type StuffCommitee =
   | "Jur6"
   | "MvSek";
 
-export interface User {
-  userId: string;
+export type UserDetails = {
+  admin: boolean;
+  committeeId: keyof typeof committees;
+};
+export type User = {
+  id: string;
   displayName: string | null;
   email: string;
   emailVerified: boolean;
-  committeeId: keyof typeof committees;
-  admin: boolean;
-}
+} & UserDetails;

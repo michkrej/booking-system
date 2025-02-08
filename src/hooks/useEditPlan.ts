@@ -86,7 +86,7 @@ export const useEditPlan = () => {
     plansService
       .createPlan({
         label: name,
-        userId: user.userId,
+        userId: user.id,
         public: false,
         committeeId: user.committeeId,
         year: planYear,

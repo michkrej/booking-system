@@ -1,24 +1,24 @@
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { LoginForm } from '@/components/organisms/loginForm'
-import { NollePCarousel } from '@/components/organisms/nollePCarousel'
-import { SignUpForm } from '@/components/organisms/signUpForm'
-import { SiteLogo } from '@/components/atoms/siteLogo'
-import { SiteFooter } from '@/components/molecules/siteFooter'
-import { useHasUser } from '@/state'
-import { ForgotPasswordForm } from '@/components/organisms/forgotPasswordForm'
+import { LoginForm } from "@/components/organisms/loginForm";
+import { NollePCarousel } from "@/components/organisms/nollePCarousel";
+import { SignUpForm } from "@/components/organisms/signUpForm";
+import { SiteLogo } from "@/components/atoms/siteLogo";
+import { SiteFooter } from "@/components/molecules/siteFooter";
+import { useHasUser } from "@/state";
+import { ForgotPasswordForm } from "@/components/organisms/forgotPasswordForm";
 
 export function LoginPage() {
-  const { state } = useLocation()
-  const navigate = useNavigate()
-  const hasUser = useHasUser()
+  const { state } = useLocation() as { state: { mode?: string } };
+  const navigate = useNavigate();
+  const hasUser = useHasUser();
 
   useEffect(() => {
     if (hasUser) {
-      navigate('/dashboard')
+      navigate("/dashboard");
     }
-  }, [hasUser])
+  }, [hasUser]);
 
   return (
     <div className="flex min-h-screen w-full flex-col md:overflow-y-hidden lg:grid lg:grid-cols-2">
@@ -26,9 +26,9 @@ export function LoginPage() {
         <SiteLogo />
       </div>
       <div className="relative mt-20 flex items-center justify-center lg:mt-0">
-        {state?.mode === 'forgotPassword' ? (
+        {state?.mode === "forgotPassword" ? (
           <ForgotPasswordForm />
-        ) : state?.mode === 'signup' ? (
+        ) : state?.mode === "signup" ? (
           <SignUpForm />
         ) : (
           <LoginForm />
@@ -46,5 +46,5 @@ export function LoginPage() {
         <SiteFooter />
       </div>
     </div>
-  )
+  );
 }

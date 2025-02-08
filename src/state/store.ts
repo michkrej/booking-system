@@ -7,7 +7,6 @@ import { type Kår, type User } from "@/utils/interfaces";
 import { createPlanStoreSlice, type PlanStoreSlice } from "./planStoreSlice";
 import { createUserStoreSlice, type UserStoreSlice } from "./userStoreSlice";
 import { type AdminStoreSlice, createAdminStoreSlice } from "./adminStoreSlice";
-import { set } from "date-fns";
 
 const useBoundStore = create<
   UserStoreSlice & PlanStoreSlice & AdminStoreSlice
@@ -26,7 +25,7 @@ const useBoundStore = create<
   ),
 );
 
-export const useUser = (): { user: User; kår: Kår } => {
+export const useUser = () => {
   const user = useBoundStore((state) => state.user);
 
   if (!user) {
@@ -35,7 +34,12 @@ export const useUser = (): { user: User; kår: Kår } => {
 
   const kår = committees[user.committeeId].kår;
 
-  return { user, kår };
+  return {
+    user: {
+      ...user,
+      kår,
+    },
+  };
 };
 
 export const useUserUpdated = () => {
@@ -73,7 +77,7 @@ export const useNonUserPublicPlans = () => {
     return [];
   }
 
-  return publicPlans.filter((plan) => plan.userId !== user.userId);
+  return publicPlans.filter((plan) => plan.userId !== user.id);
 };
 
 export const usePlanActions = () => {

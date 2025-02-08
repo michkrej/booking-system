@@ -60,20 +60,20 @@ export function DashboardPage() {
 
 const TimeUntilMottagningCard = () => {
   const { mottagningStart } = useMottagningStart();
-  const { kår } = useUser();
+  const { user } = useUser();
 
-  if (kår === "Övrigt") return null;
+  if (user.kår === "Övrigt") return null;
 
-  const weeksToNolleP = getWeeksLeftToNolleP(mottagningStart[kår]);
-  const progress = getPercentageProgress(mottagningStart[kår]);
+  const weeksToNolleP = getWeeksLeftToNolleP(mottagningStart[user.kår]);
+  const progress = getPercentageProgress(mottagningStart[user.kår]);
 
   return (
     <Card>
       <CardHeader>
-        <CardDescription>Mottagnigen för {kår} börjar</CardDescription>
+        <CardDescription>Mottagnigen för {user.kår} börjar</CardDescription>
         <div className="flex items-center gap-2">
           <CardTitle>
-            {format(mottagningStart[kår], "P", { locale: sv })}
+            {format(mottagningStart[user.kår], "P", { locale: sv })}
           </CardTitle>
         </div>
       </CardHeader>
