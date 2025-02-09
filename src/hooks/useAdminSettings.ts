@@ -15,7 +15,7 @@ export const useAdminSettings = () => {
   const { setPlanEditLock } = usePlanEditLock();
   const { setMottagningStart } = useMottagningStart();
 
-  const { data: adminSettings } = useQuery<AdminSettings>({
+  const { data: adminSettings, isPending } = useQuery<AdminSettings>({
     queryKey: ["adminSettings"],
     queryFn: () => adminService.getAdminSettings(),
   });
@@ -47,6 +47,17 @@ export const useAdminSettings = () => {
     },
   });
 
+  const updateBookableItems = useMutation({
+    mutationFn: (newItems: Record<string, number>) =>
+      adminService.updateBookableItems(newItems),
+    onSuccess: () => {
+      toast.success("Bokningsbara material har ändrats");
+    },
+    onError: () => {
+      toast.error("Kunde inte ändra bokningsbara material");
+    },
+  });
+
   const updateMottagningStart = useMutation({
     mutationFn: ({ date, kår }: { date: Date; kår: Kår }) =>
       adminService.updateMottagningStart(date, kår),
@@ -62,5 +73,7 @@ export const useAdminSettings = () => {
   return {
     lockPlans,
     updateMottagningStart,
+    updateBookableItems,
+    settings: adminSettings,
   };
 };

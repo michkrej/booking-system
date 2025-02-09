@@ -35,7 +35,7 @@ const updateMottagningStart = async (newValue: Date, kår: Kår) => {
 };
 
 // Note - we overwrite the entire bookableItems object
-const updateBookableItems = async (newValue: number) => {
+const updateBookableItems = async (newValue: Record<string, number>) => {
   try {
     const ref = await updateDoc(doc(db, "adminSettings", KEY), {
       bookableItems: newValue,

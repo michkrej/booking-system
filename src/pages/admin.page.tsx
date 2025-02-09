@@ -1,6 +1,6 @@
 import { DatePicker } from "@/components/molecules/datePicker";
 import { Layout } from "@/components/molecules/layout";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/molecules/loadingButton";
 import {
   Card,
   CardContent,
@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { useAdminSettings } from "@/hooks";
 import { useMottagningStart, usePlanEditLock } from "@/state";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { useMemo, useState } from "react";
 
 export const AdminPage = () => {
   return (
@@ -23,11 +24,12 @@ export const AdminPage = () => {
           <CardHeader>
             <CardTitle>Admin</CardTitle>
             <CardDescription>
-              Här kan du justera diverse inställningar för systemet.
+              Här kan du justera diverse inställningar för bokningsplaneringen.
+              Dina ändringar påverkar alla som har tillgång till systemet.
             </CardDescription>
           </CardHeader>
         </Card>
-        {/* <BookableItemsCard /> */}
+        <BookableItemsCard />
         <MottagningStartDateCard />
         <LockPlanEditingCard />
       </div>
@@ -96,7 +98,7 @@ const LockPlanEditingCard = () => {
       </CardHeader>
       <CardContent className="grid gap-2">
         <div className="flex items-center gap-2">
-          <p>Lås redigering av bokningar</p>
+          <p>{planEditLocked ? "Lås upp redigering" : "Lås redigering"}</p>
           <Switch
             checked={planEditLocked}
             onCheckedChange={lockPlans.mutate}
@@ -108,8 +110,7 @@ const LockPlanEditingCard = () => {
   );
 };
 
-// TODO - actually make this card do things
-const items = {
+const DEFAULT_ITEMS = {
   grillar: 8,
   bardiskar: 6,
   "bankset-hg": 20,
@@ -119,9 +120,29 @@ const items = {
   tents: 4,
   scene: 10,
   elverk: 1,
-};
+} as const;
 
 const BookableItemsCard = () => {
+  const { settings, updateBookableItems } = useAdminSettings();
+  const [items, setItems] = useState(settings?.bookableItems ?? DEFAULT_ITEMS);
+  const originalItems = settings?.bookableItems ?? DEFAULT_ITEMS;
+
+  const itemsAmountsHaveChanged = useMemo(
+    () =>
+      Object.entries(items).some(
+        ([key, value]) =>
+          value !== originalItems[key as keyof typeof originalItems],
+      ),
+    [items, originalItems],
+  );
+
+  const handleChange = (item: keyof typeof items, value: string) => {
+    setItems((prev) => ({
+      ...prev,
+      [item]: isNaN(parseInt(value)) ? prev[item] : parseInt(value),
+    }));
+  };
+
   return (
     <Card className="row-span-3">
       <CardHeader>
@@ -132,13 +153,29 @@ const BookableItemsCard = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        {Object.keys(items).map((item) => (
+        {Object.entries(items).map(([item, value]) => (
           <div className="grid grid-cols-[100px_auto] gap-2" key={item}>
             <Label>{item}</Label>
-            <Input type="number" value={items[item]} />
+            <Input
+              type="number"
+              value={value}
+              onChange={(e) =>
+                handleChange(item as keyof typeof items, e.target.value)
+              }
+            />
           </div>
         ))}
-        <Button>Spara</Button>
+
+        <LoadingButton
+          loading={updateBookableItems.isPending}
+          disabled={!itemsAmountsHaveChanged}
+          onClick={() => updateBookableItems.mutate(items)}
+        >
+          Spara
+        </LoadingButton>
+        <p className="text-center text-xs">
+          Om det saknas något material mejla mig så kan jag lägga till det.
+        </p>
       </CardContent>
     </Card>
   );
