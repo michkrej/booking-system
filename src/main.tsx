@@ -1,16 +1,20 @@
-import { createRoot } from 'react-dom/client'
-import { StrictMode } from 'react'
+import { createRoot } from "react-dom/client";
+import { StrictMode } from "react";
+import { registerLicense } from "@syncfusion/ej2-base";
 
-import App from './App'
+import App from "./App";
 
-import 'devextreme/dist/css/dx.light.css'
-import '@fontsource-variable/inter'
-import './styles/global.css'
+import "@fontsource-variable/inter";
+import "./styles/global.css";
+import "./styles/scheduler.css";
 
-const container = document.getElementById('root')
-const root = createRoot(container!!)
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+registerLicense(import.meta.env.VITE_APP_SYNCFUSION_KEY);
+
+const container = document.getElementById("root");
+const root = createRoot(container!!);
 root.render(
   <StrictMode>
     <App />
-  </StrictMode>
-)
+  </StrictMode>,
+);

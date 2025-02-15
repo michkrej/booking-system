@@ -1,7 +1,7 @@
 import { type committees, type kårer } from "@/data/committees";
 
 export type Room = {
-  text: string;
+  name: string;
   id: string;
   corridorId?: string;
 };
@@ -15,6 +15,12 @@ export type CorridorC = Record<
   }
 >;
 
+export type Location = {
+  id: string;
+  name: string;
+  rooms: Room[];
+};
+
 export interface EditablePlanDetails {
   label: string;
   public: boolean;
@@ -26,23 +32,23 @@ export interface DBPlan extends EditablePlanDetails {
   updatedAt: Date;
   userId: string;
   year: number;
-  events: PlanEvent[];
+  events: Booking[];
 }
 
 export interface Plan extends DBPlan {
   id: string;
 }
 
-export type PlanEvent = {
+export type Booking = {
   id: string;
+  title: string;
   allDay: boolean;
   committeeId: keyof typeof committees;
   planId: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   locationId: string;
   roomId: string[];
-  text: string;
 
   createdAt: Date;
   updatedAt: Date;
