@@ -33,7 +33,7 @@ export const campuses = {
 
 type CampusName = typeof VALLA_CAMPUS.label | typeof US_CAMPUS.label;
 
-const campusLocationsMap = {
+export const campusLocationsMap = {
   [VALLA_CAMPUS.label]: { ...locations.campusValla, ...locations.others },
   [US_CAMPUS.label]: { ...locations.campusUS, ...locations.others },
 };

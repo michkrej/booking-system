@@ -16,54 +16,54 @@ const roomsOther = [
 ];
 
 export const locationsUS = {
-  house001: {
+  "Hus 001": {
     id: "949636dc-997a-4aa2-8582-7c81a12dad4d",
-    text: "Hus 001",
+    name: "Hus 001",
     rooms: house001,
   },
-  house240: {
+  "Hus 240": {
     id: "c1173d8c-3b1e-4e91-bf5a-38fa30f23bb7",
-    text: "Hus 240",
+    name: "Hus 240",
     rooms: house240,
   },
-  house420: {
+  "Hus 420": {
     id: "52392466-b327-49cd-83e7-fbc1edd13f56",
-    text: "Hus 420",
+    name: "Hus 420",
     rooms: house420,
   },
-  house421: {
+  "Hus 421": {
     id: "8d31f888-99c9-4caf-a3ba-c31619a658f6",
-    text: "Hus 421",
+    name: "Hus 421",
     rooms: house421,
   },
-  house448: {
+  "Hus 448": {
     id: "be6df087-6884-4f80-87a1-8d0547ab2feb",
-    text: "Hus 448",
+    name: "Hus 448",
     rooms: house448,
   },
-  house462: {
+  "Hus 462": {
     id: "f536fe7a-2bbb-4321-8edb-92346f3f5ffc",
-    text: "Hus 462",
+    name: "Hus 462",
     rooms: house462,
   },
-  house463: {
+  "Hus 463": {
     id: "0d8d31ba-f773-4db2-9119-0fdcbf342819",
-    text: "Hus 463",
+    name: "Hus 463",
     rooms: house463,
   },
-  house473: {
+  "Hus 473": {
     id: "a8e79460-581b-423a-a0f5-07d1ae75b940",
-    text: "Hus 473",
+    name: "Hus 473",
     rooms: house473,
   },
-  house511: {
+  "Hus 511": {
     id: "faceed67-e485-4ed8-8aeb-264d72e3be52",
-    text: "Hus 511",
+    name: "Hus 511",
     rooms: house511,
   },
   "Övriga områden på campus US": {
     id: "56138ae6-f3f4-40cc-88ec-bd1d841e3770",
-    text: "Övriga områden på campus",
+    name: "Övriga områden på campus",
     rooms: roomsOther,
   },
 };
