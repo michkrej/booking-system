@@ -12,7 +12,7 @@ import {
   DragAndDrop,
   TimelineMonth,
 } from "@syncfusion/ej2-react-schedule";
-import { type Location } from "@/utils/interfaces";
+import { Booking, Room, type Location } from "@/utils/interfaces";
 import { ChevronLeft, ChevronRight, TrashIcon } from "lucide-react";
 import { addDays, addMonths, format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -24,13 +24,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { sv } from "date-fns/locale";
-import { useUser } from "@/state";
+import { useBookings, useUser } from "@/state";
 import { defaultCampus } from "@/utils/helpers";
 import { campusLocationsMap } from "@/data/locationsData";
+import { toast } from "sonner";
+import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
+import { EditorTemplate } from "./components/editorTemplate";
+
+import "./components/localization";
+import { committees } from "@/data/committees";
 
 type View = "TimelineDay" | "TimelineWeek" | "TimelineMonth";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
+// https://ej2.syncfusion.com/react/documentation/schedule/editor-template
 
 type ScheduleContextType = {
   schedule: React.RefObject<ScheduleComponent>;
@@ -43,8 +51,9 @@ type ScheduleContextType = {
   setChosenCampus: (campus: "US" | "Valla") => void;
   setBuilding: (building: string | undefined) => void;
   locations: Location[];
+  rooms: Room[];
 };
-const ScheduleContext = createContext<ScheduleContextType>(
+export const ScheduleContext = createContext<ScheduleContextType>(
   {} as ScheduleContextType,
 );
 
@@ -56,6 +65,10 @@ export const BookingPage = () => {
     defaultCampus(user.committeeId).label,
   );
   const [building, setBuilding] = useState<string | undefined>();
+  const [newBooking, setNewBooking] = useState<any>({});
+  const { bookings } = useBookings();
+  const [isCreateBookingModalOpen, setIsCreateBookingModalOpen] =
+    useState(false);
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
@@ -102,14 +115,21 @@ export const BookingPage = () => {
           setBuilding,
           building,
           locations,
+          rooms,
         }}
       >
         <div className="h-[calc(100vh-121px)]">
           <ScheduleToolbar />
           <ScheduleComponent
+            locale="sv"
             ref={scheduleObj}
             width="100%"
             height="100%"
+            // editorTemplate={EditorTemplate}
+            popupClose={(args) => {
+              // console.log(args);
+            }}
+            showQuickInfo={false}
             workHours={{ highlight: false }}
             timeScale={{
               enable: true,
@@ -123,13 +143,15 @@ export const BookingPage = () => {
             firstDayOfWeek={1}
             currentView={currentView}
             eventSettings={{
-              dataSource: [],
+              dataSource: bookings,
               fields: {
-                id: "name",
-                subject: { title: "Summary", name: "subject" },
+                id: "id",
+                subject: {
+                  name: "title",
+                },
                 description: { title: "Comments", name: "description" },
-                startTime: { title: "From", name: "startTime" },
-                endTime: { title: "To", name: "endTime" },
+                startTime: { title: "From", name: "startDate" },
+                endTime: { title: "To", name: "endDate" },
               },
             }}
             timezone="Europe/Stockholm"
@@ -138,7 +160,23 @@ export const BookingPage = () => {
               resources: ["Locations", "Rooms"],
             }}
             showHeaderBar={false}
-            // rowAutoHeight={true}
+            popupOpen={(e) => {
+              if (!building) {
+                toast.error(
+                  "Du måste välja en byggnad för att skapa ett bokning",
+                );
+                e.cancel = true;
+                return;
+              }
+              setNewBooking(e.data);
+              setIsCreateBookingModalOpen(true);
+              e.cancel = true;
+            }}
+            rowAutoHeight={true}
+            eventRendered={(args) => {
+              const commitee = committees[user.committeeId];
+              args.element.style.backgroundColor = commitee.color;
+            }}
           >
             <ResourcesDirective>
               {building ? (
@@ -168,7 +206,25 @@ export const BookingPage = () => {
               )}
             </ResourcesDirective>
             <ViewsDirective>
-              <ViewDirective option="TimelineDay" />
+              <ViewDirective
+                option="TimelineDay"
+                eventTemplate={(props: Booking) => {
+                  console.log(props);
+                  return (
+                    <div className="relative">
+                      <div className="e-subject">{props.title}</div>
+                      <div className="text-[10px]">
+                        {format(props.startDate, "HH:mm", { locale: sv })}
+                        {" - "}
+                        {format(props.endDate, "HH:mm", { locale: sv })}
+                      </div>
+                      <div className="absolute bottom-[-2px] right-[-2.7em]">
+                        {committees[user.committeeId].name}
+                      </div>
+                    </div>
+                  );
+                }}
+              />
               <ViewDirective option="TimelineWeek" />
               <ViewDirective option="TimelineMonth" />
             </ViewsDirective>
@@ -177,6 +233,12 @@ export const BookingPage = () => {
             />
           </ScheduleComponent>
         </div>
+        <EditorTemplate
+          currentBuilding={building ?? ""}
+          data={newBooking}
+          open={isCreateBookingModalOpen}
+          onOpenChange={() => setIsCreateBookingModalOpen((prev) => !prev)}
+        />
       </ScheduleContext.Provider>
     </Layout>
   );
@@ -250,7 +312,9 @@ const ScheduleToolbar = () => {
             </SelectTrigger>
             <SelectContent>
               {locations.map((location) => (
-                <SelectItem value={location.name}>{location.name}</SelectItem>
+                <SelectItem key={location.name} value={location.name}>
+                  {location.name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>

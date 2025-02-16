@@ -17,7 +17,7 @@ import { AdminPage } from "./pages/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
 import { LoginPage } from "./pages/login.page";
 import { useHasUser } from "./state/store";
-import { BookingPage } from "./pages/booking.page";
+import { BookingPage } from "./pages/Booking/booking.page";
 
 const queryClient = new QueryClient();
 

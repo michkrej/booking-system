@@ -3,13 +3,16 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 import { committees } from "@/data/committees";
-import { type Kår, type User } from "@/utils/interfaces";
 import { createPlanStoreSlice, type PlanStoreSlice } from "./planStoreSlice";
 import { createUserStoreSlice, type UserStoreSlice } from "./userStoreSlice";
 import { type AdminStoreSlice, createAdminStoreSlice } from "./adminStoreSlice";
+import {
+  type BookingStoreSlice,
+  createBookingStoreSlice,
+} from "./bookingStoreSlice";
 
 const useBoundStore = create<
-  UserStoreSlice & PlanStoreSlice & AdminStoreSlice
+  UserStoreSlice & PlanStoreSlice & AdminStoreSlice & BookingStoreSlice
 >()(
   devtools(
     persist(
@@ -18,6 +21,7 @@ const useBoundStore = create<
           ...createUserStoreSlice(...a),
           ...createPlanStoreSlice(...a),
           ...createAdminStoreSlice(...a),
+          ...createBookingStoreSlice(...a),
         };
       },
       { name: "app-storage" },
@@ -138,4 +142,16 @@ export const useSetAdminSettings = () => {
   const setAdminSettings = useBoundStore((state) => state.setAdminSettings);
 
   return setAdminSettings;
+};
+
+export const useBookings = () => {
+  const bookings = useBoundStore((state) => state.bookings);
+
+  return {
+    bookings,
+    createBooking: useBoundStore((state) => state.createBooking),
+    deleteBooking: useBoundStore((state) => state.deleteBooking),
+    updateBooking: useBoundStore((state) => state.updateBooking),
+    setInitialBookings: useBoundStore((state) => state.setInitialBookings),
+  };
 };

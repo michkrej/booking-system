@@ -13,3 +13,8 @@
 .e-schedule .e-timeline-view .e-content-wrap table col {
   width: 100px !important;
 }
+
+.e-input-group .e-control-wrapper .e-datetime-wrapper {
+  background-color: aliceblue;
+  border: 1px solid #dadce0;
+}
