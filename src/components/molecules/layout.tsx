@@ -5,9 +5,11 @@ import { SiteFooter } from "./siteFooter";
 export const Layout = ({
   children,
   className,
+  hideFooter = false,
 }: {
   children: React.ReactNode;
   className?: string;
+  hideFooter?: boolean;
 }) => {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -15,7 +17,7 @@ export const Layout = ({
       <main className={cn("flex flex-1 flex-col gap-4 p-4 sm:px-6", className)}>
         {children}
       </main>
-      <SiteFooter />
+      {hideFooter ? null : <SiteFooter />}
     </div>
   );
 };

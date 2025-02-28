@@ -1,6 +1,5 @@
-import { L10n, setCulture, loadCldr } from "@syncfusion/ej2-base";
+import { L10n, loadCldr } from "@syncfusion/ej2-base";
 import svData from "@syncfusion/ej2-cldr-data/main/sv/all.json";
-import { required } from "yargs";
 
 loadCldr(svData);
 

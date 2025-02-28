@@ -1,7 +1,3 @@
-import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
-import { MultiSelectComponent } from "@syncfusion/ej2-react-dropdowns";
-import { CheckBoxComponent } from "@syncfusion/ej2-react-buttons";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/text-area";
@@ -27,16 +23,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useContext, useEffect } from "react";
-import { Section } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { sv } from "date-fns/locale";
 import { useBookings, useUser } from "@/state";
-import { plansService } from "@/services";
 import { ScheduleContext } from "../booking.page";
 import { committees } from "@/data/committees";
 import { campusLocationsMap } from "@/data/locationsData";
-import { on } from "events";
+import { type Booking } from "@/utils/interfaces";
 
 const formSchema = z.object({
   title: z.string().min(1, "Bokningen måste ha ett namn"),
@@ -62,7 +56,7 @@ const formSchema = z.object({
 });
 
 type EditorTemplateProps = {
-  data: any;
+  data?: Booking;
   open: boolean;
   onOpenChange: () => void;
   currentBuilding: string;
@@ -83,19 +77,20 @@ export const EditorTemplate = ({
     resolver: zodResolver(formSchema),
   });
 
+  console.log(data);
+
   // Reset form values when `data` is available
   useEffect(() => {
     if (data) {
       form.reset({
-        title: "",
+        title: data.title,
         startDate: data.startDate || "",
         endDate: data.endDate || "",
         description: "",
         rooms: [
           {
             value: data.roomId,
-            label: rooms.find((room) => room.id === data.roomId)
-              ?.name as string,
+            label: rooms.find((room) => room.id === data.roomId)?.name!,
           },
         ],
         food: false,
@@ -148,8 +143,6 @@ export const EditorTemplate = ({
       console.log(err);
     }); */
   }
-
-  console.log(bookings);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -455,204 +448,5 @@ export const EditorTemplate = ({
         </Form>
       </DialogContent>
     </Dialog>
-  );
-
-  return props !== undefined ? (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-      <div className="col-span-2">
-        <label className="e-textlabel">Aktivitet</label>
-        <input
-          className="e-field e-subject e-input"
-          type="search"
-          name="Subject"
-          id="subject"
-        />
-        {/* <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-          /> */}
-      </div>
-      <div className="col-span-full">
-        <label className="e-textlabel">Beskrivning</label>
-        <textarea
-          id="Summary"
-          className="e-field e-input"
-          name="Subject"
-          rows={1}
-        />
-      </div>
-      <div>
-        <label className="e-textlabel">Start</label>
-        <td colSpan={4}>
-          <DateTimePickerComponent
-            format="dd/MM/yy hh:mm a"
-            id="EndTime"
-            data-name="EndTime"
-            value={new Date(props.startTime || props.StartTime)}
-            className="e-field"
-          ></DateTimePickerComponent>
-        </td>
-      </div>
-      <div>
-        <label className="e-textlabel">Slut</label>
-        <td colSpan={4}>
-          <DateTimePickerComponent
-            format="dd/MM/yy hh:mm a"
-            id="EndTime"
-            data-name="EndTime"
-            value={new Date(props.endTime || props.EndTime)}
-            className="e-field"
-          ></DateTimePickerComponent>
-        </td>
-      </div>
-      <div>
-        <label className="e-textlabel">Lokal</label>
-        <MultiSelectComponent
-          className="e-field"
-          placeholder="Choose owner"
-          data-name="OwnerId"
-          dataSource={[]}
-          fields={{}}
-          value={""}
-          enabled={false}
-        />
-      </div>
-      <div>
-        <label className="e-textlabel">Plats</label>
-        <MultiSelectComponent
-          className="e-field"
-          placeholder="Choose owner"
-          data-name="OwnerId"
-          dataSource={[]}
-          fields={{}}
-          value={""}
-          enabled={false}
-        />
-      </div>
-
-      <div className="gap col-span-full grid grid-cols-4">
-        <CheckBoxComponent label="Mat?" className="e-field" />
-        <CheckBoxComponent label="Alkohol?" className="e-field" />
-      </div>
-      {/* ------------------------- Bänkset -------------------------- */}
-      <div className="col-span-full flex items-center justify-center gap-x-2 font-bold">
-        <Separator />
-        <h3>Bänkset</h3>
-        <Separator />
-      </div>
-      <div className="gap col-span-full grid grid-cols-3 gap-x-4 gap-y-2">
-        <div className="">
-          <label className="e-textlabel">HG</label>
-          <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-          />
-        </div>
-        <div className="">
-          <label className="e-textlabel">Kårallen</label>
-          <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-          />
-        </div>
-        <div className="">
-          <label className="e-textlabel">Hoben</label>
-          <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-          />
-        </div>
-      </div>
-      {/* ------------------------- Bänkset -------------------------- */}
-      <div className="col-span-full flex items-center justify-center gap-x-2 text-center font-bold">
-        <Separator />
-        <h3>Övrigt bokningsbart</h3>
-        <Separator />
-      </div>
-      <div className="col-span-full grid grid-cols-3 place-items-center gap-x-4 gap-y-2">
-        <div className="">
-          <label className="e-textlabel">Grillar (Kårallen)</label>
-          <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-          />
-        </div>
-        <div className="">
-          <label className="e-textlabel">Bardiskar (Kårallen)</label>
-          <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-          />
-        </div>
-        <div className="">
-          <label className="e-textlabel">Scenpoder</label>
-          <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-          />
-        </div>
-        <div className="w-full">
-          <label className="e-textlabel">Tält (FF)</label>
-          <input
-            id="Summary"
-            className="e-field e-input"
-            type="number"
-            name="Subject"
-            min={0}
-            max={4}
-          />
-        </div>
-        <CheckBoxComponent label="Elverk (FF)" className="e-field" />
-        <CheckBoxComponent label="Släp (FF)" className="e-field" />
-      </div>
-      <div className="col-span-full">
-        <label className="e-textlabel">Övriga inventarier för bokningen</label>
-        <textarea
-          id="Summary"
-          className="e-field e-input"
-          name="Subject"
-          rows={1}
-        />
-      </div>
-      <div className="col-span-full flex items-center justify-center gap-x-2 text-center font-bold">
-        <Separator />
-        <h3>Länk</h3>
-        <Separator />
-      </div>
-      <div className="col-span-full">
-        <label className="e-textlabel">
-          Google Maps länk till plats (t.ex. för hajk eller stadsvandring)
-        </label>
-        <input
-          id="Summary"
-          className="e-field e-input"
-          type="text"
-          name="Subject"
-        />
-      </div>
-    </div>
-  ) : (
-    <div></div>
   );
 };

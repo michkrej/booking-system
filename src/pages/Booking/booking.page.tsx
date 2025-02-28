@@ -1,5 +1,5 @@
 import { Layout } from "@/components/molecules/layout";
-import { createContext, useContext, useMemo, useRef, useState } from "react";
+import { createContext, useMemo, useRef, useState } from "react";
 import {
   ScheduleComponent,
   Inject,
@@ -12,30 +12,18 @@ import {
   DragAndDrop,
   TimelineMonth,
 } from "@syncfusion/ej2-react-schedule";
-import { Booking, Room, type Location } from "@/utils/interfaces";
-import { ChevronLeft, ChevronRight, TrashIcon } from "lucide-react";
-import { addDays, addMonths, format } from "date-fns";
-import { Button } from "@/components/ui/button";
-import { Select } from "@radix-ui/react-select";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { type Booking, type Room, type Location } from "@/utils/interfaces";
+import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { useBookings, useUser } from "@/state";
 import { defaultCampus } from "@/utils/helpers";
 import { campusLocationsMap } from "@/data/locationsData";
 import { toast } from "sonner";
-import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
-import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
 import { EditorTemplate } from "./components/editorTemplate";
+import { committees } from "@/data/committees";
+import { ScheduleToolbar, type View } from "./components/ScheduleToolbar";
 
 import "./components/localization";
-import { committees } from "@/data/committees";
-
-type View = "TimelineDay" | "TimelineWeek" | "TimelineMonth";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -59,13 +47,13 @@ export const ScheduleContext = createContext<ScheduleContextType>(
 
 export const BookingPage = () => {
   const { user } = useUser();
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date("2026-01-01"));
   const [currentView, setCurrentView] = useState<View>("TimelineDay");
   const [chosenCampus, setChosenCampus] = useState(
     defaultCampus(user.committeeId).label,
   );
   const [building, setBuilding] = useState<string | undefined>();
-  const [newBooking, setNewBooking] = useState<any>({});
+  const [newBooking, setNewBooking] = useState<Booking | undefined>();
   const { bookings } = useBookings();
   const [isCreateBookingModalOpen, setIsCreateBookingModalOpen] =
     useState(false);
@@ -86,23 +74,64 @@ export const BookingPage = () => {
 
   // Rooms in the building
   const rooms = useMemo(() => {
-    if (!building) return [];
-
     const campus = campusLocationsMap[chosenCampus];
+
+    if (!building)
+      return Object.values(campus).flatMap((location) => location.rooms);
 
     const _building = Object.values(campus).find(
       (location) => location.name === building,
     );
 
-    if (!_building) return [];
+    if (!_building) {
+      console.error("Building not found");
+      return [];
+    }
 
     return _building.rooms.sort((a, b) =>
       a.name.localeCompare(b.name, "sv", { numeric: true }),
     );
   }, [building, chosenCampus]);
 
+  const handlePopupOpen = (e: {
+    type: string;
+    data: Booking;
+    cancel: boolean;
+  }) => {
+    console.log(e);
+
+    const isQuickInfo = e.type === "QuickInfo";
+    const isEditor = e.type === "Editor";
+    const clickedExistingBooking = e.data.id;
+    const clickedCell = !e.data?.id;
+
+    if (!building && clickedCell) {
+      console.log("Need to select a building");
+      toast.error("Du måste välja en byggnad för att skapa en bokning");
+      e.cancel = true;
+      return;
+    }
+
+    if (
+      (isQuickInfo && clickedCell && building) ||
+      (isEditor && clickedExistingBooking)
+    ) {
+      console.log("Create/edit booking");
+      setNewBooking(e.data);
+      setIsCreateBookingModalOpen(true);
+      e.cancel = true;
+      return;
+    }
+  };
+
+  // Set the event color to the committee color
+  const handleEventRendered = (args: { element: HTMLElement }) => {
+    const commitee = committees[user.committeeId];
+    args.element.style.backgroundColor = commitee.color;
+  };
+
   return (
-    <Layout className="!p-0">
+    <Layout className="bg-white !p-0" hideFooter>
       <ScheduleContext.Provider
         value={{
           schedule: scheduleObj,
@@ -125,11 +154,7 @@ export const BookingPage = () => {
             ref={scheduleObj}
             width="100%"
             height="100%"
-            // editorTemplate={EditorTemplate}
-            popupClose={(args) => {
-              // console.log(args);
-            }}
-            showQuickInfo={false}
+            showQuickInfo={true}
             workHours={{ highlight: false }}
             timeScale={{
               enable: true,
@@ -160,23 +185,9 @@ export const BookingPage = () => {
               resources: ["Locations", "Rooms"],
             }}
             showHeaderBar={false}
-            popupOpen={(e) => {
-              if (!building) {
-                toast.error(
-                  "Du måste välja en byggnad för att skapa ett bokning",
-                );
-                e.cancel = true;
-                return;
-              }
-              setNewBooking(e.data);
-              setIsCreateBookingModalOpen(true);
-              e.cancel = true;
-            }}
             rowAutoHeight={true}
-            eventRendered={(args) => {
-              const commitee = committees[user.committeeId];
-              args.element.style.backgroundColor = commitee.color;
-            }}
+            popupOpen={handlePopupOpen}
+            eventRendered={handleEventRendered}
           >
             <ResourcesDirective>
               {building ? (
@@ -209,7 +220,6 @@ export const BookingPage = () => {
               <ViewDirective
                 option="TimelineDay"
                 eventTemplate={(props: Booking) => {
-                  console.log(props);
                   return (
                     <div className="relative">
                       <div className="e-subject">{props.title}</div>
@@ -241,135 +251,5 @@ export const BookingPage = () => {
         />
       </ScheduleContext.Provider>
     </Layout>
-  );
-};
-
-const viewAdjustments = {
-  TimelineDay: (date: Date, step: number) => addDays(date, step),
-  TimelineWeek: (date: Date, step: number) => addDays(date, step * 7),
-  TimelineMonth: (date: Date, step: number) => addMonths(date, step),
-};
-
-const ScheduleToolbar = () => {
-  const {
-    schedule,
-    currentDate,
-    currentView,
-    setCurrentDate,
-    setCurrentView,
-    setChosenCampus,
-    chosenCampus,
-    setBuilding,
-    building,
-    locations,
-  } = useContext(ScheduleContext);
-
-  const changeDate = (step: number) => {
-    setCurrentDate(viewAdjustments[currentView](currentDate, step));
-  };
-
-  const goToPrevious = () => changeDate(-1);
-  const goToNext = () => changeDate(1);
-
-  const switchToView = (view: View) => {
-    setCurrentView(view);
-    schedule.current?.changeCurrentView(view);
-  };
-
-  const getWeekDateSpan = () => {
-    const dates = schedule.current?.activeView?.renderDates;
-    if (!Array.isArray(dates) || dates.length === 0) return "";
-
-    const startDate = dates[0];
-    const endDate = dates[dates.length - 1];
-
-    if (!startDate || !endDate) return "";
-
-    return `${format(startDate, "d", { locale: sv })} - ${format(endDate, "d MMMM yyyy", { locale: sv })}`;
-  };
-
-  const handleCampusChange = (option: "US" | "Valla") => {
-    setChosenCampus(option);
-    setBuilding("");
-  };
-
-  return (
-    <div className="flex w-full items-center justify-between border border-b-0 border-gray-200 bg-[#fafafa] px-4 py-2">
-      <div className="flex flex-1 gap-x-4">
-        <Select value={chosenCampus} onValueChange={handleCampusChange}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Välj campus" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="US">US</SelectItem>
-            <SelectItem value="Valla">Valla</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="flex gap-1">
-          <Select value={building ?? ""} onValueChange={setBuilding}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Välj byggnad" />
-            </SelectTrigger>
-            <SelectContent>
-              {locations.map((location) => (
-                <SelectItem key={location.name} value={location.name}>
-                  {location.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {building && (
-            <Button
-              variant={"ghost"}
-              onClick={() => setBuilding(undefined)}
-              className="flex gap-2 px-1 text-primary"
-            >
-              <TrashIcon />
-              Återställ byggnad
-            </Button>
-          )}
-        </div>
-      </div>
-      <div className="flex gap-x-2">
-        <div className="flex items-center gap-x-2">
-          <Button size="icon" variant="ghost" onClick={goToPrevious}>
-            <ChevronLeft className="cursor-pointer hover:text-primary" />
-          </Button>
-          <span className="pointer-events-none">
-            {currentView === "TimelineDay"
-              ? currentDate.toLocaleDateString()
-              : null}
-            {currentView === "TimelineWeek" ? getWeekDateSpan() : null}
-            {currentView === "TimelineMonth"
-              ? format(currentDate, "MMMM", { locale: sv })
-              : null}
-          </span>
-          <Button size="icon" variant="ghost" onClick={goToNext}>
-            <ChevronRight className="cursor-pointer hover:text-primary" />
-          </Button>
-        </div>
-        <Button
-          size="sm"
-          variant={currentView === "TimelineDay" ? "default" : "ghost"}
-          onClick={() => switchToView("TimelineDay")}
-        >
-          Dag
-        </Button>
-        <Button
-          size="sm"
-          variant={currentView === "TimelineWeek" ? "default" : "ghost"}
-          onClick={() => switchToView("TimelineWeek")}
-        >
-          Vecka
-        </Button>
-        <Button
-          size="sm"
-          variant={currentView === "TimelineMonth" ? "default" : "ghost"}
-          onClick={() => switchToView("TimelineMonth")}
-        >
-          Månad
-        </Button>
-      </div>
-    </div>
   );
 };
