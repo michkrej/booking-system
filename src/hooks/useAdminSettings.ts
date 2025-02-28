@@ -15,7 +15,7 @@ export const useAdminSettings = () => {
   const { setPlanEditLock } = usePlanEditLock();
   const { setMottagningStart } = useMottagningStart();
 
-  const { data: adminSettings, isPending } = useQuery<AdminSettings>({
+  const { data: adminSettings } = useQuery<AdminSettings>({
     queryKey: ["adminSettings"],
     queryFn: () => adminService.getAdminSettings(),
   });
@@ -40,7 +40,11 @@ export const useAdminSettings = () => {
       adminService.lockAndUnlockPlans(newValue),
     onSuccess: (value) => {
       setPlanEditLock(value);
-      toast.success("Låst redigering av bokningar");
+      toast.success(
+        value
+          ? "Låst redigering av bokningar"
+          : "Låst upp redigering av bokningar",
+      );
     },
     onError: () => {
       toast.error("Kunde inte låsa/upplåsa redigering av bokningar");
