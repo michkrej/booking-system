@@ -1,5 +1,5 @@
-import { siteConfig } from '@/config/site'
-import { IntroductionPopover } from '../organisms/introductionPopover'
+import { siteConfig } from "@/config/site";
+import { IntroductionPopover } from "../organisms/introductionPopover";
 
 export function SiteFooter() {
   return (
@@ -7,16 +7,16 @@ export function SiteFooter() {
       <div className="flex flex-row items-center gap-3 md:h-12 md:flex-row">
         <IntroductionPopover />
         <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
-          Byggt av{' '}
+          Byggt av{" "}
           <a
-            href={siteConfig.links.linkedin}
+            href={siteConfig.links.portfolio}
             target="_blank"
             rel="noreferrer"
             className="font-medium underline underline-offset-4"
           >
             Michelle
           </a>
-          . Koden finns på{' '}
+          . Koden finns på{" "}
           <a
             href={siteConfig.links.github}
             target="_blank"
@@ -29,5 +29,5 @@ export function SiteFooter() {
         </p>
       </div>
     </footer>
-  )
+  );
 }

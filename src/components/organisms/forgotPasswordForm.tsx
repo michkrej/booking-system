@@ -1,40 +1,42 @@
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from '@/components/ui/input'
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form'
-import { LoadingButton } from '@/components/molecules/loadingButton'
-import { useResetPassword } from '@/hooks'
+  FormMessage,
+} from "@/components/ui/form";
+import { LoadingButton } from "@/components/molecules/loadingButton";
+import { useResetPassword } from "@/hooks";
 
 const formSchema = z.object({
-  email: z.string().min(1, 'E-postadress saknas').email('Felaktig e-postadress')
-})
+  email: z
+    .string()
+    .min(1, "E-postadress saknas")
+    .email("Felaktig e-postadress"),
+});
 
 export const ForgotPasswordForm = () => {
-  const { resetPassword, isPending } = useResetPassword()
-  const navigate = useNavigate()
+  const { resetPassword, isPending } = useResetPassword();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: ''
-    }
-  })
+      email: "",
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    resetPassword(values.email).then(() => {
-      navigate('/')
-    })
+    void resetPassword(values.email).then(() => {
+      navigate("/");
+    });
   }
   return (
     <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
@@ -55,7 +57,12 @@ export const ForgotPasswordForm = () => {
                 <FormItem>
                   <FormLabel>E-post</FormLabel>
                   <FormControl>
-                    <Input id="email" type="email" placeholder="m@example.com" {...field} />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -68,14 +75,14 @@ export const ForgotPasswordForm = () => {
         </Form>
       </div>
       <div className="text-center text-sm">
-        Klar?{' '}
+        Klar?{" "}
         <span
-          onClick={() => navigate('/', { state: { mode: undefined } })}
+          onClick={() => navigate("/", { state: { mode: undefined } })}
           className="cursor-pointer underline"
         >
           Logga in
         </span>
       </div>
     </div>
-  )
-}
+  );
+};

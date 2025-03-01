@@ -18,6 +18,7 @@ import { DashboardPage } from "./pages/dashboard.page";
 import { LoginPage } from "./pages/login.page";
 import { useHasUser } from "./state/store";
 import { BookingPage } from "./pages/Booking/booking.page";
+import { Layout } from "./components/molecules/layout";
 
 const queryClient = new QueryClient();
 
@@ -54,24 +55,14 @@ function App() {
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/booking/:id" element={<BookingPage />} />
               </Route>
-              {/*<Route exact path="/resetPassword" element={<ForgotPassword />} />
-          <Route element={<RequireAuth />}>
-            <Route exact path="/booking/:id/:year" element={<CalendarView />} />
-            <Route exact path="/collisions/:id/:year" element={<CalendarView findCollisions />} />
-            <Route
-              exact
-              path="/collisions/all/:id/:year"
-              element={<CalendarView findCollisions />}
-            />
-            <Route exact path="/overview" element={<Overview />} />
-            <Route exact path="/allEvents/:id/:year" element={<CalendarView showAllEvents />} />
-          </Route> */}
               <Route
                 path="*"
                 element={
-                  <main style={{ padding: "1rem" }}>
-                    <p>Oops, denna sidan är tom!</p>
-                  </main>
+                  <Layout>
+                    <div className="flex h-[calc(100vh-155px)] flex-col items-center justify-center">
+                      Oops, denna sidan är tom!
+                    </div>
+                  </Layout>
                 }
               />
             </Routes>
