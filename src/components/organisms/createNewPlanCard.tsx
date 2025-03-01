@@ -52,7 +52,7 @@ export const CreateNewPlanCard = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     createPlan.mutate(values.planName, {
       onSuccess: (newPlan) => {
-        bookings.setInitialBookings([]);
+        bookings.loadedBookings([]);
         navigate(`/booking/${newPlan.id}`);
         form.reset();
       },

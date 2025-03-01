@@ -16,7 +16,6 @@ import {
 import { type Booking, type Room, type Location } from "@/utils/interfaces";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { useBookings, useUser } from "@/state";
 import { defaultCampus } from "@/utils/helpers";
 import { campusLocationsMap } from "@/data/locationsData";
 import { toast } from "sonner";
@@ -27,6 +26,8 @@ import { ScheduleToolbar, type View } from "./components/ScheduleToolbar";
 import "./components/localization";
 import { useStoreUser } from "@/hooks/useStoreUser";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
+import { plansService } from "@/services";
+import { useBoundStore } from "@/state/store";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -50,7 +51,8 @@ export const ScheduleContext = createContext<ScheduleContextType>(
 
 export const BookingPage = () => {
   const { user } = useStoreUser();
-  const { bookings } = useStoreBookings();
+  const { bookings, deletedBooking, updatedBooking } = useStoreBookings();
+  const currentPlan = useBoundStore((state) => state.currentPlan);
 
   const [currentDate, setCurrentDate] = useState(new Date("2026-01-01"));
   const [currentView, setCurrentView] = useState<View>("TimelineDay");
@@ -132,15 +134,43 @@ export const BookingPage = () => {
 
   const onActionBegin = (args: ActionEventArgs): void => {
     console.log(args);
-    if (
-      args.requestType === "eventCreate" ||
-      args.requestType === "eventChange"
-    ) {
-      const data: Record<string, any> =
-        args.data instanceof Array ? args.data[0] : args.data;
-      args.cancel = !scheduleObj.current?.isSlotAvailable(data);
+    if (args.requestType === "eventRemove" && args.deletedRecords) {
+      if (!args.deletedRecords.length) return;
+      const entry = args.deletedRecords[0] as Booking;
+      plansService
+        .deletePlanEvent(currentPlan!, entry.id)
+        .then(() => {
+          deletedBooking(entry.id);
+          toast.success("Bokningen har raderats");
+        })
+        .catch((e) => {
+          console.log(e);
+          toast.error("Kunde inte radera bokningen");
+        });
+      return;
+    }
+
+    if (args.requestType === "eventChange" && args.changedRecords) {
+      const updatedEvent = args.changedRecords[0] as Booking & {
+        Guid?: string;
+      };
+
+      delete updatedEvent.Guid;
+
+      plansService
+        .updatePlanEvent(currentPlan!, updatedEvent)
+        .then(() => {
+          updatedBooking(updatedEvent);
+          toast.success("Bokningen har uppdaterats");
+        })
+        .catch((e) => {
+          console.log(e);
+          toast.error("Kunde inte uppdatera bokningen");
+        });
     }
   };
+
+  console.log(bookings);
 
   return (
     <Layout className="bg-white !p-0" hideFooter>

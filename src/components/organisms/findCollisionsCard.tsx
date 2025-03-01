@@ -142,7 +142,7 @@ const CollisionsTable = ({ publicPlans, userPlan }: CollisionsTableProps) => {
 };
 
 const useFindAllCollisions = () => {
-  const { collisionsExist, toggleCollisionsExist } = useStoreCollisionsExist();
+  const { collisionsExist, changedCollisionsExist } = useStoreCollisionsExist();
 
   const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
     const allCollisions: Record<string, Plan["events"]> = {};
@@ -151,7 +151,7 @@ const useFindAllCollisions = () => {
       allCollisions[plan.id] = collisions;
 
       if (collisions.length > 0 && !collisionsExist) {
-        toggleCollisionsExist();
+        changedCollisionsExist();
       }
     });
     return allCollisions;

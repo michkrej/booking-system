@@ -4,10 +4,10 @@ import { type Booking } from "@/utils/interfaces";
 
 type BookingStoreSlice = {
   bookings: Booking[];
-  createBooking: (booking: Booking) => void;
-  deleteBooking: (id: string) => void;
-  updateBooking: (booking: Booking) => void;
-  setInitialBookings: (bookings: Booking[]) => void;
+  createdBooking: (booking: Booking) => void;
+  deletedBooking: (id: string) => void;
+  updatedBooking: (booking: Booking) => void;
+  loadedBookings: (bookings: Booking[]) => void;
 };
 
 const createBookingStoreSlice: StateCreator<
@@ -17,17 +17,17 @@ const createBookingStoreSlice: StateCreator<
   BookingStoreSlice
 > = (set) => ({
   bookings: [],
-  createBooking: (booking) => {
+  createdBooking: (booking) => {
     set((state) => ({
       bookings: [...state.bookings, booking],
     }));
   },
-  deleteBooking: (id) => {
+  deletedBooking: (id) => {
     set((state) => ({
       bookings: state.bookings.filter((booking) => booking.id !== id),
     }));
   },
-  updateBooking: (updatedBooking) => {
+  updatedBooking: (updatedBooking) => {
     set((state) => ({
       bookings: state.bookings.map((booking) => {
         if (updatedBooking.id === booking.id) {
@@ -40,7 +40,7 @@ const createBookingStoreSlice: StateCreator<
       }),
     }));
   },
-  setInitialBookings: (bookings) => {
+  loadedBookings: (bookings) => {
     set(() => ({
       bookings: bookings,
     }));

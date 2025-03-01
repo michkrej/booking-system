@@ -14,12 +14,14 @@ import { v4 as uuidv4 } from "uuid";
 
 import { getErrorMessage } from "@/utils/error.util";
 import {
+  type DBPlan,
   type Booking,
   type EditablePlanDetails,
   type Plan,
   type User,
 } from "@/utils/interfaces";
 import { db } from "./config";
+import { convertToDate } from "@/lib/utils";
 
 type CreatePlanParams = Omit<Plan, "createdAt" | "updatedAt" | "id">;
 const createPlan = async (plan: CreatePlanParams) => {
@@ -98,10 +100,20 @@ export const getUserPlans = async (userId: string, year: number) => {
         where("year", "==", year),
       ),
     );
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Plan[];
+    return snapshot.docs.map((doc) => {
+      const data = doc.data() as DBPlan;
+      return {
+        id: doc.id,
+        ...data,
+        events: data.events.map((event) => ({
+          ...event,
+          startDate: convertToDate(event.startDate),
+          endDate: convertToDate(event.endDate),
+          createdAt: convertToDate(event.createdAt),
+          updatedAt: convertToDate(event.updatedAt),
+        })),
+      };
+    }) as Plan[];
   } catch (e) {
     console.error("Error fetching user plans:", getErrorMessage(e));
     throw e;

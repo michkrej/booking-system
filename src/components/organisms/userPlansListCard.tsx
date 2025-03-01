@@ -16,18 +16,19 @@ import {
 import { useNavigate } from "react-router-dom";
 import { type Plan } from "@/utils/interfaces";
 import { useUserPlans } from "@/hooks/useUserPlans";
-import { useStoreBookings } from "@/hooks/useStoreBookings";
 import { useBoundStore } from "@/state/store";
 
 const loadingTableEntries = Array.from({ length: 4 }, (_, i) => i);
 
 export const UserPlansListCard = () => {
   const { isPending, userPlans } = useUserPlans();
-  const setInitialBookings = useBoundStore((state) => state.setInitialBookings);
+  const loadedBookings = useBoundStore((state) => state.loadedBookings);
+  const changedActivePlan = useBoundStore((state) => state.changedActivePlan);
   const navigate = useNavigate();
 
   const handlePlanClick = (plan: Plan) => {
-    setInitialBookings(plan.events);
+    loadedBookings(plan.events);
+    changedActivePlan(plan);
     navigate(`/booking/${plan.id}`);
   };
 

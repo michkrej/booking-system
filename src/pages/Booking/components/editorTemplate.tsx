@@ -76,7 +76,7 @@ export const EditorTemplate = ({
   currentBuilding,
 }: EditorTemplateProps) => {
   const { id: planId } = useParams();
-  const { createBooking, bookings } = useStoreBookings();
+  const { createdBooking, bookings } = useStoreBookings();
   const { rooms, building, chosenCampus } = useContext(ScheduleContext);
   const { user } = useStoreUser();
 
@@ -154,7 +154,7 @@ export const EditorTemplate = ({
       elverk: values["ff-elverk"],
       annat: values["other-inventory"],
     };
-    createBooking(bookingData);
+    createdBooking(bookingData);
     await addBookingToPlanMutation.mutateAsync(bookingData);
   }
 
