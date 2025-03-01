@@ -8,8 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { CalendarIcon, PencilIcon } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import { sv } from "date-fns/locale";
 
 export function DatePicker({

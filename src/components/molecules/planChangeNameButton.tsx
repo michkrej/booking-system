@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Pencil } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import {
   Dialog,
@@ -10,42 +10,52 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
-import { useEditPlan } from '@/hooks'
-import { Plan } from '@/utils/interfaces'
-import { useState } from 'react'
-import { LoadingButton } from './loadingButton'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { Button } from '../ui/button'
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useEditPlan } from "@/hooks";
+import { type Plan } from "@/utils/interfaces";
+import { useState } from "react";
+import { LoadingButton } from "./loadingButton";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const formSchema = z.object({
-  newPlanName: z.string().min(1, 'Du måste ange ett nytt namn för planeringen')
-})
+  newPlanName: z.string().min(1, "Du måste ange ett nytt namn för planeringen"),
+});
 
 type ChangePlanNameModalProps = {
-  plan: Plan
-}
+  plan: Plan;
+};
 
 export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
-  const { isPending, changePlanName } = useEditPlan()
-  const [open, setOpen] = useState(false)
+  const { isPending, changePlanName } = useEditPlan();
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      newPlanName: ''
-    }
-  })
+      newPlanName: "",
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    changePlanName(plan, values.newPlanName).then(() => {
-      form.reset()
-      setOpen(false)
-    })
+    console.log(values);
+    void changePlanName(plan, values.newPlanName).then(() => {
+      form.reset();
+      setOpen(false);
+    });
   }
 
   return (
@@ -96,5 +106,5 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
         </Form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

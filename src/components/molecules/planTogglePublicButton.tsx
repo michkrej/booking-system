@@ -1,14 +1,17 @@
-import { useEditPlan } from '@/hooks'
-import { Plan } from '@/utils/interfaces'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { Globe, GlobeLock, Loader } from 'lucide-react'
+import { useEditPlan } from "@/hooks";
+import { type Plan } from "@/utils/interfaces";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Globe, GlobeLock, Loader } from "lucide-react";
 
 type PlanTogglePublicButtonProps = {
-  plan: Plan
-}
+  plan: Plan;
+};
 
-export const PlanTogglePublicButton = ({ plan }: PlanTogglePublicButtonProps) => {
-  const { togglePublicPlan, isPending } = useEditPlan()
+export const PlanTogglePublicButton = ({
+  plan,
+}: PlanTogglePublicButtonProps) => {
+  const { togglePublicPlan, isPending } = useEditPlan();
+
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -25,7 +28,9 @@ export const PlanTogglePublicButton = ({ plan }: PlanTogglePublicButtonProps) =>
           )}
         </div>
       </TooltipTrigger>
-      <TooltipContent>Gör planering {`${plan.public ? 'privat' : 'publik'}`}</TooltipContent>
+      <TooltipContent>
+        Gör planering {`${plan.public ? "privat" : "publik"}`}
+      </TooltipContent>
     </Tooltip>
-  )
-}
+  );
+};

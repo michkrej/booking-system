@@ -59,7 +59,7 @@ const TabCommitteeSection = ({
                 return (
                   <TableRow key={plan.id}>
                     <TableCell className="font-medium">
-                      {committee?.text}
+                      {committee.name}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
                       {formatDate(plan.updatedAt)}
@@ -158,7 +158,7 @@ export const PublicPlansCard = () => {
                   return (
                     <TableRow key={plan.id}>
                       <TableCell className="font-medium">
-                        {committee?.text}
+                        {committee.name}
                       </TableCell>
                       <TableCell>{committee?.kår}</TableCell>
                       <TableCell className="hidden md:table-cell">

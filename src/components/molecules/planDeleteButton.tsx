@@ -6,28 +6,31 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { Trash } from 'lucide-react'
-import { Button } from '../ui/button'
-import { Plan } from '@/utils/interfaces'
-import { useEditPlan } from '@/hooks'
-import { LoadingButton } from './loadingButton'
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Trash } from "lucide-react";
+import { Button } from "../ui/button";
+import { type Plan } from "@/utils/interfaces";
+import { useEditPlan } from "@/hooks";
+import { LoadingButton } from "./loadingButton";
+import { useState } from "react";
 
 type PlanDeleteButtonProps = {
-  plan: Plan
-}
+  plan: Plan;
+};
 
 export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
-  const { deletePlan, isPending } = useEditPlan()
+  const [isOpen, setIsOpen] = useState(false);
+  const { deletePlan, isPending } = useEditPlan();
 
-  const handleDelete = () => {
-    deletePlan(plan)
-  }
+  const handleDelete = async () => {
+    await deletePlan(plan);
+    setIsOpen(false);
+  };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setIsOpen((prev) => !prev)} open={isOpen}>
       <DialogTrigger>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -42,24 +45,19 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
         <DialogHeader>
           <DialogTitle>Är du helt säker?</DialogTitle>
           <DialogDescription>
-            Om du raderar planeringen <b>{plan.label}</b> kommer den att tas bort permanent. Det går
-            inte att ångra denna åtgärd.
+            Om du raderar planeringen <b>{plan.label}</b> kommer den att tas
+            bort permanent. Det går inte att ångra denna åtgärd.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose>
             <Button variant="secondary">Cancel</Button>
           </DialogClose>
-          <LoadingButton
-            loading={isPending}
-            onClick={() => {
-              handleDelete()
-            }}
-          >
+          <LoadingButton loading={isPending} onClick={handleDelete}>
             Radera
           </LoadingButton>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

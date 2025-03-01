@@ -1,4 +1,4 @@
-import { DatePicker } from "@/components/molecules/datePicker";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Layout } from "@/components/molecules/layout";
 import { LoadingButton } from "@/components/molecules/loadingButton";
 import {
