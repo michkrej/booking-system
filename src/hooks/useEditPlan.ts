@@ -82,33 +82,42 @@ export const useEditPlan = () => {
   };
 
   const createPlan = async (name: string) => {
-    setIsPending(true);
-    plansService
-      .createPlan({
+    try {
+      setIsPending(true);
+      console.log({
         label: name,
         userId: user.id,
         public: false,
         committeeId: user.committeeId,
         year: planYear,
         events: [],
-      })
-      .then((newPlan) => {
-        userPlanCreated({
-          ...newPlan,
-          label: newPlan.label,
-          id: newPlan.id,
-          createdAt: newPlan.createdAt,
-          updatedAt: newPlan.updatedAt,
-        });
-        toast.success("Planeringen skapades");
-        setIsPending(false);
-        //navigate(`/booking/${newPlan.id}/${planYear}`)
-      })
-      .catch((e) => {
-        const errorMessage = getErrorMessage(e);
-        toast.error(errorMessage);
-        setIsPending(false);
       });
+      const newPlan = await plansService.createPlan({
+        label: name,
+        userId: user.id,
+        public: false,
+        committeeId: user.committeeId,
+        year: planYear,
+        events: [],
+      });
+
+      userPlanCreated({
+        ...newPlan,
+        label: newPlan.label,
+        id: newPlan.id,
+        createdAt: newPlan.createdAt,
+        updatedAt: newPlan.updatedAt,
+      });
+
+      toast.success("Planeringen skapades");
+
+      return newPlan;
+    } catch (error) {
+      const errorMessage = getErrorMessage(error);
+      toast.error(errorMessage);
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return {

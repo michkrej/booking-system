@@ -14,11 +14,21 @@ import {
   TableRow,
 } from "../ui/table";
 import { useUserPlans } from "@/hooks";
+import { useNavigate } from "react-router-dom";
+import { type Plan } from "@/utils/interfaces";
+import { useBookings } from "@/state";
 
 const loadingTableEntries = Array.from({ length: 4 }, (_, i) => i);
 
 export const UserPlansListCard = () => {
   const { isPending, userPlans } = useUserPlans();
+  const { setInitialBookings } = useBookings();
+  const navigate = useNavigate();
+
+  const handlePlanClick = (plan: Plan) => {
+    setInitialBookings(plan.events);
+    navigate(`/booking/${plan.id}`);
+  };
 
   return (
     <Card className="col-span-full">
@@ -43,7 +53,12 @@ export const UserPlansListCard = () => {
                   const updatedAt = formatDate(plan.updatedAt);
                   return (
                     <TableRow key={plan.id}>
-                      <TableCell>{plan.label}</TableCell>
+                      <TableCell
+                        className="hover:cursor-pointer hover:underline"
+                        onClick={() => handlePlanClick(plan)}
+                      >
+                        {plan.label}
+                      </TableCell>
                       <TableCell>{plan.events.length}</TableCell>
                       <TableCell>{createdAt}</TableCell>
                       <TableCell>{updatedAt}</TableCell>
@@ -57,7 +72,7 @@ export const UserPlansListCard = () => {
                   );
                 })
               : loadingTableEntries.map((index) => (
-                  <TableRow key={index}>
+                  <TableRow key={`table-row-${index}`}>
                     <TableCell>
                       <Skeleton className="h-4 w-full" />
                     </TableCell>

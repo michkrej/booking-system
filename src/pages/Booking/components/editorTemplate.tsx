@@ -31,6 +31,11 @@ import { ScheduleContext } from "../booking.page";
 import { committees } from "@/data/committees";
 import { campusLocationsMap } from "@/data/locationsData";
 import { type Booking } from "@/utils/interfaces";
+import { useMutation } from "@tanstack/react-query";
+import { plansService } from "@/services";
+import { toast } from "sonner";
+import { useParams } from "react-router-dom";
+import { LoadingButton } from "@/components/molecules/loadingButton";
 
 const formSchema = z.object({
   title: z.string().min(1, "Bokningen måste ha ett namn"),
@@ -69,6 +74,7 @@ export const EditorTemplate = ({
   onOpenChange,
   currentBuilding,
 }: EditorTemplateProps) => {
+  const { id: planId } = useParams();
   const { createBooking, bookings } = useBookings();
   const { rooms, building, chosenCampus } = useContext(ScheduleContext);
   const { user } = useUser();
@@ -77,7 +83,19 @@ export const EditorTemplate = ({
     resolver: zodResolver(formSchema),
   });
 
-  console.log(data);
+  const addBookingToPlanMutation = useMutation({
+    mutationFn: (booking: Booking) => {
+      if (!planId) throw new Error("PlanId not found");
+      return plansService.addPlanEvent(planId, booking);
+    },
+    onSuccess: () => {
+      toast.success("Bokning har lagts till i planeringen");
+      onOpenChange();
+    },
+    onError: () => {
+      toast.error("Kunde inte lägga till bokning i planeringen");
+    },
+  });
 
   // Reset form values when `data` is available
   useEffect(() => {
@@ -110,8 +128,8 @@ export const EditorTemplate = ({
     }
   }, [data, form.reset]); // Depend on `data` and `reset` to update values when `data` changes
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    createBooking({
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const bookingData = {
       id: uuidv4(),
       title: values.title,
       startDate: values.startDate,
@@ -134,14 +152,9 @@ export const EditorTemplate = ({
       scene: values.scenes,
       elverk: values["ff-elverk"],
       annat: values["other-inventory"],
-    });
-    onOpenChange();
-    /* plansService.addPlanEvent('', values).then((res) => {
-      console.log(res);
-      createBooking(res); 
-    }).catch((err) => {
-      console.log(err);
-    }); */
+    };
+    createBooking(bookingData);
+    await addBookingToPlanMutation.mutateAsync(bookingData);
   }
 
   return (
@@ -437,7 +450,12 @@ export const EditorTemplate = ({
               )}
             />
             <DialogFooter className="col-span-full">
-              <Button type="submit">Spara</Button>
+              <LoadingButton
+                type="submit"
+                loading={addBookingToPlanMutation.isPending}
+              >
+                Spara
+              </LoadingButton>
               <DialogClose>
                 <Button variant="outline" type="button">
                   Avbryt

@@ -11,6 +11,7 @@ import {
   Resize,
   DragAndDrop,
   TimelineMonth,
+  type ActionEventArgs,
 } from "@syncfusion/ej2-react-schedule";
 import { type Booking, type Room, type Location } from "@/utils/interfaces";
 import { format } from "date-fns";
@@ -93,11 +94,7 @@ export const BookingPage = () => {
     );
   }, [building, chosenCampus]);
 
-  const handlePopupOpen = (e: {
-    type: string;
-    data: Booking;
-    cancel: boolean;
-  }) => {
+  const onPopupOpen = (e: { type: string; data: Booking; cancel: boolean }) => {
     console.log(e);
 
     const isQuickInfo = e.type === "QuickInfo";
@@ -125,9 +122,21 @@ export const BookingPage = () => {
   };
 
   // Set the event color to the committee color
-  const handleEventRendered = (args: { element: HTMLElement }) => {
+  const onEventRendered = (args: { element: HTMLElement }) => {
     const commitee = committees[user.committeeId];
     args.element.style.backgroundColor = commitee.color;
+  };
+
+  const onActionBegin = (args: ActionEventArgs): void => {
+    console.log(args);
+    if (
+      args.requestType === "eventCreate" ||
+      args.requestType === "eventChange"
+    ) {
+      const data: Record<string, any> =
+        args.data instanceof Array ? args.data[0] : args.data;
+      args.cancel = !scheduleObj.current?.isSlotAvailable(data);
+    }
   };
 
   return (
@@ -184,10 +193,12 @@ export const BookingPage = () => {
               enableCompactView: false,
               resources: ["Locations", "Rooms"],
             }}
+            showWeekNumber={false}
             showHeaderBar={false}
             rowAutoHeight={true}
-            popupOpen={handlePopupOpen}
-            eventRendered={handleEventRendered}
+            popupOpen={onPopupOpen}
+            eventRendered={onEventRendered}
+            actionBegin={onActionBegin}
           >
             <ResourcesDirective>
               {building ? (

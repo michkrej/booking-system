@@ -52,7 +52,7 @@ function App() {
               <Route element={<RequireAuth />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
-                <Route path="/booking" element={<BookingPage />} />
+                <Route path="/booking/:id" element={<BookingPage />} />
               </Route>
               {/*<Route exact path="/resetPassword" element={<ForgotPassword />} />
           <Route element={<RequireAuth />}>

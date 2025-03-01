@@ -173,10 +173,9 @@ const addPlanEvent = async (planId: string, event: PlanEvent) => {
 
     return event;
   } catch (e) {
+    throw e;
     console.log(getErrorMessage(e));
   }
-
-  return null;
 };
 
 const updatePlanEvent = async (plan: Plan, event: Partial<PlanEvent>) => {

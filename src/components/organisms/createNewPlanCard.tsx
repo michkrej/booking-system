@@ -30,6 +30,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { useNavigate } from "react-router-dom";
+import { useBookings } from "@/state";
 
 const formSchema = z.object({
   planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
@@ -37,6 +39,8 @@ const formSchema = z.object({
 
 export const CreateNewPlanCard = () => {
   const { createPlan, isPending } = useEditPlan();
+  const bookings = useBookings();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,12 +49,12 @@ export const CreateNewPlanCard = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    createPlan(values.planName).then(() => {
-      form.reset();
-      // redirect to the new plan here
-    });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const newPlan = await createPlan(values.planName);
+    if (!newPlan) return;
+    bookings.setInitialBookings([]);
+    navigate(`/booking/${newPlan.id}`);
+    form.reset();
   }
 
   return (

@@ -1,8 +1,7 @@
-import { Kår, type Plan } from "@/utils/interfaces";
+import { type Plan } from "@/utils/interfaces";
 import { type StateCreator } from "zustand";
 import { type UserStoreSlice } from "./userStoreSlice";
 import { convertToDate } from "@/lib/utils";
-import { setWeek, startOfWeek } from "date-fns";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export const MIN_YEAR = 2023;
