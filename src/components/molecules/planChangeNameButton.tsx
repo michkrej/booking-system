@@ -30,6 +30,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Button } from "../ui/button";
+import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 const formSchema = z.object({
   newPlanName: z.string().min(1, "Du måste ange ett nytt namn för planeringen"),
@@ -40,7 +42,7 @@ type ChangePlanNameModalProps = {
 };
 
 export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
-  const { isPending, changePlanName } = useEditPlan();
+  const { updatePlanName } = useEditPlan();
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,21 +53,32 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    void changePlanName(plan, values.newPlanName).then(() => {
-      form.reset();
-      setOpen(false);
-    });
+    updatePlanName.mutate(
+      { plan, newPlanName: values.newPlanName },
+      {
+        onSuccess: () => {
+          form.reset();
+          setOpen(false);
+        },
+      },
+    );
   }
+
+  const isCurrentYear = plan.year === CURRENT_YEAR;
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen((prev) => !prev)}>
-      <DialogTrigger>
+      <DialogTrigger disabled={!isCurrentYear}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="text-sn rounded-full p-1 text-primary/60 transition-colors hover:bg-primary/30 hover:text-primary/100">
+            <Button
+              size={"icon"}
+              variant="ghost"
+              className="rounded-full text-primary/60 hover:text-primary"
+              disabled={!isCurrentYear}
+            >
               <Pencil />
-            </div>
+            </Button>
           </TooltipTrigger>
           <TooltipContent>Byt namn på planering</TooltipContent>
         </Tooltip>
@@ -98,7 +111,11 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
               )}
             />
             <DialogFooter>
-              <LoadingButton type="submit" loading={isPending} className="mt-4">
+              <LoadingButton
+                type="submit"
+                loading={updatePlanName.isPending}
+                className="mt-4"
+              >
                 Skapa
               </LoadingButton>
             </DialogFooter>

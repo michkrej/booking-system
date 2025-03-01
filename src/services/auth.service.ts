@@ -6,14 +6,12 @@ import {
   sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
-  UserCredential,
-  User as FirebaseUser,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { auth, db } from "./config";
 import { getErrorMessage } from "@/utils/error.util";
-import { type UserDetails, type User, Kår } from "@/utils/interfaces";
+import { type UserDetails, type User } from "@/utils/interfaces";
 
 const signUpWithEmailAndPassword = async ({
   email,

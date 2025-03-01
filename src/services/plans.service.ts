@@ -14,29 +14,31 @@ import { v4 as uuidv4 } from "uuid";
 
 import { getErrorMessage } from "@/utils/error.util";
 import {
+  type Booking,
   type EditablePlanDetails,
   type Plan,
-  type PlanEvent,
   type User,
 } from "@/utils/interfaces";
 import { db } from "./config";
 
-interface CreatePlanParams
-  extends Omit<Plan, "createdAt" | "updatedAt" | "id"> {}
+type CreatePlanParams = Omit<Plan, "createdAt" | "updatedAt" | "id">;
 const createPlan = async (plan: CreatePlanParams) => {
   try {
-    const newPlanDoc = {
+    const timestamp = new Date();
+    const newPlan = {
       ...plan,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
-    const planRef = await addDoc(collection(db, "plans"), newPlanDoc);
+
+    const planRef = await addDoc(collection(db, "plans"), newPlan);
+
     return {
       id: planRef.id,
-      ...newPlanDoc,
+      ...newPlan,
     };
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error creating plan:", getErrorMessage(e));
     throw e;
   }
 };
@@ -44,52 +46,45 @@ const createPlan = async (plan: CreatePlanParams) => {
 export const deletePlan = async (planId: string) => {
   try {
     await deleteDoc(doc(db, "plans", planId));
+    return planId;
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error deleting plan:", getErrorMessage(e));
+    throw e;
   }
 };
 
 export const getAllPlans = async (user: User, year: number) => {
   try {
-    console.log("Fetching all plans");
     const ref = collection(db, "plans");
-    const [snapshotPersonal, snapshotPublic] = await Promise.all([
-      getDocs(
-        query(
-          ref,
-          where("userId", "==", user.id),
-          where("year", "==", year),
-          orderBy("updatedAt", "desc"),
-          //limit(6)
-        ),
+    const queries = [
+      query(
+        ref,
+        where("userId", "==", user.id),
+        where("year", "==", year),
+        orderBy("updatedAt", "desc"),
       ),
-      getDocs(
-        query(
-          ref,
-          where("public", "==", true),
-          where("year", "==", year),
-          orderBy("updatedAt", "desc"),
-        ),
+      query(
+        ref,
+        where("public", "==", true),
+        where("year", "==", year),
+        orderBy("updatedAt", "desc"),
       ),
-    ]);
-    const userPlans = snapshotPersonal.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Plan[];
-    const publicPlans = snapshotPublic.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Plan[];
+    ];
+    const [snapshotPersonal, snapshotPublic] = await Promise.all(
+      queries.map(getDocs),
+    );
     return {
-      userPlans: userPlans.map((plan) => {
-        return {
-          ...plan,
-        };
-      }),
-      publicPlans,
+      userPlans: (snapshotPersonal?.docs ?? []).map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Plan[],
+      publicPlans: (snapshotPublic?.docs ?? []).map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Plan[],
     };
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error fetching plans:", getErrorMessage(e));
     throw e;
   }
 };
@@ -103,36 +98,32 @@ export const getUserPlans = async (user: User, year: number) => {
         where("year", "==", year),
       ),
     );
-    const plans = snapshot.docs.map((doc) => ({
+    return snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as Plan[];
-    return plans;
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error fetching user plans:", getErrorMessage(e));
     throw e;
   }
 };
 
-export const getPublicPlans = async (user: User, year: number) => {
+export const getPublicPlans = async (year: number) => {
   try {
     const snapshot = await getDocs(
       query(
         collection(db, "plans"),
-        //where("userId", "!=", user.id),
         where("public", "==", true),
         where("year", "==", year),
-        orderBy("userId"),
         orderBy("updatedAt", "desc"),
       ),
     );
-    const plans = snapshot.docs.map((doc) => ({
+    return snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as Plan[];
-    return plans;
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error fetching public plans:", getErrorMessage(e));
     throw e;
   }
 };
@@ -141,84 +132,66 @@ const updatePlanDetails = async (
   id: string,
   newValues: Partial<EditablePlanDetails>,
 ) => {
-  const now = new Date();
   try {
-    await updateDoc(doc(db, "plans", id), {
-      ...newValues,
-      updatedAt: now,
-    });
+    const updatedData = { ...newValues, updatedAt: new Date() };
+    await updateDoc(doc(db, "plans", id), updatedData);
     return {
-      ...newValues,
-      updatedAt: now,
+      id,
+      ...updatedData,
     };
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error updating plan details:", getErrorMessage(e));
     throw e;
   }
 };
 
-const addPlanEvent = async (planId: string, event: PlanEvent) => {
+// ----------------------- Plan events ----------------------- //
+
+const addPlanEvent = async (planId: string, booking: Booking) => {
   try {
-    const newEvent = {
-      ...event,
-      startDate: new Date(event.startDate).toString(),
-      endDate: new Date(event.endDate).toString(),
-      planId,
-      id: uuidv4(),
-    };
+    const newBooking = { ...booking, planId, id: uuidv4() };
     await updateDoc(doc(db, "plans", planId), {
-      events: arrayUnion(newEvent),
+      events: arrayUnion(newBooking),
       updatedAt: new Date(),
     });
-
-    return event;
+    return newBooking;
   } catch (e) {
+    console.error("Error adding plan event:", getErrorMessage(e));
     throw e;
-    console.log(getErrorMessage(e));
   }
 };
 
-const updatePlanEvent = async (plan: Plan, event: Partial<PlanEvent>) => {
-  // find current event
-  const planId = plan.id;
-  const currentEvent = plan.events.find((e) => e.id === event.id);
-
-  const updatedEvent = {
-    ...currentEvent,
-    ...event,
-    ...(event.startDate
-      ? { startDate: new Date(event.startDate).toString() }
-      : {}),
-    ...(event.endDate ? { endDate: new Date(event.endDate).toString() } : {}),
-    updatedAt: new Date(),
-  };
-
-  // replace current event with updated event
-  const newEvents = plan.events.map((e) =>
-    e.id === event.id ? updatedEvent : e,
-  );
-
+const updatePlanEvent = async (plan: Plan, event: Partial<Booking>) => {
   try {
-    await updateDoc(doc(db, "plans", planId), {
-      events: newEvents,
+    const updatedEvent = {
+      ...plan.events.find((e) => e.id === event.id),
+      ...event,
+      updatedAt: new Date(),
+    };
+    const updatedEvents = plan.events.map((e) =>
+      e.id === event.id ? updatedEvent : e,
+    );
+    await updateDoc(doc(db, "plans", plan.id), {
+      events: updatedEvents,
       updatedAt: new Date(),
     });
     return updatedEvent;
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error updating plan event:", getErrorMessage(e));
+    throw e;
   }
-  return null;
 };
 
 const deletePlanEvent = async (plan: Plan, eventId: string) => {
   try {
-    const newEvents = plan.events.filter((event) => event.id !== eventId);
+    const updatedEvents = plan.events.filter((event) => event.id !== eventId);
     await updateDoc(doc(db, "plans", plan.id), {
-      events: newEvents,
+      events: updatedEvents,
       updatedAt: new Date(),
     });
   } catch (e) {
-    console.log(getErrorMessage(e));
+    console.error("Error deleting plan event:", getErrorMessage(e));
+    throw e;
   }
 };
 

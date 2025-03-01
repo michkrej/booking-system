@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useNavigate } from "react-router-dom";
 
 import {
   Dialog,
@@ -30,7 +31,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { useNavigate } from "react-router-dom";
+
 import { useBookings } from "@/state";
 
 const formSchema = z.object({
@@ -38,7 +39,7 @@ const formSchema = z.object({
 });
 
 export const CreateNewPlanCard = () => {
-  const { createPlan, isPending } = useEditPlan();
+  const { createPlan } = useEditPlan();
   const bookings = useBookings();
   const navigate = useNavigate();
 
@@ -50,11 +51,16 @@ export const CreateNewPlanCard = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const newPlan = await createPlan(values.planName);
-    if (!newPlan) return;
-    bookings.setInitialBookings([]);
-    navigate(`/booking/${newPlan.id}`);
-    form.reset();
+    createPlan.mutate(values.planName, {
+      onSuccess: (newPlan) => {
+        bookings.setInitialBookings([]);
+        navigate(`/booking/${newPlan.id}`);
+        form.reset();
+      },
+      onError: () => {
+        form.reset();
+      },
+    });
   }
 
   return (
@@ -105,7 +111,7 @@ export const CreateNewPlanCard = () => {
                 <DialogFooter>
                   <LoadingButton
                     type="submit"
-                    loading={isPending}
+                    loading={createPlan.isPending}
                     className="mt-4"
                   >
                     Skapa

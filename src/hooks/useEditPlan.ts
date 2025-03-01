@@ -1,18 +1,17 @@
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { plansService } from "@/services";
 import {
   useHasPublicPlan,
   usePlanActions,
   usePlanYear,
   useUser,
 } from "@/state/store";
-import { Plan } from "@/utils/interfaces";
-import { plansService } from "@/services";
-import { getErrorMessage } from "@/utils/error.util";
-import { toast } from "sonner";
+import { type Plan } from "@/utils/interfaces";
 
 export const useEditPlan = () => {
   const { user } = useUser();
-  const [isPending, setIsPending] = useState(false);
   const {
     userPlanDeleted,
     userPlanUpdated,
@@ -22,109 +21,88 @@ export const useEditPlan = () => {
   const { planYear } = usePlanYear();
   const hasPublicPlan = useHasPublicPlan();
 
-  const changePlanName = async (plan: Plan, name: string) => {
-    setIsPending(true);
-    const oldPlanName = plan.label;
-    plansService
-      .updatePlanDetails(plan.id, { label: name })
-      .then((updatedPlan) => {
-        userPlanUpdated({
-          label: name,
-          id: plan.id,
-          updatedAt: updatedPlan?.updatedAt,
-        });
-        toast.success(`Planeringen '${oldPlanName}' bytte namn till '${name}'`);
-        setIsPending(false);
-      })
-      .catch((e) => {
-        const errorMessage = getErrorMessage(e);
-        toast.error(errorMessage);
-        setIsPending(false);
-      });
-  };
-
-  const deletePlan = async (plan: Plan) => {
-    setIsPending(true);
-    plansService
-      .deletePlan(plan.id)
-      .then(() => {
-        toast.success(`Planeringen '${plan.label}' har raderats`);
-        userPlanDeleted(plan.id);
-        setIsPending(false);
-      })
-      .catch((e) => {
-        const errorMessage = getErrorMessage(e);
-        toast.error(errorMessage);
-        setIsPending(false);
-      });
-  };
-
-  const togglePublicPlan = (plan: Plan) => {
-    if (!plan.public && hasPublicPlan) {
-      toast.error("Du kan bara ha en publik planering åt gången");
-    } else {
-      setIsPending(true);
-      plansService
-        .updatePlanDetails(plan.id, { public: !plan.public })
-        .then(() => {
-          toast.success(
-            `Planeringen '${plan.label}' är nu ${!plan.public ? "publik" : "privat"}`,
-          );
-          userPlanPublicToggled(plan.id);
-          setIsPending(false);
-        })
-        .catch((e) => {
-          const errorMessage = getErrorMessage(e);
-          toast.error(errorMessage);
-          setIsPending(false);
-        });
-    }
-  };
-
-  const createPlan = async (name: string) => {
-    try {
-      setIsPending(true);
-      console.log({
-        label: name,
+  const createPlan = useMutation({
+    mutationFn: (planName: string) => {
+      return plansService.createPlan({
+        label: planName,
         userId: user.id,
         public: false,
         committeeId: user.committeeId,
         year: planYear,
         events: [],
       });
-      const newPlan = await plansService.createPlan({
-        label: name,
-        userId: user.id,
-        public: false,
-        committeeId: user.committeeId,
-        year: planYear,
-        events: [],
-      });
-
-      userPlanCreated({
-        ...newPlan,
-        label: newPlan.label,
-        id: newPlan.id,
-        createdAt: newPlan.createdAt,
-        updatedAt: newPlan.updatedAt,
-      });
-
+    },
+    onSuccess: (value) => {
+      userPlanCreated(value);
       toast.success("Planeringen skapades");
+    },
+    onError: () => {
+      toast.error("Kunde inte skapa planeringen");
+    },
+  });
 
-      return newPlan;
-    } catch (error) {
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
-    } finally {
-      setIsPending(false);
-    }
-  };
+  const updatePlanName = useMutation({
+    mutationFn: ({
+      plan,
+      newPlanName,
+    }: {
+      plan: Plan;
+      newPlanName: string;
+    }) => {
+      return plansService.updatePlanDetails(plan.id, { label: newPlanName });
+    },
+    onSuccess: (value, { plan: { label: oldName } }) => {
+      userPlanUpdated({
+        id: value.id,
+        label: value.label,
+        updatedAt: value.updatedAt,
+      });
+      toast.success(
+        `Planeringen '${oldName}' bytte namn till '${value.label}'`,
+      );
+    },
+    onError: () => {
+      toast.error("Kunde inte byta namn på planeringen");
+    },
+  });
+
+  const deletePlan = useMutation({
+    mutationFn: (planId: string) => {
+      return plansService.deletePlan(planId);
+    },
+    onSuccess: (id) => {
+      toast.success("Planeringen har raderats");
+      userPlanDeleted(id);
+    },
+    onError: () => {
+      toast.error("Kunde inte radera planeringen");
+    },
+  });
+
+  const togglePublicPlan = useMutation({
+    mutationFn: (plan: Plan) => {
+      if (!plan.public && hasPublicPlan) {
+        toast.error("Du kan bara ha en publik planering åt gången");
+      }
+      return plansService.updatePlanDetails(plan.id, {
+        public: !hasPublicPlan,
+      });
+    },
+    onSuccess: (value) => {
+      toast.success(
+        `Planeringen '${value.label}' är nu ${!hasPublicPlan ? "publik" : "privat"}`,
+      );
+      userPlanPublicToggled(value.id);
+    },
+    onError: () => {
+      toast.error("Kunde inte ändra planeringens public status");
+    },
+  });
 
   return {
-    changePlanName,
+    updatePlanName,
     togglePublicPlan,
     deletePlan,
     createPlan,
-    isPending,
   };
 };

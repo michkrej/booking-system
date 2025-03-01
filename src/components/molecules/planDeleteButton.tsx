@@ -15,6 +15,7 @@ import { type Plan } from "@/utils/interfaces";
 import { useEditPlan } from "@/hooks";
 import { LoadingButton } from "./loadingButton";
 import { useState } from "react";
+import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 type PlanDeleteButtonProps = {
   plan: Plan;
@@ -22,21 +23,34 @@ type PlanDeleteButtonProps = {
 
 export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { deletePlan, isPending } = useEditPlan();
+  const { deletePlan } = useEditPlan();
 
   const handleDelete = async () => {
-    await deletePlan(plan);
-    setIsOpen(false);
+    deletePlan.mutate(plan.id, {
+      onSuccess: () => {
+        setIsOpen(false);
+      },
+      onError: () => {
+        setIsOpen(false);
+      },
+    });
   };
+
+  const isCurrentYear = plan.year === CURRENT_YEAR;
 
   return (
     <Dialog onOpenChange={() => setIsOpen((prev) => !prev)} open={isOpen}>
-      <DialogTrigger>
+      <DialogTrigger disabled={!isCurrentYear}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="text-sn rounded-full p-1 text-primary/60 transition-colors hover:bg-primary/30 hover:text-primary/100">
+            <Button
+              size={"icon"}
+              variant="ghost"
+              className="rounded-full text-primary/60 hover:text-primary"
+              disabled={!isCurrentYear}
+            >
               <Trash />
-            </div>
+            </Button>
           </TooltipTrigger>
           <TooltipContent>Radera planering</TooltipContent>
         </Tooltip>
@@ -53,7 +67,7 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
           <DialogClose>
             <Button variant="secondary">Cancel</Button>
           </DialogClose>
-          <LoadingButton loading={isPending} onClick={handleDelete}>
+          <LoadingButton loading={deletePlan.isPending} onClick={handleDelete}>
             Radera
           </LoadingButton>
         </DialogFooter>

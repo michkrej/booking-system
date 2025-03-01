@@ -1,8 +1,7 @@
-import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
+import { doc, getDoc, type Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "./config";
 import { getErrorMessage } from "@/utils/error.util";
 import { type Kår } from "@/utils/interfaces";
-import { th } from "date-fns/locale";
 
 const KEY = "adminValues";
 
