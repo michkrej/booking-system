@@ -1,4 +1,4 @@
-import { Plan, PlanEvent } from "@/utils/interfaces";
+import { Plan } from "@/utils/interfaces";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -115,7 +115,7 @@ const CollisionsTable = ({ publicPlans, userPlan }: CollisionsTableProps) => {
           return (
             <TableRow key={plan.id}>
               <TableCell>{committee?.kår}</TableCell>
-              <TableCell className="font-medium">{committee?.text}</TableCell>
+              <TableCell className="font-medium">{committee.name}</TableCell>
               <TableCell className="hidden md:table-cell">
                 {formatDate(plan.updatedAt)}
               </TableCell>
@@ -139,7 +139,7 @@ const useFindAllCollisions = () => {
   const { collisionsExist, toggleCollisionsExist } = useCollisionsExist();
 
   const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
-    const allCollisions: { [key: string]: PlanEvent[] } = {};
+    const allCollisions: Record<string, Plan["events"]> = {};
     publicPlans.forEach((plan) => {
       const collisions = findCollisionsBetweenPlans(userPlan, plan);
       allCollisions[plan.id] = collisions;

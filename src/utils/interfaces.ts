@@ -21,13 +21,10 @@ export type Location = {
   rooms: Room[];
 };
 
-export interface EditablePlanDetails {
+export interface DBPlan extends EditablePlanDetails {
   label: string;
   public: boolean;
   committeeId: keyof typeof committees;
-}
-
-export interface DBPlan extends EditablePlanDetails {
   createdAt: Date;
   updatedAt: Date;
   userId: string;
@@ -35,9 +32,14 @@ export interface DBPlan extends EditablePlanDetails {
   events: Booking[];
 }
 
-export interface Plan extends DBPlan {
+export type EditablePlanDetails = Pick<
+  DBPlan,
+  "label" | "public" | "committeeId"
+>;
+
+export type Plan = DBPlan & {
   id: string;
-}
+};
 
 export type Booking = {
   id: string;

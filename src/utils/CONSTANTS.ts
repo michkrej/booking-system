@@ -1,5 +1,3 @@
-const views = ["timelineDay", "timelineWeek", "timelineMonth"];
-
 const adminError =
   "Möjligheten att skapa och redigera planeringar har låsts av en administratör";
 
@@ -12,8 +10,6 @@ const color = {
   tertiary: "#818389",
 };
 
-const pages = [{ url: "overview", name: "Översikt" }];
-
 export const CURRENT_YEAR = new Date().getFullYear();
 
-export { views, adminError, color, pages };
+export { adminError, color };

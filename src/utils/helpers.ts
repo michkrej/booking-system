@@ -1,103 +1,113 @@
-import Moment from 'moment'
-import { extendMoment } from 'moment-range'
-import { campuses, locationsNonGrouped, rooms } from '../data/locationsData'
-import { committees, committeesConsensus, kårer } from '../data/committees'
-import { Kår, PlanEvent } from './interfaces'
+import Moment from "moment";
+import { extendMoment } from "moment-range";
+import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
+import { committees, committeesConsensus, kårer } from "../data/committees";
+import { Kår, Booking } from "./interfaces";
 
-const moment = extendMoment(Moment)
+const moment = extendMoment(Moment);
 
 export const sortAlphabetically = (elem: any[], useLabel = false) => {
   return elem.sort((a, b) =>
-    ('' + (useLabel ? a.label : a.text)).localeCompare(useLabel ? b.label : b.text, 'sv', {
-      numeric: true
-    })
-  )
-}
+    ("" + (useLabel ? a.label : a.text)).localeCompare(
+      useLabel ? b.label : b.text,
+      "sv",
+      {
+        numeric: true,
+      },
+    ),
+  );
+};
 
 export const exportPlan = async (plans) => {
   const header = [
-    'ID',
-    'Fadderi',
-    'Aktivitet',
-    'Område',
-    'Plats',
-    'Startdatum',
-    'Starttid',
-    'Slutdatum',
-    'Sluttid',
-    'Alkohol',
-    'Mat',
-    'Bardiskar',
-    'Bänkset Kårallen',
-    'Bänkset HG',
-    'Grillar',
-    'Annat bokbart',
-    'Beskrivining',
-    'Länk'
-  ]
-  const events = plans.flatMap((plan) => plan.events)
-  events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+    "ID",
+    "Fadderi",
+    "Aktivitet",
+    "Område",
+    "Plats",
+    "Startdatum",
+    "Starttid",
+    "Slutdatum",
+    "Sluttid",
+    "Alkohol",
+    "Mat",
+    "Bardiskar",
+    "Bänkset Kårallen",
+    "Bänkset HG",
+    "Grillar",
+    "Annat bokbart",
+    "Beskrivining",
+    "Länk",
+  ];
+  const events = plans.flatMap((plan) => plan.events);
+  events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
   const cvsConversion = events.map((event) => {
-    const committee = committees.find((com) => com.id === event.committeeId)
-    const location = locationsNonGrouped.find((location) => location.id === event.locationId)
+    const committee = committees.find((com) => com.id === event.committeeId);
+    const location = locationsNonGrouped.find(
+      (location) => location.id === event.locationId,
+    );
     const roomNames = event.roomId
       .map((eventRoomID) => rooms.find((room) => room.id === eventRoomID).text)
-      .join(', ')
+      .join(", ");
     return [
       event.id,
       committee.text,
       event.text,
       location.text,
       roomNames,
-      moment(event.startDate).format('YY-MM-DD'),
-      moment(event.startDate).format('HH:mm'),
-      moment(event.endDate).format('YY-MM-DD'),
-      moment(event.endDate).format('HH:mm'),
-      event.alcohol ? 'TRUE' : 'FALSE',
-      event.food ? 'TRUE' : 'FALSE',
-      event.bardiskar || '0',
-      event['bankset-k'] || '0',
-      event['bankset-hg'] || '0',
-      event.grillar || '0',
-      event.annat || '',
-      event.description || '',
-      event.link || ''
-    ]
-  })
-  return [header, ...cvsConversion]
-}
+      moment(event.startDate).format("YY-MM-DD"),
+      moment(event.startDate).format("HH:mm"),
+      moment(event.endDate).format("YY-MM-DD"),
+      moment(event.endDate).format("HH:mm"),
+      event.alcohol ? "TRUE" : "FALSE",
+      event.food ? "TRUE" : "FALSE",
+      event.bardiskar || "0",
+      event["bankset-k"] || "0",
+      event["bankset-hg"] || "0",
+      event.grillar || "0",
+      event.annat || "",
+      event.description || "",
+      event.link || "",
+    ];
+  });
+  return [header, ...cvsConversion];
+};
 
 export const getCommitteesForKår = (kår: Kår) => {
-  return kårer[kår]
-}
+  return kårer[kår];
+};
 
 export const defaultCampus = (committeeId: string) => {
-  if (Object.keys(committeesConsensus).includes(committeeId)) return campuses.US
-  return campuses.Valla
-}
+  if (Object.keys(committeesConsensus).includes(committeeId))
+    return campuses.US;
+  return campuses.Valla;
+};
 
-export const formatCollisions = (collisions: PlanEvent[]) => {
-  return `+${(collisions || []).map((collision) => collision.id).join('+')}`
-}
+export const formatCollisions = (collisions: Booking[]) => {
+  return `+${(collisions || []).map((collision) => collision.id).join("+")}`;
+};
 
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export const getYears = () => {
-  const startYear = 2023
-  const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => i + startYear)
+  const startYear = 2023;
+  const currentYear = new Date().getFullYear();
+  const years = Array.from(
+    { length: currentYear - startYear + 1 },
+    (_, i) => i + startYear,
+  );
   // Conditionally extend years with one year if the date is past october 1st
   if (new Date().getMonth() >= 9) {
-    years.push(currentYear + 1)
+    years.push(currentYear + 1);
   }
-  return years
-}
+  return years;
+};
 
 export const getActiveYear = () => {
   // The year should be the current year if the date is past october 1st
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
   if (new Date().getMonth() >= 9) {
-    return currentYear + 1
+    return currentYear + 1;
   }
-  return currentYear
-}
+  return currentYear;
+};
