@@ -11,10 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useAdminSettings } from "@/hooks";
-import { useMottagningStart, usePlanEditLock } from "@/state";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { useMemo, useState } from "react";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 
 export const AdminPage = () => {
   return (
@@ -38,8 +37,7 @@ export const AdminPage = () => {
 };
 
 const MottagningStartDateCard = () => {
-  const { mottagningStart } = useMottagningStart();
-  const { updateMottagningStart } = useAdminSettings();
+  const { mottagningStart, updateMottagningStart } = useAdminSettings();
 
   return (
     <Card>
@@ -83,8 +81,7 @@ const MottagningStartDateCard = () => {
 };
 
 const LockPlanEditingCard = () => {
-  const { lockPlans } = useAdminSettings();
-  const { planEditLocked } = usePlanEditLock();
+  const { lockPlans, planEditLocked } = useAdminSettings();
 
   return (
     <Card>
@@ -123,9 +120,9 @@ const DEFAULT_ITEMS = {
 } as const;
 
 const BookableItemsCard = () => {
-  const { settings, updateBookableItems } = useAdminSettings();
-  const [items, setItems] = useState(settings?.bookableItems ?? DEFAULT_ITEMS);
-  const originalItems = settings?.bookableItems ?? DEFAULT_ITEMS;
+  const { bookableItems, updateBookableItems } = useAdminSettings();
+  const [items, setItems] = useState(bookableItems ?? DEFAULT_ITEMS);
+  const originalItems = bookableItems ?? DEFAULT_ITEMS;
 
   const itemsAmountsHaveChanged = useMemo(
     () =>

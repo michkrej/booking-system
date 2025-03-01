@@ -19,81 +19,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatDate, getCommittee } from "@/lib/utils";
 import { type Kår, type Plan } from "@/utils/interfaces";
 import { ExportPlansButton } from "../molecules/exportPlansButton";
-import { usePublicPlans } from "@/hooks";
+
 import { Skeleton } from "../ui/skeleton";
-import { useUser } from "@/state";
-
-type TabCommitteeSectionProps = {
-  kår: Kår;
-  plans: Plan[];
-  isPending: boolean;
-};
-
-const TabCommitteeSection = ({
-  kår,
-  plans,
-  isPending,
-}: TabCommitteeSectionProps) => {
-  return (
-    <TabsContent value={kår.toLowerCase()}>
-      <Card>
-        <CardHeader className="px-7">
-          <CardTitle>{kår} planeringar</CardTitle>
-          <CardDescription>
-            Publika planeringar för fadderier inom {kår}.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Fadderi</TableHead>
-                <TableHead className="hidden sm:table-cell">
-                  Uppdaterad
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {plans.map((plan) => {
-                const committee = getCommittee(plan.committeeId);
-                return (
-                  <TableRow key={plan.id}>
-                    <TableCell className="font-medium">
-                      {committee.name}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {formatDate(plan.updatedAt)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {!isPending && plans.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={2}>
-                    Det finns inga publika planeringar för {kår}.
-                  </TableCell>
-                </TableRow>
-              )}
-              {isPending ? (
-                <TableRow>
-                  <TableCell>
-                    <Skeleton className="h-4 w-full" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-4 w-full" />
-                  </TableCell>
-                </TableRow>
-              ) : null}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </TabsContent>
-  );
-};
+import { useStoreUser } from "@/hooks/useStoreUser";
+import { usePublicPlans } from "@/hooks/usePublicPlans";
 
 export const PublicPlansCard = () => {
-  const { user } = useUser();
+  const { user } = useStoreUser();
   const { publicPlans, isPending } = usePublicPlans();
 
   const defaultTab = useMemo(() => {
@@ -211,5 +143,74 @@ export const PublicPlansCard = () => {
         isPending={isPending}
       />
     </Tabs>
+  );
+};
+
+type TabCommitteeSectionProps = {
+  kår: Kår;
+  plans: Plan[];
+  isPending: boolean;
+};
+
+const TabCommitteeSection = ({
+  kår,
+  plans,
+  isPending,
+}: TabCommitteeSectionProps) => {
+  return (
+    <TabsContent value={kår.toLowerCase()}>
+      <Card>
+        <CardHeader className="px-7">
+          <CardTitle>{kår} planeringar</CardTitle>
+          <CardDescription>
+            Publika planeringar för fadderier inom {kår}.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Fadderi</TableHead>
+                <TableHead className="hidden sm:table-cell">
+                  Uppdaterad
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {plans.map((plan) => {
+                const committee = getCommittee(plan.committeeId);
+                return (
+                  <TableRow key={plan.id}>
+                    <TableCell className="font-medium">
+                      {committee.name}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {formatDate(plan.updatedAt)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+              {!isPending && plans.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={2}>
+                    Det finns inga publika planeringar för {kår}.
+                  </TableCell>
+                </TableRow>
+              )}
+              {isPending ? (
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className="h-4 w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-full" />
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </TabsContent>
   );
 };

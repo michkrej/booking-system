@@ -15,11 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  useCollisionsExist,
-  useNonUserPublicPlans,
-  useUserPlans,
-} from "@/state";
+
 import { formatDate, getCommittee } from "@/lib/utils";
 import {
   Table,
@@ -31,12 +27,22 @@ import {
 } from "@/components/ui/table";
 import { findCollisionsBetweenPlans } from "@/utils/collisionHandling";
 import { useMemo, useState } from "react";
+import { useStoreCollisionsExist } from "@/hooks/useStoreCollisionsExist";
+import { useUserPlans } from "@/hooks/useUserPlans";
+import { usePublicPlans } from "@/hooks/usePublicPlans";
 
 export const FindCollisionsCard = () => {
-  const publicPlans = useNonUserPublicPlans();
-  const userPlans = useUserPlans();
-  const { collisionsExist } = useCollisionsExist();
+  const { publicPlans } = usePublicPlans();
+  const { userPlans } = useUserPlans();
+  const { collisionsExist } = useStoreCollisionsExist();
+
   const [selectedUserPlan, setSelectedUserPlan] = useState<Plan>();
+
+  const publicPlansWithoutUserPlans = useMemo(() => {
+    const userPublicPlan = userPlans.find((plan) => plan.public);
+    if (!userPublicPlan) return publicPlans;
+    return publicPlans.filter((plan) => plan.id !== userPublicPlan.id);
+  }, [userPlans, publicPlans]);
 
   return (
     <Card className="col-span-full">
@@ -69,7 +75,7 @@ export const FindCollisionsCard = () => {
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-6">
         <CollisionsTable
-          publicPlans={publicPlans}
+          publicPlans={publicPlansWithoutUserPlans}
           userPlan={selectedUserPlan}
         />
       </CardContent>
@@ -136,7 +142,7 @@ const CollisionsTable = ({ publicPlans, userPlan }: CollisionsTableProps) => {
 };
 
 const useFindAllCollisions = () => {
-  const { collisionsExist, toggleCollisionsExist } = useCollisionsExist();
+  const { collisionsExist, toggleCollisionsExist } = useStoreCollisionsExist();
 
   const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
     const allCollisions: Record<string, Plan["events"]> = {};

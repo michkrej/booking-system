@@ -12,10 +12,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { type Plan } from "@/utils/interfaces";
-import { useEditPlan } from "@/hooks";
 import { LoadingButton } from "./loadingButton";
 import { useState } from "react";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { useEditPlan } from "@/hooks/useEditPlan";
 
 type PlanDeleteButtonProps = {
   plan: Plan;

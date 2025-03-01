@@ -1,45 +1,36 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { adminService, type AdminSettings } from "@/services";
-import {
-  useMottagningStart,
-  usePlanEditLock,
-  useSetAdminSettings,
-} from "@/state/store";
+import { adminService } from "@/services";
 import { type Kår } from "@/utils/interfaces";
-import { useEffect } from "react";
+import { useStoreAdminSettings } from "./useStoreAdminSettings";
 
 export const useAdminSettings = () => {
-  const setAdminSettings = useSetAdminSettings();
-  const { setPlanEditLock } = usePlanEditLock();
-  const { setMottagningStart } = useMottagningStart();
+  const {
+    bookableItems,
+    planEditLocked,
+    mottagningStart,
+    updatedBookableItems,
+    updatedMottagningStartDateForKår,
+    updatedPlanEditLock,
+    loadedAdminSettings,
+  } = useStoreAdminSettings();
 
-  const { data: adminSettings } = useQuery<AdminSettings>({
+  const res = useQuery({
     queryKey: ["adminSettings"],
-    queryFn: () => adminService.getAdminSettings(),
+    queryFn: async () => {
+      const settings = await adminService.getAdminSettings();
+      loadedAdminSettings(settings);
+      return settings;
+    },
+    staleTime: Infinity,
   });
-
-  useEffect(() => {
-    if (adminSettings) {
-      setAdminSettings({
-        lockPlans: adminSettings.lockPlans,
-        mottagningStart: {
-          Consensus: adminSettings.mottagningStart.Consensus.toDate(),
-          StuFF: adminSettings.mottagningStart.StuFF.toDate(),
-          LinTek: adminSettings.mottagningStart.LinTek.toDate(),
-          Övrigt: new Date(), // this field is not used in the app, I'm too lazy to remove it
-        },
-        bookableItems: adminSettings.bookableItems,
-      });
-    }
-  }, [adminSettings, setAdminSettings]);
 
   const lockPlans = useMutation({
     mutationFn: (newValue: boolean) =>
       adminService.lockAndUnlockPlans(newValue),
     onSuccess: (value) => {
-      setPlanEditLock(value);
+      updatedPlanEditLock(value);
       toast.success(
         value
           ? "Låst redigering av bokningar"
@@ -54,7 +45,8 @@ export const useAdminSettings = () => {
   const updateBookableItems = useMutation({
     mutationFn: (newItems: Record<string, number>) =>
       adminService.updateBookableItems(newItems),
-    onSuccess: () => {
+    onSuccess: (value) => {
+      updatedBookableItems(value);
       toast.success("Bokningsbara material har ändrats");
     },
     onError: () => {
@@ -66,7 +58,7 @@ export const useAdminSettings = () => {
     mutationFn: ({ date, kår }: { date: Date; kår: Kår }) =>
       adminService.updateMottagningStart(date, kår),
     onSuccess: (value) => {
-      setMottagningStart(value.date, value.kår);
+      updatedMottagningStartDateForKår(value.date, value.kår);
       toast.success(`Mottagningsstart för ${value.kår} ändrad`);
     },
     onError: () => {
@@ -75,9 +67,16 @@ export const useAdminSettings = () => {
   });
 
   return {
+    planEditLocked,
+    mottagningStart,
+    bookableItems,
     lockPlans,
     updateMottagningStart,
     updateBookableItems,
-    settings: adminSettings,
+    settings: {
+      lockPlans: planEditLocked,
+      mottagningStart,
+      bookableItems,
+    },
   };
 };

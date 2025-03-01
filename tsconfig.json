@@ -33,7 +33,8 @@
       "@pages": ["./src/pages/"],
       "@state": ["./src/state/"],
       "@utils": ["./src/utils/"],
-      "@data": ["./src/data/"]
+      "@data": ["./src/data/"],
+      "@state/*": ["./src/state/*"]
     }
   },
   "include": [".eslintrc.cjs", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.js"],

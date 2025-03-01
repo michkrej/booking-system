@@ -1,5 +1,6 @@
-import { CircleUser, Package2 } from "lucide-react";
+import { CircleUser } from "lucide-react";
 import { Link } from "react-router-dom";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,14 +11,15 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { SiteLogo } from "../atoms/siteLogo";
-import { useSignOut } from "@/hooks";
-import { usePlanYear, useUser } from "@/state";
 import { siteConfig } from "@/config/site";
+import { useStoreUser } from "@/hooks/useStoreUser";
+import { useStorePlanYear } from "@/hooks/useStorePlanYear";
+import { useSignOut } from "@/hooks/useSignOut";
 
 export const Header = () => {
   const { logout } = useSignOut();
-  const { planYear } = usePlanYear();
-  const { user } = useUser();
+  const { planYear } = useStorePlanYear();
+  const { user } = useStoreUser();
 
   const TF_URL =
     planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023;
@@ -83,7 +85,9 @@ export const Header = () => {
             {/* TODO - implementera Settings sidan, man ska kunna byta namn, ändra lösenord mm */}
             <DropdownMenuItem>Inställningar</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout}>Logga ut</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => logout()}>
+              Logga ut
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

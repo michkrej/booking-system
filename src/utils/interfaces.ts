@@ -114,3 +114,9 @@ export type User = {
   email: string;
   emailVerified: boolean;
 } & UserDetails;
+
+export type AdminSettings = {
+  lockPlans: boolean;
+  mottagningStart: Record<Kår, Date>;
+  bookableItems: Record<string, number>;
+};

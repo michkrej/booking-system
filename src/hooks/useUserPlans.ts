@@ -1,26 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { plansService } from "@/services";
-import {
-  useUserPlans as useStoreUserPlans,
-  usePlanActions,
-  usePlanYear,
-  useUser,
-} from "@/state/store";
+import { useStoreUser } from "./useStoreUser";
+import { useStorePlanYear } from "./useStorePlanYear";
+import { useStorePlanActions } from "./useStorePlanActions";
+import { useBoundStore } from "@/state/store";
 
 export const useUserPlans = () => {
-  const { planYear: year } = usePlanYear();
-  const { userPlansLoaded } = usePlanActions();
-  const userPlans = useStoreUserPlans();
-  const { user } = useUser();
+  const { user } = useStoreUser();
+  const { planYear: year } = useStorePlanYear();
+  const { userPlansLoaded } = useStorePlanActions();
 
   const { isFetching } = useQuery({
-    queryKey: ["userPlans", year],
+    queryKey: ["userPlans", year, user.id],
     queryFn: async () => {
-      const plans = await plansService.getUserPlans(user, year);
+      const plans = await plansService.getUserPlans(user.id, year);
       userPlansLoaded(plans);
       return plans;
     },
   });
 
-  return { userPlans, isPending: isFetching };
+  return {
+    userPlans: useBoundStore((state) => state.userPlans) ?? [],
+    isPending: isFetching,
+  };
 };

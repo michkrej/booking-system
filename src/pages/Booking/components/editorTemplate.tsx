@@ -26,7 +26,6 @@ import { useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { sv } from "date-fns/locale";
-import { useBookings, useUser } from "@/state";
 import { ScheduleContext } from "../booking.page";
 import { committees } from "@/data/committees";
 import { campusLocationsMap } from "@/data/locationsData";
@@ -36,6 +35,8 @@ import { plansService } from "@/services";
 import { toast } from "sonner";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@/components/molecules/loadingButton";
+import { useStoreBookings } from "@/hooks/useStoreBookings";
+import { useStoreUser } from "@/hooks/useStoreUser";
 
 const formSchema = z.object({
   title: z.string().min(1, "Bokningen måste ha ett namn"),
@@ -75,9 +76,9 @@ export const EditorTemplate = ({
   currentBuilding,
 }: EditorTemplateProps) => {
   const { id: planId } = useParams();
-  const { createBooking, bookings } = useBookings();
+  const { createBooking, bookings } = useStoreBookings();
   const { rooms, building, chosenCampus } = useContext(ScheduleContext);
-  const { user } = useUser();
+  const { user } = useStoreUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

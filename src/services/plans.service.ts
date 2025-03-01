@@ -89,12 +89,12 @@ export const getAllPlans = async (user: User, year: number) => {
   }
 };
 
-export const getUserPlans = async (user: User, year: number) => {
+export const getUserPlans = async (userId: string, year: number) => {
   try {
     const snapshot = await getDocs(
       query(
         collection(db, "plans"),
-        where("userId", "==", user.id),
+        where("userId", "==", userId),
         where("year", "==", year),
       ),
     );

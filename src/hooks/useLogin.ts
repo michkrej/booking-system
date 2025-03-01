@@ -1,13 +1,14 @@
-import { authService } from "@/services";
-import { useUserUpdated } from "@/state/store";
-import { getErrorMessage } from "@/utils/error.util";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+
+import { authService } from "@/services";
+import { getErrorMessage } from "@/utils/error.util";
+import { useBoundStore } from "@/state/store";
 
 export const useLogin = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { userUpdated } = useUserUpdated();
+  const userUpdated = useBoundStore((state) => state.userUpdated);
 
   const isMounted = useRef(true);
 

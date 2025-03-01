@@ -1,7 +1,8 @@
-import { doc, getDoc, type Timestamp, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./config";
 import { getErrorMessage } from "@/utils/error.util";
-import { type Kår } from "@/utils/interfaces";
+import { type AdminSettings, type Kår } from "@/utils/interfaces";
+import { convertToDate } from "@/lib/utils";
 
 const KEY = "adminValues";
 
@@ -36,28 +37,30 @@ const updateMottagningStart = async (newValue: Date, kår: Kår) => {
 // Note - we overwrite the entire bookableItems object
 const updateBookableItems = async (newValue: Record<string, number>) => {
   try {
-    const ref = await updateDoc(doc(db, "adminSettings", KEY), {
+    await updateDoc(doc(db, "adminSettings", KEY), {
       bookableItems: newValue,
     });
-    return ref;
+    return newValue;
   } catch (e) {
     console.log(getErrorMessage(e));
     throw e;
   }
 };
 
-type AdminSettings = {
-  lockPlans: boolean;
-  mottagningStart: Record<Kår, Timestamp>;
-  bookableItems: Record<string, number>;
-};
-
 const getAdminSettings = async () => {
-  console.log("Getting admin settings");
   const docSnap = await getDoc(doc(db, "adminSettings", KEY));
 
   if (docSnap.exists()) {
-    return docSnap.data() as AdminSettings;
+    const settings = docSnap.data() as AdminSettings;
+    return {
+      ...settings,
+      mottagningStart: {
+        Consensus: convertToDate(settings.mottagningStart.Consensus),
+        StuFF: convertToDate(settings.mottagningStart.StuFF),
+        LinTek: convertToDate(settings.mottagningStart.LinTek),
+        Övrigt: new Date(), // this field is not used in the app, I'm too lazy to remove it
+      },
+    } as AdminSettings;
   } else {
     console.log("No such document!");
     throw Error("No such document!");
@@ -70,5 +73,3 @@ export const adminService = {
   updateMottagningStart,
   updateBookableItems,
 };
-
-export type { AdminSettings };

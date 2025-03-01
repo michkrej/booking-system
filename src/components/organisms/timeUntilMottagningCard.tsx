@@ -1,5 +1,8 @@
-import { useMottagningStart, useUser } from "@/state";
 import { differenceInMilliseconds, format } from "date-fns";
+import { sv } from "date-fns/locale";
+
+import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { useStoreUser } from "@/hooks/useStoreUser";
 import {
   Card,
   CardContent,
@@ -8,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { sv } from "date-fns/locale";
 import { Progress } from "../ui/progress";
 
 export const getWeeksLeftToNolleP = (startDate: Date) => {
@@ -35,22 +37,22 @@ export const getPercentageProgress = (startDate: Date) => {
 };
 
 export const TimeUntilMottagningCard = () => {
-  const { mottagningStart } = useMottagningStart();
-  const { user } = useUser();
+  const { mottagningStart } = useAdminSettings();
+  const { user } = useStoreUser();
 
   if (user.kår === "Övrigt") return null;
 
-  const weeksToNolleP = getWeeksLeftToNolleP(mottagningStart[user.kår]);
-  const progress = getPercentageProgress(mottagningStart[user.kår]);
+  const date = mottagningStart[user.kår];
+
+  const weeksToNolleP = getWeeksLeftToNolleP(date);
+  const progress = getPercentageProgress(date);
 
   return (
     <Card>
       <CardHeader>
         <CardDescription>Mottagnigen för {user.kår} börjar</CardDescription>
         <div className="flex items-center gap-2">
-          <CardTitle>
-            {format(mottagningStart[user.kår], "P", { locale: sv })}
-          </CardTitle>
+          <CardTitle>{format(date, "P", { locale: sv })}</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="text-center">

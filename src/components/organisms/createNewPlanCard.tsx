@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useEditPlan } from "@/hooks";
 import { LoadingButton } from "../molecules/loadingButton";
 import { Button } from "../ui/button";
 import {
@@ -31,8 +30,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-
-import { useBookings } from "@/state";
+import { useStoreBookings } from "@/hooks/useStoreBookings";
+import { useEditPlan } from "@/hooks/useEditPlan";
 
 const formSchema = z.object({
   planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
@@ -40,7 +39,7 @@ const formSchema = z.object({
 
 export const CreateNewPlanCard = () => {
   const { createPlan } = useEditPlan();
-  const bookings = useBookings();
+  const bookings = useStoreBookings();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({

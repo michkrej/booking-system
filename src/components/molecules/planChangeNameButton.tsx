@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useEditPlan } from "@/hooks";
 import { type Plan } from "@/utils/interfaces";
 import { useState } from "react";
 import { LoadingButton } from "./loadingButton";
@@ -32,6 +31,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "../ui/button";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { useEditPlan } from "@/hooks/useEditPlan";
 
 const formSchema = z.object({
   newPlanName: z.string().min(1, "Du måste ange ett nytt namn för planeringen"),

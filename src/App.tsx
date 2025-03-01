@@ -16,17 +16,17 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AdminPage } from "./pages/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
 import { LoginPage } from "./pages/login.page";
-import { useHasUser } from "./state/store";
 import { BookingPage } from "./pages/Booking/booking.page";
 import { Layout } from "./components/molecules/layout";
+import { useUserIsLoggedIn } from "./hooks/useUserIsLoggedIn";
 
 const queryClient = new QueryClient();
 
 const RequireAuth = () => {
-  const hasUser = useHasUser();
   const location = useLocation();
+  const userIsLoggedIn = useUserIsLoggedIn();
 
-  if (!hasUser) {
+  if (!userIsLoggedIn) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience

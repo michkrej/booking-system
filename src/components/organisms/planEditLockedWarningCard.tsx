@@ -1,16 +1,16 @@
-import { usePlanEditLock, usePlanYear } from "@/state";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { useStorePlanYear } from "@/hooks/useStorePlanYear";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export const PlanEditLockedWarningCard = () => {
-  const { planEditLocked } = usePlanEditLock();
-  const { planYear } = usePlanYear();
+  const { planEditLocked } = useAdminSettings();
+  const { planYear } = useStorePlanYear();
 
   const isCurrentYear = planYear === CURRENT_YEAR;
 

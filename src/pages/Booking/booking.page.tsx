@@ -25,6 +25,8 @@ import { committees } from "@/data/committees";
 import { ScheduleToolbar, type View } from "./components/ScheduleToolbar";
 
 import "./components/localization";
+import { useStoreUser } from "@/hooks/useStoreUser";
+import { useStoreBookings } from "@/hooks/useStoreBookings";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -47,7 +49,9 @@ export const ScheduleContext = createContext<ScheduleContextType>(
 );
 
 export const BookingPage = () => {
-  const { user } = useUser();
+  const { user } = useStoreUser();
+  const { bookings } = useStoreBookings();
+
   const [currentDate, setCurrentDate] = useState(new Date("2026-01-01"));
   const [currentView, setCurrentView] = useState<View>("TimelineDay");
   const [chosenCampus, setChosenCampus] = useState(
@@ -55,7 +59,6 @@ export const BookingPage = () => {
   );
   const [building, setBuilding] = useState<string | undefined>();
   const [newBooking, setNewBooking] = useState<Booking | undefined>();
-  const { bookings } = useBookings();
   const [isCreateBookingModalOpen, setIsCreateBookingModalOpen] =
     useState(false);
 

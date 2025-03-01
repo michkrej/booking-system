@@ -1,4 +1,4 @@
-import { type Kår } from "@/utils/interfaces";
+import { type AdminSettings, type Kår } from "@/utils/interfaces";
 import { type StateCreator } from "zustand";
 import { type PlanStoreSlice } from "./planStoreSlice";
 import { setWeek, startOfWeek } from "date-fns";
@@ -7,15 +7,12 @@ import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 interface AdminStoreSlice {
   planEditLocked: boolean;
   mottagningStart: Record<Kår, Date>;
-  bookableItems: Record<string, number>;
+  bookableItems: Record<string, number> | null;
 
-  setPlanEditLock: (value: boolean) => void;
-  setMottagningStart: (date: Date, kår: Kår) => void;
-  setAdminSettings: (settings: {
-    lockPlans: boolean;
-    mottagningStart: Record<Kår, Date>;
-    bookableItems: Record<string, number>;
-  }) => void;
+  updatedPlanEditLock: (value: boolean) => void;
+  updatedMottagningStartDateForKår: (date: Date, kår: Kår) => void;
+  updatedBookableItems: (items: Record<string, number>) => void;
+  loadedAdminSettings: (settings: AdminSettings) => void;
 }
 
 const getMottagningStartWeek = () => {
@@ -42,13 +39,10 @@ const createAdminStoreSlice: StateCreator<
     LinTek: getMottagningStartWeek(),
     Övrigt: getMottagningStartWeek(),
   },
-  bookableItems: {
-    grillar: 8,
-    bardiskar: 6,
-  },
+  bookableItems: null,
 
-  setPlanEditLock: (value) => set(() => ({ planEditLocked: value })),
-  setMottagningStart: (date, kår) => {
+  updatedPlanEditLock: (value) => set(() => ({ planEditLocked: value })),
+  updatedMottagningStartDateForKår: (date, kår) => {
     set({
       mottagningStart: {
         ...get().mottagningStart,
@@ -56,12 +50,8 @@ const createAdminStoreSlice: StateCreator<
       },
     });
   },
-  setAdminSettings: (settings) =>
-    set(() => ({
-      planEditLocked: settings.lockPlans,
-      mottagningStart: settings.mottagningStart,
-      bookableItems: settings.bookableItems,
-    })),
+  updatedBookableItems: (items) => set(() => ({ bookableItems: items })),
+  loadedAdminSettings: (settings) => set(() => settings),
 });
 
 export { createAdminStoreSlice };

@@ -1,25 +1,25 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { plansService } from "@/services";
-import {
-  useHasPublicPlan,
-  usePlanActions,
-  usePlanYear,
-  useUser,
-} from "@/state/store";
 import { type Plan } from "@/utils/interfaces";
+import { useStorePlanActions } from "./useStorePlanActions";
+import { useStoreUser } from "./useStoreUser";
+import { useStorePlanYear } from "./useStorePlanYear";
+import { useBoundStore } from "@/state/store";
+//import { useUserPlans } from "./useUserPlans";
 
 export const useEditPlan = () => {
-  const { user } = useUser();
+  const { user } = useStoreUser();
   const {
     userPlanDeleted,
     userPlanUpdated,
     userPlanCreated,
     userPlanPublicToggled,
-  } = usePlanActions();
-  const { planYear } = usePlanYear();
-  const hasPublicPlan = useHasPublicPlan();
+  } = useStorePlanActions();
+  const { planYear } = useStorePlanYear();
+  const hasPublicPlan = useBoundStore((state) => state.hasPublicPlan);
+  const queryClient = useQueryClient();
 
   const createPlan = useMutation({
     mutationFn: (planName: string) => {
@@ -82,20 +82,27 @@ export const useEditPlan = () => {
   const togglePublicPlan = useMutation({
     mutationFn: (plan: Plan) => {
       if (!plan.public && hasPublicPlan) {
-        toast.error("Du kan bara ha en publik planering åt gången");
+        throw new Error("singlePublicPlan");
       }
       return plansService.updatePlanDetails(plan.id, {
-        public: !hasPublicPlan,
+        public: !plan.public,
       });
     },
-    onSuccess: (value) => {
+    onSuccess: (value, oldPlan) => {
       toast.success(
-        `Planeringen '${value.label}' är nu ${!hasPublicPlan ? "publik" : "privat"}`,
+        `Planeringen '${oldPlan.label}' är nu ${!oldPlan.public ? "publik" : "privat"}`,
       );
       userPlanPublicToggled(value.id);
+      void queryClient.invalidateQueries({
+        queryKey: ["publicPlans", planYear],
+      });
     },
-    onError: () => {
-      toast.error("Kunde inte ändra planeringens public status");
+    onError: (error) => {
+      if (error.message === "singlePublicPlan") {
+        toast.error("Du kan bara ha en publik planering åt gången");
+        return;
+      }
+      toast.error("Kunde inte uppdatera planeringen");
     },
   });
 

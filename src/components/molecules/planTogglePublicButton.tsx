@@ -1,9 +1,9 @@
-import { useEditPlan } from "@/hooks";
 import { type Plan } from "@/utils/interfaces";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Globe, GlobeLock, Loader } from "lucide-react";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { Button } from "../ui/button";
+import { useEditPlan } from "@/hooks/useEditPlan";
 
 type PlanTogglePublicButtonProps = {
   plan: Plan;
@@ -18,7 +18,7 @@ const getIcon = (pending: boolean, isPublic: boolean) => {
 export const PlanTogglePublicButton = ({
   plan,
 }: PlanTogglePublicButtonProps) => {
-  const { togglePublicPlan, isPending } = useEditPlan();
+  const { togglePublicPlan } = useEditPlan();
 
   const isCurrentYear = plan.year === CURRENT_YEAR;
 
@@ -33,9 +33,9 @@ export const PlanTogglePublicButton = ({
           variant="ghost"
           className="rounded-full text-primary/60 hover:text-primary"
           disabled={!isCurrentYear}
-          onClick={() => togglePublicPlan(plan)}
+          onClick={() => togglePublicPlan.mutate(plan)}
         >
-          {getIcon(isPending, plan.public)}
+          {getIcon(togglePublicPlan.isPending, plan.public)}
         </Button>
       </TooltipTrigger>
       <TooltipContent>

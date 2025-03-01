@@ -12,7 +12,7 @@ import "./styles/scheduler.css";
 registerLicense(import.meta.env.VITE_APP_SYNCFUSION_KEY);
 
 const container = document.getElementById("root");
-const root = createRoot(container!!);
+const root = createRoot(container!);
 root.render(
   <StrictMode>
     <App />

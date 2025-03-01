@@ -1,4 +1,3 @@
-import { usePlanYear, usePlanYearActions } from "@/state";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -10,10 +9,10 @@ import {
 import { useMemo } from "react";
 import { MAX_YEAR, MIN_YEAR } from "@/state/planStoreSlice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useStorePlanYear } from "@/hooks/useStorePlanYear";
 
 export const PlanChangeYearCard = () => {
-  const { planYear } = usePlanYear();
-  const { incrementPlanYear, decrementPlanYear } = usePlanYearActions();
+  const { planYear, incrementPlanYear, decrementPlanYear } = useStorePlanYear();
 
   const isMaxYear = useMemo(() => planYear >= MAX_YEAR, [planYear]);
   const isMinYear = useMemo(() => planYear <= MIN_YEAR, [planYear]);

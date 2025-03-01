@@ -84,7 +84,6 @@ const createPlanStoreSlice: StateCreator<
   decrementPlanYear: () =>
     set((state) => {
       const newYear = state.planYear - 1;
-      console.log(newYear);
       if (newYear >= MIN_YEAR && newYear <= MAX_YEAR) {
         return {
           planYear: newYear,

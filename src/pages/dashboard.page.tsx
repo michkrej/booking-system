@@ -2,16 +2,17 @@ import { Layout } from "@/components/molecules/layout";
 import { CreateNewPlanCard } from "@/components/organisms/createNewPlanCard";
 import { FindCollisionsCard } from "@/components/organisms/findCollisionsCard";
 import { PlanChangeYearCard } from "@/components/organisms/planChangeYearCard";
-import { PublicPlansCard } from "@/components/organisms/publicPlansCard";
-import { UserPlansListCard } from "@/components/organisms/userPlansListCard";
-import { TimeUntilMottagningCard } from "@/components/organisms/timeUntilMottagningCard";
 import { PlanEditLockedWarningCard } from "@/components/organisms/planEditLockedWarningCard";
-import { usePlanEditLock, usePlanYear } from "@/state";
+import { PublicPlansCard } from "@/components/organisms/publicPlansCard";
+import { TimeUntilMottagningCard } from "@/components/organisms/timeUntilMottagningCard";
+import { UserPlansListCard } from "@/components/organisms/userPlansListCard";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { useStorePlanYear } from "@/hooks/useStorePlanYear";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export function DashboardPage() {
-  const { planEditLocked } = usePlanEditLock();
-  const { planYear } = usePlanYear();
+  const { planEditLocked } = useAdminSettings();
+  const { planYear } = useStorePlanYear();
 
   return (
     <Layout>

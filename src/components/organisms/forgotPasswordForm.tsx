@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { LoadingButton } from "@/components/molecules/loadingButton";
-import { useResetPassword } from "@/hooks";
+import { useResetPassword } from "@/hooks/useResetPassword";
 
 const formSchema = z.object({
   email: z
@@ -34,8 +34,13 @@ export const ForgotPasswordForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    void resetPassword(values.email).then(() => {
-      navigate("/");
+    resetPassword(values.email, {
+      onSuccess: () => {
+        navigate("/");
+      },
+      onError: () => {
+        form.reset();
+      },
     });
   }
   return (

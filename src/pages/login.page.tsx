@@ -6,19 +6,19 @@ import { NollePCarousel } from "@/components/organisms/nollePCarousel";
 import { SignUpForm } from "@/components/organisms/signUpForm";
 import { SiteLogo } from "@/components/atoms/siteLogo";
 import { SiteFooter } from "@/components/molecules/siteFooter";
-import { useHasUser } from "@/state";
 import { ForgotPasswordForm } from "@/components/organisms/forgotPasswordForm";
+import { useUserIsLoggedIn } from "@/hooks/useUserIsLoggedIn";
 
 export function LoginPage() {
   const { state } = useLocation() as { state: { mode?: string } };
   const navigate = useNavigate();
-  const hasUser = useHasUser();
+  const userIsLoggedIn = useUserIsLoggedIn();
 
   useEffect(() => {
-    if (hasUser) {
+    if (userIsLoggedIn) {
       navigate("/dashboard");
     }
-  }, [hasUser]);
+  }, [userIsLoggedIn]);
 
   return (
     <div className="flex min-h-screen w-full flex-col md:overflow-y-hidden lg:grid lg:grid-cols-2">

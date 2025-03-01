@@ -1,15 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { plansService } from "@/services";
-import { usePlanYear, useUser } from "@/state/store";
+import { useStorePlanYear } from "./useStorePlanYear";
 
 export const usePublicPlans = () => {
-  const { planYear: year } = usePlanYear();
-  const { user } = useUser();
+  const { planYear: year } = useStorePlanYear();
 
   const { data = [], isFetching } = useQuery({
     queryKey: ["publicPlans", year],
     queryFn: async () => {
-      const plans = await plansService.getPublicPlans(user, year);
+      const plans = await plansService.getPublicPlans(year);
       return plans;
     },
   });

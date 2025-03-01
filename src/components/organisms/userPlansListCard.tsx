@@ -13,16 +13,17 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useUserPlans } from "@/hooks";
 import { useNavigate } from "react-router-dom";
 import { type Plan } from "@/utils/interfaces";
-import { useBookings } from "@/state";
+import { useUserPlans } from "@/hooks/useUserPlans";
+import { useStoreBookings } from "@/hooks/useStoreBookings";
+import { useBoundStore } from "@/state/store";
 
 const loadingTableEntries = Array.from({ length: 4 }, (_, i) => i);
 
 export const UserPlansListCard = () => {
   const { isPending, userPlans } = useUserPlans();
-  const { setInitialBookings } = useBookings();
+  const setInitialBookings = useBoundStore((state) => state.setInitialBookings);
   const navigate = useNavigate();
 
   const handlePlanClick = (plan: Plan) => {
