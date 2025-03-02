@@ -3,23 +3,15 @@ import { areIntervalsOverlapping } from "date-fns";
 import roomsC, { corridorsC } from "../data/campusValla/rooms/C.js";
 import { locations } from "../data/locationsData.js";
 import { type Plan, type Booking } from "./interfaces.js";
+import { useBoundStore } from "@/state/store.js";
+import { DEFAULT_ITEMS } from "@/state/adminStoreSlice.js";
 
 export const LOCATION_ID = locations.campusValla["C-huset"].id;
 export const CORRIDOR_IDS: string[] = Object.values(corridorsC).map(
   (corridor) => corridor.id,
 );
-const MAX_ITEMS = {
-  grillar: 8,
-  bardiskar: 6,
-  "bankset-hg": 20,
-  "bankset-k": 25,
-  trailer: 1,
-  tents: 4,
-  scene: 10,
-  elverk: 1,
-} as const;
 
-type ItemName = keyof typeof MAX_ITEMS;
+type ItemName = keyof typeof DEFAULT_ITEMS;
 
 type SummedItems = Record<ItemName, { sum: number; events: Booking[] }>;
 
@@ -31,7 +23,8 @@ type SummedItems = Record<ItemName, { sum: number; events: Booking[] }>;
  */
 export const createItemsObject = (event: Booking): SummedItems => {
   const eventItemExists = (item: ItemName) => event[item] !== undefined;
-  return (Object.keys(MAX_ITEMS) as ItemName[]).reduce((items, item) => {
+
+  return (Object.keys(DEFAULT_ITEMS) as ItemName[]).reduce((items, item) => {
     if (typeof event[item] === "boolean") {
       items[item] = {
         sum: 1,
@@ -74,8 +67,11 @@ export const increaseItemsUse = (items: SummedItems, event: Booking) => {
  * @returns {Array|undefined} - An array of events with too many items, or undefined if no events have too many items.
  */
 export const getEventsWithTooManyItems = (items: SummedItems) => {
+  const { getState } = useBoundStore;
+  const maxItems = getState().bookableItems;
+
   for (const item in items) {
-    if (items[item as ItemName].sum > MAX_ITEMS[item as ItemName]) {
+    if (items[item as ItemName].sum > maxItems[item as ItemName]) {
       return items[item as ItemName].events;
     }
   }

@@ -4,14 +4,28 @@ import { type PlanStoreSlice } from "./planStoreSlice";
 import { setWeek, startOfWeek } from "date-fns";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
+export const DEFAULT_ITEMS = {
+  grillar: 8,
+  bardiskar: 6,
+  scenes: 10,
+  "bankset-hg": 20,
+  "bankset-k": 25,
+  "bankset-hoben": 50,
+  "ff-trailer": 1,
+  "ff-tents": 4,
+  "ff-elverk": 1,
+} as const;
+
 interface AdminStoreSlice {
   planEditLocked: boolean;
   mottagningStart: Record<Kår, Date>;
-  bookableItems: Record<string, number> | null;
+  bookableItems: Record<keyof typeof DEFAULT_ITEMS, number>;
 
   updatedPlanEditLock: (value: boolean) => void;
   updatedMottagningStartDateForKår: (date: Date, kår: Kår) => void;
-  updatedBookableItems: (items: Record<string, number>) => void;
+  updatedBookableItems: (
+    items: Record<keyof typeof DEFAULT_ITEMS, number>,
+  ) => void;
   loadedAdminSettings: (settings: AdminSettings) => void;
 }
 
@@ -39,7 +53,7 @@ const createAdminStoreSlice: StateCreator<
     LinTek: getMottagningStartWeek(),
     Övrigt: getMottagningStartWeek(),
   },
-  bookableItems: null,
+  bookableItems: DEFAULT_ITEMS,
 
   updatedPlanEditLock: (value) => set(() => ({ planEditLocked: value })),
   updatedMottagningStartDateForKår: (date, kår) => {

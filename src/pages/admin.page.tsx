@@ -107,22 +107,10 @@ const LockPlanEditingCard = () => {
   );
 };
 
-const DEFAULT_ITEMS = {
-  grillar: 8,
-  bardiskar: 6,
-  "bankset-hg": 20,
-  "bankset-k": 25,
-  "bankset-hoben": 50,
-  trailer: 1,
-  tents: 4,
-  scene: 10,
-  elverk: 1,
-} as const;
-
 const BookableItemsCard = () => {
   const { bookableItems, updateBookableItems } = useAdminSettings();
-  const [items, setItems] = useState(bookableItems ?? DEFAULT_ITEMS);
-  const originalItems = bookableItems ?? DEFAULT_ITEMS;
+  const [items, setItems] = useState(bookableItems);
+  const originalItems = bookableItems;
 
   const itemsAmountsHaveChanged = useMemo(
     () =>
