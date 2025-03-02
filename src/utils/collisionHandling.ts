@@ -22,7 +22,7 @@ type SummedItems = Record<ItemName, { sum: number; events: Booking[] }>;
  * @returns {object} - The items object containing information about the event items.
  */
 export const createItemsObject = (event: Booking): SummedItems => {
-  const eventItemExists = (item: ItemName) => event[item] !== undefined;
+  const eventItemExists = (item: ItemName) => event[item];
 
   return (Object.keys(DEFAULT_ITEMS) as ItemName[]).reduce((items, item) => {
     if (typeof event[item] === "boolean") {

@@ -34,15 +34,15 @@ export const ForgotPasswordForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    resetPassword(values.email, {
-      onSuccess: () => {
+    resetPassword(values.email)
+      .then(() => {
         navigate("/");
-      },
-      onError: () => {
+      })
+      .catch(() => {
         form.reset();
-      },
-    });
+      });
   }
+
   return (
     <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
       <div className="grid gap-2 text-center">

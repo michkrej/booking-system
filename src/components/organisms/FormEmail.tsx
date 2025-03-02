@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { kårer } from "@/data/committees";
-import { getCommitteesForKår, sortAlphabetically } from "@/utils/helpers";
+import { getCommitteesForKår } from "@/utils/helpers";
 
 import {
   Form,
@@ -198,7 +198,7 @@ export const FormEmail = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {sortAlphabetically(Object.values(committees)).map(
+                    {Object.values(committees).map(
                       (assignee: { name: string; id: string }) => (
                         <SelectItem key={assignee.name} value={assignee.id}>
                           {assignee.name}

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { kårer } from "@/data/committees";
-import { getCommitteesForKår, sortAlphabetically } from "@/utils/helpers";
+import { getCommitteesForKår } from "@/utils/helpers";
 
 import {
   Form,
@@ -114,10 +114,10 @@ export const FormGoogle = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {sortAlphabetically(Object.values(committees)).map(
-                      (assignee: { text: string; id: string }) => (
-                        <SelectItem key={assignee.text} value={assignee.id}>
-                          {assignee.text}
+                    {Object.values(committees).map(
+                      (assignee: { name: string; id: string }) => (
+                        <SelectItem key={assignee.name} value={assignee.id}>
+                          {assignee.name}
                         </SelectItem>
                       ),
                     )}

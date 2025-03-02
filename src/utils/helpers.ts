@@ -1,24 +1,10 @@
-import Moment from "moment";
-import { extendMoment } from "moment-range";
 import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
 import { committees, committeesConsensus, kårer } from "../data/committees";
-import { Kår, Booking } from "./interfaces";
+import { type Kår, type Booking, type Plan } from "./interfaces";
+import { format } from "date-fns";
+import { sv } from "date-fns/locale";
 
-const moment = extendMoment(Moment);
-
-export const sortAlphabetically = (elem: any[], useLabel = false) => {
-  return elem.sort((a, b) =>
-    ("" + (useLabel ? a.label : a.text)).localeCompare(
-      useLabel ? b.label : b.text,
-      "sv",
-      {
-        numeric: true,
-      },
-    ),
-  );
-};
-
-export const exportPlan = async (plans) => {
+export const exportPlan = async (plans: Plan[]) => {
   const header = [
     "ID",
     "Fadderi",
@@ -40,26 +26,35 @@ export const exportPlan = async (plans) => {
     "Länk",
   ];
   const events = plans.flatMap((plan) => plan.events);
-  events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+  events.sort(
+    (a, b) => a.startDate.getMilliseconds() - b.startDate.getMilliseconds(),
+  );
   const cvsConversion = events.map((event) => {
-    const committee = committees.find((com) => com.id === event.committeeId);
+    const committee = Object.values(committees).find(
+      (com) => com.id === event.committeeId,
+    );
     const location = locationsNonGrouped.find(
       (location) => location.id === event.locationId,
     );
+
+    const roomValues = Object.values(rooms);
     const roomNames = event.roomId
-      .map((eventRoomID) => rooms.find((room) => room.id === eventRoomID).text)
+      .map(
+        (eventRoomID) =>
+          roomValues.find((room) => room.id === eventRoomID)?.name,
+      )
       .join(", ");
     return [
       event.id,
-      committee.text,
-      event.text,
-      location.text,
+      committee?.name,
+      event.title,
+      location?.name,
       roomNames,
-      moment(event.startDate).format("YY-MM-DD"),
-      moment(event.startDate).format("HH:mm"),
-      moment(event.endDate).format("YY-MM-DD"),
-      moment(event.endDate).format("HH:mm"),
-      event.alcohol ? "TRUE" : "FALSE",
+      format(event.startDate, "YYYY-MM-DD", { locale: sv }),
+      format(event.startDate, "HH:mm", { locale: sv }),
+      format(event.endDate, "YYYY-MM-DD", { locale: sv }),
+      format(event.endDate, "HH:mm", { locale: sv }),
+      /*  event.alcohol ? "TRUE" : "FALSE",
       event.food ? "TRUE" : "FALSE",
       event.bardiskar || "0",
       event["bankset-k"] || "0",
@@ -67,7 +62,7 @@ export const exportPlan = async (plans) => {
       event.grillar || "0",
       event.annat || "",
       event.description || "",
-      event.link || "",
+      event.link || "", */
     ];
   });
   return [header, ...cvsConversion];
