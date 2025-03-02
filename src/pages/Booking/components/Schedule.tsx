@@ -250,6 +250,15 @@ export const Schedule = () => {
           popupOpen={onPopupOpen}
           eventRendered={onEventRendered}
           actionBegin={onActionBegin}
+          dragStart={(e: { cancel: boolean }) => {
+            if (!building) {
+              e.cancel = true;
+              toast.error(
+                "Du måste välja en byggnad för att drag and drop av bokningar ska fungera",
+              );
+            }
+            return e;
+          }}
         >
           <ResourcesDirective>
             {building ? (

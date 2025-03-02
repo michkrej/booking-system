@@ -123,7 +123,7 @@ export const EditorTemplate = ({
     }
 
     return activePlans.find((plan) => plan.id === data?.planId) ?? null;
-  }, [activePlans, planId]);
+  }, [activePlans, planId, data]);
 
   // Reset form values when `data` is available
   useEffect(() => {
@@ -179,6 +179,8 @@ export const EditorTemplate = ({
       });
     }
   }, [data, form.reset]); // Depend on `data` and `reset` to update values when `data` changes
+
+  console.log(currentPlan);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!planId) return;
