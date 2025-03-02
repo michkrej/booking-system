@@ -22,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { sv } from "date-fns/locale";
@@ -36,6 +36,8 @@ import { useStoreUser } from "@/hooks/useStoreUser";
 import { Checkbox } from "@/components/ui/checkbox";
 import { campusLocationsMap } from "@/data/locationsData";
 import { useBookingActions } from "@/hooks/useBookingActions";
+import { corridorsC } from "@/data/campusValla/rooms";
+import roomsC from "@/data/campusValla/rooms/C";
 
 const formSchema = z.object({
   title: z.string().min(1, "Bokningen måste ha ett namn"),
@@ -100,8 +102,18 @@ export const EditorTemplate = ({
   const { user } = useStoreUser();
   const { addBookingToPlanMutation, updateBookingMutation } =
     useBookingActions();
+  const [roomOptions, setRoomOptions] = useState<
+    { label: string; value: string }[]
+  >(
+    rooms.map((room) => ({
+      value: room.id,
+      label: room.name,
+    })),
+  );
 
   const building = useMemo(() => {
+    setRoomOptions(rooms.map((room) => ({ value: room.id, label: room.name })));
+
     if (action === "create") return dropDownBuilding;
 
     return (
@@ -154,7 +166,6 @@ export const EditorTemplate = ({
         link: "",
       });
     } else {
-      console.log(data);
       form.reset({
         title: data.title,
         startDate: data.startDate,
@@ -180,11 +191,8 @@ export const EditorTemplate = ({
     }
   }, [data, form.reset]); // Depend on `data` and `reset` to update values when `data` changes
 
-  console.log(currentPlan);
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!planId) return;
-    console.log(values);
     const bookingData = {
       id: action === "create" ? uuidv4() : (data?.id ?? uuidv4()),
       title: values.title,
@@ -240,6 +248,53 @@ export const EditorTemplate = ({
       );
     }
   }
+
+  const onRoomsSelect = (selectedRooms: { label: string; value: string }[]) => {
+    // Reset room options if not in "C-huset" or no rooms are selected
+    if (
+      building?.id !== campusLocationsMap.Valla["C-huset"].id ||
+      selectedRooms.length === 0
+    ) {
+      setRoomOptions(
+        rooms.map((room) => ({ value: room.id, label: room.name })),
+      );
+      return;
+    }
+
+    const corridors = new Set<string>(
+      Object.values(corridorsC).map((c) => c.id),
+    );
+    const selectedCorridorIds = new Set<string>();
+
+    // Use a Map to prevent duplicates (key = room ID)
+    const updatedRoomSelection = new Map<
+      string,
+      { label: string; value: string }
+    >();
+
+    selectedRooms.forEach((entry) => {
+      if (corridors.has(entry.value)) {
+        selectedCorridorIds.add(entry.value);
+
+        // Add all rooms in the selected corridor
+        roomsC
+          .filter((room) => room.corridorId === entry.value)
+          .forEach((room) =>
+            updatedRoomSelection.set(room.id, {
+              value: room.id,
+              label: room.name,
+            }),
+          );
+      } else {
+        updatedRoomSelection.set(entry.value, entry);
+      }
+    });
+
+    form.setValue("rooms", Array.from(updatedRoomSelection.values()));
+    setRoomOptions((prevOptions) =>
+      prevOptions.filter((room) => !selectedCorridorIds.has(room.value)),
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -327,10 +382,8 @@ export const EditorTemplate = ({
                     <FormLabel>Rum</FormLabel>
                     <MultiSelect
                       {...field}
-                      defaultOptions={rooms.map((room) => ({
-                        value: room.id,
-                        label: room.name,
-                      }))}
+                      onChange={onRoomsSelect}
+                      options={roomOptions}
                       placeholder="Välj rum"
                       emptyIndicator="Inga rum hittades"
                     />

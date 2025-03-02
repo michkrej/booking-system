@@ -1,4 +1,4 @@
-import { Room } from "../../../utils/interfaces";
+import { type Room } from "../../../utils/interfaces";
 
 const locationId = "550ddbe9-6fa1-49de-9336-01744c67b233";
 
@@ -32,7 +32,6 @@ export const corridorsC = {
 
 const roomsC = [
   ...Object.values(corridorsC),
-  /* U-korridoren */
   {
     name: "U1",
     id: "c9394b56-0e30-4b95-a821-ac33d7e632fc",
@@ -279,13 +278,6 @@ const roomsC = [
   {
     name: "R22",
     id: "7c76e08f-f742-4375-b6e5-c7af16646ce0",
-
-    corridorId: corridorsC.R.id,
-  },
-  // TODO - remove this duplicate
-  {
-    name: "R22",
-    id: "e893e020-5772-4a53-ac8c-eabcf03545e6",
 
     corridorId: corridorsC.R.id,
   },
