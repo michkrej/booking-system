@@ -224,7 +224,7 @@ export const EditorTemplate = ({
       await addBookingToPlanMutation.mutateAsync(
         {
           booking: bookingData,
-          planId: currentPlan?.id,
+          plan: currentPlan,
         },
         {
           onSuccess: () => {

@@ -27,12 +27,10 @@ import {
 } from "@/components/ui/table";
 import { findCollisionsBetweenPlans } from "@/utils/collisionHandling";
 import { useMemo, useState } from "react";
-import { useStoreCollisionsExist } from "@/hooks/useStoreCollisionsExist";
 import { useUserPlans } from "@/hooks/useUserPlans";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();
@@ -40,7 +38,6 @@ export const FindCollisionsCard = () => {
   const loadedBookings = useBoundStore((state) => state.loadedBookings);
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
-  const { collisionsExist, changedCollisionsExist } = useStoreCollisionsExist();
   const [selectedUserPlan, setSelectedUserPlan] = useState<Plan>();
   const [collisions, setCollisions] = useState<Record<string, Plan["events"]>>(
     {},
@@ -57,11 +54,8 @@ export const FindCollisionsCard = () => {
     publicPlans.forEach((plan) => {
       const collisions = findCollisionsBetweenPlans(userPlan, plan);
       allCollisions[plan.id] = collisions;
-
-      if (collisions.length > 0 && !collisionsExist) {
-        changedCollisionsExist();
-      }
     });
+
     return allCollisions;
   };
 
@@ -82,12 +76,13 @@ export const FindCollisionsCard = () => {
     ]);
 
     navigate(`/booking/view`);
-
-    toast.info("I denna vy går det inte att redigera några bokningar.", {
-      id: "collisions-view",
-      position: "bottom-left",
-    });
   };
+
+  const showCollisionsButtonEnabled = useMemo(() => {
+    const col = Object.values(collisions).flat();
+    console.log(col);
+    return col.length > 0 && selectedUserPlan;
+  }, [collisions]);
 
   return (
     <Card className="col-span-full">
@@ -123,7 +118,7 @@ export const FindCollisionsCard = () => {
         <Button
           variant="outline"
           size="sm"
-          disabled={!selectedUserPlan || !collisionsExist}
+          disabled={!showCollisionsButtonEnabled}
           onClick={onButtonClick}
         >
           Se krockar grafiskt

@@ -7,14 +7,14 @@ import { type Plan, type Booking } from "@/utils/interfaces";
 export const useBookingActions = () => {
   const addBookingToPlanMutation = useMutation({
     mutationFn: ({
-      planId,
+      plan,
       booking,
     }: {
-      planId?: string;
+      plan: Plan | null;
       booking: Booking;
     }) => {
-      if (!planId) throw new Error("planId not found");
-      return plansService.addPlanEvent(planId, booking);
+      if (!plan) throw new Error("Plan not found");
+      return plansService.addPlanEvent(plan, booking);
     },
     onSuccess: () => {
       toast.success("Bokning har lagts till i planeringen");

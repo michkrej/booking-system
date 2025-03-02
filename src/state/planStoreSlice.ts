@@ -12,7 +12,6 @@ interface PlanStoreSlice {
   userPlans: Plan[];
   publicPlans: Plan[];
   hasPublicPlan: boolean;
-  collisionsExist: boolean;
   activePlans: Plan[];
 
   userPlansLoaded: (plans: Plan[]) => void;
@@ -23,7 +22,6 @@ interface PlanStoreSlice {
   incrementPlanYear: () => void;
   decrementPlanYear: () => void;
   planPublicToggled: (planId: string) => void;
-  changedCollisionsExist: () => void;
   changedActivePlans: (plans: Plan[]) => void;
 }
 
@@ -38,7 +36,6 @@ const createPlanStoreSlice: StateCreator<
   userPlans: [],
   publicPlans: [],
   hasPublicPlan: false,
-  collisionsExist: false,
   activePlans: [],
 
   userPlansLoaded: (plans) => {
@@ -103,9 +100,6 @@ const createPlanStoreSlice: StateCreator<
       return plan;
     });
     set({ userPlans: plans });
-  },
-  changedCollisionsExist: () => {
-    set((state) => ({ collisionsExist: !state.collisionsExist }));
   },
   changedActivePlans: (plans) => {
     set({ activePlans: plans });

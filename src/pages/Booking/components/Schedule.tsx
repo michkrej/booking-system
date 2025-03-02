@@ -115,12 +115,6 @@ export const Schedule = () => {
     data: Booking;
     cancel: boolean;
   }) => {
-    if (id === "view" && !e.data?.id) {
-      toast.error("Du kan inte editera bokningar i denna vy");
-      e.cancel = true;
-      return;
-    }
-
     if (!building && !e.data?.id) {
       toast.error("Du måste välja en byggnad för att skapa en bokning");
       e.cancel = true;
@@ -152,11 +146,7 @@ export const Schedule = () => {
 
   // Handle delete and drag and drop events
   const onActionBegin = (args: ActionEventArgs): void => {
-    if (id === "view") {
-      toast.error("Du kan inte editera bokningar i denna vy");
-      args.cancel = true;
-      return;
-    }
+    args.cancel = true;
 
     if (args.requestType === "eventRemove" && args.deletedRecords?.length) {
       const entry = args.deletedRecords[0] as Booking;
@@ -164,7 +154,6 @@ export const Schedule = () => {
       const plan = activePlans.find((plan) => plan.id === entry.planId);
       if (!plan) {
         console.warn("Plan not found");
-        args.cancel = true;
         return;
       }
 
@@ -196,13 +185,11 @@ export const Schedule = () => {
       const plan = activePlans.find((plan) => plan.id === updatedEvent.planId);
       if (!plan) {
         console.warn("Plan not found");
-        args.cancel = true;
         return;
       }
 
       if (plan.userId !== user.id) {
         toast.error("Du kan inte uppdatera andra fadderiers bokningar");
-        args.cancel = true;
         return;
       }
 
@@ -210,8 +197,7 @@ export const Schedule = () => {
         { booking: updatedEvent, plan },
         {
           onSuccess: () => {
-            // This causes a copy of the booking to be created
-            // updatedBooking(updatedEvent);
+            updatedBooking(updatedEvent);
           },
         },
       );
@@ -279,12 +265,6 @@ export const Schedule = () => {
           eventRendered={onEventRendered}
           actionBegin={onActionBegin}
           dragStart={(e: { cancel: boolean }) => {
-            if (id === "view") {
-              e.cancel = true;
-              toast.error("Du kan inte editera bokningar i denna vy");
-              return;
-            }
-
             if (!building) {
               e.cancel = true;
               toast.error(
@@ -293,8 +273,6 @@ export const Schedule = () => {
             }
             return e;
           }}
-          allowResizing={id !== "view"}
-          allowDragAndDrop={id !== "view"}
         >
           <ResourcesDirective>
             {building ? (

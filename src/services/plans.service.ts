@@ -172,11 +172,13 @@ const updatePlanDetails = async (
 
 // ----------------------- Plan events ----------------------- //
 
-const addPlanEvent = async (planId: string, booking: Booking) => {
+const addPlanEvent = async (plan: Plan, booking: Booking) => {
   try {
-    const newBooking = { ...booking, planId, id: uuidv4() };
-    await updateDoc(doc(db, "plans", planId), {
-      events: arrayUnion(newBooking),
+    const newBooking = { ...booking, planId: plan.id, id: uuidv4() };
+    const events = [...plan.events, newBooking];
+
+    await updateDoc(doc(db, "plans", plan.id), {
+      events,
       updatedAt: new Date(),
     });
     return newBooking;
@@ -196,6 +198,10 @@ const updatePlanEvent = async (plan: Plan, event: Booking) => {
     const updatedEvents = plan.events.map((e) =>
       e.id === event.id ? updatedEvent : e,
     );
+
+    if (updatedEvents.length !== plan.events.length) {
+      throw new Error("Event lengths do not match");
+    }
 
     await updateDoc(doc(db, "plans", plan.id), {
       events: updatedEvents,

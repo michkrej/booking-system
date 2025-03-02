@@ -16,16 +16,25 @@ const updatePlansEventList = (
   action: "add" | "remove" | "update",
 ) => {
   return plans.map((plan) => {
-    if (plan.id === booking.planId) {
-      return {
-        ...plan,
-        events:
-          action === "remove"
-            ? plan.events.filter((event) => event.id !== booking.id)
-            : [...plan.events, booking],
-      };
+    if (plan.id !== booking.planId) return plan; // Skip plans that don't match
+
+    let updatedEvents = plan.events;
+
+    switch (action) {
+      case "remove":
+        updatedEvents = plan.events.filter((event) => event.id !== booking.id);
+        break;
+      case "update":
+        updatedEvents = plan.events.map((event) =>
+          event.id === booking.id ? booking : event,
+        );
+        break;
+      case "add":
+        updatedEvents = [...plan.events, booking];
+        break;
     }
-    return plan;
+
+    return { ...plan, events: updatedEvents };
   });
 };
 
@@ -54,7 +63,7 @@ const createBookingStoreSlice: StateCreator<
         (booking) => booking.id !== bookingToDelete.id,
       );
       const updatedPlansList = updatePlansEventList(
-        get().activePlans,
+        state.activePlans,
         bookingToDelete,
         "remove",
       );
@@ -77,7 +86,7 @@ const createBookingStoreSlice: StateCreator<
         return booking;
       });
       const updatedPlansList = updatePlansEventList(
-        get().activePlans,
+        state.activePlans,
         updatedBooking,
         "update",
       );
