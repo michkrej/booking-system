@@ -31,6 +31,7 @@ import { useUserPlans } from "@/hooks/useUserPlans";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();
@@ -76,11 +77,17 @@ export const FindCollisionsCard = () => {
     ]);
 
     navigate(`/booking/view`);
+    toast.info(
+      "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
+      {
+        position: "bottom-left",
+        duration: 1000 * 60,
+      },
+    );
   };
 
   const showCollisionsButtonEnabled = useMemo(() => {
     const col = Object.values(collisions).flat();
-    console.log(col);
     return col.length > 0 && selectedUserPlan;
   }, [collisions]);
 
