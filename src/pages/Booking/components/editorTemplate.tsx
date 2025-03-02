@@ -238,7 +238,10 @@ export const EditorTemplate = ({
       alcohol: values.alcohol,
       food: values.food,
       allDay: false,
-      committeeId: user.committeeId,
+      committeeId:
+        action === "create"
+          ? user.committeeId
+          : (data?.committeeId ?? user.committeeId),
       planId: action === "create" ? planId : (data?.planId ?? "??"),
       locationId: building!.id,
       roomId: values.rooms.map((room) => room.value),
