@@ -1,9 +1,8 @@
-import Moment from "moment";
-import { extendMoment } from "moment-range";
+import { areIntervalsOverlapping } from "date-fns";
+
 import roomsC, { corridorsC } from "../data/campusValla/rooms/C.js";
 import { locations } from "../data/locationsData.js";
-import { Plan, Booking } from "./interfaces.js";
-const moment = extendMoment(Moment);
+import { type Plan, type Booking } from "./interfaces.js";
 
 export const LOCATION_ID = locations.campusValla["C-huset"].id;
 export const CORRIDOR_IDS: string[] = Object.values(corridorsC).map(
@@ -75,7 +74,7 @@ export const increaseItemsUse = (items: SummedItems, event: Booking) => {
  * @returns {Array|undefined} - An array of events with too many items, or undefined if no events have too many items.
  */
 export const getEventsWithTooManyItems = (items: SummedItems) => {
-  for (let item in items as SummedItems) {
+  for (const item in items) {
     if (items[item as ItemName].sum > MAX_ITEMS[item as ItemName]) {
       return items[item as ItemName].events;
     }
@@ -149,27 +148,26 @@ export const findCollisionBetweenEvents = (
   event2: Booking,
   items: SummedItems,
 ) => {
-  const collidingEvents = new Set();
+  const collidingEvents = new Set<Booking>();
 
-  const range1 = moment.range(moment(event1.startDate), moment(event1.endDate));
-  const range2 = moment.range(moment(event2.startDate), moment(event2.endDate));
-  if (range1.overlaps(range2)) {
-    // check for item collisions
+  const range1 = { start: event1.startDate, end: event1.endDate };
+  const range2 = { start: event2.startDate, end: event2.endDate };
+
+  if (areIntervalsOverlapping(range1, range2)) {
+    // Check for item collisions
     increaseItemsUse(items, event2);
     const tooManyItems = getEventsWithTooManyItems(items);
     if (tooManyItems) {
-      tooManyItems.forEach((itemEvent) => {
-        collidingEvents.add(itemEvent);
-      });
-      // collidingEvents.add(event1) adding this is not necessary since the event should be in tooManyItems, I think
+      tooManyItems.forEach((itemEvent) => collidingEvents.add(itemEvent));
     }
-    // check for room or corridor collisions
+
+    // Check for room or corridor collisions
     if (
       eventsUseSameRooms(event1, event2) ||
       eventsInSameCorridor(event1, event2)
     ) {
-      collidingEvents.add(event2);
       collidingEvents.add(event1);
+      collidingEvents.add(event2);
     }
   }
 
@@ -187,7 +185,8 @@ export const findCollisionsBetweenUserPlanAndPublicPlans = (
   userPlan: Plan,
   publicPlans: Plan[],
 ): Booking[] => {
-  let collidingEvents = new Set();
+  const collidingEventIds = new Set<string>();
+  const uniqueCollisions: Booking[] = [];
 
   const userEvents = userPlan.events;
   const publicEvents = publicPlans.flatMap((plan) => plan.events);
@@ -195,14 +194,26 @@ export const findCollisionsBetweenUserPlanAndPublicPlans = (
   // check for collisions between personal and public events
   userEvents.forEach((userEvent) => {
     const items = createItemsObject(userEvent);
+
     publicEvents.forEach((publicEvent) => {
-      collidingEvents = new Set([
-        ...collidingEvents,
-        ...findCollisionBetweenEvents(userEvent, publicEvent, items),
-      ]);
+      const collisions = findCollisionBetweenEvents(
+        userEvent,
+        publicEvent,
+        items,
+      );
+
+      collisions.forEach((event) => {
+        if (!collidingEventIds.has(event.id)) {
+          // Assuming `event.id` exists
+          collidingEventIds.add(event.id);
+          uniqueCollisions.push(event);
+        }
+      });
     });
   });
-  return [...collidingEvents] as Booking[];
+
+  console.log(uniqueCollisions);
+  return uniqueCollisions;
 };
 
 export const findCollisionsBetweenPlans = (
@@ -210,26 +221,4 @@ export const findCollisionsBetweenPlans = (
   publicPlan: Plan,
 ) => {
   return findCollisionsBetweenUserPlanAndPublicPlans(userPlan, [publicPlan]);
-};
-
-/**
- * Finds collisions between all events and returns an array of colliding events.
- *
- * @param {Array} events - An array of event objects.
- * @returns {Array} - An array of colliding events.
- */
-export const findCollisionsBetweenAllEvents = (events: Booking[]) => {
-  let collidingEvents = new Set();
-  events.forEach((event1) => {
-    const items = createItemsObject(event1);
-    events.forEach((event2) => {
-      if (event1.id !== event2.id && event1.planId !== event2.planId) {
-        collidingEvents = new Set([
-          ...collidingEvents,
-          ...findCollisionBetweenEvents(event1, event2, items),
-        ]);
-      }
-    });
-  });
-  return [...collidingEvents];
 };

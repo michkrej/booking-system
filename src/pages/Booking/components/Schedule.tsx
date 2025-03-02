@@ -117,9 +117,7 @@ export const Schedule = () => {
   }) => {
     console.log(e);
     if (id === "view" && !e.data?.id) {
-      toast.error(
-        "När du ser bokningar för flera fadderier kan du bara radera och flytta dina egna bokningar",
-      );
+      toast.error("Du kan inte editera bokningar i denna vy");
       e.cancel = true;
       return;
     }
@@ -159,6 +157,12 @@ export const Schedule = () => {
 
   // Handle delete and drag and drop events
   const onActionBegin = (args: ActionEventArgs): void => {
+    if (id === "view") {
+      toast.error("Du kan inte editera bokningar i denna vy");
+      args.cancel = true;
+      return;
+    }
+
     if (args.requestType === "eventRemove" && args.deletedRecords?.length) {
       const entry = args.deletedRecords[0] as Booking;
 
@@ -280,6 +284,12 @@ export const Schedule = () => {
           eventRendered={onEventRendered}
           actionBegin={onActionBegin}
           dragStart={(e: { cancel: boolean }) => {
+            if (id === "view") {
+              e.cancel = true;
+              toast.error("Du kan inte editera bokningar i denna vy");
+              return;
+            }
+
             if (!building) {
               e.cancel = true;
               toast.error(
@@ -288,6 +298,8 @@ export const Schedule = () => {
             }
             return e;
           }}
+          allowResizing={id !== "view"}
+          allowDragAndDrop={id !== "view"}
         >
           <ResourcesDirective>
             {building ? (
@@ -317,7 +329,6 @@ export const Schedule = () => {
           </ResourcesDirective>
           <ViewsDirective>
             <ViewDirective
-              allowVirtualScrolling={true}
               option="TimelineDay"
               eventTemplate={(props: Booking) => {
                 return (

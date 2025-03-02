@@ -30,13 +30,21 @@ import { useMemo, useState } from "react";
 import { useStoreCollisionsExist } from "@/hooks/useStoreCollisionsExist";
 import { useUserPlans } from "@/hooks/useUserPlans";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
+import { useBoundStore } from "@/state/store";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();
   const { userPlans } = useUserPlans();
-  const { collisionsExist } = useStoreCollisionsExist();
-
+  const loadedBookings = useBoundStore((state) => state.loadedBookings);
+  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
+  const navigate = useNavigate();
+  const { collisionsExist, changedCollisionsExist } = useStoreCollisionsExist();
   const [selectedUserPlan, setSelectedUserPlan] = useState<Plan>();
+  const [collisions, setCollisions] = useState<Record<string, Plan["events"]>>(
+    {},
+  );
 
   const publicPlansWithoutUserPlans = useMemo(() => {
     const userPublicPlan = userPlans.find((plan) => plan.public);
@@ -44,21 +52,54 @@ export const FindCollisionsCard = () => {
     return publicPlans.filter((plan) => plan.id !== userPublicPlan.id);
   }, [userPlans, publicPlans]);
 
+  const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
+    const allCollisions: Record<string, Plan["events"]> = {};
+    publicPlans.forEach((plan) => {
+      const collisions = findCollisionsBetweenPlans(userPlan, plan);
+      allCollisions[plan.id] = collisions;
+
+      if (collisions.length > 0 && !collisionsExist) {
+        changedCollisionsExist();
+      }
+    });
+    return allCollisions;
+  };
+
+  const onChangeSelect = (id: string) => {
+    const plan = userPlans.find((plan) => plan.id === id);
+    if (!plan) return;
+
+    setSelectedUserPlan(plan);
+    setCollisions(findCollisions(plan, publicPlansWithoutUserPlans));
+  };
+
+  const onButtonClick = () => {
+    const plansWithCollisions = Object.keys(collisions);
+    loadedBookings(Object.values(collisions).flat());
+    changedActivePlans([
+      ...publicPlans.filter((plan) => plansWithCollisions.includes(plan.id)),
+      ...(selectedUserPlan ? [selectedUserPlan] : []),
+    ]);
+
+    navigate(`/booking/view`);
+
+    toast.info("I denna vy går det inte att redigera några bokningar.", {
+      id: "collisions-view",
+      position: "bottom-left",
+    });
+  };
+
   return (
     <Card className="col-span-full">
       <CardHeader className="grid content-between sm:grid-cols-[1fr_auto]">
         <div className="flex flex-col space-y-1.5">
           <CardTitle>Hitta krockar</CardTitle>
           <CardDescription>
-            Hitta krockar mellan fadderiers bokningar
+            Hitta krockar mellan dina och andra fadderiers bokningar.
           </CardDescription>
         </div>
-        <div className="flex space-x-2">
-          <Select
-            onValueChange={(val) =>
-              setSelectedUserPlan(userPlans.find((plan) => plan.id === val))
-            }
-          >
+        <div className="flex items-center space-x-2">
+          <Select onValueChange={onChangeSelect}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Välj planering..." />
             </SelectTrigger>
@@ -70,17 +111,21 @@ export const FindCollisionsCard = () => {
               ))}
             </SelectContent>
           </Select>
-          <Button>Hitta</Button>
         </div>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-6">
         <CollisionsTable
           publicPlans={publicPlansWithoutUserPlans}
-          userPlan={selectedUserPlan}
+          collisions={collisions}
         />
       </CardContent>
       <CardFooter className="justify-end">
-        <Button variant="outline" size="sm" disabled={!collisionsExist}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!selectedUserPlan || !collisionsExist}
+          onClick={onButtonClick}
+        >
           Se krockar grafiskt
         </Button>
       </CardFooter>
@@ -90,19 +135,11 @@ export const FindCollisionsCard = () => {
 
 type CollisionsTableProps = {
   publicPlans: Plan[];
-  userPlan?: Plan;
+  collisions: Record<string, Plan["events"]>;
 };
 
-const CollisionsTable = ({ publicPlans, userPlan }: CollisionsTableProps) => {
-  const { findCollisions } = useFindAllCollisions();
-
-  const collisions = useMemo(() => {
-    if (userPlan) {
-      return findCollisions(userPlan, publicPlans);
-    }
-    return {};
-  }, [userPlan, publicPlans]);
-
+const CollisionsTable = ({ publicPlans, collisions }: CollisionsTableProps) => {
+  console.log(collisions);
   return (
     <Table>
       <TableHeader>
@@ -117,7 +154,10 @@ const CollisionsTable = ({ publicPlans, userPlan }: CollisionsTableProps) => {
         {publicPlans.map((plan) => {
           const committee = getCommittee(plan.committeeId);
 
-          const numCollisions = collisions[plan.id]?.length ?? null;
+          const collisnsForPlan = collisions[plan.id];
+          const numCollisions = collisnsForPlan
+            ? Math.ceil(collisnsForPlan.length / 2)
+            : null;
           return (
             <TableRow key={plan.id}>
               <TableCell>{committee?.kår}</TableCell>
@@ -139,23 +179,4 @@ const CollisionsTable = ({ publicPlans, userPlan }: CollisionsTableProps) => {
       </TableBody>
     </Table>
   );
-};
-
-const useFindAllCollisions = () => {
-  const { collisionsExist, changedCollisionsExist } = useStoreCollisionsExist();
-
-  const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
-    const allCollisions: Record<string, Plan["events"]> = {};
-    publicPlans.forEach((plan) => {
-      const collisions = findCollisionsBetweenPlans(userPlan, plan);
-      allCollisions[plan.id] = collisions;
-
-      if (collisions.length > 0 && !collisionsExist) {
-        changedCollisionsExist();
-      }
-    });
-    return allCollisions;
-  };
-
-  return { findCollisions };
 };
