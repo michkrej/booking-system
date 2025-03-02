@@ -20,16 +20,31 @@ const createBookingStoreSlice: StateCreator<
   createdBooking: (booking) => {
     set((state) => ({
       bookings: [...state.bookings, booking],
+      currentPlan: state.currentPlan
+        ? {
+            ...state.currentPlan,
+            events: [...state.currentPlan.events, booking],
+          }
+        : null,
     }));
   },
   deletedBooking: (id) => {
-    set((state) => ({
-      bookings: state.bookings.filter((booking) => booking.id !== id),
-    }));
+    set((state) => {
+      const bookings = state.bookings.filter((booking) => booking.id !== id);
+      return {
+        bookings,
+        currentPlan: state.currentPlan
+          ? {
+              ...state.currentPlan,
+              events: bookings,
+            }
+          : null,
+      };
+    });
   },
   updatedBooking: (updatedBooking) => {
-    set((state) => ({
-      bookings: state.bookings.map((booking) => {
+    set((state) => {
+      const bookings = state.bookings.map((booking) => {
         if (updatedBooking.id === booking.id) {
           return {
             ...booking,
@@ -37,8 +52,17 @@ const createBookingStoreSlice: StateCreator<
           };
         }
         return booking;
-      }),
-    }));
+      });
+      return {
+        bookings,
+        currentPlan: state.currentPlan
+          ? {
+              ...state.currentPlan,
+              events: bookings,
+            }
+          : null,
+      };
+    });
   },
   loadedBookings: (bookings) => {
     set(() => ({

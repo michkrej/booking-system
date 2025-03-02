@@ -55,20 +55,28 @@ export type Booking = {
   createdAt: Date;
   updatedAt: Date;
 
-  alcohol?: boolean;
-  food?: boolean;
-  link?: string;
+  alcohol: boolean;
+  food: boolean;
+  link: string;
   annat: string;
   // items
-  grillar?: number;
-  bardiskar?: number;
-  "bankset-hg"?: number;
-  "bankset-k"?: number;
-  trailer?: number;
-  tents?: number;
-  scene?: number;
-  elverk?: number;
+  grillar: number;
+  bardiskar: number;
+  scenes: number;
+  "bankset-hg": number;
+  "bankset-k": number;
+  "bankset-hoben": number;
+  "ff-tents": number;
+  "ff-elverk": number;
+  "ff-trailer": number;
 };
+
+export type NewBooking = {
+  endDate: Date;
+  startDate: Date;
+  roomId: string;
+};
+
 export type Kår = keyof typeof kårer;
 
 export type LintekCommitee =

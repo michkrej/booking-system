@@ -48,8 +48,9 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
               variant="ghost"
               className="rounded-full text-primary/60 hover:text-primary"
               disabled={!isCurrentYear}
+              asChild
             >
-              <Trash />
+              <Trash className="p-2" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Radera planering</TooltipContent>

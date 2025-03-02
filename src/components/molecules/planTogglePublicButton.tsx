@@ -10,9 +10,9 @@ type PlanTogglePublicButtonProps = {
 };
 
 const getIcon = (pending: boolean, isPublic: boolean) => {
-  if (pending) return <Loader className="animate-spin" />;
-  if (isPublic) return <GlobeLock />;
-  return <Globe />;
+  if (pending) return <Loader className="animate-spin p-2" />;
+  if (isPublic) return <GlobeLock className="p-2" />;
+  return <Globe className="p-2" />;
 };
 
 export const PlanTogglePublicButton = ({
@@ -34,6 +34,7 @@ export const PlanTogglePublicButton = ({
           className="rounded-full text-primary/60 hover:text-primary"
           disabled={!isCurrentYear}
           onClick={() => togglePublicPlan.mutate(plan)}
+          asChild
         >
           {getIcon(togglePublicPlan.isPending, plan.public)}
         </Button>

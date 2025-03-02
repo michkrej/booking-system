@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { addDays, addMonths, format } from "date-fns";
 import { ChevronLeft, ChevronRight, TrashIcon } from "lucide-react";
-import { ScheduleContext } from "../booking.page";
+import { ScheduleContext } from "./Schedule";
 import { useContext } from "react";
 import { sv } from "date-fns/locale";
 import {
@@ -11,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { campusLocationsMap } from "@/data/locationsData";
+import { type Location } from "@/utils/interfaces";
 
 const viewAdjustments = {
   TimelineDay: (date: Date, step: number) => addDays(date, step),
@@ -60,7 +62,14 @@ export const ScheduleToolbar = () => {
 
   const handleCampusChange = (option: "US" | "Valla") => {
     setChosenCampus(option);
-    setBuilding("");
+    setBuilding(undefined);
+  };
+
+  const handleLocationChange = (option: Location["name"]) => {
+    const buildingObject = Object.values(campusLocationsMap[chosenCampus]).find(
+      (location) => location.name === option,
+    );
+    setBuilding(buildingObject);
   };
 
   return (
@@ -76,7 +85,10 @@ export const ScheduleToolbar = () => {
           </SelectContent>
         </Select>
         <div className="flex gap-1">
-          <Select value={building ?? ""} onValueChange={setBuilding}>
+          <Select
+            value={building?.name ?? ""}
+            onValueChange={handleLocationChange}
+          >
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Välj byggnad" />
             </SelectTrigger>
@@ -107,11 +119,11 @@ export const ScheduleToolbar = () => {
           </Button>
           <span className="pointer-events-none">
             {currentView === "TimelineDay"
-              ? currentDate.toLocaleDateString()
+              ? format(currentDate, "d MMMM yyyy", { locale: sv })
               : null}
             {currentView === "TimelineWeek" ? getWeekDateSpan() : null}
             {currentView === "TimelineMonth"
-              ? format(currentDate, "MMMM", { locale: sv })
+              ? format(currentDate, "MMMM yyyy", { locale: sv })
               : null}
           </span>
           <Button size="icon" variant="ghost" onClick={goToNext}>

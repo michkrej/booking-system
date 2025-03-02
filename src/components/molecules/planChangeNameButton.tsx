@@ -74,10 +74,13 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
             <Button
               size={"icon"}
               variant="ghost"
-              className="rounded-full text-primary/60 hover:text-primary"
+              className="rounded-full p-2 text-primary/60 hover:text-primary"
               disabled={!isCurrentYear}
+              asChild
             >
-              <Pencil />
+              <div>
+                <Pencil />
+              </div>
             </Button>
           </TooltipTrigger>
           <TooltipContent>Byt namn på planering</TooltipContent>

@@ -22,14 +22,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { sv } from "date-fns/locale";
-import { ScheduleContext } from "../booking.page";
+import { ScheduleContext } from "./Schedule";
 import { committees } from "@/data/committees";
-import { campusLocationsMap } from "@/data/locationsData";
-import { type Booking } from "@/utils/interfaces";
+import { type NewBooking, type Booking } from "@/utils/interfaces";
 import { useMutation } from "@tanstack/react-query";
 import { plansService } from "@/services";
 import { toast } from "sonner";
@@ -37,12 +36,14 @@ import { useParams } from "react-router-dom";
 import { LoadingButton } from "@/components/molecules/loadingButton";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
 import { useStoreUser } from "@/hooks/useStoreUser";
+import { Checkbox } from "@/components/ui/checkbox";
+import { campusLocationsMap } from "@/data/locationsData";
+import { useBookingActions } from "@/hooks/useBookingActions";
 
 const formSchema = z.object({
   title: z.string().min(1, "Bokningen måste ha ett namn"),
-  startDate: z.date().min(new Date(), "Startdatumet måste vara i framtiden"),
-  endDate: z.date().min(new Date(), "Slutdatumet måste vara i framtiden"),
-  description: z.string(),
+  startDate: z.date(),
+  endDate: z.date(),
   rooms: z
     .array(z.object({ value: z.string(), label: z.string() }))
     .min(1, "Bokningen måste ha minst en rum"),
@@ -61,55 +62,65 @@ const formSchema = z.object({
   link: z.string(),
 });
 
-type EditorTemplateProps = {
-  data?: Booking;
+type EditorTemplateProps = (
+  | {
+      action: "create";
+      data?: NewBooking;
+    }
+  | {
+      action: "edit";
+      data?: Booking;
+    }
+) & {
   open: boolean;
   onOpenChange: () => void;
-  currentBuilding: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const EditorTemplate = ({
+  action,
   data,
   open,
   onOpenChange,
-  currentBuilding,
 }: EditorTemplateProps) => {
-  const { id: planId } = useParams();
-  const { createdBooking, bookings } = useStoreBookings();
-  const { rooms, building, chosenCampus } = useContext(ScheduleContext);
+  const { id: planId = "" } = useParams();
+  const { createdBooking, updatedBooking } = useStoreBookings();
+  const {
+    rooms,
+    currentPlan,
+    building: dropDownBuilding,
+    chosenCampus,
+  } = useContext(ScheduleContext);
   const { user } = useStoreUser();
+  const { addBookingToPlanMutation, updateBookingMutation } =
+    useBookingActions();
+
+  const building = useMemo(() => {
+    if (action === "create") return dropDownBuilding;
+
+    return (
+      Object.values(campusLocationsMap[chosenCampus]).find(
+        (entry) => entry.id === data?.locationId,
+      ) ?? dropDownBuilding
+    );
+  }, [dropDownBuilding, action, data, chosenCampus]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  const addBookingToPlanMutation = useMutation({
-    mutationFn: (booking: Booking) => {
-      if (!planId) throw new Error("PlanId not found");
-      return plansService.addPlanEvent(planId, booking);
-    },
-    onSuccess: () => {
-      toast.success("Bokning har lagts till i planeringen");
-      onOpenChange();
-    },
-    onError: () => {
-      toast.error("Kunde inte lägga till bokning i planeringen");
-    },
-  });
-
   // Reset form values when `data` is available
   useEffect(() => {
-    if (data) {
+    if (!data) return;
+    if (action === "create") {
       form.reset({
-        title: data.title,
-        startDate: data.startDate || "",
-        endDate: data.endDate || "",
-        description: "",
+        title: "",
+        startDate: data.startDate,
+        endDate: data.endDate,
         rooms: [
           {
             value: data.roomId,
-            label: rooms.find((room) => room.id === data.roomId)?.name!,
+            label: rooms.find((room) => room.id === data.roomId)?.name ?? "",
           },
         ],
         food: false,
@@ -126,10 +137,35 @@ export const EditorTemplate = ({
         "other-inventory": "",
         link: "",
       });
+    } else {
+      console.log(data);
+      form.reset({
+        title: data.title,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        rooms: data.roomId.map((roomId) => ({
+          value: roomId,
+          label: rooms.find((room) => room.id === roomId)?.name ?? "",
+        })),
+        food: data.food,
+        alcohol: data.alcohol,
+        "bankset-k": data["bankset-k"] ?? 0,
+        "bankset-hg": data["bankset-hg"] ?? 0,
+        "bankset-hoben": data["bankset-hoben"] ?? 0,
+        grillar: data.grillar ?? 0,
+        bardiskar: data.bardiskar ?? 0,
+        scenes: data.scenes ?? 0,
+        "ff-tents": data["ff-tents"] ?? 0,
+        "ff-elverk": data["ff-elverk"] ?? 0,
+        "ff-trailer": data["ff-trailer"] ?? 0,
+        "other-inventory": data.annat,
+        link: data.link ?? "",
+      });
     }
   }, [data, form.reset]); // Depend on `data` and `reset` to update values when `data` changes
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
     const bookingData = {
       id: uuidv4(),
       title: values.title,
@@ -139,23 +175,51 @@ export const EditorTemplate = ({
       food: values.food,
       allDay: false,
       committeeId: user.committeeId,
-      planId: "",
-      locationId: campusLocationsMap[chosenCampus][building].id,
+      planId: planId,
+      locationId: building!.id,
       roomId: values.rooms.map((room) => room.value),
-      createdAt: new Date(),
-      updatedAt: new Date(),
       grillar: values.grillar,
       bardiskar: values.bardiskar,
+      scenes: values.scenes,
       "bankset-hg": values["bankset-hg"],
       "bankset-k": values["bankset-k"],
-      trailer: values["ff-trailer"],
-      tents: values["ff-tents"],
-      scene: values.scenes,
-      elverk: values["ff-elverk"],
+      "bankset-hoben": values["bankset-hoben"],
+      "ff-trailer": values["ff-trailer"],
+      "ff-tents": values["ff-tents"],
+      "ff-elverk": values["ff-elverk"],
       annat: values["other-inventory"],
-    };
-    createdBooking(bookingData);
-    await addBookingToPlanMutation.mutateAsync(bookingData);
+      link: values.link,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } satisfies Booking;
+
+    if (action === "create") {
+      createdBooking(bookingData);
+      await addBookingToPlanMutation.mutateAsync(
+        {
+          booking: bookingData,
+          planId: currentPlan?.id,
+        },
+        {
+          onSuccess: () => {
+            onOpenChange();
+          },
+        },
+      );
+    } else {
+      updatedBooking(bookingData);
+      await updateBookingMutation.mutateAsync(
+        {
+          booking: bookingData,
+          plan: currentPlan,
+        },
+        {
+          onSuccess: () => {
+            onOpenChange();
+          },
+        },
+      );
+    }
   }
 
   return (
@@ -233,7 +297,7 @@ export const EditorTemplate = ({
             </div>
             <div>
               <Label>Byggnad</Label>
-              <Input disabled value={currentBuilding} />
+              <Input disabled value={building?.name ?? "Välj byggnad"} />
             </div>
             <FormField
               name="rooms"
@@ -262,7 +326,10 @@ export const EditorTemplate = ({
                 render={({ field }) => (
                   <FormItem className="flex h-5 items-center justify-center gap-x-2">
                     <FormControl>
-                      <Input id="food" type="checkbox" />
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
                     </FormControl>
                     <FormLabel className="!mt-0">Mat?</FormLabel>
                     <FormMessage />
@@ -275,7 +342,10 @@ export const EditorTemplate = ({
                 render={({ field }) => (
                   <FormItem className="!m-0 flex h-5 items-center justify-center gap-x-2">
                     <FormControl>
-                      <Input id="alcohol" type="checkbox" />
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
                     </FormControl>
                     <FormLabel className="!mt-0">Alkohol?</FormLabel>
                     <FormMessage />
