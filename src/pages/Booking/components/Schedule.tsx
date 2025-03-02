@@ -288,6 +288,7 @@ export const Schedule = () => {
           </ResourcesDirective>
           <ViewsDirective>
             <ViewDirective
+              allowVirtualScrolling={true}
               option="TimelineDay"
               eventTemplate={(props: Booking) => {
                 return (
@@ -305,8 +306,11 @@ export const Schedule = () => {
                 );
               }}
             />
-            <ViewDirective option="TimelineWeek" />
-            <ViewDirective option="TimelineMonth" />
+            <ViewDirective option="TimelineWeek" allowVirtualScrolling={true} />
+            <ViewDirective
+              option="TimelineMonth"
+              allowVirtualScrolling={true}
+            />
           </ViewsDirective>
           <Inject
             services={[TimelineViews, TimelineMonth, Resize, DragAndDrop]}
