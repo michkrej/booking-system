@@ -130,10 +130,23 @@ export const getPublicPlans = async (year: number) => {
         orderBy("updatedAt", "desc"),
       ),
     );
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Plan[];
+
+    return snapshot.docs.map((doc) => {
+      const data = doc.data() as DBPlan;
+      return {
+        id: doc.id,
+        ...data,
+        events: data.events.map((event) => ({
+          ...event,
+          startDate: convertToDate(event.startDate),
+          endDate: convertToDate(event.endDate),
+          createdAt: convertToDate(event.createdAt),
+          updatedAt: convertToDate(event.updatedAt),
+        })),
+        createdAt: convertToDate(data.createdAt),
+        updatedAt: convertToDate(data.updatedAt),
+      };
+    });
   } catch (e) {
     console.error("Error fetching public plans:", getErrorMessage(e));
     throw e;
