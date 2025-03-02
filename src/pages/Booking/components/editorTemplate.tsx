@@ -38,37 +38,61 @@ import { campusLocationsMap } from "@/data/locationsData";
 import { useBookingActions } from "@/hooks/useBookingActions";
 import { corridorsC } from "@/data/campusValla/rooms";
 import roomsC from "@/data/campusValla/rooms/C";
+import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 
-const formSchema = z.object({
-  title: z.string().min(1, "Bokningen måste ha ett namn"),
-  startDate: z.date(),
-  endDate: z.date(),
-  rooms: z
-    .array(z.object({ value: z.string(), label: z.string() }))
-    .min(1, "Bokningen måste ha minst en rum"),
-  food: z.boolean(),
-  alcohol: z.boolean(),
-  "bankset-k": z.coerce.number(),
-  "bankset-hg": z.coerce.number(),
-  "bankset-hoben": z.coerce.number(),
-  grillar: z.coerce.number(),
-  bardiskar: z.coerce.number(),
-  scenes: z.coerce.number(),
-  "ff-tents": z.coerce
-    .number()
-    .min(0)
-    .max(4, "Det finns bara fyra tält att låna"),
-  "ff-elverk": z.coerce
-    .number()
-    .min(0)
-    .max(1, "Det finns bara ett elverk att låna"),
-  "ff-trailer": z.coerce
-    .number()
-    .min(0)
-    .max(1, "Det finns bara en trailer att låna"),
-  "other-inventory": z.string(),
-  link: z.string(),
-});
+const createFormSchema = (
+  items: Record<keyof typeof DEFAULT_ITEMS, number>,
+) => {
+  return z.object({
+    title: z.string().min(1, "Bokningen måste ha ett namn"),
+    startDate: z.date(),
+    endDate: z.date(),
+    rooms: z
+      .array(z.object({ value: z.string(), label: z.string() }))
+      .min(1, "Bokningen måste ha minst en rum"),
+    food: z.boolean(),
+    alcohol: z.boolean(),
+    "bankset-k": z.coerce
+      .number()
+      .min(0)
+      .max(items["bankset-k"], `Det finns bara ${items["bankset-k"]}`),
+    "bankset-hg": z.coerce
+      .number()
+      .min(0)
+      .max(items["bankset-hg"], `Det finns bara ${items["bankset-hg"]}`),
+    "bankset-hoben": z.coerce
+      .number()
+      .min(0)
+      .max(items["bankset-hoben"], `Det finns bara ${items["bankset-hoben"]}`),
+    grillar: z.coerce
+      .number()
+      .min(0)
+      .max(items.grillar, `Det finns bara ${items.grillar}`),
+    bardiskar: z.coerce
+      .number()
+      .min(0)
+      .max(items.bardiskar, `Det finns bara ${items.bardiskar}`),
+    scenes: z.coerce
+      .number()
+      .min(0)
+      .max(items.scenes, `Det finns bara ${items.scenes}`),
+    "ff-tents": z.coerce
+      .number()
+      .min(0)
+      .max(items["ff-tents"], `Det finns bara ${items["ff-tents"]}`),
+    "ff-elverk": z.coerce
+      .number()
+      .min(0)
+      .max(items["ff-elverk"], `Det finns bara ${items["ff-elverk"]}`),
+    "ff-trailer": z.coerce
+      .number()
+      .min(0)
+      .max(items["ff-trailer"], `Det finns bara ${items["ff-trailer"]}`),
+    "other-inventory": z.string(),
+    link: z.string(),
+  });
+};
 
 type EditorTemplateProps = (
   | {
@@ -91,6 +115,7 @@ export const EditorTemplate = ({
   open,
   onOpenChange,
 }: EditorTemplateProps) => {
+  const { bookableItems } = useAdminSettings();
   const { id: planId = "" } = useParams();
   const { createdBooking, updatedBooking } = useStoreBookings();
   const {
@@ -140,6 +165,10 @@ export const EditorTemplate = ({
     return planId === "view";
   }, [action, currentPlan, planId, data]);
 
+  const formSchema = useMemo(
+    () => createFormSchema(bookableItems),
+    [bookableItems],
+  );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     disabled: disabledForm,
