@@ -29,9 +29,6 @@ import { sv } from "date-fns/locale";
 import { ScheduleContext } from "./Schedule";
 import { committees } from "@/data/committees";
 import { type NewBooking, type Booking } from "@/utils/interfaces";
-import { useMutation } from "@tanstack/react-query";
-import { plansService } from "@/services";
-import { toast } from "sonner";
 import { useParams } from "react-router-dom";
 import { LoadingButton } from "@/components/molecules/loadingButton";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
@@ -55,9 +52,18 @@ const formSchema = z.object({
   grillar: z.coerce.number(),
   bardiskar: z.coerce.number(),
   scenes: z.coerce.number(),
-  "ff-tents": z.coerce.number().min(0).max(4),
-  "ff-elverk": z.coerce.number().min(0).max(1),
-  "ff-trailer": z.coerce.number().min(0).max(1),
+  "ff-tents": z.coerce
+    .number()
+    .min(0)
+    .max(4, "Det finns bara fyra tält att låna"),
+  "ff-elverk": z.coerce
+    .number()
+    .min(0)
+    .max(1, "Det finns bara ett elverk att låna"),
+  "ff-trailer": z.coerce
+    .number()
+    .min(0)
+    .max(1, "Det finns bara en trailer att låna"),
   "other-inventory": z.string(),
   link: z.string(),
 });
@@ -387,12 +393,7 @@ export const EditorTemplate = ({
                   <FormItem className="space-y-0">
                     <FormLabel>Bänkset (Hoben)</FormLabel>
                     <FormControl>
-                      <Input
-                        id="bankset-hoben"
-                        type="number"
-                        min={0}
-                        {...field}
-                      />
+                      <Input id="bankset-hoben" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -446,13 +447,7 @@ export const EditorTemplate = ({
                   <FormItem className="space-y-0">
                     <FormLabel>Tält (FF)</FormLabel>
                     <FormControl>
-                      <Input
-                        id="ff-tents"
-                        type="number"
-                        min={0}
-                        max={4}
-                        {...field}
-                      />
+                      <Input id="ff-tents" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -465,13 +460,7 @@ export const EditorTemplate = ({
                   <FormItem className="space-y-0">
                     <FormLabel>Elverk (FF)</FormLabel>
                     <FormControl>
-                      <Input
-                        id="ff-elverk"
-                        type="number"
-                        min={0}
-                        max={1}
-                        {...field}
-                      />
+                      <Input id="ff-elverk" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
