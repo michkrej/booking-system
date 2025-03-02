@@ -115,7 +115,6 @@ export const Schedule = () => {
     data: Booking;
     cancel: boolean;
   }) => {
-    console.log(e);
     if (id === "view" && !e.data?.id) {
       toast.error("Du kan inte editera bokningar i denna vy");
       e.cancel = true;
@@ -129,7 +128,6 @@ export const Schedule = () => {
     }
 
     if (e.type === "QuickInfo" && !e.data?.id && building) {
-      console.log("Create/edit booking");
       setNewBooking(e.data as unknown as NewBooking);
       setAction("create");
       setIsCreateBookingModalOpen(true);
@@ -138,7 +136,6 @@ export const Schedule = () => {
     }
 
     if (e.type === "Editor" && e.data?.id) {
-      console.log("Edit booking");
       setEditBooking(e.data);
       setAction("edit");
       setIsCreateBookingModalOpen(true);
@@ -146,8 +143,6 @@ export const Schedule = () => {
       return;
     }
   };
-
-  console.log(bookings);
 
   // Set the event color to the committee color
   const onEventRendered = (args: { element: HTMLElement; data: Booking }) => {

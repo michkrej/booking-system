@@ -188,19 +188,15 @@ const addPlanEvent = async (planId: string, booking: Booking) => {
 
 const updatePlanEvent = async (plan: Plan, event: Booking) => {
   try {
-    console.log("Plan events", plan.events);
-    console.log("Event", event);
     const updatedEvent = {
       ...event,
       updatedAt: new Date(),
     };
-    console.log(updatedEvent);
 
     const updatedEvents = plan.events.map((e) =>
       e.id === event.id ? updatedEvent : e,
     );
 
-    console.log("Updated events", updatedEvents);
     await updateDoc(doc(db, "plans", plan.id), {
       events: updatedEvents,
       updatedAt: new Date(),

@@ -139,7 +139,6 @@ type CollisionsTableProps = {
 };
 
 const CollisionsTable = ({ publicPlans, collisions }: CollisionsTableProps) => {
-  console.log(collisions);
   return (
     <Table>
       <TableHeader>

@@ -234,7 +234,6 @@ export const EditorTemplate = ({
         },
       );
     } else {
-      console.log("Update booking");
       await updateBookingMutation.mutateAsync(
         {
           booking: bookingData,

@@ -32,7 +32,6 @@ export const useBookingActions = () => {
       plan: Plan | null;
       booking: Booking;
     }) => {
-      console.log(booking);
       if (!plan) throw new Error("Plan not found");
       return plansService.updatePlanEvent(plan, booking);
     },

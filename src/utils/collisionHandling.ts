@@ -212,7 +212,6 @@ export const findCollisionsBetweenUserPlanAndPublicPlans = (
     });
   });
 
-  console.log(uniqueCollisions);
   return uniqueCollisions;
 };
 
