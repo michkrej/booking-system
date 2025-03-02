@@ -23,6 +23,7 @@ import {
 import { type Kår, type User } from "@/utils/interfaces";
 import { LoadingButton } from "../molecules/loadingButton";
 import { useSignUp } from "@/hooks/useSignUp";
+import { useEffect } from "react";
 
 const formSchemaGoogle = z.object({
   kår: z.string().min(1, "Val av kår saknas"),
@@ -47,6 +48,14 @@ export const FormGoogle = () => {
   const kårIsOther = form.watch("kår") === "Övrigt";
   const kårIsEmpty = form.watch("kår") === "";
 
+  useEffect(() => {
+    if (kårIsOther) {
+      form.setValue("fadderi", Object.values(kårer.Övrigt)[0]!.id);
+    } else {
+      form.setValue("fadderi", "");
+    }
+  }, [kårIsOther]);
+
   return (
     <Form {...form}>
       <form
@@ -63,14 +72,6 @@ export const FormGoogle = () => {
               <Select
                 onValueChange={(val) => {
                   field.onChange(val);
-                  if (val === "Övrigt") {
-                    form.setValue(
-                      "fadderi",
-                      kårer.Övrigt["a16c78ef-6f00-492c-926e-bf1bfe9fce32"].id,
-                    );
-                  } else {
-                    form.setValue("fadderi", "");
-                  }
                 }}
                 defaultValue={field.value}
               >

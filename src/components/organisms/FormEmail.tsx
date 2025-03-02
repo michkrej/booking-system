@@ -25,6 +25,7 @@ import {
 import { type Kår, type User } from "@/utils/interfaces";
 import { LoadingButton } from "../molecules/loadingButton";
 import { useSignUp } from "@/hooks/useSignUp";
+import { useEffect } from "react";
 
 const formSchemaEmail = z
   .object({
@@ -67,6 +68,14 @@ export const FormEmail = () => {
 
   const kårIsOther = form.watch("kår") === "Övrigt";
   const kårIsEmpty = form.watch("kår") === "";
+
+  useEffect(() => {
+    if (kårIsOther) {
+      form.setValue("fadderi", Object.values(kårer.Övrigt)[0]!.id);
+    } else {
+      form.setValue("fadderi", "");
+    }
+  }, [kårIsOther]);
 
   return (
     <Form {...form}>
