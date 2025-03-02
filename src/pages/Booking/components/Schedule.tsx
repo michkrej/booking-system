@@ -30,6 +30,7 @@ import { useBookingState } from "@/hooks/useBookingState";
 
 import "./localization";
 import { useBookingActions } from "@/hooks/useBookingActions";
+import { useParams } from "react-router-dom";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -77,6 +78,7 @@ export const Schedule = () => {
     user,
   } = useBookingState();
   const { updateBookingMutation, deleteBookingMutation } = useBookingActions();
+  const { id = "" } = useParams();
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
@@ -114,6 +116,14 @@ export const Schedule = () => {
     cancel: boolean;
   }) => {
     console.log(e);
+    if (id === "view" && !e.data?.id) {
+      toast.error(
+        "När du ser bokningar för flera fadderier kan du bara radera och flytta dina egna bokningar",
+      );
+      e.cancel = true;
+      return;
+    }
+
     if (!building && !e.data?.id) {
       toast.error("Du måste välja en byggnad för att skapa en bokning");
       e.cancel = true;
@@ -139,9 +149,12 @@ export const Schedule = () => {
     }
   };
 
+  console.log(bookings);
+
   // Set the event color to the committee color
-  const onEventRendered = (args: { element: HTMLElement }) => {
-    args.element.style.backgroundColor = committees[user.committeeId].color;
+  const onEventRendered = (args: { element: HTMLElement; data: Booking }) => {
+    args.element.style.backgroundColor =
+      committees[args.data.committeeId].color;
   };
 
   // Handle delete and drag and drop events
@@ -152,6 +165,13 @@ export const Schedule = () => {
       const plan = activePlans.find((plan) => plan.id === entry.planId);
       if (!plan) {
         console.warn("Plan not found");
+        args.cancel = true;
+        return;
+      }
+
+      if (plan.userId !== user.id) {
+        toast.error("Du kan inte radera andra fadderiers bokningar");
+        args.cancel = true;
         return;
       }
 
@@ -177,13 +197,22 @@ export const Schedule = () => {
       const plan = activePlans.find((plan) => plan.id === updatedEvent.planId);
       if (!plan) {
         console.warn("Plan not found");
+        args.cancel = true;
         return;
       }
+
+      if (plan.userId !== user.id) {
+        toast.error("Du kan inte uppdatera andra fadderiers bokningar");
+        args.cancel = true;
+        return;
+      }
+
       updateBookingMutation.mutate(
         { booking: updatedEvent, plan },
         {
           onSuccess: () => {
-            updatedBooking(updatedEvent);
+            // This causes a copy of the booking to be created
+            // updatedBooking(updatedEvent);
           },
         },
       );
@@ -299,9 +328,9 @@ export const Schedule = () => {
                       {" - "}
                       {format(props.endDate, "HH:mm", { locale: sv })}
                     </div>
-                    <div className="absolute bottom-[-2px] right-[-2.7em]">
+                    {/* <div className="absolute bottom-[-2px] right-[-2.7em]">
                       {committees[user.committeeId].name}
-                    </div>
+                    </div> */}
                   </div>
                 );
               }}

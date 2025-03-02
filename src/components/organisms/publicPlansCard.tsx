@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,6 +24,9 @@ import { ExportPlansButton } from "../molecules/exportPlansButton";
 import { Skeleton } from "../ui/skeleton";
 import { useStoreUser } from "@/hooks/useStoreUser";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
+import { Button } from "../ui/button";
+import { useBoundStore } from "@/state/store";
+import { useNavigate } from "react-router-dom";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
@@ -157,6 +161,22 @@ const TabCommitteeSection = ({
   plans,
   isPending,
 }: TabCommitteeSectionProps) => {
+  const { loadedBookings } = useBoundStore();
+  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    loadedBookings(plans.flatMap((plan) => plan.events));
+    changedActivePlans(plans);
+    navigate(`/booking/view`);
+  };
+
+  const handlePlanClick = (plan: Plan) => {
+    loadedBookings(plan.events);
+    changedActivePlans([plan]);
+    navigate(`/booking/${plan.id}`);
+  };
+
   return (
     <TabsContent value={kår.toLowerCase()}>
       <Card>
@@ -180,7 +200,7 @@ const TabCommitteeSection = ({
               {plans.map((plan) => {
                 const committee = getCommittee(plan.committeeId);
                 return (
-                  <TableRow key={plan.id}>
+                  <TableRow key={plan.id} onClick={() => handlePlanClick(plan)}>
                     <TableCell className="font-medium">
                       {committee.name}
                     </TableCell>
@@ -210,6 +230,11 @@ const TabCommitteeSection = ({
             </TableBody>
           </Table>
         </CardContent>
+        <CardFooter className="flex">
+          <Button className="ml-auto" onClick={handleButtonClick}>
+            Se bokningar
+          </Button>
+        </CardFooter>
       </Card>
     </TabsContent>
   );

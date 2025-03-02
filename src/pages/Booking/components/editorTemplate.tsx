@@ -123,19 +123,19 @@ export const EditorTemplate = ({
     );
   }, [dropDownBuilding, action, data, chosenCampus]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
-
   const currentPlan = useMemo(() => {
-    if (!planId) return null;
-
     if (action === "create") {
       return activePlans.find((plan) => plan.id === planId) ?? null;
     }
 
     return activePlans.find((plan) => plan.id === data?.planId) ?? null;
   }, [activePlans, planId, data]);
+
+  const disabledForm = planId === "view";
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    disabled: disabledForm,
+  });
 
   // Reset form values when `data` is available
   useEffect(() => {
@@ -202,7 +202,7 @@ export const EditorTemplate = ({
       food: values.food,
       allDay: false,
       committeeId: user.committeeId,
-      planId: planId,
+      planId: action === "create" ? planId : (data?.planId ?? "??"),
       locationId: building!.id,
       roomId: values.rooms.map((room) => room.value),
       grillar: values.grillar,
@@ -234,6 +234,7 @@ export const EditorTemplate = ({
         },
       );
     } else {
+      console.log("Update booking");
       await updateBookingMutation.mutateAsync(
         {
           booking: bookingData,
@@ -367,7 +368,16 @@ export const EditorTemplate = ({
             />
             <div>
               <Label>Fadderi</Label>
-              <Input disabled value={committees[user.committeeId].name} />
+              <Input
+                disabled
+                value={
+                  action === "edit"
+                    ? data
+                      ? committees[data.committeeId].name
+                      : "??"
+                    : committees[user.committeeId].name
+                }
+              />
             </div>
             <div>
               <Label>Byggnad</Label>
@@ -401,6 +411,7 @@ export const EditorTemplate = ({
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={disabledForm}
                       />
                     </FormControl>
                     <FormLabel className="!mt-0">Mat?</FormLabel>
@@ -417,6 +428,7 @@ export const EditorTemplate = ({
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={disabledForm}
                       />
                     </FormControl>
                     <FormLabel className="!mt-0">Alkohol?</FormLabel>
@@ -579,6 +591,7 @@ export const EditorTemplate = ({
               <LoadingButton
                 type="submit"
                 loading={addBookingToPlanMutation.isPending}
+                disabled={disabledForm}
               >
                 Spara
               </LoadingButton>
