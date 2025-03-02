@@ -7,7 +7,7 @@ export const siteConfig = {
   links: {
     linkedin: "https://www.linkedin.com/in/michelle-krejci",
     github: "https://github.com/michkrej/booking-system",
-    portfolio: "https://michalkrejci.com",
+    portfolio: "https://michellekrejci.com",
     instructionVideo: "https://youtu.be/9RDlhOWRlGY",
     feedback: "https://forms.gle/tW28rpuNSWfQHNCq5",
     TF_2023:
