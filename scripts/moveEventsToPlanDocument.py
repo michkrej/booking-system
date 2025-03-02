@@ -3,10 +3,10 @@ from firebase_admin import credentials, firestore
 from datetime import datetime
 
 # Initialize Firebase Admin SDK
-PRODUCTION = False
+PRODUCTION = True
 
 if PRODUCTION:
-    cred = credentials.Certificate("./scripts/booking-system-dev-2a562-firebase-adminsdk-qemcg-0d9adb22d0.json")
+    cred = credentials.Certificate("./scripts/booking-system-1377d-firebase-adminsdk-d9uwz-97ae2ea253.json")
 else:
     cred = credentials.Certificate("./scripts/booking-system-dev-2a562-firebase-adminsdk-qemcg-0d9adb22d0.json")
 firebase_admin.initialize_app(cred)
@@ -37,8 +37,11 @@ for doc in plan_docs:
         events.append(event_data)
     
     # Add documents to subcollection on plan document, all events should be on one document
-    plan_ref = db.collection("plans").document(plan_id)
-    plan_ref.set({ "events": events })
+    plan_ref = db.collection("plans_new").document(plan_id)
+    # plan_ref.set({ "events": events })
+
+    data['events'] = events
+    plan_ref.set(data)
 
 
 print("All events moved to plan documents")

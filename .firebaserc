@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "booking-system-dev-2a562"
-  }
+    "default": "booking-system-dev-2a562",
+    "prod": "booking-system-1377d"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

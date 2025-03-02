@@ -3,10 +3,10 @@ from firebase_admin import credentials, firestore, auth
 from datetime import datetime
 
 # Initialize Firebase Admin SDK
-PRODUCTION = False
+PRODUCTION = True
 
 if PRODUCTION:
-    cred = credentials.Certificate("./scripts/booking-system-dev-2a562-firebase-adminsdk-qemcg-0d9adb22d0.json")
+    cred = credentials.Certificate("./scripts/booking-system-1377d-firebase-adminsdk-d9uwz-97ae2ea253.json")
 else:
     cred = credentials.Certificate("./scripts/booking-system-dev-2a562-firebase-adminsdk-qemcg-0d9adb22d0.json")
 firebase_admin.initialize_app(cred)
@@ -27,7 +27,12 @@ for doc in users_docs:
     user_id = data.get("userId")
     
     # Get the user's auth data
-    auth_user = auth.get_user(user_id)
+    # catch error if user is not found
+    try:
+        auth_user = auth.get_user(user_id)
+    except:
+        print("User not found:", user_id)
+        continue
     
     # If the user has an auth document, create a document with the user ID as the document ID
     if auth_user:
