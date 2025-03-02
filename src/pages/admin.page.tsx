@@ -30,7 +30,7 @@ export const AdminPage = () => {
         </Card>
         <BookableItemsCard />
         <MottagningStartDateCard />
-        <LockPlanEditingCard />
+        {/* <LockPlanEditingCard /> */}
       </div>
     </Layout>
   );
