@@ -1,6 +1,5 @@
 import {
   addDoc,
-  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -33,7 +32,7 @@ const createPlan = async (plan: CreatePlanParams) => {
       updatedAt: timestamp,
     };
 
-    const planRef = await addDoc(collection(db, "plans"), newPlan);
+    const planRef = await addDoc(collection(db, "plansV2"), newPlan);
 
     return {
       id: planRef.id,
@@ -47,46 +46,10 @@ const createPlan = async (plan: CreatePlanParams) => {
 
 export const deletePlan = async (planId: string) => {
   try {
-    await deleteDoc(doc(db, "plans", planId));
+    await deleteDoc(doc(db, "plansV2", planId));
     return planId;
   } catch (e) {
     console.error("Error deleting plan:", getErrorMessage(e));
-    throw e;
-  }
-};
-
-export const getAllPlans = async (user: User, year: number) => {
-  try {
-    const ref = collection(db, "plans");
-    const queries = [
-      query(
-        ref,
-        where("userId", "==", user.id),
-        where("year", "==", year),
-        orderBy("updatedAt", "desc"),
-      ),
-      query(
-        ref,
-        where("public", "==", true),
-        where("year", "==", year),
-        orderBy("updatedAt", "desc"),
-      ),
-    ];
-    const [snapshotPersonal, snapshotPublic] = await Promise.all(
-      queries.map(getDocs),
-    );
-    return {
-      userPlans: (snapshotPersonal?.docs ?? []).map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Plan[],
-      publicPlans: (snapshotPublic?.docs ?? []).map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Plan[],
-    };
-  } catch (e) {
-    console.error("Error fetching plans:", getErrorMessage(e));
     throw e;
   }
 };
@@ -95,7 +58,7 @@ export const getUserPlans = async (userId: string, year: number) => {
   try {
     const snapshot = await getDocs(
       query(
-        collection(db, "plans"),
+        collection(db, "plansV2"),
         where("userId", "==", userId),
         where("year", "==", year),
       ),
@@ -105,13 +68,17 @@ export const getUserPlans = async (userId: string, year: number) => {
       return {
         id: doc.id,
         ...data,
-        events: data.events.map((event) => ({
-          ...event,
-          startDate: convertToDate(event.startDate),
-          endDate: convertToDate(event.endDate),
-          createdAt: convertToDate(event.createdAt),
-          updatedAt: convertToDate(event.updatedAt),
-        })),
+        events: data.events.map((event) => {
+          return {
+            ...event,
+            startDate: convertToDate(event.startDate),
+            endDate: convertToDate(event.endDate),
+            createdAt: convertToDate(event.createdAt),
+            updatedAt: convertToDate(event?.updatedAt ?? event.createdAt),
+          };
+        }),
+        createdAt: convertToDate(data.createdAt),
+        updatedAt: convertToDate(data?.updatedAt ?? data.createdAt),
       };
     }) as Plan[];
   } catch (e) {
@@ -124,7 +91,7 @@ export const getPublicPlans = async (year: number) => {
   try {
     const snapshot = await getDocs(
       query(
-        collection(db, "plans"),
+        collection(db, "plansV2"),
         where("public", "==", true),
         where("year", "==", year),
         orderBy("updatedAt", "desc"),
@@ -141,7 +108,7 @@ export const getPublicPlans = async (year: number) => {
           startDate: convertToDate(event.startDate),
           endDate: convertToDate(event.endDate),
           createdAt: convertToDate(event.createdAt),
-          updatedAt: convertToDate(event.updatedAt),
+          updatedAt: convertToDate(event?.updatedAt ?? event.createdAt),
         })),
         createdAt: convertToDate(data.createdAt),
         updatedAt: convertToDate(data.updatedAt),
@@ -159,7 +126,7 @@ const updatePlanDetails = async (
 ) => {
   try {
     const updatedData = { ...newValues, updatedAt: new Date() };
-    await updateDoc(doc(db, "plans", id), updatedData);
+    await updateDoc(doc(db, "plansV2", id), updatedData);
     return {
       id,
       ...updatedData,
@@ -177,7 +144,7 @@ const addPlanEvent = async (plan: Plan, booking: Booking) => {
     const newBooking = { ...booking, planId: plan.id, id: uuidv4() };
     const events = [...plan.events, newBooking];
 
-    await updateDoc(doc(db, "plans", plan.id), {
+    await updateDoc(doc(db, "plansV2", plan.id), {
       events,
       updatedAt: new Date(),
     });
@@ -203,7 +170,7 @@ const updatePlanEvent = async (plan: Plan, event: Booking) => {
       throw new Error("Event lengths do not match");
     }
 
-    await updateDoc(doc(db, "plans", plan.id), {
+    await updateDoc(doc(db, "plansV2", plan.id), {
       events: updatedEvents,
       updatedAt: new Date(),
     });
@@ -217,7 +184,7 @@ const updatePlanEvent = async (plan: Plan, event: Booking) => {
 const deletePlanEvent = async (plan: Plan, eventId: string) => {
   try {
     const updatedEvents = plan.events.filter((event) => event.id !== eventId);
-    await updateDoc(doc(db, "plans", plan.id), {
+    await updateDoc(doc(db, "plansV2", plan.id), {
       events: updatedEvents,
       updatedAt: new Date(),
     });
@@ -230,7 +197,6 @@ const deletePlanEvent = async (plan: Plan, eventId: string) => {
 export const plansService = {
   createPlan,
   deletePlan,
-  getAllPlans,
   getUserPlans,
   getPublicPlans,
   updatePlanDetails,
