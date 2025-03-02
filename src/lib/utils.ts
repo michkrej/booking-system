@@ -8,8 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const convertToDate = (
-  date: Timestamp | Date | { seconds: number; nanoseconds: number } | string,
+  date?: Timestamp | Date | { seconds: number; nanoseconds: number } | string,
 ) => {
+  if (!date) return new Date();
+
   if (typeof date === "string") {
     return new Date(date);
   }

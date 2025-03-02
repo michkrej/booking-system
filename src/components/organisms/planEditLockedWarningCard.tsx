@@ -14,7 +14,7 @@ export const PlanEditLockedWarningCard = () => {
 
   const isCurrentYear = planYear === CURRENT_YEAR;
 
-  if (!planEditLocked && isCurrentYear) return null;
+  if (!planEditLocked) return null;
 
   return (
     <Card className="col-span-2">

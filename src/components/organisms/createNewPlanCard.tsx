@@ -33,6 +33,8 @@ import { Input } from "../ui/input";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
 import { useEditPlan } from "@/hooks/useEditPlan";
 import { useBoundStore } from "@/state/store";
+import { useStorePlanYear } from "@/hooks/useStorePlanYear";
+import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 const formSchema = z.object({
   planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
@@ -43,6 +45,7 @@ export const CreateNewPlanCard = () => {
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const bookings = useStoreBookings();
   const navigate = useNavigate();
+  const { planYear } = useStorePlanYear();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,8 +79,10 @@ export const CreateNewPlanCard = () => {
       </CardHeader>
       <CardFooter>
         <Dialog>
-          <DialogTrigger asChild>
-            <Button>Skapa ny planering</Button>
+          <DialogTrigger asChild disabled={planYear < CURRENT_YEAR}>
+            <Button disabled={planYear < CURRENT_YEAR}>
+              Skapa ny planering
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <Form {...form}>

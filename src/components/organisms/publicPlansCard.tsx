@@ -70,7 +70,7 @@ export const PublicPlansCard = () => {
   const handlePlanClick = (plan: Plan) => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
-    navigate(`/booking/${plan.id}`);
+    navigate(`/booking/view`);
   };
 
   return (
@@ -206,7 +206,7 @@ const TabCommitteeSection = ({
   const handlePlanClick = (plan: Plan) => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
-    navigate(`/booking/${plan.id}`);
+    navigate(`/booking/view`);
   };
 
   return (

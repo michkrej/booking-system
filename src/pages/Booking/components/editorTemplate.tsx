@@ -157,7 +157,7 @@ export const EditorTemplate = ({
   }, [activePlans, data, planId]);
 
   const disabledForm = useMemo(() => {
-    if (user.admin) return false;
+    /* if (user.admin) return false; */
 
     if (action === "edit") {
       return currentPlan?.userId !== user.id;

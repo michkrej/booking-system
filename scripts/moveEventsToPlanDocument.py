@@ -34,10 +34,11 @@ for doc in plan_docs:
     for event in events_docs:
         event_data = event.to_dict()
         event_data["id"] = event.id
+        event_data["title"] = event_data.pop("text")
         events.append(event_data)
     
     # Add documents to subcollection on plan document, all events should be on one document
-    plan_ref = db.collection("plans_new").document(plan_id)
+    plan_ref = db.collection("plansV2").document(plan_id)
     # plan_ref.set({ "events": events })
 
     data['events'] = events

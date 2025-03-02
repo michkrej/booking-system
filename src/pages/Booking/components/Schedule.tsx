@@ -152,18 +152,17 @@ export const Schedule = () => {
 
   // Handle delete and drag and drop events
   const onActionBegin = (args: ActionEventArgs): void => {
-    args.cancel = true;
-
     if (args.requestType === "eventRemove" && args.deletedRecords?.length) {
       const entry = args.deletedRecords[0] as Booking;
 
       const plan = activePlans.find((plan) => plan.id === entry.planId);
       if (!plan) {
         console.warn("Plan not found");
+        args.cancel = true;
         return;
       }
 
-      if (plan.userId !== user.id && !user.admin) {
+      if (plan.userId !== user.id /* && !user.admin */) {
         toast.error("Du kan inte radera andra fadderiers bokningar");
         args.cancel = true;
         return;
@@ -191,11 +190,13 @@ export const Schedule = () => {
       const plan = activePlans.find((plan) => plan.id === updatedEvent.planId);
       if (!plan) {
         console.warn("Plan not found");
+        args.cancel = true;
         return;
       }
 
-      if (plan.userId !== user.id && !user.admin) {
+      if (plan.userId !== user.id /* && !user.admin */) {
         toast.error("Du kan inte uppdatera andra fadderiers bokningar");
+        args.cancel = true;
         return;
       }
 
