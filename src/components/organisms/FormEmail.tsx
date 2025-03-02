@@ -199,9 +199,9 @@ export const FormEmail = () => {
                   </FormControl>
                   <SelectContent>
                     {sortAlphabetically(Object.values(committees)).map(
-                      (assignee: { text: string; id: string }) => (
-                        <SelectItem key={assignee.text} value={assignee.id}>
-                          {assignee.text}
+                      (assignee: { name: string; id: string }) => (
+                        <SelectItem key={assignee.name} value={assignee.id}>
+                          {assignee.name}
                         </SelectItem>
                       ),
                     )}
@@ -218,6 +218,7 @@ export const FormEmail = () => {
           loading={isPending}
           type="submit"
           className="w-full md:col-span-2"
+          onClick={() => onSubmit(form.getValues())}
         >
           Skapa ett konto
         </LoadingButton>
