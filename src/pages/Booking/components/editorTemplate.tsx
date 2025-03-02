@@ -167,7 +167,7 @@ export const EditorTemplate = ({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     const bookingData = {
-      id: uuidv4(),
+      id: action === "create" ? uuidv4() : (data?.id ?? uuidv4()),
       title: values.title,
       startDate: values.startDate,
       endDate: values.endDate,
@@ -194,7 +194,6 @@ export const EditorTemplate = ({
     } satisfies Booking;
 
     if (action === "create") {
-      createdBooking(bookingData);
       await addBookingToPlanMutation.mutateAsync(
         {
           booking: bookingData,
@@ -202,12 +201,12 @@ export const EditorTemplate = ({
         },
         {
           onSuccess: () => {
+            createdBooking(bookingData);
             onOpenChange();
           },
         },
       );
     } else {
-      updatedBooking(bookingData);
       await updateBookingMutation.mutateAsync(
         {
           booking: bookingData,
@@ -215,6 +214,7 @@ export const EditorTemplate = ({
         },
         {
           onSuccess: () => {
+            updatedBooking(bookingData);
             onOpenChange();
           },
         },

@@ -163,6 +163,11 @@ export const Schedule = () => {
     if (args.requestType === "eventChange" && args.changedRecords) {
       const updatedEvent = args.changedRecords[0] as Booking;
 
+      // convert roomId to array if it's a string
+      if (typeof updatedEvent.roomId === "string") {
+        updatedEvent.roomId = [updatedEvent.roomId];
+      }
+
       updateBookingMutation.mutate(
         { booking: updatedEvent, plan: currentPlan },
         {
