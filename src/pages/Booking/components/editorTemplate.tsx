@@ -129,9 +129,17 @@ export const EditorTemplate = ({
     }
 
     return activePlans.find((plan) => plan.id === data?.planId) ?? null;
-  }, [activePlans, planId, data]);
+  }, [activePlans, data, planId]);
 
-  const disabledForm = planId === "view";
+  const disabledForm = useMemo(() => {
+    if (user.admin) return false;
+
+    if (action === "edit") {
+      return currentPlan?.userId !== user.id;
+    }
+    return planId === "view";
+  }, [action, currentPlan, planId, data]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     disabled: disabledForm,

@@ -115,6 +115,12 @@ export const Schedule = () => {
     data: Booking;
     cancel: boolean;
   }) => {
+    if (id === "view" && !e.data.id) {
+      toast.error("Det går inte att skapa nya bokningar i denna vy");
+      e.cancel = true;
+      return;
+    }
+
     if (!building && !e.data?.id) {
       toast.error("Du måste välja en byggnad för att skapa en bokning");
       e.cancel = true;
@@ -157,7 +163,7 @@ export const Schedule = () => {
         return;
       }
 
-      if (plan.userId !== user.id) {
+      if (plan.userId !== user.id && !user.admin) {
         toast.error("Du kan inte radera andra fadderiers bokningar");
         args.cancel = true;
         return;
@@ -188,7 +194,7 @@ export const Schedule = () => {
         return;
       }
 
-      if (plan.userId !== user.id) {
+      if (plan.userId !== user.id && !user.admin) {
         toast.error("Du kan inte uppdatera andra fadderiers bokningar");
         return;
       }
