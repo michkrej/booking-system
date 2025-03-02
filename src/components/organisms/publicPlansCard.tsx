@@ -27,14 +27,20 @@ import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { Button } from "../ui/button";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
+import { useStoreBookings } from "@/hooks/useStoreBookings";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
   const { publicPlans, isPending } = usePublicPlans();
+  const { loadedBookings } = useStoreBookings();
+  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
+  const navigate = useNavigate();
 
   const defaultTab = useMemo(() => {
     const committee = getCommittee(user.committeeId);
-    return (committee?.kår || "all").toLowerCase();
+    if (!committee) return "all";
+    if (committee.kår === "Övrigt") return "all";
+    return committee.kår.toLowerCase();
   }, [user.committeeId]);
 
   const plansLinTek = useMemo(() => {
@@ -55,6 +61,18 @@ export const PublicPlansCard = () => {
     );
   }, [publicPlans]);
 
+  const handleButtonClick = () => {
+    loadedBookings(publicPlans.flatMap((plan) => plan.events));
+    changedActivePlans(publicPlans);
+    navigate(`/booking/view`);
+  };
+
+  const handlePlanClick = (plan: Plan) => {
+    loadedBookings(plan.events);
+    changedActivePlans([plan]);
+    navigate(`/booking/${plan.id}`);
+  };
+
   return (
     <Tabs defaultValue={defaultTab} className="col-span-2">
       <div className="flex items-center">
@@ -65,7 +83,8 @@ export const PublicPlansCard = () => {
           <TabsTrigger value="stuff">StuFF</TabsTrigger>
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          <ExportPlansButton />
+          {/* TODO: make it work */}
+          {/* <ExportPlansButton /> */}
         </div>
       </div>
       {/* SECTION - all */}
@@ -92,7 +111,11 @@ export const PublicPlansCard = () => {
                 {publicPlans.map((plan) => {
                   const committee = getCommittee(plan.committeeId);
                   return (
-                    <TableRow key={plan.id}>
+                    <TableRow
+                      key={plan.id}
+                      onClick={() => handlePlanClick(plan)}
+                      className="hover:cursor-pointer"
+                    >
                       <TableCell className="font-medium">
                         {committee.name}
                       </TableCell>
@@ -126,6 +149,15 @@ export const PublicPlansCard = () => {
               </TableBody>
             </Table>
           </CardContent>
+          <CardFooter className="flex">
+            <Button
+              className="ml-auto"
+              onClick={handleButtonClick}
+              disabled={publicPlans.length === 0}
+            >
+              Se bokningar
+            </Button>
+          </CardFooter>
         </Card>
       </TabsContent>
       {/* SECTION - Consensus */}
@@ -161,7 +193,7 @@ const TabCommitteeSection = ({
   plans,
   isPending,
 }: TabCommitteeSectionProps) => {
-  const { loadedBookings } = useBoundStore();
+  const { loadedBookings } = useStoreBookings();
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
 
@@ -200,7 +232,11 @@ const TabCommitteeSection = ({
               {plans.map((plan) => {
                 const committee = getCommittee(plan.committeeId);
                 return (
-                  <TableRow key={plan.id} onClick={() => handlePlanClick(plan)}>
+                  <TableRow
+                    key={plan.id}
+                    onClick={() => handlePlanClick(plan)}
+                    className="hover:cursor-pointer"
+                  >
                     <TableCell className="font-medium">
                       {committee.name}
                     </TableCell>
@@ -231,7 +267,11 @@ const TabCommitteeSection = ({
           </Table>
         </CardContent>
         <CardFooter className="flex">
-          <Button className="ml-auto" onClick={handleButtonClick}>
+          <Button
+            className="ml-auto"
+            onClick={handleButtonClick}
+            disabled={plans.length === 0}
+          >
             Se bokningar
           </Button>
         </CardFooter>

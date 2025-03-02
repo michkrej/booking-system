@@ -4,7 +4,7 @@ import { type UserStoreSlice } from "./userStoreSlice";
 import { convertToDate } from "@/lib/utils";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
-export const MIN_YEAR = 2023;
+export const MIN_YEAR = 2025;
 export const MAX_YEAR = CURRENT_YEAR + 1;
 
 interface PlanStoreSlice {

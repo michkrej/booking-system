@@ -32,6 +32,7 @@ import {
 import { Input } from "../ui/input";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
 import { useEditPlan } from "@/hooks/useEditPlan";
+import { useBoundStore } from "@/state/store";
 
 const formSchema = z.object({
   planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
@@ -39,6 +40,7 @@ const formSchema = z.object({
 
 export const CreateNewPlanCard = () => {
   const { createPlan } = useEditPlan();
+  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const bookings = useStoreBookings();
   const navigate = useNavigate();
 
@@ -53,6 +55,7 @@ export const CreateNewPlanCard = () => {
     createPlan.mutate(values.planName, {
       onSuccess: (newPlan) => {
         bookings.loadedBookings([]);
+        changedActivePlans([newPlan]);
         navigate(`/booking/${newPlan.id}`);
         form.reset();
       },

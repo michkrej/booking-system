@@ -64,7 +64,7 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
     );
   }
 
-  const isCurrentYear = plan.year === CURRENT_YEAR;
+  const isCurrentYear = plan.year >= CURRENT_YEAR;
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen((prev) => !prev)}>

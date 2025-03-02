@@ -18,7 +18,7 @@ export function DashboardPage() {
     <Layout>
       <div className="grid-auto-rows grid grid-cols-7 gap-4">
         <div className="col-span-5 grid grid-cols-4 gap-4">
-          {!planEditLocked && planYear === CURRENT_YEAR ? (
+          {!planEditLocked && planYear >= CURRENT_YEAR ? (
             <CreateNewPlanCard />
           ) : (
             <PlanEditLockedWarningCard />

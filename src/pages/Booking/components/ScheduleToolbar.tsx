@@ -117,7 +117,7 @@ export const ScheduleToolbar = () => {
           <Button size="icon" variant="ghost" onClick={goToPrevious}>
             <ChevronLeft className="cursor-pointer hover:text-primary" />
           </Button>
-          <span className="pointer-events-none">
+          <span className="pointer-events-none w-[150px] text-center">
             {currentView === "TimelineDay"
               ? format(currentDate, "d MMMM yyyy", { locale: sv })
               : null}
