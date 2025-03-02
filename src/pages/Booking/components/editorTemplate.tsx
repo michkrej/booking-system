@@ -93,7 +93,7 @@ export const EditorTemplate = ({
   const { createdBooking, updatedBooking } = useStoreBookings();
   const {
     rooms,
-    currentPlan,
+    activePlans,
     building: dropDownBuilding,
     chosenCampus,
   } = useContext(ScheduleContext);
@@ -114,6 +114,16 @@ export const EditorTemplate = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+
+  const currentPlan = useMemo(() => {
+    if (!planId) return null;
+
+    if (action === "create") {
+      return activePlans.find((plan) => plan.id === planId) ?? null;
+    }
+
+    return activePlans.find((plan) => plan.id === data?.planId) ?? null;
+  }, [activePlans, planId]);
 
   // Reset form values when `data` is available
   useEffect(() => {
@@ -171,6 +181,7 @@ export const EditorTemplate = ({
   }, [data, form.reset]); // Depend on `data` and `reset` to update values when `data` changes
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!planId) return;
     console.log(values);
     const bookingData = {
       id: action === "create" ? uuidv4() : (data?.id ?? uuidv4()),

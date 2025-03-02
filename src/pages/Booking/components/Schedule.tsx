@@ -17,7 +17,7 @@ import {
   type Room,
   type Location,
   type NewBooking,
-  Plan,
+  type Plan,
 } from "@/utils/interfaces";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
@@ -26,7 +26,6 @@ import { toast } from "sonner";
 import { EditorTemplate } from "./editorTemplate";
 import { committees } from "@/data/committees";
 import { ScheduleToolbar, type View } from "./ScheduleToolbar";
-import { plansService } from "@/services";
 import { useBookingState } from "@/hooks/useBookingState";
 
 import "./localization";
@@ -41,7 +40,7 @@ type ScheduleContextType = {
   currentView: View;
   chosenCampus: "US" | "Valla";
   building: Location | undefined;
-  currentPlan: Plan | null;
+  activePlans: Plan[];
   setCurrentDate: (date: Date) => void;
   setCurrentView: (view: View) => void;
   setChosenCampus: (campus: "US" | "Valla") => void;
@@ -74,7 +73,7 @@ export const Schedule = () => {
     bookings,
     deletedBooking,
     updatedBooking,
-    currentPlan,
+    activePlans,
     user,
   } = useBookingState();
   const { updateBookingMutation, deleteBookingMutation } = useBookingActions();
@@ -149,11 +148,18 @@ export const Schedule = () => {
   const onActionBegin = (args: ActionEventArgs): void => {
     if (args.requestType === "eventRemove" && args.deletedRecords?.length) {
       const entry = args.deletedRecords[0] as Booking;
+
+      const plan = activePlans.find((plan) => plan.id === entry.planId);
+      if (!plan) {
+        console.warn("Plan not found");
+        return;
+      }
+
       deleteBookingMutation.mutate(
-        { booking: entry, plan: currentPlan },
+        { booking: entry, plan: plan },
         {
           onSuccess: () => {
-            deletedBooking(entry.id);
+            deletedBooking(entry);
           },
         },
       );
@@ -168,8 +174,13 @@ export const Schedule = () => {
         updatedEvent.roomId = [updatedEvent.roomId];
       }
 
+      const plan = activePlans.find((plan) => plan.id === updatedEvent.planId);
+      if (!plan) {
+        console.warn("Plan not found");
+        return;
+      }
       updateBookingMutation.mutate(
-        { booking: updatedEvent, plan: currentPlan },
+        { booking: updatedEvent, plan },
         {
           onSuccess: () => {
             updatedBooking(updatedEvent);
@@ -193,7 +204,7 @@ export const Schedule = () => {
         building,
         locations,
         rooms,
-        currentPlan,
+        activePlans,
       }}
     >
       <div className="h-[calc(100vh-121px)]">

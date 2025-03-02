@@ -1,7 +1,11 @@
 import { type View } from "@/pages/Booking/components/ScheduleToolbar";
 import { useBoundStore } from "@/state/store";
 import { defaultCampus } from "@/utils/helpers";
-import { Location, type Booking, type NewBooking } from "@/utils/interfaces";
+import {
+  type Location,
+  type Booking,
+  type NewBooking,
+} from "@/utils/interfaces";
 import { useState } from "react";
 import { useAdminSettings } from "./useAdminSettings";
 import { useStoreBookings } from "./useStoreBookings";
@@ -11,7 +15,7 @@ export const useBookingState = () => {
   const { user } = useStoreUser();
   const { mottagningStart } = useAdminSettings();
   const { bookings, deletedBooking, updatedBooking } = useStoreBookings();
-  const currentPlan = useBoundStore((state) => state.currentPlan);
+  const activePlans = useBoundStore((state) => state.activePlans);
 
   const [currentDate, setCurrentDate] = useState(mottagningStart[user.kår]);
   const [currentView, setCurrentView] = useState<View>("TimelineDay");
@@ -45,7 +49,7 @@ export const useBookingState = () => {
     bookings,
     deletedBooking,
     updatedBooking,
-    currentPlan,
+    activePlans,
     user,
   };
 };

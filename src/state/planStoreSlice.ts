@@ -13,7 +13,7 @@ interface PlanStoreSlice {
   publicPlans: Plan[];
   hasPublicPlan: boolean;
   collisionsExist: boolean;
-  currentPlan: Plan | null;
+  activePlans: Plan[];
 
   userPlansLoaded: (plans: Plan[]) => void;
   publicPlansLoaded: (plans: Plan[]) => void;
@@ -24,7 +24,7 @@ interface PlanStoreSlice {
   decrementPlanYear: () => void;
   planPublicToggled: (planId: string) => void;
   changedCollisionsExist: () => void;
-  changedActivePlan: (plan: Plan) => void;
+  changedActivePlans: (plans: Plan[]) => void;
 }
 
 const createPlanStoreSlice: StateCreator<
@@ -39,7 +39,7 @@ const createPlanStoreSlice: StateCreator<
   publicPlans: [],
   hasPublicPlan: false,
   collisionsExist: false,
-  currentPlan: null,
+  activePlans: [],
 
   userPlansLoaded: (plans) => {
     const sortedPlans = plans.sort((a, b) => {
@@ -107,8 +107,8 @@ const createPlanStoreSlice: StateCreator<
   changedCollisionsExist: () => {
     set((state) => ({ collisionsExist: !state.collisionsExist }));
   },
-  changedActivePlan: (plan) => {
-    set({ currentPlan: plan });
+  changedActivePlans: (plans) => {
+    set({ activePlans: plans });
   },
 });
 

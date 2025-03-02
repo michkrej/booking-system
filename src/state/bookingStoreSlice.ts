@@ -1,13 +1,32 @@
 import { type StateCreator } from "zustand";
 import { type PlanStoreSlice } from "./planStoreSlice";
-import { type Booking } from "@/utils/interfaces";
+import { type Plan, type Booking } from "@/utils/interfaces";
 
 type BookingStoreSlice = {
   bookings: Booking[];
   createdBooking: (booking: Booking) => void;
-  deletedBooking: (id: string) => void;
+  deletedBooking: (booking: Booking) => void;
   updatedBooking: (booking: Booking) => void;
   loadedBookings: (bookings: Booking[]) => void;
+};
+
+const updatePlansEventList = (
+  plans: Plan[],
+  booking: Booking,
+  action: "add" | "remove" | "update",
+) => {
+  return plans.map((plan) => {
+    if (plan.id === booking.planId) {
+      return {
+        ...plan,
+        events:
+          action === "remove"
+            ? plan.events.filter((event) => event.id !== booking.id)
+            : [...plan.events, booking],
+      };
+    }
+    return plan;
+  });
 };
 
 const createBookingStoreSlice: StateCreator<
@@ -15,30 +34,34 @@ const createBookingStoreSlice: StateCreator<
   [],
   [],
   BookingStoreSlice
-> = (set) => ({
+> = (set, get) => ({
   bookings: [],
   createdBooking: (booking) => {
+    const updatedPlansList = updatePlansEventList(
+      get().activePlans,
+      booking,
+      "add",
+    );
+
     set((state) => ({
       bookings: [...state.bookings, booking],
-      currentPlan: state.currentPlan
-        ? {
-            ...state.currentPlan,
-            events: [...state.currentPlan.events, booking],
-          }
-        : null,
+      activePlans: updatedPlansList,
     }));
   },
-  deletedBooking: (id) => {
+  deletedBooking: (bookingToDelete) => {
     set((state) => {
-      const bookings = state.bookings.filter((booking) => booking.id !== id);
+      const bookings = state.bookings.filter(
+        (booking) => booking.id !== bookingToDelete.id,
+      );
+      const updatedPlansList = updatePlansEventList(
+        get().activePlans,
+        bookingToDelete,
+        "remove",
+      );
+
       return {
         bookings,
-        currentPlan: state.currentPlan
-          ? {
-              ...state.currentPlan,
-              events: bookings,
-            }
-          : null,
+        activePlans: updatedPlansList,
       };
     });
   },
@@ -53,14 +76,15 @@ const createBookingStoreSlice: StateCreator<
         }
         return booking;
       });
+      const updatedPlansList = updatePlansEventList(
+        get().activePlans,
+        updatedBooking,
+        "update",
+      );
+
       return {
         bookings,
-        currentPlan: state.currentPlan
-          ? {
-              ...state.currentPlan,
-              events: bookings,
-            }
-          : null,
+        activePlans: updatedPlansList,
       };
     });
   },
