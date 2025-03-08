@@ -18,6 +18,7 @@ import {
   type Location,
   type NewBooking,
   type Plan,
+  BookableItemName,
 } from "@/utils/interfaces";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
@@ -32,6 +33,17 @@ import "./localization";
 import { useBookingActions } from "@/hooks/useBookingActions";
 import { useParams } from "react-router-dom";
 import { corridorsC } from "@/data/campusValla/rooms";
+import {
+  BuildingIcon,
+  ChevronRight,
+  DotIcon,
+  MapPinIcon,
+  PinIcon,
+  UserIcon,
+} from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
+import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -283,6 +295,9 @@ export const Schedule = () => {
           popupOpen={onPopupOpen}
           eventRendered={onEventRendered}
           actionBegin={onActionBegin}
+          quickInfoTemplates={{
+            content: QuickInfoContentTemplate,
+          }}
           dragStart={(e: { cancel: boolean }) => {
             if (!building) {
               e.cancel = true;

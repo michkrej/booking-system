@@ -1,4 +1,8 @@
-import { type AdminSettings, type Kår } from "@/utils/interfaces";
+import {
+  type BookableItemName,
+  type AdminSettings,
+  type Kår,
+} from "@/utils/interfaces";
 import { type StateCreator } from "zustand";
 import { type PlanStoreSlice } from "./planStoreSlice";
 import { setWeek, startOfWeek } from "date-fns";
@@ -19,13 +23,11 @@ export const DEFAULT_ITEMS = {
 interface AdminStoreSlice {
   planEditLocked: boolean;
   mottagningStart: Record<Kår, Date>;
-  bookableItems: Record<keyof typeof DEFAULT_ITEMS, number>;
+  bookableItems: Record<BookableItemName, number>;
 
   updatedPlanEditLock: (value: boolean) => void;
   updatedMottagningStartDateForKår: (date: Date, kår: Kår) => void;
-  updatedBookableItems: (
-    items: Record<keyof typeof DEFAULT_ITEMS, number>,
-  ) => void;
+  updatedBookableItems: (items: Record<BookableItemName, number>) => void;
   loadedAdminSettings: (settings: AdminSettings) => void;
 }
 

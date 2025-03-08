@@ -1,4 +1,5 @@
 import { type committees, type kårer } from "@/data/committees";
+import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
 
 export type Room = {
   name: string;
@@ -129,3 +130,5 @@ export type AdminSettings = {
   mottagningStart: Record<Kår, Date>;
   bookableItems: Record<string, number>;
 };
+
+export type BookableItemName = keyof typeof DEFAULT_ITEMS;
