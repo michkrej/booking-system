@@ -335,24 +335,7 @@ export const Schedule = () => {
             )}
           </ResourcesDirective>
           <ViewsDirective>
-            <ViewDirective
-              option="TimelineDay"
-              eventTemplate={(props: Booking) => {
-                return (
-                  <div className="relative">
-                    <div className="e-subject">{props.title}</div>
-                    <div className="text-[10px]">
-                      {format(props.startDate, "HH:mm", { locale: sv })}
-                      {" - "}
-                      {format(props.endDate, "HH:mm", { locale: sv })}
-                    </div>
-                    {/* <div className="absolute bottom-[-2px] right-[-2.7em]">
-                      {committees[user.committeeId].name}
-                    </div> */}
-                  </div>
-                );
-              }}
-            />
+            <ViewDirective option="TimelineDay" />
             <ViewDirective option="TimelineWeek" allowVirtualScrolling={true} />
             <ViewDirective
               option="TimelineMonth"
