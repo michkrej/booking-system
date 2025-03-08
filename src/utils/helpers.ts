@@ -1,71 +1,76 @@
 import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
 import { committees, committeesConsensus, kårer } from "../data/committees";
-import { type Kår, type Booking, type Plan } from "./interfaces";
+import {
+  type Kår,
+  type Booking,
+  type Plan,
+  type BookableItemName,
+} from "./interfaces";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
+import { locationsValla } from "@/data/campusValla/campusValla";
+import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
+import { itemTranslations } from "./CONSTANTS";
 
-export const exportPlan = async (plans: Plan[]) => {
-  const header = [
-    "ID",
-    "Fadderi",
-    "Aktivitet",
-    "Område",
-    "Plats",
-    "Startdatum",
-    "Starttid",
-    "Slutdatum",
-    "Sluttid",
-    "Alkohol",
-    "Mat",
-    "Bardiskar",
-    "Bänkset Kårallen",
-    "Bänkset HG",
-    "Grillar",
-    "Annat bokbart",
-    "Beskrivining",
-    "Länk",
-  ];
-  const events = plans.flatMap((plan) => plan.events);
-  events.sort(
-    (a, b) => a.startDate.getMilliseconds() - b.startDate.getMilliseconds(),
-  );
-  const cvsConversion = events.map((event) => {
-    const committee = Object.values(committees).find(
-      (com) => com.id === event.committeeId,
+export const exportPlans = async (
+  plans: Plan[],
+  onlyBookableLocationValla: boolean,
+  includeInventory: boolean,
+) => {
+  let events = plans.flatMap((plan) => plan.events);
+
+  if (onlyBookableLocationValla) {
+    events = events.filter(
+      (event) => event.locationId === locationsValla["Områden på campus"].id,
     );
+  }
+
+  events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+
+  return events.map((event) => {
+    const committee = committees[event.committeeId];
     const location = locationsNonGrouped.find(
-      (location) => location.id === event.locationId,
+      (loc) => loc.id === event.locationId,
     );
 
-    const roomValues = Object.values(rooms);
     const roomNames = event.roomId
-      .map(
-        (eventRoomID) =>
-          roomValues.find((room) => room.id === eventRoomID)?.name,
-      )
+      .map((roomID) => rooms.find((room) => room.id === roomID)?.name)
+      .filter(Boolean) // Remove undefined values
       .join(", ");
-    return [
-      event.id,
-      committee?.name,
-      event.title,
-      location?.name,
-      roomNames,
-      format(event.startDate, "YYYY-MM-DD", { locale: sv }),
-      format(event.startDate, "HH:mm", { locale: sv }),
-      format(event.endDate, "YYYY-MM-DD", { locale: sv }),
-      format(event.endDate, "HH:mm", { locale: sv }),
-      /*  event.alcohol ? "TRUE" : "FALSE",
-      event.food ? "TRUE" : "FALSE",
-      event.bardiskar || "0",
-      event["bankset-k"] || "0",
-      event["bankset-hg"] || "0",
-      event.grillar || "0",
-      event.annat || "",
-      event.description || "",
-      event.link || "", */
-    ];
+
+    const items = includeInventory
+      ? (Object.keys(DEFAULT_ITEMS) as BookableItemName[]).reduce(
+          (acc, item) => ({
+            ...acc,
+            [itemTranslations[item]]: event[item] || "",
+          }),
+          {} as Record<string, number | string>,
+        )
+      : {};
+
+    return {
+      id: event.id,
+      Fadderi: committee?.name,
+      Aktivitet: event.title,
+      Område: location?.name,
+      Plats: roomNames,
+      Startdatum: format(event.startDate, "yyyy-MM-dd", { locale: sv }),
+      Starttid: format(event.startDate, "HH:mm", { locale: sv }),
+      Slutdatum: format(event.endDate, "yyyy-MM-dd", { locale: sv }),
+      Sluttid: format(event.endDate, "HH:mm", { locale: sv }),
+      Mat: event.alcohol ? "Ja" : "Nej",
+      Alkohol: event.food ? "Ja" : "Nej",
+      ...(includeInventory
+        ? {
+            ...items,
+            "Övrigt bokningsbartbart material": event.annat || "",
+          }
+        : {}),
+      ...(onlyBookableLocationValla
+        ? {}
+        : { "Länk till plats": event.link || "" }),
+    };
   });
-  return [header, ...cvsConversion];
 };
 
 export const getCommitteesForKår = (kår: Kår) => {

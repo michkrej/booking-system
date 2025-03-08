@@ -105,8 +105,7 @@ export const PublicPlansCard = () => {
           <TabsTrigger value="stuff">StuFF</TabsTrigger>
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          {/* TODO: make it work */}
-          {/* <ExportPlansButton /> */}
+          <ExportPlansButton />
         </div>
       </div>
       {/* SECTION - all */}

@@ -64,7 +64,6 @@ export const increaseItemsUse = (items: SummedItems, event: Booking) => {
   });
 };
 
-// TODO: return all items that are over the limit
 /**
  * Returns the events with too many items based on the given items object.
  *
