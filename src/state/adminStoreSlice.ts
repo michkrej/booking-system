@@ -5,7 +5,7 @@ import {
 } from "@/utils/interfaces";
 import { type StateCreator } from "zustand";
 import { type PlanStoreSlice } from "./planStoreSlice";
-import { setWeek, startOfWeek } from "date-fns";
+import { setISOWeek, startOfWeek } from "date-fns";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export const DEFAULT_ITEMS = {
@@ -33,9 +33,9 @@ interface AdminStoreSlice {
 
 const getMottagningStartWeek = () => {
   const firstDayOfWeek34 = startOfWeek(
-    setWeek(new Date(CURRENT_YEAR, 0, 1), 34),
+    setISOWeek(new Date(CURRENT_YEAR, 0, 1), 34),
     {
-      weekStartsOn: 1,
+      weekStartsOn: 2,
     },
   );
 

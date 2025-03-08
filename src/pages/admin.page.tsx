@@ -75,6 +75,15 @@ const MottagningStartDateCard = () => {
             }
           />
         </div>
+        <div className="grid grid-cols-[100px_auto] gap-2">
+          <p>Övrigt: </p>
+          <DatePicker
+            date={mottagningStart.Övrigt}
+            setDate={(date) =>
+              updateMottagningStart.mutate({ date, kår: "Övrigt" })
+            }
+          />
+        </div>
       </CardContent>
     </Card>
   );
