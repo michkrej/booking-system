@@ -53,22 +53,6 @@ export const Header = () => {
             Admin
           </Link>
         )}
-        <div className="ml-auto flex flex-row items-center gap-4 md:gap-5 lg:gap-6">
-          {/*  <a
-            href={siteConfig.links.instructionVideo}
-            className="text-muted-foreground transition-colors hover:text-foreground"
-            target="_blank"
-          >
-            Instruktionsvideo
-          </a> */}
-          <a
-            href={siteConfig.links.feedback}
-            className="text-muted-foreground transition-colors hover:text-foreground"
-            target="_blank"
-          >
-            Feedback
-          </a>
-        </div>
       </nav>
 
       <div className="flex items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
@@ -80,12 +64,22 @@ export const Header = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Mitt konto</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => window.open(siteConfig.links.instructionVideo)}
+            >
+              Instruktionsvideo
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {/* TODO - implementera Settings sidan, man ska kunna byta namn, ändra lösenord mm */}
-            <DropdownMenuItem>Inställningar</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => window.open(siteConfig.links.feedback)}
+            >
+              Feedback
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout()}>
+            <DropdownMenuItem
+              onClick={() => logout()}
+              className="font-semibold"
+            >
               Logga ut
             </DropdownMenuItem>
           </DropdownMenuContent>

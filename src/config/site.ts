@@ -8,7 +8,7 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/in/michelle-krejci",
     github: "https://github.com/michkrej/booking-system",
     portfolio: "https://michellekrejci.com",
-    instructionVideo: "https://youtu.be/9RDlhOWRlGY",
+    instructionVideo: "https://youtu.be/CrjEvRKp1A4",
     feedback: "https://forms.gle/tW28rpuNSWfQHNCq5",
     TF_2023:
       "https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/lkpg_tradgardsforeningen_folder_kartbild.pdf?49b5ff",
