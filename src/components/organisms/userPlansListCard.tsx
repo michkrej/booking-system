@@ -18,7 +18,7 @@ import { type Plan } from "@/utils/interfaces";
 import { useUserPlans } from "@/hooks/useUserPlans";
 import { useBoundStore } from "@/state/store";
 
-const loadingTableEntries = Array.from({ length: 4 }, (_, i) => i);
+const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
 
 export const UserPlansListCard = () => {
   const { isPending, userPlans } = useUserPlans();
@@ -76,16 +76,16 @@ export const UserPlansListCard = () => {
               : loadingTableEntries.map((index) => (
                   <TableRow key={`table-row-${index}`}>
                     <TableCell>
-                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-5 w-full" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-5 w-full" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-5 w-full" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-5 w-full" />
                     </TableCell>
                   </TableRow>
                 ))}
