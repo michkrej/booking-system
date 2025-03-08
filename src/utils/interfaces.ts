@@ -87,7 +87,8 @@ export type LintekCommitee =
   | "TackLING"
   | "CM"
   | "GF"
-  | "TEKKEN";
+  | "TEKKEN"
+  | "Mytheriet";
 export type ConsensusCommitee =
   | "KraFTen"
   | "Logoped"
