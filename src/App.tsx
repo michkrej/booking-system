@@ -1,6 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { loadMessages, locale } from "devextreme/localization";
-import seMessages from "devextreme/localization/messages/sv.json";
 import { useEffect } from "react";
 import {
   BrowserRouter,
@@ -38,11 +36,6 @@ const RequireAuth = () => {
 };
 
 function App() {
-  useEffect(() => {
-    loadMessages(seMessages);
-    locale(navigator.language);
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
