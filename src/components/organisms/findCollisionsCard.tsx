@@ -77,13 +77,16 @@ export const FindCollisionsCard = () => {
     ]);
 
     navigate(`/booking/view`);
-    toast.info(
-      "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
-      {
-        position: "bottom-left",
-        duration: 1000 * 60,
+    toast.warning("Bokningar som inte krockar på område", {
+      description:
+        "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
+      position: "bottom-left",
+      duration: Infinity,
+      action: {
+        label: "OK",
+        onClick: () => toast.dismiss(),
       },
-    );
+    });
   };
 
   const showCollisionsButtonEnabled = useMemo(() => {

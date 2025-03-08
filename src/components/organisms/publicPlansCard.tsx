@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import {
   Card,
@@ -28,6 +28,8 @@ import { Button } from "../ui/button";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
+import { findCollisionsBetweenAllEvents } from "@/utils/collisionHandling";
+import { toast } from "sonner";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
@@ -61,7 +63,11 @@ export const PublicPlansCard = () => {
     );
   }, [publicPlans]);
 
-  const handleButtonClick = () => {
+  const collisions = useMemo(() => {
+    return findCollisionsBetweenAllEvents(publicPlans);
+  }, [publicPlans]);
+
+  const handleViewBookingsClick = () => {
     loadedBookings(publicPlans.flatMap((plan) => plan.events));
     changedActivePlans(publicPlans);
     navigate(`/booking/view`);
@@ -71,6 +77,22 @@ export const PublicPlansCard = () => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
     navigate(`/booking/view`);
+  };
+
+  const handleViewCollisionsClick = () => {
+    loadedBookings(collisions);
+    changedActivePlans(publicPlans);
+    navigate(`/booking/view`);
+    toast.warning("Bokningar som inte krockar på område", {
+      description:
+        "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
+      position: "bottom-left",
+      duration: Infinity,
+      action: {
+        label: "OK",
+        onClick: () => toast.dismiss(),
+      },
+    });
   };
 
   return (
@@ -149,13 +171,19 @@ export const PublicPlansCard = () => {
               </TableBody>
             </Table>
           </CardContent>
-          <CardFooter className="flex">
+          <CardFooter className="flex justify-end gap-x-3">
             <Button
-              className="ml-auto"
-              onClick={handleButtonClick}
+              onClick={handleViewBookingsClick}
               disabled={publicPlans.length === 0}
+              variant="outline"
             >
               Se bokningar
+            </Button>
+            <Button
+              onClick={handleViewCollisionsClick}
+              disabled={collisions.length === 0}
+            >
+              Se krockar
             </Button>
           </CardFooter>
         </Card>
@@ -197,10 +225,30 @@ const TabCommitteeSection = ({
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
+  const collisions = useMemo(() => {
+    return findCollisionsBetweenAllEvents(plans);
+  }, [plans]);
+
+  const handleViewBookingsClick = () => {
     loadedBookings(plans.flatMap((plan) => plan.events));
     changedActivePlans(plans);
     navigate(`/booking/view`);
+  };
+
+  const handleViewCollisionsClick = () => {
+    loadedBookings(collisions);
+    changedActivePlans(plans);
+    navigate(`/booking/view`);
+    toast.warning("Bokningar som inte krockar på område", {
+      description:
+        "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
+      position: "bottom-left",
+      duration: Infinity,
+      action: {
+        label: "OK",
+        onClick: () => toast.dismiss(),
+      },
+    });
   };
 
   const handlePlanClick = (plan: Plan) => {
@@ -266,13 +314,19 @@ const TabCommitteeSection = ({
             </TableBody>
           </Table>
         </CardContent>
-        <CardFooter className="flex">
+        <CardFooter className="flex justify-end gap-x-3">
           <Button
-            className="ml-auto"
-            onClick={handleButtonClick}
+            onClick={handleViewBookingsClick}
             disabled={plans.length === 0}
+            variant="outline"
           >
             Se bokningar
+          </Button>
+          <Button
+            onClick={handleViewCollisionsClick}
+            disabled={collisions.length === 0}
+          >
+            Se krockar
           </Button>
         </CardFooter>
       </Card>

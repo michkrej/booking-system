@@ -217,3 +217,36 @@ export const findCollisionsBetweenPlans = (
 ) => {
   return findCollisionsBetweenUserPlanAndPublicPlans(userPlan, [publicPlan]);
 };
+
+// I want to see what collisions each plan has with each other plan
+export const findCollisionsBetweenAllEvents = (publicPlans: Plan[]) => {
+  const collidingEventIds = new Set<string>();
+  const uniqueCollisions: Booking[] = [];
+
+  const publicEvents = publicPlans.flatMap((plan) => plan.events);
+
+  // check for collisions between personal and public events
+  publicEvents.forEach((e1) => {
+    const items = createItemsObject(e1);
+
+    publicEvents.forEach((e2) => {
+      // Look for collisions between the same event
+      if (e1.id === e2.id) return;
+
+      // Events belong to same plan
+      if (e1.planId === e2.planId) return;
+
+      const collisions = findCollisionBetweenEvents(e1, e2, items);
+
+      collisions.forEach((event) => {
+        if (!collidingEventIds.has(event.id)) {
+          // Assuming `event.id` exists
+          collidingEventIds.add(event.id);
+          uniqueCollisions.push(event);
+        }
+      });
+    });
+  });
+
+  return uniqueCollisions;
+};
