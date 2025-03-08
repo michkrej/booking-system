@@ -66,7 +66,7 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
         </DialogHeader>
         <DialogFooter>
           <DialogClose>
-            <Button variant="secondary">Cancel</Button>
+            <Button variant="secondary">Avbryt</Button>
           </DialogClose>
           <LoadingButton loading={deletePlan.isPending} onClick={handleDelete}>
             Radera
