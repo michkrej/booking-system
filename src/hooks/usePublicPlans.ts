@@ -5,7 +5,11 @@ import { useStorePlanYear } from "./useStorePlanYear";
 export const usePublicPlans = () => {
   const { planYear: year } = useStorePlanYear();
 
-  const { data = [], isFetching } = useQuery({
+  const {
+    data = [],
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["publicPlans", year],
     queryFn: async () => {
       const plans = await plansService.getPublicPlans(year);
@@ -13,5 +17,5 @@ export const usePublicPlans = () => {
     },
   });
 
-  return { publicPlans: data, isPending: isFetching };
+  return { publicPlans: data, isPending: isFetching, refetch };
 };

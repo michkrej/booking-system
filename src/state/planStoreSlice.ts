@@ -3,6 +3,7 @@ import { type StateCreator } from "zustand";
 import { type UserStoreSlice } from "./userStoreSlice";
 import { convertToDate } from "@/lib/utils";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { type BookingStoreSlice } from "./bookingStoreSlice";
 
 export const MIN_YEAR = 2023;
 export const MAX_YEAR = CURRENT_YEAR + 1;
@@ -23,10 +24,11 @@ interface PlanStoreSlice {
   decrementPlanYear: () => void;
   planPublicToggled: (planId: string) => void;
   changedActivePlans: (plans: Plan[]) => void;
+  updatedActivePlans: (plans: Plan[]) => void;
 }
 
 const createPlanStoreSlice: StateCreator<
-  PlanStoreSlice & UserStoreSlice,
+  PlanStoreSlice & UserStoreSlice & BookingStoreSlice,
   [],
   [],
   PlanStoreSlice
@@ -103,6 +105,20 @@ const createPlanStoreSlice: StateCreator<
   },
   changedActivePlans: (plans) => {
     set({ activePlans: plans });
+  },
+  updatedActivePlans: (plans) => {
+    set((state) => {
+      const updatedPlans = state.activePlans.map((plan) => {
+        const updatedPlan = plans.find((p) => p.id === plan.id);
+        if (!updatedPlan) return plan;
+        return updatedPlan;
+      });
+
+      return {
+        activePlans: updatedPlans,
+        bookings: updatedPlans.flatMap((plan) => plan.events),
+      };
+    });
   },
 });
 
