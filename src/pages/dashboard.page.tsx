@@ -6,33 +6,38 @@ import { PlanEditLockedWarningCard } from "@/components/organisms/planEditLocked
 import { PublicPlansCard } from "@/components/organisms/publicPlansCard";
 import { TimeUntilMottagningCard } from "@/components/organisms/timeUntilMottagningCard";
 import { UserPlansListCard } from "@/components/organisms/userPlansListCard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
-import { useStorePlanYear } from "@/hooks/useStorePlanYear";
-import { auth } from "@/services/config";
+import { useBoundStore } from "@/state/store";
+import { XIcon } from "lucide-react";
 
 export function DashboardPage() {
   const { planEditLocked } = useAdminSettings();
-  const { planYear } = useStorePlanYear();
-
-  const lastSignInTime = auth.currentUser?.metadata?.lastSignInTime;
-  const userHasNotSignedInSinceV3 = lastSignInTime
-    ? new Date(lastSignInTime) < new Date("2025-03-01")
-    : false;
+  const versionUpdateWarningClosed = useBoundStore(
+    (state) => state.versionUpdateWarningClosed,
+  );
+  const closeVersionUpdateWarning = useBoundStore(
+    (state) => state.closeVersionUpdateWarning,
+  );
 
   return (
     <Layout>
-      {userHasNotSignedInSinceV3 && (
-        <Card className="col-span-2">
-          <CardHeader>
+      {!versionUpdateWarningClosed ? (
+        <Card className="col-span-full flex flex-row">
+          <CardHeader className="w-full flex-row items-center gap-x-10">
             <CardTitle>👩‍💻 Bokningsplanering 3.0</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm">
+            <CardDescription className="flex-1">
               En ny version av hemsidan är här - och det är en fullständig
               omskrivning.
-              <br />
               <br />
               <i>
                 Om något inte fungerar{" "}
@@ -44,10 +49,18 @@ export function DashboardPage() {
                   rapportera det
                 </a>
               </i>
-            </p>
-          </CardContent>
+            </CardDescription>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={closeVersionUpdateWarning}
+            >
+              Ok
+            </Button>
+          </CardHeader>
         </Card>
-      )}
+      ) : null}
+
       <div className="grid-auto-rows grid grid-cols-7 gap-4">
         <div className="col-span-5 grid grid-cols-4 gap-4">
           {!planEditLocked ? (
