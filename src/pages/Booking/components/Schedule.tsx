@@ -31,6 +31,7 @@ import { useBookingState } from "@/hooks/useBookingState";
 import "./localization";
 import { useBookingActions } from "@/hooks/useBookingActions";
 import { useParams } from "react-router-dom";
+import { corridorsC } from "@/data/campusValla/rooms";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -108,6 +109,17 @@ export const Schedule = () => {
         )
       : [];
   }, [building, chosenCampus]);
+
+  const scheduleDisplayRooms = useMemo(() => {
+    if (building?.name === "C-huset") {
+      const corridorIds: string[] = Object.values(corridorsC).map(
+        (corridor) => corridor.id,
+      );
+      return building?.rooms.filter((room) => !corridorIds.includes(room.id));
+    }
+
+    return building?.rooms ?? [];
+  }, [building]);
 
   // Handle popup open events
   const onPopupOpen = (e: {
@@ -288,7 +300,7 @@ export const Schedule = () => {
                 title="Rooms"
                 name="Rooms"
                 allowMultiple={true}
-                dataSource={rooms}
+                dataSource={scheduleDisplayRooms}
                 textField="name"
                 idField="id"
                 colorField="color"
