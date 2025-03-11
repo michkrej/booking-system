@@ -164,7 +164,9 @@ const CollisionsTable = ({ publicPlans, collisions }: CollisionsTableProps) => {
             : null;
           return (
             <TableRow key={plan.id}>
-              <TableCell>{committee?.kår}</TableCell>
+              <TableCell>
+                {committee?.kår === "Övrigt" ? plan.label : committee.name}
+              </TableCell>
               <TableCell className="font-medium">{committee.name}</TableCell>
               <TableCell className="hidden md:table-cell">
                 {formatDate(plan.updatedAt)}
