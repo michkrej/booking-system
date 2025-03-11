@@ -35,6 +35,8 @@ export const useBookingState = () => {
   const [action, setAction] = useState<"create" | "edit">("create");
   const [isCreateBookingModalOpen, setIsCreateBookingModalOpen] =
     useState(false);
+  const [isUpdateBookingModalOpen, setIsUpdateBookingModalOpen] =
+    useState(false);
 
   return {
     currentDate,
@@ -53,6 +55,8 @@ export const useBookingState = () => {
     setAction,
     isCreateBookingModalOpen,
     setIsCreateBookingModalOpen,
+    isUpdateBookingModalOpen,
+    setIsUpdateBookingModalOpen,
     bookings,
     deletedBooking,
     updatedBooking,

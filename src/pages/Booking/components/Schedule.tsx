@@ -18,13 +18,10 @@ import {
   type Location,
   type NewBooking,
   type Plan,
-  BookableItemName,
 } from "@/utils/interfaces";
-import { format } from "date-fns";
-import { sv } from "date-fns/locale";
 import { campusLocationsMap } from "@/data/locationsData";
 import { toast } from "sonner";
-import { EditorTemplate } from "./editorTemplate";
+import { EditBookingDialog } from "./EditBookingDialog";
 import { committees } from "@/data/committees";
 import { ScheduleToolbar, type View } from "./ScheduleToolbar";
 import { useBookingState } from "@/hooks/useBookingState";
@@ -33,17 +30,8 @@ import "./localization";
 import { useBookingActions } from "@/hooks/useBookingActions";
 import { useParams } from "react-router-dom";
 import { corridorsC } from "@/data/campusValla/rooms";
-import {
-  BuildingIcon,
-  ChevronRight,
-  DotIcon,
-  MapPinIcon,
-  PinIcon,
-  UserIcon,
-} from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
 import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
+import { NewBookingDialog } from "./NewBookingDialog";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -84,6 +72,8 @@ export const Schedule = () => {
     setAction,
     isCreateBookingModalOpen,
     setIsCreateBookingModalOpen,
+    isUpdateBookingModalOpen,
+    setIsUpdateBookingModalOpen,
     bookings,
     deletedBooking,
     updatedBooking,
@@ -162,7 +152,7 @@ export const Schedule = () => {
     if (e.type === "Editor" && e.data?.id) {
       setEditBooking(e.data);
       setAction("edit");
-      setIsCreateBookingModalOpen(true);
+      setIsUpdateBookingModalOpen(true);
       e.cancel = true;
       return;
     }
@@ -347,21 +337,18 @@ export const Schedule = () => {
           />
         </ScheduleComponent>
       </div>
-      {isCreateBookingModalOpen && action === "create" ? (
-        <EditorTemplate
-          action="create"
-          data={newBooking}
-          open={isCreateBookingModalOpen}
-          onOpenChange={() => setIsCreateBookingModalOpen((prev) => !prev)}
-        />
-      ) : (
-        <EditorTemplate
-          action="edit"
-          data={editBooking}
-          open={isCreateBookingModalOpen}
-          onOpenChange={() => setIsCreateBookingModalOpen((prev) => !prev)}
-        />
-      )}
+
+      <NewBookingDialog
+        data={newBooking}
+        open={isCreateBookingModalOpen}
+        onOpenChange={() => setIsCreateBookingModalOpen((prev) => !prev)}
+      />
+
+      <EditBookingDialog
+        data={editBooking}
+        open={isUpdateBookingModalOpen}
+        onOpenChange={() => setIsUpdateBookingModalOpen((prev) => !prev)}
+      />
     </ScheduleContext.Provider>
   );
 };

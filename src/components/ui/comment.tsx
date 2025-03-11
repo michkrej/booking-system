@@ -1,7 +1,14 @@
-import { ReactNode } from 'react'
+import { cn } from "@/lib/utils";
+import { type ReactNode } from "react";
 
-const Comment = ({ children }: { children: ReactNode }) => {
-  return <p className=" text-gray-500 text-xs">{children}</p>
-}
+const Comment = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
+  return <p className={cn("text-xs text-gray-500", className)}>{children}</p>;
+};
 
-export { Comment }
+export { Comment };

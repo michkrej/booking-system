@@ -59,9 +59,11 @@ export type Booking = {
   alcohol: boolean;
   food: boolean;
   link: string;
-  annat: string;
+
+  bookableItems: BookableItem[];
+
   // items
-  grillar: number;
+  /*   grillar: number;
   bardiskar: number;
   scenes: number;
   "bankset-hg": number;
@@ -69,7 +71,14 @@ export type Booking = {
   "bankset-hoben": number;
   "ff-tents": number;
   "ff-elverk": number;
-  "ff-trailer": number;
+  "ff-trailer": number; */
+};
+
+export type BookableItem = {
+  key: string;
+  value: number | string;
+  startDate: Date;
+  endDate: Date;
 };
 
 export type NewBooking = {
