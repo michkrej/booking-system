@@ -115,13 +115,13 @@ export const FormGoogle = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Object.values(committees).map(
-                      (assignee: { name: string; id: string }) => (
+                    {Object.values(committees)
+                      .filter((c: { hidden?: boolean }) => c?.hidden !== true)
+                      .map((assignee: { name: string; id: string }) => (
                         <SelectItem key={assignee.name} value={assignee.id}>
                           {assignee.name}
                         </SelectItem>
-                      ),
-                    )}
+                      ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />

@@ -7,7 +7,10 @@ import {
 type Committee<
   T,
   D extends "LinTek" | "Consensus" | "StuFF" | "Övrigt",
-> = Record<string, { name: T; id: string; color: string; kår: D }>;
+> = Record<
+  string,
+  { name: T; id: string; color: string; kår: D; hidden?: boolean }
+>;
 
 export const committeesLinTek = {
   "102d533f-a760-4a4e-9746-b67d3e64b49a": {
@@ -46,6 +49,13 @@ export const committeesLinTek = {
     color: "#9D25CA",
     kår: "LinTek",
   },
+  "8d413659-a663-467d-84a0-415c53751817": {
+    name: "TEKKEN",
+    id: "8d413659-a663-467d-84a0-415c53751817",
+    color: "#FF0000",
+    kår: "LinTek",
+    hidden: true,
+  },
   "850e6ab4-e900-4f34-a593-0361bb0451a6": {
     name: "URF",
     id: "850e6ab4-e900-4f34-a593-0361bb0451a6",
@@ -58,12 +68,6 @@ export const committeesLinTek = {
     color: "#000000",
     kår: "LinTek",
   },
-  /* "8d413659-a663-467d-84a0-415c53751817": {
-    name: "TEKKEN",
-    id: "8d413659-a663-467d-84a0-415c53751817",
-    color: "#FF0000",
-    kår: "LinTek",
-  }, */
 } satisfies Committee<LintekCommitee, "LinTek">;
 
 export const committeesConsensus = {
