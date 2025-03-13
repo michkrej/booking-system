@@ -88,6 +88,7 @@ export const committeesConsensus = {
     id: "91005ff2-030d-41ca-8b3e-788ea5161cae",
     color: "#5a8fc2",
     kår: "Consensus",
+    hidden: true,
   },
   "3d5b8981-76cf-4393-8d4b-32cac5af3f1d": {
     name: "HuvudFadderiet",
@@ -122,6 +123,13 @@ export const committeesConsensus = {
   "c1c83d9b-1840-456a-b875-ed0002b94a86": {
     name: "Welcoming Committee",
     id: "c1c83d9b-1840-456a-b875-ed0002b94a86",
+    color: "#00b90f",
+    kår: "Consensus",
+    hidden: true,
+  },
+  "eccecf17-cf9f-43fb-982f-9550122c6596": {
+    name: "Stemcellen",
+    id: "eccecf17-cf9f-43fb-982f-9550122c6596",
     color: "#00b90f",
     kår: "Consensus",
   },

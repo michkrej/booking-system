@@ -108,7 +108,8 @@ export type ConsensusCommitee =
   | "Super Faddrarna"
   | "Welcoming Committee"
   | "BMA"
-  | "BioMed Master";
+  | "BioMed Master"
+  | "Stemcellen";
 export type StuffCommitee =
   | "FOUL"
   | "SM"
