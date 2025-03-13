@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect } from "react";
 import {
   BrowserRouter,
   Navigate,
@@ -8,14 +7,13 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AdminPage } from "./pages/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
 import { LoginPage } from "./pages/login.page";
 import { BookingPage } from "./pages/Booking/booking.page";
-import { Layout } from "./components/molecules/layout";
 import { useUserIsLoggedIn } from "./hooks/useUserIsLoggedIn";
 
 const queryClient = new QueryClient();
@@ -48,16 +46,7 @@ function App() {
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/booking/:id" element={<BookingPage />} />
               </Route>
-              <Route
-                path="*"
-                element={
-                  <Layout>
-                    <div className="flex h-[calc(100vh-155px)] flex-col items-center justify-center">
-                      Oops, denna sidan är tom!
-                    </div>
-                  </Layout>
-                }
-              />
+              <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </BrowserRouter>
           <Toaster />
