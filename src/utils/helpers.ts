@@ -46,7 +46,6 @@ export const exportPlans = async (
       },
       {} as Record<string, number | string>,
     );
-    console.log(items);
 
     return {
       id: event.id,

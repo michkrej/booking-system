@@ -41,6 +41,7 @@ import { Separator } from "@/components/ui/separator";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { BookingSchema } from "./schema";
+import { convertToDate } from "@/lib/utils";
 
 type EditorTemplateProps = {
   data?: Booking;
@@ -116,7 +117,11 @@ export const EditBookingDialog = ({
       })),
       food: data.food,
       alcohol: data.alcohol,
-      bookableItems: data.bookableItems,
+      bookableItems: data.bookableItems.map((item) => ({
+        ...item,
+        startDate: convertToDate(item.startDate),
+        endDate: convertToDate(item.endDate),
+      })),
       link: data.link ?? "",
     });
   }, [data]);
