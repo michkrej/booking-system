@@ -54,12 +54,7 @@ export const BookableItemEntry = ({
               <Comment>{optionData.comment}</Comment>
             ) : null}
             <FormControl>
-              <Input
-                id="newPlanName"
-                type={optionData.inputType}
-                placeholder="Ange aktivitet"
-                {...field}
-              />
+              <Input id="newPlanName" type={optionData.inputType} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
