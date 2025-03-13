@@ -139,5 +139,3 @@ export type AdminSettings = {
   mottagningStart: Record<Kår, Date>;
   bookableItems: Record<string, number>;
 };
-
-export type BookableItemName = keyof typeof DEFAULT_ITEMS;

@@ -28,7 +28,7 @@ export const AdminPage = () => {
             </CardDescription>
           </CardHeader>
         </Card>
-        <BookableItemsCard />
+        {/* <BookableItemsCard /> */}
         <MottagningStartDateCard />
         {/* <LockPlanEditingCard /> */}
       </div>

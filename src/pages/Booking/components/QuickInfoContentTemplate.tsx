@@ -1,7 +1,5 @@
 import { committees } from "@/data/committees";
-import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
-import { itemTranslations } from "@/utils/CONSTANTS";
-import { type BookableItemName, type Booking } from "@/utils/interfaces";
+import { type Booking } from "@/utils/interfaces";
 import { Label } from "@radix-ui/react-label";
 import {
   BuildingIcon,
@@ -14,6 +12,7 @@ import { useContext } from "react";
 import { ScheduleContext } from "./Schedule";
 import { differenceInDays, format } from "date-fns";
 import { sv } from "date-fns/locale";
+import { BOOKABLE_ITEM_OPTIONS } from "./AddBookableItemDropdown";
 
 const getFormattedDate = (startDate: Date, endDate: Date) => {
   const eventSpansSeveralDays = differenceInDays(endDate, startDate);
@@ -38,17 +37,6 @@ export const QuickInfoContentTemplate = (
     .map((roomId) => rooms.find((room) => room.id === roomId)?.name)
     .join(", ");
 
-  const items = Object.keys(DEFAULT_ITEMS).reduce(
-    (items, item) => {
-      const typedItem = item as BookableItemName;
-      if (props[typedItem]) {
-        items[typedItem] = props[typedItem];
-      }
-      return items;
-    },
-    {} as Record<BookableItemName, number>,
-  );
-
   return (
     <div className="mt-3 flex flex-col gap-y-1 text-base">
       <div className="grid grid-cols-[20px_auto] items-center">
@@ -67,15 +55,22 @@ export const QuickInfoContentTemplate = (
         <MapPinIcon className="mr-2 h-4 w-4" />
         {roomNames}
       </div>
-      {Object.keys(items).length > 0 && (
+      {props.bookableItems.length > 0 && (
         <div className="flex flex-col gap-y-1">
           <Label className="font-semibold">Material</Label>
-          {Object.entries(items).map(([item, value]) => (
-            <div key={item} className="flex items-center">
-              <ChevronRight className="mr-1 h-4 w-4" />
-              {itemTranslations[item as BookableItemName]}: {value} st
-            </div>
-          ))}
+          {props.bookableItems.map((item) => {
+            const itemData = BOOKABLE_ITEM_OPTIONS.find(
+              (option) => option.key === item.key,
+            );
+
+            if (!itemData) return null;
+            return (
+              <div key={item.key} className="flex items-center">
+                <ChevronRight className="mr-1 h-4 w-4" />
+                {itemData.value}: {item.value}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

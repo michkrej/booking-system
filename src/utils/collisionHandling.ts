@@ -2,11 +2,7 @@ import { areIntervalsOverlapping } from "date-fns";
 
 import roomsC, { corridorsC } from "../data/campusValla/rooms/C.js";
 import { locations } from "../data/locationsData.js";
-import {
-  type Plan,
-  type Booking,
-  type BookableItemName,
-} from "./interfaces.js";
+import { type Plan, type Booking } from "./interfaces.js";
 import { useBoundStore } from "@/state/store.js";
 import { DEFAULT_ITEMS } from "@/state/adminStoreSlice.js";
 
@@ -15,7 +11,7 @@ export const CORRIDOR_IDS: string[] = Object.values(corridorsC).map(
   (corridor) => corridor.id,
 );
 
-type SummedItems = Record<BookableItemName, { sum: number; events: Booking[] }>;
+type SummedItems = Record<string, { sum: number; events: Booking[] }>;
 
 /**
  * Creates an items object based on the given event.
@@ -24,25 +20,22 @@ type SummedItems = Record<BookableItemName, { sum: number; events: Booking[] }>;
  * @returns {object} - The items object containing information about the event items.
  */
 export const createItemsObject = (event: Booking): SummedItems => {
-  const eventItemExists = (item: BookableItemName) => event[item];
+  const eventItemExists = (item: string) => event[item];
 
-  return (Object.keys(DEFAULT_ITEMS) as BookableItemName[]).reduce(
-    (items, item) => {
-      if (typeof event[item] === "boolean") {
-        items[item] = {
-          sum: 1,
-          events: eventItemExists(item) ? [event] : [],
-        };
-        return items;
-      }
+  return Object.keys(DEFAULT_ITEMS).reduce((items, item) => {
+    if (typeof event[item] === "boolean") {
       items[item] = {
-        sum: event[item] ?? 0,
+        sum: 1,
         events: eventItemExists(item) ? [event] : [],
       };
       return items;
-    },
-    {} as SummedItems,
-  );
+    }
+    items[item] = {
+      sum: event[item] ?? 0,
+      events: eventItemExists(item) ? [event] : [],
+    };
+    return items;
+  }, {} as SummedItems);
 };
 
 /**
@@ -52,7 +45,7 @@ export const createItemsObject = (event: Booking): SummedItems => {
  * @param {object} event - The event object containing the updated item values.
  */
 export const increaseItemsUse = (items: SummedItems, event: Booking) => {
-  (Object.keys(items) as BookableItemName[]).forEach((item) => {
+  Object.keys(items).forEach((item) => {
     if (event?.[item]) {
       if (typeof event[item] === "boolean") {
         items[item].sum += 1;
@@ -75,10 +68,8 @@ export const getEventsWithTooManyItems = (items: SummedItems) => {
   const maxItems = getState().bookableItems;
 
   for (const item in items) {
-    if (
-      items[item as BookableItemName].sum > maxItems[item as BookableItemName]
-    ) {
-      return items[item as BookableItemName].events;
+    if (items[item].sum > maxItems[item]) {
+      return items[item].events;
     }
   }
   return undefined;
@@ -157,11 +148,11 @@ export const findCollisionBetweenEvents = (
 
   if (areIntervalsOverlapping(range1, range2)) {
     // Check for item collisions
-    increaseItemsUse(items, event2);
+    /* increaseItemsUse(items, event2);
     const tooManyItems = getEventsWithTooManyItems(items);
     if (tooManyItems) {
       tooManyItems.forEach((itemEvent) => collidingEvents.add(itemEvent));
-    }
+    } */
 
     // Check for room or corridor collisions
     if (

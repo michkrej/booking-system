@@ -1,5 +1,3 @@
-import { type BookableItemName } from "./interfaces";
-
 const adminError =
   "Möjligheten att skapa och redigera planeringar har låsts av en administratör";
 
@@ -15,15 +13,3 @@ const color = {
 export const CURRENT_YEAR = new Date().getFullYear();
 
 export { adminError, color };
-
-export const itemTranslations: Record<BookableItemName, string> = {
-  "bankset-k": "Bänkset (Kårallen)",
-  "bankset-hg": "Bänkset (HG)",
-  "bankset-hoben": "Bänkset (Hoben)",
-  "ff-tents": "FF-tents",
-  "ff-elverk": "FF-elverk",
-  "ff-trailer": "FF-trailer",
-  grillar: "Grillar (Kårallen)",
-  bardiskar: "Bardiskar (Kårallen)",
-  scenes: "Scenpodier (Kårallen)",
-};

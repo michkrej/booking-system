@@ -1,16 +1,10 @@
 import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
 import { committees, committeesConsensus, kårer } from "../data/committees";
-import {
-  type Kår,
-  type Booking,
-  type Plan,
-  type BookableItemName,
-} from "./interfaces";
+import { type Kår, type Booking, type Plan } from "./interfaces";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
-import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
-import { itemTranslations } from "./CONSTANTS";
+import { BOOKABLE_ITEM_OPTIONS } from "@/pages/Booking/components/AddBookableItemDropdown";
 
 export const exportPlans = async (
   plans: Plan[],
@@ -38,15 +32,21 @@ export const exportPlans = async (
       .filter(Boolean) // Remove undefined values
       .join(", ");
 
-    const items = includeInventory
-      ? (Object.keys(DEFAULT_ITEMS) as BookableItemName[]).reduce(
-          (acc, item) => ({
-            ...acc,
-            [itemTranslations[item]]: event[item] || "",
-          }),
-          {} as Record<string, number | string>,
-        )
-      : {};
+    const items = BOOKABLE_ITEM_OPTIONS.reduce(
+      (acc, item) => {
+        const bookableItem = (event?.bookableItems || []).find(
+          (bookableItem) => bookableItem.key === item.key,
+        );
+        if (bookableItem) {
+          acc[item.value] = bookableItem.value;
+        } else {
+          acc[item.value] = "";
+        }
+        return acc;
+      },
+      {} as Record<string, number | string>,
+    );
+    console.log(items);
 
     return {
       id: event.id,
@@ -60,12 +60,7 @@ export const exportPlans = async (
       Sluttid: format(event.endDate, "HH:mm", { locale: sv }),
       Mat: event.alcohol ? "Ja" : "Nej",
       Alkohol: event.food ? "Ja" : "Nej",
-      ...(includeInventory
-        ? {
-            ...items,
-            "Övrigt bokningsbartbart material": event.annat || "",
-          }
-        : {}),
+      ...(includeInventory ? items : {}),
       ...(onlyBookableLocationValla
         ? {}
         : { "Länk till plats": event.link || "" }),
