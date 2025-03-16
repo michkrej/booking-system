@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { type Plan } from "@/utils/interfaces";
 import { useUserPlans } from "@/hooks/useUserPlans";
 import { useBoundStore } from "@/state/store";
+import { useCurrentDate } from "@/hooks/useCurrentDate";
 
 const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
 
@@ -25,10 +26,12 @@ export const UserPlansListCard = () => {
   const loadedBookings = useBoundStore((state) => state.loadedBookings);
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
+  const { resetCurrentDate } = useCurrentDate();
 
   const handlePlanClick = (plan: Plan) => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
+    resetCurrentDate(plan.events);
     navigate(`/booking/${plan.id}`);
   };
 

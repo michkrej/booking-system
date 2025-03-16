@@ -14,6 +14,7 @@ interface PlanStoreSlice {
   publicPlans: Plan[];
   hasPublicPlan: boolean;
   activePlans: Plan[];
+  currentDate: Date;
 
   userPlansLoaded: (plans: Plan[]) => void;
   publicPlansLoaded: (plans: Plan[]) => void;
@@ -25,6 +26,7 @@ interface PlanStoreSlice {
   planPublicToggled: (planId: string) => void;
   changedActivePlans: (plans: Plan[]) => void;
   updatedActivePlans: (plans: Plan[]) => void;
+  updatedCurrentDate: (date: Date) => void;
 }
 
 const createPlanStoreSlice: StateCreator<
@@ -39,6 +41,7 @@ const createPlanStoreSlice: StateCreator<
   publicPlans: [],
   hasPublicPlan: false,
   activePlans: [],
+  currentDate: new Date(`${CURRENT_YEAR}-08-18`),
 
   userPlansLoaded: (plans) => {
     const sortedPlans = plans.sort((a, b) => {
@@ -119,6 +122,9 @@ const createPlanStoreSlice: StateCreator<
         bookings: updatedPlans.flatMap((plan) => plan.events),
       };
     });
+  },
+  updatedCurrentDate: (date) => {
+    set({ currentDate: date });
   },
 });
 

@@ -1,33 +1,33 @@
-import { useMemo, useRef } from "react";
 import {
-  ScheduleComponent,
   Inject,
-  ViewsDirective,
-  ViewDirective,
-  TimelineViews,
-  ResourcesDirective,
   ResourceDirective,
+  ResourcesDirective,
+  ScheduleComponent,
   TimelineMonth,
+  TimelineViews,
+  ViewDirective,
+  ViewsDirective,
   type PopupOpenEventArgs,
 } from "@syncfusion/ej2-react-schedule";
+import { useMemo, useRef } from "react";
+
+import { committees } from "@/data/committees";
 import { useBookingState } from "@/hooks/useBookingState";
+import { useCurrentDate } from "@/hooks/useCurrentDate";
+import { convertToDate } from "@/lib/utils";
+import { type Booking } from "@/utils/interfaces";
+import { BOOKABLE_ITEM_OPTIONS } from "./AddBookableItemDropdown";
+import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
+import { ScheduleContext } from "./Schedule";
+import { ScheduleToolbar } from "./ScheduleToolbar";
 
 import "./localization";
-import { BOOKABLE_ITEM_OPTIONS } from "./AddBookableItemDropdown";
-import { ScheduleContext } from "./Schedule";
-import { convertToDate } from "@/lib/utils";
-import { ScheduleToolbar } from "./ScheduleToolbar";
-import { committees } from "@/data/committees";
-import { type Booking } from "@/utils/interfaces";
-import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
 
 export const InventorySchedule = () => {
   const {
-    currentDate,
-    setCurrentDate,
     currentView,
     setCurrentView,
     chosenCampus,
@@ -37,12 +37,13 @@ export const InventorySchedule = () => {
     bookings,
     activePlans,
   } = useBookingState();
+  const { currentDate } = useCurrentDate();
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
   const itemBookings = useMemo(() => {
     return bookings.flatMap((booking) =>
-      booking.bookableItems.map((bookableItem) => ({
+      (booking?.bookableItems ?? []).map((bookableItem) => ({
         ...booking,
         id: `${booking.id}-${bookableItem.key}`,
         title: `${bookableItem.value} - ${booking.title}`,
@@ -92,9 +93,7 @@ export const InventorySchedule = () => {
     <ScheduleContext.Provider
       value={{
         schedule: scheduleObj,
-        currentDate,
         currentView,
-        setCurrentDate,
         setCurrentView,
         setChosenCampus,
         chosenCampus,

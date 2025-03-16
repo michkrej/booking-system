@@ -32,18 +32,17 @@ import { useParams } from "react-router-dom";
 import { corridorsC } from "@/data/campusValla/rooms";
 import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
 import { NewBookingDialog } from "./NewBookingDialog";
+import { useCurrentDate } from "@/hooks/useCurrentDate";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
 
 type ScheduleContextType = {
   schedule: React.RefObject<ScheduleComponent>;
-  currentDate: Date;
   currentView: View;
   chosenCampus: "US" | "Valla";
   building: Location | undefined;
   activePlans: Plan[];
-  setCurrentDate: (date: Date) => void;
   setCurrentView: (view: View) => void;
   setChosenCampus: (campus: "US" | "Valla") => void;
   setBuilding: (building: Location | undefined) => void;
@@ -56,8 +55,6 @@ export const ScheduleContext = createContext<ScheduleContextType>(
 
 export const Schedule = () => {
   const {
-    currentDate,
-    setCurrentDate,
     currentView,
     setCurrentView,
     chosenCampus,
@@ -68,7 +65,6 @@ export const Schedule = () => {
     setEditBooking,
     newBooking,
     setNewBooking,
-    action,
     setAction,
     isCreateBookingModalOpen,
     setIsCreateBookingModalOpen,
@@ -82,6 +78,7 @@ export const Schedule = () => {
   } = useBookingState();
   const { updateBookingMutation, deleteBookingMutation } = useBookingActions();
   const { id = "" } = useParams();
+  const { currentDate } = useCurrentDate();
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
@@ -229,9 +226,7 @@ export const Schedule = () => {
     <ScheduleContext.Provider
       value={{
         schedule: scheduleObj,
-        currentDate,
         currentView,
-        setCurrentDate,
         setCurrentView,
         setChosenCampus,
         chosenCampus,

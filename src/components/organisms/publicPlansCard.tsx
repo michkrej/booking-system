@@ -30,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
 import { findCollisionsBetweenAllEvents } from "@/utils/collisionHandling";
 import { toast } from "sonner";
+import { useCurrentDate } from "@/hooks/useCurrentDate";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
@@ -37,6 +38,7 @@ export const PublicPlansCard = () => {
   const { loadedBookings } = useStoreBookings();
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
+  const { resetCurrentDate } = useCurrentDate();
 
   const defaultTab = useMemo(() => {
     const committee = getCommittee(user.committeeId);
@@ -68,14 +70,17 @@ export const PublicPlansCard = () => {
   }, [publicPlans]);
 
   const handleViewBookingsClick = () => {
-    loadedBookings(publicPlans.flatMap((plan) => plan.events));
+    const events = publicPlans.flatMap((plan) => plan.events);
+    loadedBookings(events);
     changedActivePlans(publicPlans);
+    resetCurrentDate(events);
     navigate(`/booking/view`);
   };
 
   const handlePlanClick = (plan: Plan) => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
+    resetCurrentDate(plan.events);
     navigate(`/booking/view`);
   };
 

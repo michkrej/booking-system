@@ -7,24 +7,14 @@ import {
   type NewBooking,
 } from "@/utils/interfaces";
 import { useState } from "react";
-import { useAdminSettings } from "./useAdminSettings";
 import { useStoreBookings } from "./useStoreBookings";
 import { useStoreUser } from "./useStoreUser";
-import { useStorePlanYear } from "./useStorePlanYear";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export const useBookingState = () => {
   const { user } = useStoreUser();
-  const { mottagningStart } = useAdminSettings();
   const { bookings, deletedBooking, updatedBooking } = useStoreBookings();
   const activePlans = useBoundStore((state) => state.activePlans);
-  const { planYear } = useStorePlanYear();
 
-  const [currentDate, setCurrentDate] = useState(
-    planYear === CURRENT_YEAR
-      ? mottagningStart[user.kår]
-      : new Date(`${planYear}-08-18`),
-  );
   const [currentView, setCurrentView] = useState<View>("TimelineDay");
   const [chosenCampus, setChosenCampus] = useState(
     defaultCampus(user.committeeId).label,
@@ -39,8 +29,6 @@ export const useBookingState = () => {
     useState(false);
 
   return {
-    currentDate,
-    setCurrentDate,
     currentView,
     setCurrentView,
     chosenCampus,
