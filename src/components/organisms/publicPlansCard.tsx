@@ -73,14 +73,14 @@ export const PublicPlansCard = () => {
     const events = publicPlans.flatMap((plan) => plan.events);
     loadedBookings(events);
     changedActivePlans(publicPlans);
-    resetCurrentDate(events);
+    resetCurrentDate();
     navigate(`/booking/view`);
   };
 
   const handlePlanClick = (plan: Plan) => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
-    resetCurrentDate(plan.events);
+    resetCurrentDate();
     navigate(`/booking/view`);
   };
 

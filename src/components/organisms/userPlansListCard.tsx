@@ -31,7 +31,7 @@ export const UserPlansListCard = () => {
   const handlePlanClick = (plan: Plan) => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
-    resetCurrentDate(plan.events);
+    resetCurrentDate();
     navigate(`/booking/${plan.id}`);
   };
 

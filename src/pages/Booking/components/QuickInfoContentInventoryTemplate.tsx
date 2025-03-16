@@ -24,7 +24,6 @@ const getFormattedDate = (startDate: Date, endDate: Date) => {
 export const QuickInfoContentInventoryTemplate = (
   props: Booking & { bookingTitle: string } & { elementType: string },
 ) => {
-  console.log(props);
   if (props.elementType !== "event") return null;
 
   const buildingName = locationsNonGrouped.find(

@@ -17,8 +17,6 @@ export const useCurrentDate = () => {
     } else {
       updatedCurrentDate(new Date(`${planYear}-08-18`));
     }
-
-    console.log(bookings);
   };
 
   return {
