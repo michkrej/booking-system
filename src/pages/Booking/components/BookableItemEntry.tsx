@@ -54,7 +54,7 @@ export const BookableItemEntry = ({
               <Comment>{optionData.comment}</Comment>
             ) : null}
             <FormControl>
-              <Input id="newPlanName" type={optionData.inputType} {...field} />
+              <Input type={optionData.inputType} min={1} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

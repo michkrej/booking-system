@@ -22,7 +22,11 @@ const viewAdjustments = {
 
 export type View = "TimelineDay" | "TimelineWeek" | "TimelineMonth";
 
-export const ScheduleToolbar = () => {
+export const ScheduleToolbar = ({
+  hideDropdowns = false,
+}: {
+  hideDropdowns?: boolean;
+}) => {
   const {
     schedule,
     currentDate,
@@ -74,44 +78,48 @@ export const ScheduleToolbar = () => {
 
   return (
     <div className="flex w-full items-center justify-between border border-b-0 border-gray-200 bg-[#fafafa] px-4 py-2">
-      <div className="flex flex-1 gap-x-4">
-        <Select value={chosenCampus} onValueChange={handleCampusChange}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Välj campus" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="US">US</SelectItem>
-            <SelectItem value="Valla">Valla</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="flex gap-1">
-          <Select
-            value={building?.name ?? ""}
-            onValueChange={handleLocationChange}
-          >
+      {!hideDropdowns ? (
+        <div className="flex flex-1 gap-x-4">
+          <Select value={chosenCampus} onValueChange={handleCampusChange}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Välj byggnad" />
+              <SelectValue placeholder="Välj campus" />
             </SelectTrigger>
             <SelectContent>
-              {locations.map((location) => (
-                <SelectItem key={location.name} value={location.name}>
-                  {location.name}
-                </SelectItem>
-              ))}
+              <SelectItem value="US">US</SelectItem>
+              <SelectItem value="Valla">Valla</SelectItem>
             </SelectContent>
           </Select>
-          {building && (
-            <Button
-              variant={"ghost"}
-              onClick={() => setBuilding(undefined)}
-              className="flex gap-2 px-1 text-primary"
+          <div className="flex gap-1">
+            <Select
+              value={building?.name ?? ""}
+              onValueChange={handleLocationChange}
             >
-              <TrashIcon />
-              Återställ byggnad
-            </Button>
-          )}
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Välj byggnad" />
+              </SelectTrigger>
+              <SelectContent>
+                {locations.map((location) => (
+                  <SelectItem key={location.name} value={location.name}>
+                    {location.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {building && (
+              <Button
+                variant={"ghost"}
+                onClick={() => setBuilding(undefined)}
+                className="flex gap-2 px-1 text-primary"
+              >
+                <TrashIcon />
+                Återställ byggnad
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div />
+      )}
       <div className="flex gap-x-2">
         <div className="flex items-center gap-x-2">
           <Button size="icon" variant="ghost" onClick={goToPrevious}>
