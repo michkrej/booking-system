@@ -226,7 +226,7 @@ export const EditBookingDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[calc(100vh-50px)] max-w-[1200px] overflow-y-auto">
+      <DialogContent className="flex max-h-[calc(100vh-50px)] max-w-[1200px] flex-col overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Redigera bokning</DialogTitle>
         </DialogHeader>
@@ -236,7 +236,7 @@ export const EditBookingDialog = ({
             className="grid grid-cols-[1fr_1px_1fr] gap-x-4 text-sm"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <div className="row-span-1 grid grid-cols-2 gap-x-4 gap-y-2">
+            <div className="row-span-1 grid grid-cols-2 gap-x-4 gap-y-2 pb-40">
               <FormField
                 name="title"
                 control={form.control}

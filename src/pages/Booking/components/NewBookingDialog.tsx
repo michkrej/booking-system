@@ -90,6 +90,10 @@ export const NewBookingDialog = ({
     name: "bookableItems",
   });
 
+  useEffect(() => {
+    setRoomOptions(rooms.map((room) => ({ value: room.id, label: room.name })));
+  }, [building]);
+
   // Fixes bug where an extra bookable item is added when the form is reset
   useLayoutEffect(() => {
     // if any of the bookable items contains a undefined value, remove it
