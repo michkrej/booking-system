@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { BOOKABLE_ITEM_OPTIONS, CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { useMemo, useState } from "react";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
 
@@ -28,7 +28,7 @@ export const AdminPage = () => {
             </CardDescription>
           </CardHeader>
         </Card>
-        {/* <BookableItemsCard /> */}
+        <BookableItemsCard />
         <MottagningStartDateCard />
         {/* <LockPlanEditingCard /> */}
       </div>
@@ -119,15 +119,14 @@ const LockPlanEditingCard = () => {
 const BookableItemsCard = () => {
   const { bookableItems, updateBookableItems } = useAdminSettings();
   const [items, setItems] = useState(bookableItems);
-  const originalItems = bookableItems;
 
   const itemsAmountsHaveChanged = useMemo(
     () =>
       Object.entries(items).some(
         ([key, value]) =>
-          value !== originalItems[key as keyof typeof originalItems],
+          value !== bookableItems[key as keyof typeof bookableItems],
       ),
-    [items, originalItems],
+    [items, bookableItems],
   );
 
   const handleChange = (item: keyof typeof items, value: string) => {
@@ -143,22 +142,29 @@ const BookableItemsCard = () => {
         <CardTitle>Bokningsbart material</CardTitle>
         <CardDescription>
           Här kan du justera antalet av diverse bokningsbara material som finns
-          tillgängliga för fadderisterna att boka.
+          tillgängliga för fadderisterna att boka. <br /> <br /> När du letar
+          krockar kommer bokningar som överlappar i tid och överskrider mängden
+          av nedan angivna material att visas.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        {Object.entries(items).map(([item, value]) => (
-          <div className="grid grid-cols-[100px_auto] gap-2" key={item}>
-            <Label>{item}</Label>
-            <Input
-              type="number"
-              value={value}
-              onChange={(e) =>
-                handleChange(item as keyof typeof items, e.target.value)
-              }
-            />
-          </div>
-        ))}
+        {Object.entries(items).map(([item, value]) => {
+          const bookableItemData = BOOKABLE_ITEM_OPTIONS.find(
+            (i) => i.key === item,
+          );
+          return (
+            <div className="grid grid-cols-[150px_auto] gap-2" key={item}>
+              <Label>{bookableItemData?.value ?? item}</Label>
+              <Input
+                type="number"
+                value={value}
+                onChange={(e) =>
+                  handleChange(item as keyof typeof items, e.target.value)
+                }
+              />
+            </div>
+          );
+        })}
 
         <LoadingButton
           loading={updateBookableItems.isPending}

@@ -1,25 +1,25 @@
-import { type AdminSettings, type Kår } from "@/utils/interfaces";
+import {
+  NumericBookableKeys,
+  type AdminSettings,
+  type Kår,
+} from "@/utils/interfaces";
 import { type StateCreator } from "zustand";
 import { type PlanStoreSlice } from "./planStoreSlice";
 import { setISOWeek, startOfWeek } from "date-fns";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
-export const DEFAULT_ITEMS = {
+export const DEFAULT_ITEMS: Record<NumericBookableKeys, number> = {
   grillar: 8,
   bardiskar: 6,
-  scenes: 10,
   "bankset-hg": 20,
   "bankset-k": 25,
   "bankset-hoben": 50,
-  "ff-trailer": 1,
-  "ff-tents": 4,
-  "ff-elverk": 1,
-} as const;
+};
 
 interface AdminStoreSlice {
   planEditLocked: boolean;
   mottagningStart: Record<Kår, Date>;
-  bookableItems: Record<string, number>;
+  bookableItems: Record<NumericBookableKeys, number>;
 
   updatedPlanEditLock: (value: boolean) => void;
   updatedMottagningStartDateForKår: (date: Date, kår: Kår) => void;

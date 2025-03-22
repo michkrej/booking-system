@@ -16,7 +16,7 @@ export const useAdminSettings = () => {
     loadedAdminSettings,
   } = useStoreAdminSettings();
 
-  const res = useQuery({
+  useQuery({
     queryKey: ["adminSettings"],
     queryFn: async () => {
       const settings = await adminService.getAdminSettings();
