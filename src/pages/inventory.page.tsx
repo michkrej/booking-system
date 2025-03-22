@@ -2,11 +2,12 @@ import { Layout } from "@/components/molecules/layout";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { InventorySchedule } from "./Booking/components/InventorySchedule";
 
 export const InventoryPage = () => {
   const { id } = useParams();
+  const location = useLocation();
   const { refetch } = usePublicPlans();
   const updatedActivePlans = useBoundStore((state) => state.updatedActivePlans);
 
@@ -14,7 +15,12 @@ export const InventoryPage = () => {
     if (!["view", "view-collisions"].includes(id ?? "")) return;
 
     void refetch().then(({ data }) => {
-      if (data) updatedActivePlans(data, id === "view-collisions");
+      if (data)
+        updatedActivePlans({
+          plans: data,
+          isCollisionView: id === "view-collisions",
+          isInventoryView: location.pathname.includes("inventory"),
+        });
     });
   }, []);
 

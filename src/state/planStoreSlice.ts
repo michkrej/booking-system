@@ -5,6 +5,7 @@ import { convertToDate } from "@/lib/utils";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { type BookingStoreSlice } from "./bookingStoreSlice";
 import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
+import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
 
 export const MIN_YEAR = 2025;
 export const MAX_YEAR = CURRENT_YEAR + 1;
@@ -26,7 +27,15 @@ interface PlanStoreSlice {
   decrementPlanYear: () => void;
   planPublicToggled: (planId: string) => void;
   changedActivePlans: (plans: Plan[]) => void;
-  updatedActivePlans: (plans: Plan[], isCollisionView?: boolean) => void;
+  updatedActivePlans: ({
+    plans,
+    isCollisionView,
+    isInventoryView,
+  }: {
+    plans: Plan[];
+    isCollisionView?: boolean;
+    isInventoryView?: boolean;
+  }) => void;
   updatedCurrentDate: (date: Date) => void;
 }
 
@@ -110,7 +119,7 @@ const createPlanStoreSlice: StateCreator<
   changedActivePlans: (plans) => {
     set({ activePlans: plans });
   },
-  updatedActivePlans: (plans, isCollisionView) => {
+  updatedActivePlans: ({ plans, isCollisionView, isInventoryView }) => {
     set((state) => {
       const updatedPlans = state.activePlans.map((plan) => {
         const updatedPlan = plans.find((p) => p.id === plan.id);
@@ -120,8 +129,12 @@ const createPlanStoreSlice: StateCreator<
 
       let bookings = updatedPlans.flatMap((plan) => plan.events);
       if (isCollisionView) {
-        bookings = findRoomCollisionsBetweenEvents(bookings);
+        bookings = isInventoryView
+          ? findInventoryCollisionsBetweenEvents(bookings)
+          : findRoomCollisionsBetweenEvents(bookings);
       }
+
+      console.log(bookings);
 
       return {
         activePlans: updatedPlans,

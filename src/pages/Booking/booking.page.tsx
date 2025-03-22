@@ -14,7 +14,12 @@ export const BookingPage = () => {
     if (!["view", "view-collisions"].includes(id ?? "")) return;
 
     void refetch().then(({ data }) => {
-      if (data) updatedActivePlans(data, id === "view-collisions");
+      if (data)
+        updatedActivePlans({
+          plans: data,
+          isCollisionView: id === "view-collisions",
+          isInventoryView: location.pathname.includes("inventory"),
+        });
     });
   }, []);
 

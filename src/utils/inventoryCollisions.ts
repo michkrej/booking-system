@@ -69,16 +69,19 @@ const findOverlappingInventoryBookings = (
     end: inventoryBooking2.endDate,
   };
 
-  if (!areIntervalsOverlapping(range1, range2)) return;
-
-  if (isTextItem(inventoryBooking1) && isTextItem(inventoryBooking2)) {
+  if (isTextItem(inventoryBooking1)) {
     const itemStore = items[inventoryBooking1.key];
 
     itemStore.events.set(inventoryBooking1.id, inventoryBooking1);
-    itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
-
-    return;
   }
+
+  if (isTextItem(inventoryBooking2)) {
+    const itemStore = items[inventoryBooking2.key];
+
+    itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
+  }
+
+  if (!areIntervalsOverlapping(range1, range2)) return;
 
   if (isNumericItem(inventoryBooking1) && isNumericItem(inventoryBooking2)) {
     const itemStore = items[inventoryBooking1.key];
@@ -91,7 +94,10 @@ const findOverlappingInventoryBookings = (
 
 export const createInventoryBookings = (events: Booking[]) =>
   events.flatMap((event) =>
-    event.bookableItems.map((bookableItem) => ({ ...event, ...bookableItem })),
+    (event?.bookableItems ?? []).map((bookableItem) => ({
+      ...event,
+      ...bookableItem,
+    })),
   );
 
 export const findInventoryCollisionsBetweenEvents = (
@@ -108,13 +114,32 @@ export const findInventoryCollisionsBetweenEvents = (
   }
 
   for (const bookings of groupedBookings.values()) {
+    if (bookings.length === 1) {
+      const booking = bookings[0];
+
+      if (!booking) continue;
+
+      // Always add text items
+      if (isTextItem(booking)) {
+        const itemStore = items[booking.key];
+        itemStore.events.set(booking.id, booking);
+      }
+
+      continue; // No need to go to nested loops
+    }
+
+    // Compare all pairs of bookings
     for (let i = 0; i < bookings.length; i++) {
       for (let j = i + 1; j < bookings.length; j++) {
         const booking1 = bookings[i];
         const booking2 = bookings[j];
 
-        if (!booking1 || !booking2) continue;
+        if (!booking1 || !booking2) {
+          console.log("No booking");
+          continue;
+        }
 
+        // Process overlapping inventory bookings
         findOverlappingInventoryBookings(items, booking1, booking2);
       }
     }
