@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   createInventoryBookings,
-  findInventoryCollisions,
+  findInventoryCollisionsBetweenEvents,
 } from "./inventoryCollisions";
 import { type Booking } from "./interfaces";
 
-describe("findInventoryCollisions", () => {
+describe("findInventoryCollisionsBetweenEvents", () => {
   it("should return an empty array if there are no collisions", () => {
     const events = [
       {
@@ -32,7 +32,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
 
     expect(collisions).toEqual([]);
   });
@@ -74,7 +74,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
 
     const inventoryBookings = createInventoryBookings(events);
 
@@ -136,7 +136,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
 
     expect(collisions.flatMap((col) => col.id)).toEqual(
       events.flatMap((col) => col.id),
@@ -180,7 +180,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
 
     expect(collisions.flatMap((col) => col.id)).toEqual(
       events.flatMap((col) => col.id),
@@ -212,7 +212,7 @@ describe("findInventoryCollisions", () => {
         ],
       },
     ] as Booking[];
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
 
     expect(collisions.flatMap((col) => col.id)).toEqual(
       events.flatMap((col) => col.id),
@@ -245,7 +245,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
     expect(collisions.length).toBeGreaterThan(0);
   });
 
@@ -275,7 +275,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
     expect(collisions).toEqual([]);
   });
 
@@ -305,7 +305,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
     expect(collisions.flatMap((col) => col.id)).toEqual(["1", "2"]);
   });
 
@@ -324,7 +324,7 @@ describe("findInventoryCollisions", () => {
       },
     ] as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
     expect(collisions).toEqual([]);
   });
 
@@ -341,7 +341,7 @@ describe("findInventoryCollisions", () => {
       ],
     })) as Booking[];
 
-    const collisions = findInventoryCollisions(events);
+    const collisions = findInventoryCollisionsBetweenEvents(events);
 
     expect(collisions.length).toBeGreaterThan(0);
   });

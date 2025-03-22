@@ -25,13 +25,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { findCollisionsBetweenPlans } from "@/utils/collisionHandling";
 import { useMemo, useState } from "react";
 import { useUserPlans } from "@/hooks/useUserPlans";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();
@@ -53,7 +53,10 @@ export const FindCollisionsCard = () => {
   const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
     const allCollisions: Record<string, Plan["events"]> = {};
     publicPlans.forEach((plan) => {
-      const collisions = findCollisionsBetweenPlans(userPlan, plan);
+      const collisions = findRoomCollisionsBetweenEvents([
+        ...userPlan.events,
+        ...plan.events,
+      ]);
       allCollisions[plan.id] = collisions;
     });
 

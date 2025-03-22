@@ -6,75 +6,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
 import { type BookableItem } from "@/utils/interfaces";
 import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-
-export const BOOKABLE_ITEM_OPTIONS: {
-  key:
-    | "bardiskar"
-    | "bankset-hg"
-    | "bankset-hoben"
-    | "bankset-k"
-    | "ff"
-    | "forte"
-    | "grillar"
-    | "other"
-    | "scenes"
-    | "other-inventory";
-  value: string;
-  comment?: string;
-  inputType: "text" | "number";
-}[] = [
-  {
-    key: "bardiskar",
-    value: "Bardiskar (Kårallen)",
-    comment: "Ange antal",
-    inputType: "number",
-  },
-  {
-    key: "bankset-hg",
-    value: "Bänkset (HG)",
-    comment: "Ange antal",
-    inputType: "number",
-  },
-  {
-    key: "bankset-hoben",
-    value: "Bänkset (Hoben)",
-    comment: "Ange antal",
-    inputType: "number",
-  },
-  {
-    key: "bankset-k",
-    value: "Bänkset (Kårallen)",
-    comment: "Ange antal",
-    inputType: "number",
-  },
-  {
-    key: "ff",
-    value: "FF inventarier",
-    comment: "T.ex. topptält, popup tält, elverk, släp etc.",
-    inputType: "text",
-  },
-  {
-    key: "forte",
-    value: "Forte",
-    comment: "T.ex. sittningspaket, två högtalare och en mikrofon etc.",
-    inputType: "text",
-  },
-  {
-    key: "grillar",
-    value: "Grillar (Kårallen)",
-    comment: "Ange antal",
-    inputType: "number",
-  },
-  {
-    key: "other-inventory",
-    value: "Övriga inventarier",
-    comment: "Övriga inventarier för bokningen",
-    inputType: "text",
-  },
-];
 
 export const AddBookableItemDropdown = ({
   addBookableItemToBooking,

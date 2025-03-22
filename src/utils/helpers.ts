@@ -4,7 +4,7 @@ import { type Kår, type Booking, type Plan } from "./interfaces";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
-import { BOOKABLE_ITEM_OPTIONS } from "@/pages/Booking/components/AddBookableItemDropdown";
+import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
 
 export const exportPlans = async (
   plans: Plan[],

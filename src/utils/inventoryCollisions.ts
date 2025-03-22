@@ -94,7 +94,7 @@ export const createInventoryBookings = (events: Booking[]) =>
     event.bookableItems.map((bookableItem) => ({ ...event, ...bookableItem })),
   );
 
-export const findInventoryCollisions = (
+export const findInventoryCollisionsBetweenEvents = (
   events: Booking[],
 ): (Booking & BookableItem)[] => {
   const items = createItemsObject();

@@ -16,12 +16,12 @@ import { useBookingState } from "@/hooks/useBookingState";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
 import { convertToDate } from "@/lib/utils";
 import { type Booking } from "@/utils/interfaces";
-import { BOOKABLE_ITEM_OPTIONS } from "./AddBookableItemDropdown";
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 import { ScheduleContext } from "./Schedule";
 import { ScheduleToolbar } from "./ScheduleToolbar";
 
 import "./localization";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template

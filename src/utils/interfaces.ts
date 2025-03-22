@@ -1,5 +1,5 @@
 import { type committees, type kårer } from "@/data/committees";
-import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
+import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
 
 export type Room = {
   name: string;
@@ -46,6 +46,7 @@ export type Booking = {
   id: string;
   title: string;
   allDay: boolean;
+  description?: string;
   committeeId: keyof typeof committees;
   planId: string;
   startDate: Date;
@@ -60,7 +61,7 @@ export type Booking = {
   food: boolean;
   link: string;
 
-  bookableItems: BookableItem[];
+  bookableItems?: BookableItem[];
 
   // items
   /*   grillar: number;
@@ -74,12 +75,34 @@ export type Booking = {
   "ff-trailer": number; */
 };
 
-export type BookableItem = {
-  key: string;
-  value: number | string;
+export type BookableItemNames = (typeof BOOKABLE_ITEM_OPTIONS)[number]["key"];
+
+// Separate keys for clarity and maintainability
+export type NumericBookableKeys =
+  | "bardiskar"
+  | "grillar"
+  | "bankset-hg"
+  | "bankset-k"
+  | "bankset-hoben";
+export type TextBookableKeys = "ff" | "forte" | "other-inventory";
+
+// Use a discriminated union for better type safety
+export type NumericBookableItem = {
+  key: Extract<BookableItemNames, NumericBookableKeys>;
+  value: number;
   startDate: Date;
   endDate: Date;
 };
+
+export type TextBookableItem = {
+  key: Extract<BookableItemNames, TextBookableKeys>;
+  value: string;
+  startDate: Date;
+  endDate: Date;
+};
+
+// Unified type for bookable items
+export type BookableItem = NumericBookableItem | TextBookableItem;
 
 export type NewBooking = {
   endDate: Date;

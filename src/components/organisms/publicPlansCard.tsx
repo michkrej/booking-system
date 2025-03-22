@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import {
   Card,
@@ -28,9 +28,9 @@ import { Button } from "../ui/button";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
-import { findCollisionsBetweenAllEvents } from "@/utils/collisionHandling";
 import { toast } from "sonner";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
+import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
@@ -66,7 +66,9 @@ export const PublicPlansCard = () => {
   }, [publicPlans]);
 
   const collisions = useMemo(() => {
-    return findCollisionsBetweenAllEvents(publicPlans);
+    return findRoomCollisionsBetweenEvents(
+      publicPlans.flatMap((plan) => plan.events),
+    );
   }, [publicPlans]);
 
   const handleViewBookingsClick = () => {
@@ -231,7 +233,9 @@ const TabCommitteeSection = ({
   const navigate = useNavigate();
 
   const collisions = useMemo(() => {
-    return findCollisionsBetweenAllEvents(plans);
+    return findRoomCollisionsBetweenEvents(
+      plans.flatMap((plan) => plan.events),
+    );
   }, [plans]);
 
   const handleViewBookingsClick = () => {

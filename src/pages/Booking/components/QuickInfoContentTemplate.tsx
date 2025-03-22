@@ -12,7 +12,7 @@ import { useContext } from "react";
 import { ScheduleContext } from "./Schedule";
 import { differenceInDays, format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { BOOKABLE_ITEM_OPTIONS } from "./AddBookableItemDropdown";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
 
 const getFormattedDate = (startDate: Date, endDate: Date) => {
   const eventSpansSeveralDays = differenceInDays(endDate, startDate);
@@ -37,6 +37,7 @@ export const QuickInfoContentTemplate = (
     .map((roomId) => rooms.find((room) => room.id === roomId)?.name)
     .join(", ");
 
+  const bookableItems = props.bookableItems ?? [];
   return (
     <div className="mt-3 flex flex-col gap-y-1 text-base">
       <div className="grid grid-cols-[20px_auto] items-center">
@@ -55,10 +56,10 @@ export const QuickInfoContentTemplate = (
         <MapPinIcon className="mr-2 h-4 w-4" />
         {roomNames}
       </div>
-      {props.bookableItems.length > 0 && (
+      {bookableItems.length > 0 && (
         <div className="flex flex-col gap-y-1">
           <Label className="font-semibold">Material</Label>
-          {props.bookableItems.map((item) => {
+          {bookableItems.map((item) => {
             const itemData = BOOKABLE_ITEM_OPTIONS.find(
               (option) => option.key === item.key,
             );

@@ -4,7 +4,6 @@ import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { TrashIcon } from "lucide-react";
 import { Comment } from "@/components/ui/comment";
 import { type BookableItem } from "@/utils/interfaces";
-import { BOOKABLE_ITEM_OPTIONS } from "./AddBookableItemDropdown";
 import { sv } from "date-fns/locale";
 import { type z } from "zod";
 import { type UseFormReturn } from "react-hook-form";
@@ -16,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { type BookingSchema } from "./schema";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
 
 type InventoryItemProps = {
   item: BookableItem & { id: string };
