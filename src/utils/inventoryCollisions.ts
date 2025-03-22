@@ -11,46 +11,23 @@ import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
 
 type NumericItems = Record<
   NumericBookableKeys,
-  { events: Set<NumericBookableItem & Booking>; sum: number }
+  { events: Map<string, NumericBookableItem & Booking>; sum: number }
 >;
 type TextItems = Record<
   TextBookableKeys,
-  { events: Set<TextBookableItem & Booking> }
+  { events: Map<string, TextBookableItem & Booking> }
 >;
 
-const createItemsObject = (): NumericItems & TextItems => {
-  return {
-    grillar: {
-      sum: 0,
-      events: new Set(),
-    },
-    bardiskar: {
-      sum: 0,
-      events: new Set(),
-    },
-    "bankset-hg": {
-      sum: 0,
-      events: new Set(),
-    },
-    "bankset-hoben": {
-      sum: 0,
-      events: new Set(),
-    },
-    "bankset-k": {
-      sum: 0,
-      events: new Set(),
-    },
-    ff: {
-      events: new Set(),
-    },
-    forte: {
-      events: new Set(),
-    },
-    "other-inventory": {
-      events: new Set(),
-    },
-  };
-};
+const createItemsObject = (): NumericItems & TextItems => ({
+  grillar: { sum: 0, events: new Map() },
+  bardiskar: { sum: 0, events: new Map() },
+  "bankset-hg": { sum: 0, events: new Map() },
+  "bankset-hoben": { sum: 0, events: new Map() },
+  "bankset-k": { sum: 0, events: new Map() },
+  ff: { events: new Map() },
+  forte: { events: new Map() },
+  "other-inventory": { events: new Map() },
+});
 
 const isTextItem = (item: BookableItem): item is TextBookableItem => {
   const findItem = BOOKABLE_ITEM_OPTIONS.find(
@@ -76,16 +53,11 @@ const isNumericItem = (item: BookableItem): item is NumericBookableItem => {
   return false;
 };
 
-const findOverlappingInventoryBookings = ({
-  items,
-  inventoryBooking1,
-  inventoryBooking2,
-}: {
-  items: ReturnType<typeof createItemsObject>;
-  inventoryBooking1: Booking & BookableItem;
-  inventoryBooking2: Booking & BookableItem;
-}) => {
-  // If the items are not of the same type, we don't need to check for overlap
+const findOverlappingInventoryBookings = (
+  items: ReturnType<typeof createItemsObject>,
+  inventoryBooking1: Booking & BookableItem,
+  inventoryBooking2: Booking & BookableItem,
+) => {
   if (inventoryBooking1.key !== inventoryBooking2.key) return;
 
   const range1 = {
@@ -97,65 +69,66 @@ const findOverlappingInventoryBookings = ({
     end: inventoryBooking2.endDate,
   };
 
-  if (areIntervalsOverlapping(range1, range2)) {
-    if (isTextItem(inventoryBooking1) && isTextItem(inventoryBooking2)) {
-      items[inventoryBooking1.key].events.add(inventoryBooking1);
-      items[inventoryBooking1.key].events.add(inventoryBooking2);
-    } else if (
-      isNumericItem(inventoryBooking1) &&
-      isNumericItem(inventoryBooking2)
-    ) {
-      items[inventoryBooking1.key].sum +=
-        +inventoryBooking1.value + +inventoryBooking2.value;
+  if (!areIntervalsOverlapping(range1, range2)) return;
 
-      items[inventoryBooking1.key].events.add(inventoryBooking1);
-      items[inventoryBooking1.key].events.add(inventoryBooking2);
-    }
+  if (isTextItem(inventoryBooking1) && isTextItem(inventoryBooking2)) {
+    const itemStore = items[inventoryBooking1.key];
+
+    itemStore.events.set(inventoryBooking1.id, inventoryBooking1);
+    itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
+
+    return;
+  }
+
+  if (isNumericItem(inventoryBooking1) && isNumericItem(inventoryBooking2)) {
+    const itemStore = items[inventoryBooking1.key];
+
+    itemStore.sum += +inventoryBooking1.value + +inventoryBooking2.value;
+    itemStore.events.set(inventoryBooking1.id, inventoryBooking1);
+    itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
   }
 };
 
-export const createInventoryBookings = (events: Booking[]) => {
-  return events.flatMap((event) => {
-    return event.bookableItems.flatMap((bookableItem) => {
-      return {
-        ...event,
-        ...bookableItem,
-      };
-    });
-  });
-};
+export const createInventoryBookings = (events: Booking[]) =>
+  events.flatMap((event) =>
+    event.bookableItems.map((bookableItem) => ({ ...event, ...bookableItem })),
+  );
 
 export const findInventoryCollisions = (
   events: Booking[],
 ): (Booking & BookableItem)[] => {
   const items = createItemsObject();
-
-  // each inventory item needs to be turned into a "event"
-
   const inventoryBookings = createInventoryBookings(events);
 
-  // Loop through all the events
-  for (const event of inventoryBookings) {
-    for (const event2 of inventoryBookings) {
-      if (event.id === event2.id) continue;
+  // Group bookings by key to avoid redundant comparisons
+  const groupedBookings = new Map<string, (Booking & BookableItem)[]>();
+  for (const booking of inventoryBookings) {
+    if (!groupedBookings.has(booking.key)) groupedBookings.set(booking.key, []);
+    groupedBookings.get(booking.key)!.push(booking);
+  }
 
-      findOverlappingInventoryBookings({
-        items,
-        inventoryBooking1: event,
-        inventoryBooking2: event2,
-      });
+  for (const bookings of groupedBookings.values()) {
+    for (let i = 0; i < bookings.length; i++) {
+      for (let j = i + 1; j < bookings.length; j++) {
+        const booking1 = bookings[i];
+        const booking2 = bookings[j];
+
+        if (!booking1 || !booking2) continue;
+
+        findOverlappingInventoryBookings(items, booking1, booking2);
+      }
     }
   }
 
-  // we have ensured that each item entry has no duplicates
-  // now we want to ensure that we have no duplicates overall
-
-  const res = Object.values(items).flatMap((item) => [...item.events]);
-
-  // removes duplicates
-  const noDuplicates = Array.from(
-    new Map(res.map((event) => [event.id, event])).values(),
+  // Extract unique events by their 'id' to remove duplicates
+  const res = Array.from(
+    new Map(
+      Object.values(items)
+        // @ts-expect-error - Type 'Map<string, NumericBookableItem & Booking>' is not assignable to type 'NumericBookableItem & Booking'
+        .flatMap((item) => Array.from(item.events.values()))
+        .map((event) => [event.id, event]), // Ensure uniqueness by event id
+    ).values(),
   );
 
-  return noDuplicates;
+  return res;
 };
