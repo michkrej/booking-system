@@ -1,4 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import {
   Card,
@@ -17,20 +19,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatDate, getCommittee } from "@/lib/utils";
-import { type Kår, type Plan } from "@/utils/interfaces";
-import { ExportPlansButton } from "../molecules/exportPlansButton";
-
-import { Skeleton } from "../ui/skeleton";
-import { useStoreUser } from "@/hooks/useStoreUser";
-import { usePublicPlans } from "@/hooks/usePublicPlans";
-import { Button } from "../ui/button";
-import { useBoundStore } from "@/state/store";
-import { useNavigate } from "react-router-dom";
-import { useStoreBookings } from "@/hooks/useStoreBookings";
-import { toast } from "sonner";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
+import { usePublicPlans } from "@/hooks/usePublicPlans";
+import { useStoreBookings } from "@/hooks/useStoreBookings";
+import { useStoreUser } from "@/hooks/useStoreUser";
+import { formatDate, getCommittee } from "@/lib/utils";
+import { useBoundStore } from "@/state/store";
+import { type Booking, type Plan } from "@/utils/interfaces";
+import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
 import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
+import { ExportPlansButton } from "../molecules/exportPlansButton";
+import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
+import { TabCommitteeSection } from "../molecules/TabCommitteeSection";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
@@ -39,6 +40,9 @@ export const PublicPlansCard = () => {
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
   const { resetCurrentDate } = useCurrentDate();
+
+  const [inventoryCollisions, setInventoryCollisions] = useState<Booking[]>([]);
+  const [roomCollisions, setRoomCollisions] = useState<Booking[]>([]);
 
   const defaultTab = useMemo(() => {
     const committee = getCommittee(user.committeeId);
@@ -65,16 +69,10 @@ export const PublicPlansCard = () => {
     );
   }, [publicPlans]);
 
-  const collisions = useMemo(() => {
-    return findRoomCollisionsBetweenEvents(
-      publicPlans.flatMap((plan) => plan.events),
-    );
-  }, [publicPlans]);
-
-  const handleViewBookingsClick = () => {
-    const events = publicPlans.flatMap((plan) => plan.events);
+  const handleViewBookingsClick = (plans: Plan[]) => {
+    const events = plans.flatMap((plan) => plan.events);
     loadedBookings(events);
-    changedActivePlans(publicPlans);
+    changedActivePlans(plans);
     resetCurrentDate();
     navigate(`/booking/view`);
   };
@@ -86,10 +84,46 @@ export const PublicPlansCard = () => {
     navigate(`/booking/view`);
   };
 
-  const handleViewCollisionsClick = () => {
-    loadedBookings(collisions);
-    changedActivePlans(publicPlans);
-    navigate(`/booking/view-collisions`);
+  const handleFindCollisionsClick = (plans: Plan[]) => {
+    const events = plans.flatMap((plan) => plan.events);
+    const eventCollisions = findRoomCollisionsBetweenEvents(events);
+
+    const inventoryCollisions = findInventoryCollisionsBetweenEvents(events);
+
+    if (eventCollisions.length === 0 && inventoryCollisions.length === 0) {
+      toast.warning(
+        "Det finns inga bokningar som krockar på lokal eller inventariet",
+      );
+      return;
+    }
+
+    if (eventCollisions.length > 0) {
+      toast.warning("Det finns bokningar som krockar på lokal");
+      setRoomCollisions(eventCollisions);
+    }
+
+    if (inventoryCollisions.length > 0) {
+      toast.warning("Det finns bokningar som krockar på inventariet");
+      setInventoryCollisions(inventoryCollisions);
+    }
+  };
+
+  const handleViewCollisionsClick = (plans: Plan[]) => {
+    const hasRoomCollisions = roomCollisions.length > 0;
+    const hasInventoryCollisions = inventoryCollisions.length > 0;
+
+    // Load the bookings
+    if (hasRoomCollisions || hasInventoryCollisions) {
+      loadedBookings(hasRoomCollisions ? roomCollisions : inventoryCollisions);
+      changedActivePlans(plans);
+    }
+
+    // Navigate to the appropriate page based on the collisions
+    if (hasRoomCollisions) {
+      navigate(`/booking/view-collisions`);
+    } else if (hasInventoryCollisions) {
+      navigate(`/inventory/view-collisions`);
+    }
   };
 
   return (
@@ -152,7 +186,7 @@ export const PublicPlansCard = () => {
                     </TableCell>
                   </TableRow>
                 ) : null}
-                {isPending ? (
+                {isPending && publicPlans.length === 0 ? (
                   <TableRow>
                     <TableCell>
                       <Skeleton className="h-4 w-full" />
@@ -170,18 +204,28 @@ export const PublicPlansCard = () => {
           </CardContent>
           <CardFooter className="flex justify-end gap-x-3">
             <Button
-              onClick={handleViewBookingsClick}
+              onClick={() => handleViewBookingsClick(publicPlans)}
               disabled={publicPlans.length === 0}
               variant="outline"
             >
               Se bokningar
             </Button>
-            <Button
-              onClick={handleViewCollisionsClick}
-              disabled={collisions.length === 0}
-            >
-              Se krockar
-            </Button>
+            {roomCollisions.length > 0 || inventoryCollisions.length > 0 ? (
+              <Button
+                onClick={() => handleViewCollisionsClick(publicPlans)}
+                className="w-32"
+              >
+                Se krockar
+              </Button>
+            ) : (
+              <Button
+                onClick={() => handleFindCollisionsClick(publicPlans)}
+                variant={"secondary"}
+                className="w-32"
+              >
+                Hitta krockar
+              </Button>
+            )}
           </CardFooter>
         </Card>
       </TabsContent>
@@ -190,135 +234,37 @@ export const PublicPlansCard = () => {
         plans={plansConsensus}
         kår={"Consensus"}
         isPending={isPending}
+        roomCollisions={roomCollisions}
+        inventoryCollisions={inventoryCollisions}
+        handleFindCollisionsClick={handleFindCollisionsClick}
+        handleViewCollisionsClick={handleViewCollisionsClick}
+        handleViewBookingsClick={handleViewBookingsClick}
+        handlePlanClick={handlePlanClick}
       />
       {/* SECTION - LinTek */}
       <TabCommitteeSection
         plans={plansLinTek}
         kår={"LinTek"}
         isPending={isPending}
+        roomCollisions={roomCollisions}
+        inventoryCollisions={inventoryCollisions}
+        handleFindCollisionsClick={handleFindCollisionsClick}
+        handleViewCollisionsClick={handleViewCollisionsClick}
+        handleViewBookingsClick={handleViewBookingsClick}
+        handlePlanClick={handlePlanClick}
       />
       {/* SECTION - StuFF */}
       <TabCommitteeSection
         plans={plansStuFF}
         kår={"StuFF"}
         isPending={isPending}
+        roomCollisions={roomCollisions}
+        inventoryCollisions={inventoryCollisions}
+        handleFindCollisionsClick={handleFindCollisionsClick}
+        handleViewCollisionsClick={handleViewCollisionsClick}
+        handleViewBookingsClick={handleViewBookingsClick}
+        handlePlanClick={handlePlanClick}
       />
     </Tabs>
-  );
-};
-
-type TabCommitteeSectionProps = {
-  kår: Kår;
-  plans: Plan[];
-  isPending: boolean;
-};
-
-const TabCommitteeSection = ({
-  kår,
-  plans,
-  isPending,
-}: TabCommitteeSectionProps) => {
-  const { loadedBookings } = useStoreBookings();
-  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
-  const navigate = useNavigate();
-
-  const collisions = useMemo(() => {
-    return findRoomCollisionsBetweenEvents(
-      plans.flatMap((plan) => plan.events),
-    );
-  }, [plans]);
-
-  const handleViewBookingsClick = () => {
-    loadedBookings(plans.flatMap((plan) => plan.events));
-    changedActivePlans(plans);
-    navigate(`/booking/view`);
-  };
-
-  const handleViewCollisionsClick = () => {
-    loadedBookings(collisions);
-    changedActivePlans(plans);
-    navigate(`/booking/view-collisions`);
-  };
-
-  const handlePlanClick = (plan: Plan) => {
-    loadedBookings(plan.events);
-    changedActivePlans([plan]);
-    navigate(`/booking/view`);
-  };
-
-  return (
-    <TabsContent value={kår.toLowerCase()}>
-      <Card>
-        <CardHeader className="px-7">
-          <CardTitle>{kår} planeringar</CardTitle>
-          <CardDescription>
-            Publika planeringar för fadderier inom {kår}.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Fadderi</TableHead>
-                <TableHead className="hidden sm:table-cell">
-                  Uppdaterad
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {plans.map((plan) => {
-                const committee = getCommittee(plan.committeeId);
-                return (
-                  <TableRow
-                    key={plan.id}
-                    onClick={() => handlePlanClick(plan)}
-                    className="hover:cursor-pointer"
-                  >
-                    <TableCell className="font-medium">
-                      {committee.name}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {formatDate(plan.updatedAt)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {!isPending && plans.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={2}>
-                    Det finns inga publika planeringar för {kår}.
-                  </TableCell>
-                </TableRow>
-              )}
-              {isPending ? (
-                <TableRow>
-                  <TableCell>
-                    <Skeleton className="h-4 w-full" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-4 w-full" />
-                  </TableCell>
-                </TableRow>
-              ) : null}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter className="flex justify-end gap-x-3">
-          <Button
-            onClick={handleViewBookingsClick}
-            disabled={plans.length === 0}
-            variant="outline"
-          >
-            Se bokningar
-          </Button>
-          <Button
-            onClick={handleViewCollisionsClick}
-            disabled={collisions.length === 0}
-          >
-            Se krockar
-          </Button>
-        </CardFooter>
-      </Card>
-    </TabsContent>
   );
 };
