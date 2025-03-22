@@ -89,17 +89,7 @@ export const PublicPlansCard = () => {
   const handleViewCollisionsClick = () => {
     loadedBookings(collisions);
     changedActivePlans(publicPlans);
-    navigate(`/booking/view`);
-    toast.warning("Bokningar som inte krockar på område", {
-      description:
-        "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
-      position: "bottom-left",
-      duration: Infinity,
-      action: {
-        label: "OK",
-        onClick: () => toast.dismiss(),
-      },
-    });
+    navigate(`/booking/view-collisions`);
   };
 
   return (
@@ -247,17 +237,7 @@ const TabCommitteeSection = ({
   const handleViewCollisionsClick = () => {
     loadedBookings(collisions);
     changedActivePlans(plans);
-    navigate(`/booking/view`);
-    toast.warning("Bokningar som inte krockar på område", {
-      description:
-        "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
-      position: "bottom-left",
-      duration: Infinity,
-      action: {
-        label: "OK",
-        onClick: () => toast.dismiss(),
-      },
-    });
+    navigate(`/booking/view-collisions`);
   };
 
   const handlePlanClick = (plan: Plan) => {

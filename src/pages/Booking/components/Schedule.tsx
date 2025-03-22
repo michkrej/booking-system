@@ -126,7 +126,7 @@ export const Schedule = () => {
     data: Booking;
     cancel: boolean;
   }) => {
-    if (id === "view" && !e.data.id) {
+    if ((id === "view" || id === "view-collisions") && !e.data.id) {
       toast.error("Det går inte att skapa nya bokningar i denna vy");
       e.cancel = true;
       return;

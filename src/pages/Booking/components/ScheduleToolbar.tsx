@@ -119,6 +119,11 @@ export const ScheduleToolbar = ({
     );
   }, [firstBookingDate, currentDate]);
 
+  const handleInventoryButtonClick = () => {
+    toast.info("I inventarie-vyn går det inte att redigera några bokningar");
+    navigate(`/inventory/${id}`);
+  };
+
   return (
     <div className="flex w-full items-center justify-between border border-b-0 border-gray-200 bg-[#fafafa] px-4 py-2">
       {!hideDropdowns ? (
@@ -167,12 +172,7 @@ export const ScheduleToolbar = ({
               <TooltipTrigger asChild>
                 <Button
                   variant={"ghost"}
-                  onClick={() => {
-                    toast.info(
-                      "I inventarie-vyn går det inte att redigera några bokningar",
-                    );
-                    navigate(`/inventory/${id}`);
-                  }}
+                  onClick={handleInventoryButtonClick}
                   className="flex gap-2 rounded-full px-2 text-primary"
                 >
                   <BaggageClaimIcon />

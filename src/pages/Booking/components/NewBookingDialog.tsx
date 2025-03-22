@@ -78,7 +78,7 @@ export const NewBookingDialog = ({
     })),
   );
 
-  const disabledForm = planId === "view";
+  const disabledForm = planId === "view" || planId === "view-collisions";
 
   const form = useForm<z.infer<typeof BookingSchema>>({
     resolver: zodResolver(BookingSchema),
@@ -143,7 +143,7 @@ export const NewBookingDialog = ({
       link: values.link,
       createdAt: new Date(),
       updatedAt: new Date(),
-      bookableItems: values.bookableItems,
+      bookableItems: values?.bookableItems ?? [],
     } satisfies Booking;
 
     await addBookingToPlanMutation.mutateAsync(

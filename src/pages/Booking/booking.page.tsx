@@ -11,9 +11,10 @@ export const BookingPage = () => {
   const updatedActivePlans = useBoundStore((state) => state.updatedActivePlans);
 
   useEffect(() => {
-    if (id !== "view") return;
+    if (!["view", "view-collisions"].includes(id ?? "")) return;
+
     void refetch().then(({ data }) => {
-      if (data) updatedActivePlans(data);
+      if (data) updatedActivePlans(data, id === "view-collisions");
     });
   }, []);
 

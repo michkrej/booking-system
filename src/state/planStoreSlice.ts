@@ -4,6 +4,7 @@ import { type UserStoreSlice } from "./userStoreSlice";
 import { convertToDate } from "@/lib/utils";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { type BookingStoreSlice } from "./bookingStoreSlice";
+import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
 
 export const MIN_YEAR = 2025;
 export const MAX_YEAR = CURRENT_YEAR + 1;
@@ -25,7 +26,7 @@ interface PlanStoreSlice {
   decrementPlanYear: () => void;
   planPublicToggled: (planId: string) => void;
   changedActivePlans: (plans: Plan[]) => void;
-  updatedActivePlans: (plans: Plan[]) => void;
+  updatedActivePlans: (plans: Plan[], isCollisionView?: boolean) => void;
   updatedCurrentDate: (date: Date) => void;
 }
 
@@ -109,7 +110,7 @@ const createPlanStoreSlice: StateCreator<
   changedActivePlans: (plans) => {
     set({ activePlans: plans });
   },
-  updatedActivePlans: (plans) => {
+  updatedActivePlans: (plans, isCollisionView) => {
     set((state) => {
       const updatedPlans = state.activePlans.map((plan) => {
         const updatedPlan = plans.find((p) => p.id === plan.id);
@@ -117,9 +118,14 @@ const createPlanStoreSlice: StateCreator<
         return updatedPlan;
       });
 
+      let bookings = updatedPlans.flatMap((plan) => plan.events);
+      if (isCollisionView) {
+        bookings = findRoomCollisionsBetweenEvents(bookings);
+      }
+
       return {
         activePlans: updatedPlans,
-        bookings: updatedPlans.flatMap((plan) => plan.events),
+        bookings,
       };
     });
   },
