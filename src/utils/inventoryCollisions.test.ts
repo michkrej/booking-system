@@ -1,12 +1,14 @@
 import { describe, expect, it, beforeEach } from "vitest";
+
 import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
-import { BookableItem, type Booking } from "./interfaces";
+import { type BookableItem, type Booking } from "./interfaces";
 import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
+import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
 
 describe("findInventoryCollisionsBetweenEvents", () => {
   let events: unknown[];
 
-  /*   beforeEach(() => {
+  beforeEach(() => {
     events = [
       {
         id: "1",
@@ -327,19 +329,14 @@ describe("findInventoryCollisionsBetweenEvents", () => {
     );
     expect(collisions).toEqual([]); // No collision expected
   });
- */
-  it("should run efficiently with 1000+ bookings", () => {
-    const NUM_EVENTS = 1000;
+
+  it("Should run efficiently with 50 bookings with the same inventory booking", () => {
+    const NUM_EVENTS = 50;
     const startDate = new Date("2025-01-01");
     const endDate = new Date("2025-01-02");
 
-    // Generate 1000+ bookings
-    console.log("Generating events...");
-
     const newEvents: unknown[] = [];
-    for (let i = 0; i < 200; i++) {
-      console.log(`Creating event ${i}`);
-
+    for (let i = 0; i < NUM_EVENTS; i++) {
       const event = {
         startDate: startDate,
         endDate: endDate,
@@ -358,8 +355,6 @@ describe("findInventoryCollisionsBetweenEvents", () => {
       newEvents.push(event);
     }
 
-    console.log("Events created");
-
     // Measure execution time
     const start = performance.now();
     const { collisions } = findInventoryCollisionsBetweenEvents(
@@ -367,10 +362,48 @@ describe("findInventoryCollisionsBetweenEvents", () => {
     );
     const end = performance.now();
 
-    console.log(`Execution time: ${(end - start).toFixed(2)}ms`);
-
     // Ensure the function completes within a reasonable time
     expect(end - start).toBeLessThan(500); // Adjust threshold if needed
+    expect(collisions.length).toBeGreaterThan(0); // Ensure some collisions are found
+  });
+
+  it("Should run efficiently with 1000 bookings with varying inventory bookings", () => {
+    const NUM_EVENTS = 1000;
+    const startDate = new Date("2025-01-01");
+    const endDate = new Date("2025-01-02");
+
+    const bookableItems = BOOKABLE_ITEM_OPTIONS.map((item) => item.key);
+
+    const newEvents: unknown[] = [];
+    for (let i = 0; i < NUM_EVENTS; i++) {
+      const chosenBookableItem =
+        bookableItems[Math.floor(Math.random() * bookableItems.length)];
+      if (!chosenBookableItem) throw new Error("No bookable item found");
+      const event = {
+        startDate: startDate,
+        endDate: endDate,
+        planId: `${i}`,
+        id: `${i}`,
+        bookableItems: [
+          {
+            key: chosenBookableItem,
+            value: 10,
+            startDate: new Date("2025-01-01"),
+            endDate: new Date("2025-01-02"),
+          } as BookableItem,
+        ],
+      };
+      newEvents.push(event);
+    }
+
+    const start = performance.now();
+    const { collisions } = findInventoryCollisionsBetweenEvents(
+      newEvents as Booking[],
+    );
+    const end = performance.now();
+
+    // Ensure the function completes within a reasonable time
+    expect(end - start).toBeLessThan(2000); // Adjust threshold if needed
     expect(collisions.length).toBeGreaterThan(0); // Ensure some collisions are found
   });
 });

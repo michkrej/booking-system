@@ -127,37 +127,18 @@ const handleNumericItemCollisions = (
   itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
 };
 
-const findOverlappingInventoryBookings = (
-  items: ReturnType<typeof createItemsObject>,
-  inventoryBooking1: Booking & BookableItem,
-  inventoryBooking2: Booking & BookableItem,
-  bookableItemLimits: Record<NumericBookableKeys, number>,
-) => {
-  if (isTextItem(inventoryBooking1) && isTextItem(inventoryBooking2)) {
-    handleTextItemCollisions(items, inventoryBooking1, inventoryBooking2);
-  } else if (
-    isNumericItem(inventoryBooking1) &&
-    isNumericItem(inventoryBooking2)
-  ) {
-    handleNumericItemCollisions(
-      items,
-      inventoryBooking1,
-      inventoryBooking2,
-      bookableItemLimits,
-    );
-  }
-};
-
 export const createInventoryBookings = (events: Booking[]) =>
-  events.flatMap((event) =>
-    (event?.bookableItems ?? []).map((bookableItem) => ({
-      ...event,
-      ...bookableItem,
-      startDate: convertToDate(bookableItem.startDate),
-      endDate: convertToDate(bookableItem.endDate),
-      bookableItems: [bookableItem],
-    })),
-  );
+  events
+    .flatMap((event) =>
+      (event?.bookableItems ?? []).map((bookableItem) => ({
+        ...event,
+        ...bookableItem,
+        startDate: convertToDate(bookableItem.startDate),
+        endDate: convertToDate(bookableItem.endDate),
+        bookableItems: [bookableItem],
+      })),
+    )
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
 export const findInventoryCollisionsBetweenEvents = (
   events: Booking[],
@@ -216,13 +197,16 @@ export const findInventoryCollisionsBetweenEvents = (
         // Skip comparing items that are not the same
         if (booking1.key !== booking2.key) continue;
 
-        // Process overlapping inventory bookings
-        findOverlappingInventoryBookings(
-          items,
-          booking1,
-          booking2,
-          bookableItemLimits,
-        );
+        if (isTextItem(booking1) && isTextItem(booking2)) {
+          handleTextItemCollisions(items, booking1, booking2);
+        } else if (isNumericItem(booking1) && isNumericItem(booking2)) {
+          handleNumericItemCollisions(
+            items,
+            booking1,
+            booking2,
+            bookableItemLimits,
+          );
+        }
       }
     }
   }
