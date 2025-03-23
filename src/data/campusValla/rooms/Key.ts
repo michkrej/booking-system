@@ -1,4 +1,4 @@
-import { Room } from "../../../utils/interfaces";
+import { type Room } from "../../../utils/interfaces";
 
 export default [
   {
@@ -112,5 +112,9 @@ export default [
   {
     name: "KG48",
     id: "dd259c44-4277-4094-870e-fb8d594fb781",
+  },
+  {
+    name: "KEYH",
+    id: "e1bfc48d-060e-4085-8ba1-a74514d6d57c",
   },
 ] as Room[];
