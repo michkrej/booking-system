@@ -1,4 +1,4 @@
-import { Plan } from "@/utils/interfaces";
+import { Booking, Plan } from "@/utils/interfaces";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { formatDate, getCommittee } from "@/lib/utils";
+import { cn, formatDate, getCommittee } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -30,8 +30,8 @@ import { useUserPlans } from "@/hooks/useUserPlans";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
+import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();
@@ -43,6 +43,9 @@ export const FindCollisionsCard = () => {
   const [collisions, setCollisions] = useState<Record<string, Plan["events"]>>(
     {},
   );
+  const [inventoryCollisions, setInventoryCollisions] = useState<
+    Record<string, Booking[]>
+  >({});
 
   const publicPlansWithoutUserPlans = useMemo(() => {
     const userPublicPlan = userPlans.find((plan) => plan.public);
@@ -51,13 +54,34 @@ export const FindCollisionsCard = () => {
   }, [userPlans, publicPlans]);
 
   const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
-    const allCollisions: Record<string, Plan["events"]> = {};
+    const allCollisions: {
+      roomCollisions: Record<string, Plan["events"]>;
+      inventoryCollisions: Record<string, Booking[]>;
+      items: Record<
+        string,
+        ReturnType<typeof findInventoryCollisionsBetweenEvents>["items"]
+      >;
+    } = {
+      roomCollisions: {},
+      inventoryCollisions: {},
+      items: {},
+    };
+
     publicPlans.forEach((plan) => {
-      const collisions = findRoomCollisionsBetweenEvents([
+      const roomCollisions = findRoomCollisionsBetweenEvents([
         ...userPlan.events,
         ...plan.events,
       ]);
-      allCollisions[plan.id] = collisions;
+
+      const inventoryCollisions = findInventoryCollisionsBetweenEvents([
+        ...userPlan.events,
+        ...plan.events,
+      ]);
+
+      allCollisions.roomCollisions[plan.id] = roomCollisions;
+      allCollisions.inventoryCollisions[plan.id] =
+        inventoryCollisions.collisions;
+      allCollisions.items[plan.id] = inventoryCollisions.items;
     });
 
     return allCollisions;
@@ -68,34 +92,52 @@ export const FindCollisionsCard = () => {
     if (!plan) return;
 
     setSelectedUserPlan(plan);
-    setCollisions(findCollisions(plan, publicPlansWithoutUserPlans));
+
+    const collisions = findCollisions(plan, publicPlansWithoutUserPlans);
+    setCollisions(collisions.roomCollisions);
+    setInventoryCollisions(collisions.inventoryCollisions);
   };
 
   const onButtonClick = () => {
-    const plansWithCollisions = Object.keys(collisions);
-    loadedBookings(Object.values(collisions).flat());
+    const roomCollisionEntries = Object.entries(collisions);
+    const inventoryCollisionEntries = Object.entries(inventoryCollisions);
+
+    if (
+      roomCollisionEntries.length === 0 &&
+      inventoryCollisionEntries.length === 0
+    ) {
+      return;
+    }
+
+    const roomPlanIds = roomCollisionEntries
+      .filter(([, value]) => value.length > 0)
+      .map(([key]) => key);
+    const inventoryPlanIds = inventoryCollisionEntries
+      .filter(([, value]) => value.length > 0)
+      .map(([key]) => key);
+
     changedActivePlans([
-      ...publicPlans.filter((plan) => plansWithCollisions.includes(plan.id)),
+      ...publicPlans.filter((plan) =>
+        [...roomPlanIds, ...inventoryPlanIds].includes(plan.id),
+      ),
       ...(selectedUserPlan ? [selectedUserPlan] : []),
     ]);
 
-    navigate(`/booking/view`);
-    toast.warning("Bokningar som inte krockar på område", {
-      description:
-        "Om du ser bokningar som inte krockar på område är det för att dem krockar på bokningsbart material.",
-      position: "bottom-left",
-      duration: Infinity,
-      action: {
-        label: "OK",
-        onClick: () => toast.dismiss(),
-      },
-    });
+    if (roomPlanIds.length === 0 && inventoryPlanIds.length > 0) {
+      loadedBookings(inventoryCollisionEntries.flatMap(([, events]) => events));
+      navigate(`/inventory/view-collisions`);
+      return;
+    }
+
+    loadedBookings(roomCollisionEntries.flatMap(([, events]) => events));
+    navigate(`/booking/view-collisions`);
   };
 
   const showCollisionsButtonEnabled = useMemo(() => {
     const col = Object.values(collisions).flat();
-    return col.length > 0 && selectedUserPlan;
-  }, [collisions]);
+    const inventoryCol = Object.values(inventoryCollisions).flat();
+    return (col.length > 0 || inventoryCol.length > 0) && selectedUserPlan;
+  }, [collisions, inventoryCollisions]);
 
   return (
     <Card className="col-span-full">
@@ -125,6 +167,7 @@ export const FindCollisionsCard = () => {
         <CollisionsTable
           publicPlans={publicPlansWithoutUserPlans}
           collisions={collisions}
+          inventoryCollisions={inventoryCollisions}
         />
       </CardContent>
       <CardFooter className="justify-end">
@@ -144,9 +187,14 @@ export const FindCollisionsCard = () => {
 type CollisionsTableProps = {
   publicPlans: Plan[];
   collisions: Record<string, Plan["events"]>;
+  inventoryCollisions: Record<string, Booking[]>;
 };
 
-const CollisionsTable = ({ publicPlans, collisions }: CollisionsTableProps) => {
+const CollisionsTable = ({
+  publicPlans,
+  collisions,
+  inventoryCollisions,
+}: CollisionsTableProps) => {
   return (
     <Table>
       <TableHeader>
@@ -154,7 +202,8 @@ const CollisionsTable = ({ publicPlans, collisions }: CollisionsTableProps) => {
           <TableHead>Kår</TableHead>
           <TableHead>Fadderi</TableHead>
           <TableHead className="hidden sm:table-cell">Uppdaterad</TableHead>
-          <TableHead>Krockar</TableHead>
+          <TableHead>Krockar på lokal</TableHead>
+          <TableHead>Krockar på inventarie</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -165,8 +214,20 @@ const CollisionsTable = ({ publicPlans, collisions }: CollisionsTableProps) => {
           const numCollisions = collisnsForPlan
             ? Math.ceil(collisnsForPlan.length / 2)
             : null;
+
+          const collisnsForInventoryPlan = inventoryCollisions[plan.id];
+          const numInventoryCollisions = collisnsForInventoryPlan
+            ? Math.ceil(collisnsForInventoryPlan.length / 2)
+            : null;
           return (
-            <TableRow key={plan.id}>
+            <TableRow
+              key={plan.id}
+              className={cn(
+                numCollisions === 0 &&
+                  numInventoryCollisions === 0 &&
+                  "opacity-50",
+              )}
+            >
               <TableCell>
                 {committee?.kår === "Övrigt" ? plan.label : committee.name}
               </TableCell>
@@ -175,6 +236,7 @@ const CollisionsTable = ({ publicPlans, collisions }: CollisionsTableProps) => {
                 {formatDate(plan.updatedAt)}
               </TableCell>
               <TableCell>{numCollisions ?? "-"}</TableCell>
+              <TableCell>{numInventoryCollisions ?? "-"}</TableCell>
             </TableRow>
           );
         })}
