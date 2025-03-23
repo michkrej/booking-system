@@ -55,48 +55,109 @@ const isNumericItem = (item: BookableItem): item is NumericBookableItem => {
   return false;
 };
 
+const handleTextItemCollisions = (
+  items: ReturnType<typeof createItemsObject>,
+  inventoryBooking1: Booking & TextBookableItem,
+  inventoryBooking2: Booking & TextBookableItem,
+) => {
+  const range1 = {
+    start: inventoryBooking1.startDate,
+    end: inventoryBooking1.endDate,
+  };
+  const range2 = {
+    start: inventoryBooking2.startDate,
+    end: inventoryBooking2.endDate,
+  };
+
+  if (!areIntervalsOverlapping(range1, range2)) {
+    return;
+  }
+
+  items[inventoryBooking1.key].events.set(
+    inventoryBooking1.id,
+    inventoryBooking1,
+  );
+  items[inventoryBooking2.key].events.set(
+    inventoryBooking2.id,
+    inventoryBooking2,
+  );
+};
+
+const handleNumericItemCollisions = (
+  items: ReturnType<typeof createItemsObject>,
+  inventoryBooking1: Booking & NumericBookableItem,
+  inventoryBooking2: Booking & NumericBookableItem,
+) => {
+  const bookableItemLimits = useBoundStore.getState().bookableItems;
+
+  const range1 = {
+    start: inventoryBooking1.startDate,
+    end: inventoryBooking1.endDate,
+  };
+  const range2 = {
+    start: inventoryBooking2.startDate,
+    end: inventoryBooking2.endDate,
+  };
+
+  // if the first booking exceeds the limit, we add it to the events and return
+  if (inventoryBooking1.value > bookableItemLimits[inventoryBooking1.key]) {
+    items[inventoryBooking1.key].events.set(
+      inventoryBooking1.id,
+      inventoryBooking1,
+    );
+  }
+
+  if (inventoryBooking2.value > bookableItemLimits[inventoryBooking2.key]) {
+    items[inventoryBooking2.key].events.set(
+      inventoryBooking2.id,
+      inventoryBooking2,
+    );
+  }
+
+  if (!areIntervalsOverlapping(range1, range2)) {
+    return;
+  }
+
+  const itemStore = items[inventoryBooking1.key];
+
+  // get all bookings that are already in the itemStore and pick out those that overlap with the new booking
+  const overlappingBookings = Array.from(itemStore.events.values()).filter(
+    (booking) => {
+      const bookingRange = {
+        start: convertToDate(booking.startDate),
+        end: convertToDate(booking.endDate),
+      };
+      return areIntervalsOverlapping(range1, bookingRange);
+    },
+  );
+
+  // Sum up the values of the overlapping bookings
+  const overlappingSum = overlappingBookings.reduce(
+    (sum, booking) => sum + +booking.value,
+    +inventoryBooking1.value + +inventoryBooking2.value,
+  );
+
+  // If the sum of the bookable items exceeds the limit, add the bookings to the events
+  if (overlappingSum > bookableItemLimits[inventoryBooking1.key]) {
+    itemStore.sum = overlappingSum;
+    itemStore.events.set(inventoryBooking1.id, inventoryBooking1);
+    itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
+  }
+};
+
 const findOverlappingInventoryBookings = (
   items: ReturnType<typeof createItemsObject>,
   inventoryBooking1: Booking & BookableItem,
   inventoryBooking2: Booking & BookableItem,
 ) => {
-  if (inventoryBooking1.key !== inventoryBooking2.key) return;
-
-  const range1 = {
-    start: convertToDate(inventoryBooking1.startDate),
-    end: convertToDate(inventoryBooking1.endDate),
-  };
-  const range2 = {
-    start: convertToDate(inventoryBooking2.startDate),
-    end: convertToDate(inventoryBooking2.endDate),
-  };
-
-  if (isTextItem(inventoryBooking1)) {
-    const itemStore = items[inventoryBooking1.key];
-
-    itemStore.events.set(inventoryBooking1.id, inventoryBooking1);
+  if (isTextItem(inventoryBooking1) && isTextItem(inventoryBooking2)) {
+    handleTextItemCollisions(items, inventoryBooking1, inventoryBooking2);
+    return;
   }
-
-  if (isTextItem(inventoryBooking2)) {
-    const itemStore = items[inventoryBooking2.key];
-
-    itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
-  }
-
-  if (!areIntervalsOverlapping(range1, range2)) return;
 
   if (isNumericItem(inventoryBooking1) && isNumericItem(inventoryBooking2)) {
-    const bookableItemLimits = useBoundStore.getState().bookableItems;
-
-    const itemStore = items[inventoryBooking1.key];
-
-    itemStore.sum += +inventoryBooking1.value + +inventoryBooking2.value;
-
-    // If the sum of the bookable items exceeds the limit, add the bookings to the events
-    if (itemStore.sum > bookableItemLimits[inventoryBooking1.key]) {
-      itemStore.events.set(inventoryBooking1.id, inventoryBooking1);
-      itemStore.events.set(inventoryBooking2.id, inventoryBooking2);
-    }
+    handleNumericItemCollisions(items, inventoryBooking1, inventoryBooking2);
+    return;
   }
 };
 
@@ -105,6 +166,9 @@ export const createInventoryBookings = (events: Booking[]) =>
     (event?.bookableItems ?? []).map((bookableItem) => ({
       ...event,
       ...bookableItem,
+      startDate: convertToDate(bookableItem.startDate),
+      endDate: convertToDate(bookableItem.endDate),
+      bookableItems: [bookableItem],
     })),
   );
 
@@ -139,6 +203,9 @@ export const findInventoryCollisionsBetweenEvents = (
         // Skip comparing the item bookings of the same plan
         if (booking1.planId === booking2.planId) continue;
 
+        // Skip comparing items that are not the same
+        if (booking1.key !== booking2.key) continue;
+
         // Process overlapping inventory bookings
         findOverlappingInventoryBookings(items, booking1, booking2);
       }
@@ -154,6 +221,9 @@ export const findInventoryCollisionsBetweenEvents = (
         .map((event) => [event.id, event]), // Ensure uniqueness by event id
     ).values(),
   );
+
+  console.log(res);
+  console.log(items);
 
   return {
     collisions: res,
