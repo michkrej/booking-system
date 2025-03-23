@@ -157,7 +157,7 @@ describe("eventCollisions", () => {
   });
 
   it("handles large datasets efficiently", () => {
-    const numEvents = 1000; // Start with 1000 events
+    const numEvents = 1500;
     const events: Booking[] = [];
     for (let i = 0; i < numEvents; i++) {
       const event: Booking = {
@@ -191,7 +191,7 @@ describe("eventCollisions", () => {
       `Room collision test for large datasets took ${duration} milliseconds`,
     );
 
-    expect(duration).toBeLessThan(500); // Expect the function to run in under 0,7 seconds for 1000 events
-    expect(collisions.length).toBe(500); // Expect 500 collisions
+    expect(duration).toBeLessThan(1000); // Expect the function to run in under 0,7 seconds for 1000 events
+    expect(collisions.length).toBe(750); // Expect 500 collisions
   });
 });

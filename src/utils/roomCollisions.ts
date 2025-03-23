@@ -13,40 +13,23 @@ const eventsUseSameRooms = (event1: Booking, event2: Booking) => {
   return false;
 };
 
-const findCollisionBetweenEvents = (
-  collidingEvents: Map<string, Booking>,
-  event1: Booking,
-  event2: Booking,
-) => {
-  const range1 = {
-    start: convertToDate(event1.startDate),
-    end: convertToDate(event1.endDate),
-  };
-  const range2 = {
-    start: convertToDate(event2.startDate),
-    end: convertToDate(event2.endDate),
-  };
-
-  if (areIntervalsOverlapping(range1, range2)) {
-    // Check for room or corridor collisions
-    if (eventsUseSameRooms(event1, event2)) {
-      collidingEvents.set(event1.id, event1);
-      collidingEvents.set(event2.id, event2);
-    }
-  }
-
-  return collidingEvents;
-};
-
 export const findRoomCollisionsBetweenEvents = (events: Booking[]) => {
   const collidingEvents = new Map<string, Booking>();
 
-  // Only check each pair once and avoid checking the same event with itself
-  for (let i = 0; i < events.length; i++) {
-    const event1 = events[i];
+  const sortedEvents = events
+    .map((event) => ({
+      ...event,
+      startDate: convertToDate(event.startDate),
+      endDate: convertToDate(event.endDate),
+    }))
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
-    for (let j = i + 1; j < events.length; j++) {
-      const event2 = events[j];
+  // Only check each pair once and avoid checking the same event with itself
+  for (let i = 0; i < sortedEvents.length; i++) {
+    const event1 = sortedEvents[i];
+
+    for (let j = i + 1; j < sortedEvents.length; j++) {
+      const event2 = sortedEvents[j];
 
       if (!event1 || !event2) continue;
 
@@ -58,7 +41,25 @@ export const findRoomCollisionsBetweenEvents = (events: Booking[]) => {
         continue;
       }
 
-      findCollisionBetweenEvents(collidingEvents, event1, event2);
+      const range1 = {
+        start: event1.startDate,
+        end: event1.endDate,
+      };
+      const range2 = {
+        start: event2.startDate,
+        end: event2.endDate,
+      };
+
+      if (areIntervalsOverlapping(range1, range2)) {
+        // Check for room or corridor collisions
+        if (eventsUseSameRooms(event1, event2)) {
+          collidingEvents.set(event1.id, event1);
+          collidingEvents.set(event2.id, event2);
+        }
+      } else {
+        // Since the array is sorted, we can stop checking further if events don't overlap
+        break;
+      }
     }
   }
 
