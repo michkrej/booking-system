@@ -1,4 +1,4 @@
-import { Room } from "../../../utils/interfaces";
+import { type Room } from "../../../utils/interfaces";
 
 export default [
   {
@@ -40,5 +40,9 @@ export default [
   {
     name: "Campushallen",
     id: "d5950789-a6f9-4cd6-9cbf-6ec88c94bc52",
+  },
+  {
+    name: "VAL1",
+    id: "fd456f2e-d951-4cc5-af88-275469f4182e",
   },
 ] as Room[];
