@@ -367,8 +367,8 @@ describe("findInventoryCollisionsBetweenEvents", () => {
     expect(collisions.length).toBeGreaterThan(0); // Ensure some collisions are found
   });
 
-  it("Should run efficiently with 1000 bookings with varying inventory bookings", () => {
-    const NUM_EVENTS = 1000;
+  it("Should run efficiently with 2000 bookings with varying inventory bookings", () => {
+    const NUM_EVENTS = 2000;
     const startDate = new Date("2025-01-01");
     const endDate = new Date("2025-01-02");
 
@@ -402,8 +402,12 @@ describe("findInventoryCollisionsBetweenEvents", () => {
     );
     const end = performance.now();
 
+    console.log(
+      `Inventory collision test for ${NUM_EVENTS} events took ${(end - start).toFixed(2)}ms`,
+    );
+
     // Ensure the function completes within a reasonable time
-    expect(end - start).toBeLessThan(2000); // Adjust threshold if needed
+    expect(end - start).toBeLessThan(300); // Adjust threshold if needed
     expect(collisions.length).toBeGreaterThan(0); // Ensure some collisions are found
   });
 });
