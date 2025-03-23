@@ -144,7 +144,7 @@ export const InventorySchedule = () => {
           showTimeIndicator={false}
           selectedDate={currentDate}
           startHour="06:00"
-          endHour="23:00"
+          endHour="24:00"
           firstDayOfWeek={1}
           currentView={currentView}
           eventSettings={{
