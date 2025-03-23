@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const BookingSchema = z.object({
   title: z.string().min(1, "Bokningen måste ha ett namn"),
+  description: z.string().optional(),
   startDate: z.date(),
   endDate: z.date(),
   rooms: z

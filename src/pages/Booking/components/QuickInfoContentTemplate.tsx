@@ -6,6 +6,8 @@ import {
   CalendarIcon,
   ChevronRight,
   MapPinIcon,
+  NotebookIcon,
+  NotebookPenIcon,
   UserIcon,
 } from "lucide-react";
 import { useContext } from "react";
@@ -56,6 +58,11 @@ export const QuickInfoContentTemplate = (
         <MapPinIcon className="mr-2 h-4 w-4" />
         {roomNames}
       </div>
+      <div className="grid grid-cols-[20px_auto] text-sm">
+        <NotebookPenIcon className="mr-2 h-4 w-4" />
+        {props.description ?? ""}
+      </div>
+
       {bookableItems.length > 0 && (
         <div className="flex flex-col gap-y-1">
           <Label className="font-semibold">Material</Label>

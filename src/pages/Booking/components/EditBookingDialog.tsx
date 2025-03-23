@@ -109,6 +109,7 @@ export const EditBookingDialog = ({
 
     form.reset({
       title: data.title,
+      description: data.description,
       startDate: data.startDate,
       endDate: data.endDate,
       rooms: data.roomId.map((roomId) => ({
@@ -132,6 +133,7 @@ export const EditBookingDialog = ({
     const bookingData = {
       id: data.id,
       title: values.title,
+      description: values.description,
       startDate: values.startDate,
       endDate: values.endDate,
       alcohol: values.alcohol,
@@ -248,6 +250,24 @@ export const EditBookingDialog = ({
                         id="newPlanName"
                         type="text"
                         placeholder="Ange aktivitet"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="col-span-full space-y-0">
+                    <FormLabel>Beskrivning</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="description"
+                        type="text"
+                        placeholder="Ange beskrivning"
                         {...field}
                       />
                     </FormControl>

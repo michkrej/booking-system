@@ -131,6 +131,7 @@ export const NewBookingDialog = ({
     const bookingData = {
       id: uuidv4(),
       title: values.title,
+      description: values.description,
       startDate: values.startDate,
       endDate: values.endDate,
       alcohol: values.alcohol,
@@ -143,7 +144,7 @@ export const NewBookingDialog = ({
       link: values.link,
       createdAt: new Date(),
       updatedAt: new Date(),
-      bookableItems: values?.bookableItems ?? [],
+      bookableItems: values?.bookableItems,
     } satisfies Booking;
 
     await addBookingToPlanMutation.mutateAsync(
@@ -253,6 +254,24 @@ export const NewBookingDialog = ({
                         id="newPlanName"
                         type="text"
                         placeholder="Ange aktivitet"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="col-span-full space-y-0">
+                    <FormLabel>Beskrivning</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="description"
+                        type="text"
+                        placeholder="Ange beskrivning"
                         {...field}
                       />
                     </FormControl>
