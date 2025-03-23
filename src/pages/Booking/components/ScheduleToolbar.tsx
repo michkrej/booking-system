@@ -129,7 +129,7 @@ export const ScheduleToolbar = ({
       {!hideDropdowns ? (
         <div className="flex flex-1 gap-x-4">
           <Select value={chosenCampus} onValueChange={handleCampusChange}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-[100px]">
               <SelectValue placeholder="Välj campus" />
             </SelectTrigger>
             <SelectContent>
@@ -142,7 +142,7 @@ export const ScheduleToolbar = ({
               value={building?.name ?? ""}
               onValueChange={handleLocationChange}
             >
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-[230px]">
                 <SelectValue placeholder="Välj byggnad" />
               </SelectTrigger>
               <SelectContent>
