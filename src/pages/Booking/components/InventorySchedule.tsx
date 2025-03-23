@@ -15,13 +15,18 @@ import { committees } from "@/data/committees";
 import { useBookingState } from "@/hooks/useBookingState";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
 import { convertToDate } from "@/lib/utils";
-import { type Booking } from "@/utils/interfaces";
+import {
+  type BookableItem,
+  type NumericBookableKeys,
+  type Booking,
+} from "@/utils/interfaces";
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 import { ScheduleContext } from "./Schedule";
 import { ScheduleToolbar } from "./ScheduleToolbar";
 
 import "./localization";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
+import { useBoundStore } from "@/state/store";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -38,15 +43,16 @@ export const InventorySchedule = () => {
     activePlans,
   } = useBookingState();
   const { currentDate } = useCurrentDate();
+  const bookableItemLimits = useBoundStore((state) => state.bookableItems);
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
   const itemBookings = useMemo(() => {
-    return bookings.flatMap((booking) =>
+    return (bookings ?? []).flatMap((booking) =>
       (booking?.bookableItems ?? []).map((bookableItem) => ({
         ...booking,
         id: `${booking.id}-${bookableItem.key}`,
-        title: `${bookableItem.value} - ${booking.title}`,
+        title: `${bookableItem.value} - Event: ${booking.title}`,
         bookingTitle: booking.title,
         ...bookableItem,
         startDate: convertToDate(bookableItem.startDate),
@@ -88,6 +94,21 @@ export const InventorySchedule = () => {
       return;
     }
   };
+
+  const bookableItemsWithLimits = useMemo(
+    () =>
+      BOOKABLE_ITEM_OPTIONS.map((item) => {
+        const key = item.key;
+        if (key in bookableItemLimits) {
+          return {
+            ...item,
+            capacity: bookableItemLimits[key as NumericBookableKeys],
+          };
+        }
+        return item;
+      }),
+    [bookableItemLimits],
+  );
 
   return (
     <ScheduleContext.Provider
@@ -149,6 +170,7 @@ export const InventorySchedule = () => {
             header: QuickInfoHeader,
             content: QuickInfoContentInventoryTemplate,
           }}
+          resourceHeaderTemplate={ResourceHeaderTemplate}
         >
           <ResourcesDirective>
             <ResourceDirective
@@ -156,7 +178,7 @@ export const InventorySchedule = () => {
               title="Inventarie"
               name="bookableItems"
               allowMultiple={true}
-              dataSource={BOOKABLE_ITEM_OPTIONS}
+              dataSource={bookableItemsWithLimits}
               textField="value"
               idField="key"
             />
@@ -173,5 +195,21 @@ export const InventorySchedule = () => {
         </ScheduleComponent>
       </div>
     </ScheduleContext.Provider>
+  );
+};
+
+const ResourceHeaderTemplate = (props: {
+  resourceData: Booking & BookableItem & { capacity?: number };
+}) => {
+  const capacity = props.resourceData.capacity;
+  return (
+    <div className="template-wrap">
+      <div className="room-name text-base font-semibold">
+        {props.resourceData.value}
+      </div>
+      <div className="room-type">
+        {capacity ? `Maxkapacitet: ${capacity} st` : ""}
+      </div>
+    </div>
   );
 };

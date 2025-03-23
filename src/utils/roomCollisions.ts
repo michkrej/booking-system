@@ -1,5 +1,6 @@
 import { areIntervalsOverlapping } from "date-fns";
 import { type Booking } from "./interfaces";
+import { convertToDate } from "@/lib/utils";
 
 const eventsUseSameRooms = (event1: Booking, event2: Booking) => {
   const set1 = new Set(event1.roomId);
@@ -17,8 +18,14 @@ const findCollisionBetweenEvents = (
   event1: Booking,
   event2: Booking,
 ) => {
-  const range1 = { start: event1.startDate, end: event1.endDate };
-  const range2 = { start: event2.startDate, end: event2.endDate };
+  const range1 = {
+    start: convertToDate(event1.startDate),
+    end: convertToDate(event1.endDate),
+  };
+  const range2 = {
+    start: convertToDate(event2.startDate),
+    end: convertToDate(event2.endDate),
+  };
 
   if (areIntervalsOverlapping(range1, range2)) {
     // Check for room or corridor collisions
@@ -43,7 +50,7 @@ export const findRoomCollisionsBetweenEvents = (events: Booking[]) => {
 
       if (!event1 || !event2) continue;
 
-      // Skip if events have the same planId or locationId
+      // Skip comparing the same event with itself or events that are not happening at the same location
       if (
         event1.planId === event2.planId ||
         event1.locationId !== event2.locationId

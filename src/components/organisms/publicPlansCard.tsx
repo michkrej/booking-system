@@ -88,7 +88,8 @@ export const PublicPlansCard = () => {
     const events = plans.flatMap((plan) => plan.events);
     const eventCollisions = findRoomCollisionsBetweenEvents(events);
 
-    const inventoryCollisions = findInventoryCollisionsBetweenEvents(events);
+    const { collisions: inventoryCollisions } =
+      findInventoryCollisionsBetweenEvents(events);
 
     if (eventCollisions.length === 0 && inventoryCollisions.length === 0) {
       toast.warning(

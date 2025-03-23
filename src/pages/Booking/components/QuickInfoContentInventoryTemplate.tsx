@@ -37,7 +37,7 @@ export const QuickInfoContentInventoryTemplate = (
     <div className="mt-3 flex flex-col gap-y-1 text-base">
       <div className="grid grid-cols-[20px_auto] items-center">
         <CalendarIcon className="mr-2 h-4 w-4" />
-        {props.bookingTitle}
+        Event: {props.bookingTitle}
       </div>
       <div className="grid grid-cols-[20px_auto] items-center">
         <CalendarClockIcon className="mr-2 h-4 w-4" />

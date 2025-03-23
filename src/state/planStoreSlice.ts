@@ -130,7 +130,7 @@ const createPlanStoreSlice: StateCreator<
       let bookings = updatedPlans.flatMap((plan) => plan.events);
       if (isCollisionView) {
         bookings = isInventoryView
-          ? findInventoryCollisionsBetweenEvents(bookings)
+          ? findInventoryCollisionsBetweenEvents(bookings).collisions
           : findRoomCollisionsBetweenEvents(bookings);
       }
 
