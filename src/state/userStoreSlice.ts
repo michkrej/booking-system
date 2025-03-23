@@ -4,11 +4,13 @@ import { type PlanStoreSlice } from "./planStoreSlice";
 
 interface UserStoreSlice {
   user: User | null;
-  versionUpdateWarningClosed: boolean;
+  versionUpdateWarningClosed: string;
 
   userUpdated: (user: User | null) => void;
   closeVersionUpdateWarning: () => void;
 }
+
+export const CURRENT_APP_VERSION = "v3.1.0";
 
 const createUserStoreSlice: StateCreator<
   UserStoreSlice & PlanStoreSlice,
@@ -17,10 +19,11 @@ const createUserStoreSlice: StateCreator<
   UserStoreSlice
 > = (set) => ({
   user: null,
-  versionUpdateWarningClosed: false,
+  versionUpdateWarningClosed: CURRENT_APP_VERSION,
 
   userUpdated: (user) => set({ user }),
-  closeVersionUpdateWarning: () => set({ versionUpdateWarningClosed: true }),
+  closeVersionUpdateWarning: () =>
+    set({ versionUpdateWarningClosed: CURRENT_APP_VERSION }),
 });
 
 export { createUserStoreSlice };
