@@ -58,7 +58,7 @@ const getAdminSettings = async () => {
         Consensus: convertToDate(settings.mottagningStart.Consensus),
         StuFF: convertToDate(settings.mottagningStart.StuFF),
         LinTek: convertToDate(settings.mottagningStart.LinTek),
-        Övrigt: new Date(), // this field is not used in the app, I'm too lazy to remove it
+        Övrigt: convertToDate(settings.mottagningStart.Övrigt),
       },
     } as AdminSettings;
   } else {
