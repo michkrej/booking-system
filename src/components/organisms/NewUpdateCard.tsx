@@ -31,6 +31,7 @@ const Changelog = () => {
       <ul className="ml-4 list-disc">
         <li>VAL1-lokalen har lagt still under "Övriga områden på campus"</li>
         <li>KEYH-lokalen har lagt till under "Key-huset"</li>
+        <li>TEMCAS och TEM21 har lagt till under "TEMA-huset"</li>
       </ul>
     </div>
   );

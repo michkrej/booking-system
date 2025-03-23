@@ -7,6 +7,7 @@ import I from "./rooms/I";
 import Key from "./rooms/Key";
 import Other from "./rooms/Other";
 import Studenthuset from "./rooms/Studenthuset";
+import TEMA from "./rooms/TEMA";
 
 export const locationsValla = {
   "C-huset": {
@@ -49,6 +50,11 @@ export const locationsValla = {
     id: "5586e0a9-91ea-4539-b6f8-19edc139e805",
     name: "B-huset",
     rooms: B,
+  },
+  "TEMA-huset": {
+    id: "0b86fb4c-94b6-47f3-9cec-a51883594e5a",
+    name: "TEMA-huset",
+    rooms: TEMA,
   },
   "Övriga områden på campus": {
     id: "3b651c71-3202-47e8-8b94-d5ba7175b1d0",
