@@ -10,12 +10,8 @@ const Changelog = () => {
     <div>
       <span className="font-semibold">Features</span>
       <ul className="ml-4 list-disc">
+        <li>Mottagningsansvariga kan låsa planeringar per kår.</li>
         <li>Bokningar har ett nytt fält för beskrivning</li>
-        <li>
-          Inventarier kan nu ha ett eget start och slutddatum (eftersom t.ex.
-          bänkset oftast måste bokas länge än själva lokalen/omårdet)
-        </li>
-        <li>Krockar hittas nu på både lokaler och inventarier</li>
         <li>
           Se inventarie-bokningar i kalender-vyn genom att klicka på{" "}
           <BaggageClaimIcon className="inline-block" /> i kalender-toolbaren
