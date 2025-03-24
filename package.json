@@ -1,6 +1,6 @@
 {
   "name": "booking-system",
-  "version": "3.0.0",
+  "version": "3.2.0",
   "type": "module",
   "private": true,
   "dependencies": {
@@ -40,7 +40,7 @@
     "react-hook-form": "^7.51.5",
     "react-router-dom": "^6.6.2",
     "sonner": "^1.4.41",
-    "tailwind-merge": "^2.3.0",
+    "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.0",
     "zod": "^3.24.2",
@@ -76,9 +76,6 @@
     "@redux-devtools/extension": "^3.3.0",
     "@tailwindcss/vite": "^4.0.15",
     "@tanstack/eslint-plugin-query": "^5.66.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.2",
     "@types/react": "^18.3.3",
