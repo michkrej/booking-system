@@ -21,7 +21,7 @@ import {
   type Booking,
 } from "@/utils/interfaces";
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
-import { ScheduleContext } from "./Schedule";
+import { ScheduleContext } from "./ScheduleContext";
 import { ScheduleToolbar } from "./ScheduleToolbar";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
 import { useBoundStore } from "@/state/store";

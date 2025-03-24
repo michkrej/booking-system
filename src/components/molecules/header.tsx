@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
@@ -41,6 +40,7 @@ export const Header = () => {
           href={TF_URL}
           className="text-muted-foreground transition-colors hover:text-foreground"
           target="_blank"
+          rel="noreferrer"
         >
           Karta Trädgårdsföreningen
         </a>

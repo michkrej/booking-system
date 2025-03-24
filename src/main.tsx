@@ -8,7 +8,6 @@ import "@fontsource-variable/inter";
 import "./styles/global.css";
 import "./styles/scheduler.css";
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 registerLicense(import.meta.env.VITE_APP_SYNCFUSION_KEY);
 
 const container = document.getElementById("root");

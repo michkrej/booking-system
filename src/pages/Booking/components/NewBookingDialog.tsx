@@ -21,17 +21,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
-import { fi, sv } from "date-fns/locale";
-import { ScheduleContext } from "./Schedule";
+import { sv } from "date-fns/locale";
+import { ScheduleContext } from "./ScheduleContext";
 import { committees } from "@/data/committees";
 import {
   type NewBooking,
@@ -58,7 +52,6 @@ type EditorTemplateProps = {
   onOpenChange: () => void;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const NewBookingDialog = ({
   data,
   open,

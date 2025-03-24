@@ -1,7 +1,6 @@
 import { type Plan } from "@/utils/interfaces";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Globe, GlobeLock, Loader } from "lucide-react";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { Button } from "../ui/button";
 import { useEditPlan } from "@/hooks/useEditPlan";
 import { useAdminSettings } from "@/hooks/useAdminSettings";

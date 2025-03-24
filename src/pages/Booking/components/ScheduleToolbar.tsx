@@ -8,7 +8,7 @@ import {
   ChevronsLeft,
   TrashIcon,
 } from "lucide-react";
-import { ScheduleContext } from "./Schedule";
+import { ScheduleContext } from "./ScheduleContext";
 import { useContext, useMemo } from "react";
 import { sv } from "date-fns/locale";
 import {

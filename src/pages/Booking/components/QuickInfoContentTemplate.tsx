@@ -6,12 +6,11 @@ import {
   CalendarIcon,
   ChevronRight,
   MapPinIcon,
-  NotebookIcon,
   NotebookPenIcon,
   UserIcon,
 } from "lucide-react";
 import { useContext } from "react";
-import { ScheduleContext } from "./Schedule";
+import { ScheduleContext } from "./ScheduleContext";
 import { differenceInDays, format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";

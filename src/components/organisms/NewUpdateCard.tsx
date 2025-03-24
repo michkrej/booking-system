@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useBoundStore } from "@/state/store";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { siteConfig } from "@/config/site";

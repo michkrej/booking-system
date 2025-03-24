@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { v4 as uuidv4 } from "uuid";
 import {
   Form,
   FormControl,
@@ -25,7 +24,6 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { sv } from "date-fns/locale";
-import { ScheduleContext } from "./Schedule";
 import { committees } from "@/data/committees";
 import { type Booking, type BookableItem } from "@/utils/interfaces";
 import { useParams } from "react-router-dom";
@@ -42,6 +40,7 @@ import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { BookingSchema } from "./schema";
 import { convertToDate } from "@/lib/utils";
+import { ScheduleContext } from "./ScheduleContext";
 
 type EditorTemplateProps = {
   data?: Booking;
@@ -49,7 +48,6 @@ type EditorTemplateProps = {
   onOpenChange: () => void;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const EditBookingDialog = ({
   data,
   open,

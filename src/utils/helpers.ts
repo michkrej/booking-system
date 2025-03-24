@@ -1,7 +1,7 @@
 import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
 import { committees, committeesConsensus, kårer } from "../data/committees";
 import { type Kår, type Booking, type Plan } from "./interfaces";
-import { format } from "date-fns";
+import { differenceInMilliseconds, format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
 import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
@@ -104,4 +104,27 @@ export const getActiveYear = () => {
     return currentYear + 1;
   }
   return currentYear;
+};
+
+export const getWeeksLeftToNolleP = (startDate: Date) => {
+  const now = new Date();
+  const diff = differenceInMilliseconds(startDate, now);
+  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7));
+  return weeks;
+};
+
+export const getTotalWeeksToNolleP = (startDate: Date) => {
+  const endDate = new Date(`${new Date().getFullYear() - 1}-08-31`);
+  const diff = differenceInMilliseconds(startDate, endDate);
+  const weeks = Math.round(diff / (1000 * 60 * 60 * 24 * 7));
+  return weeks;
+};
+
+export const getPercentageProgress = (startDate: Date) => {
+  const weeksToNolleP = getWeeksLeftToNolleP(startDate);
+  const totalWeeksToNolleP = getTotalWeeksToNolleP(startDate);
+  const progress = Math.round(
+    ((totalWeeksToNolleP - weeksToNolleP) / totalWeeksToNolleP) * 100,
+  );
+  return progress;
 };

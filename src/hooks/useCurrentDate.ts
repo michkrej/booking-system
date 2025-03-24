@@ -1,5 +1,4 @@
 import { useBoundStore } from "@/state/store";
-import { type Booking } from "@/utils/interfaces";
 import { useStoreUser } from "./useStoreUser";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { useAdminSettings } from "./useAdminSettings";
@@ -11,7 +10,7 @@ export const useCurrentDate = () => {
   const { user } = useStoreUser();
   const planYear = useBoundStore((state) => state.planYear);
 
-  const resetCurrentDate = (bookings?: Booking[]) => {
+  const resetCurrentDate = () => {
     if (planYear === CURRENT_YEAR) {
       updatedCurrentDate(mottagningStart[user.kår]);
     } else {

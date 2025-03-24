@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   ScheduleComponent,
   Inject,
@@ -12,18 +12,12 @@ import {
   TimelineMonth,
   type ActionEventArgs,
 } from "@syncfusion/ej2-react-schedule";
-import {
-  type Booking,
-  type Room,
-  type Location,
-  type NewBooking,
-  type Plan,
-} from "@/utils/interfaces";
+import { type Booking, type NewBooking } from "@/utils/interfaces";
 import { campusLocationsMap } from "@/data/locationsData";
 import { toast } from "sonner";
 import { EditBookingDialog } from "./EditBookingDialog";
 import { committees } from "@/data/committees";
-import { ScheduleToolbar, type View } from "./ScheduleToolbar";
+import { ScheduleToolbar } from "./ScheduleToolbar";
 import { useBookingState } from "@/hooks/useBookingState";
 
 import "./localization";
@@ -34,25 +28,10 @@ import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
 import { NewBookingDialog } from "./NewBookingDialog";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { ScheduleContext } from "./ScheduleContext";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
-
-type ScheduleContextType = {
-  schedule: React.RefObject<ScheduleComponent>;
-  currentView: View;
-  chosenCampus: "US" | "Valla";
-  building: Location | undefined;
-  activePlans: Plan[];
-  setCurrentView: (view: View) => void;
-  setChosenCampus: (campus: "US" | "Valla") => void;
-  setBuilding: (building: Location | undefined) => void;
-  locations: Location[];
-  rooms: Room[];
-};
-export const ScheduleContext = createContext<ScheduleContextType>(
-  {} as ScheduleContextType,
-);
 
 export const Schedule = () => {
   const {

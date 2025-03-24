@@ -81,60 +81,52 @@ const loginWithEmailAndPassword = async (email: string, password: string) => {
 const googleProvider = new GoogleAuthProvider();
 
 const signInWithGoogle = async () => {
-  try {
-    const { user } = await signInWithPopup(auth, googleProvider);
-    const userDetailsSnap = await getDoc(doc(db, "users", user.uid));
+  const { user } = await signInWithPopup(auth, googleProvider);
+  const userDetailsSnap = await getDoc(doc(db, "users", user.uid));
 
-    if (!userDetailsSnap.exists()) {
-      throw Error("Du måste skapa ett konto först");
-    }
-
-    if (!user.email) {
-      throw Error("Missing email");
-    }
-
-    const userDetails = userDetailsSnap.data() as UserDetails;
-    return {
-      id: user.uid,
-      displayName: user.displayName ?? null,
-      email: user.email,
-      emailVerified: user.emailVerified,
-      committeeId: userDetails.committeeId,
-      admin: userDetails.admin ?? false,
-    } satisfies User;
-  } catch (error) {
-    throw error;
+  if (!userDetailsSnap.exists()) {
+    throw Error("Du måste skapa ett konto först");
   }
+
+  if (!user.email) {
+    throw Error("Missing email");
+  }
+
+  const userDetails = userDetailsSnap.data() as UserDetails;
+  return {
+    id: user.uid,
+    displayName: user.displayName ?? null,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    committeeId: userDetails.committeeId,
+    admin: userDetails.admin ?? false,
+  } satisfies User;
 };
 
 const signUpWithGoogle = async (committeeId: string) => {
-  try {
-    const { user } = await signInWithPopup(auth, googleProvider);
+  const { user } = await signInWithPopup(auth, googleProvider);
 
-    if (!user.email) {
-      throw Error("Missing email");
-    }
-
-    const userDetailsDoc = {
-      committeeId,
-      admin: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    await setDoc(doc(db, "users", user.uid), userDetailsDoc);
-
-    return {
-      id: user.uid,
-      displayName: user.displayName ?? null,
-      email: user.email,
-      emailVerified: user.emailVerified,
-      committeeId: userDetailsDoc.committeeId as User["committeeId"],
-      admin: userDetailsDoc.admin ?? false,
-    } satisfies User;
-  } catch (error) {
-    throw error;
+  if (!user.email) {
+    throw Error("Missing email");
   }
+
+  const userDetailsDoc = {
+    committeeId,
+    admin: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  await setDoc(doc(db, "users", user.uid), userDetailsDoc);
+
+  return {
+    id: user.uid,
+    displayName: user.displayName ?? null,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    committeeId: userDetailsDoc.committeeId as User["committeeId"],
+    admin: userDetailsDoc.admin ?? false,
+  } satisfies User;
 };
 
 const signOut = async () => {

@@ -17,7 +17,6 @@ import {
   type Booking,
   type EditablePlanDetails,
   type Plan,
-  type User,
 } from "@/utils/interfaces";
 import { db } from "./config";
 import { convertToDate } from "@/lib/utils";
