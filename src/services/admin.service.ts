@@ -6,10 +6,10 @@ import { convertToDate } from "@/lib/utils";
 
 const KEY = "adminValues";
 
-const lockAndUnlockPlans = async (newValue: boolean) => {
+const lockAndUnlockPlans = async (newValue: boolean, kår: Kår) => {
   try {
     await updateDoc(doc(db, "adminSettings", KEY), {
-      lockPlans: newValue,
+      [`planEditLocked.${kår}`]: newValue,
     });
     return newValue;
   } catch (e) {

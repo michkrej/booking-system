@@ -32,6 +32,7 @@ import {
 import { Button } from "../ui/button";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { useEditPlan } from "@/hooks/useEditPlan";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 
 const formSchema = z.object({
   newPlanName: z.string().min(1, "Du måste ange ett nytt namn för planeringen"),
@@ -44,6 +45,7 @@ type ChangePlanNameModalProps = {
 export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
   const { updatePlanName } = useEditPlan();
   const [open, setOpen] = useState(false);
+  const { isPlanEditLocked } = useAdminSettings();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,18 +66,22 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
     );
   }
 
-  const isCurrentYear = plan.year >= CURRENT_YEAR;
+  const isCurrentYear = plan.year === CURRENT_YEAR;
+  const isDisabled = isCurrentYear || isPlanEditLocked;
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen((prev) => !prev)}>
-      <DialogTrigger disabled={!isCurrentYear}>
+      <DialogTrigger disabled={isDisabled}>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger
+            asChild
+            className={isDisabled ? "pointer-events-none opacity-50" : ""}
+          >
             <Button
               size={"icon"}
               variant="ghost"
               className="rounded-full p-2 text-primary/60 hover:text-primary"
-              disabled={!isCurrentYear}
+              disabled={isDisabled}
               asChild
             >
               <div>

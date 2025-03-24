@@ -16,6 +16,7 @@ import { LoadingButton } from "./loadingButton";
 import { useState } from "react";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { useEditPlan } from "@/hooks/useEditPlan";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 
 type PlanDeleteButtonProps = {
   plan: Plan;
@@ -24,6 +25,7 @@ type PlanDeleteButtonProps = {
 export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { deletePlan } = useEditPlan();
+  const { isPlanEditLocked } = useAdminSettings();
 
   const handleDelete = async () => {
     deletePlan.mutate(plan.id, {
@@ -37,17 +39,21 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
   };
 
   const isCurrentYear = plan.year === CURRENT_YEAR;
+  const isDisabled = isCurrentYear || isPlanEditLocked;
 
   return (
     <Dialog onOpenChange={() => setIsOpen((prev) => !prev)} open={isOpen}>
-      <DialogTrigger disabled={!isCurrentYear}>
+      <DialogTrigger disabled={isDisabled}>
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger
+            asChild
+            className={isDisabled ? "pointer-events-none opacity-50" : ""}
+          >
             <Button
               size={"icon"}
               variant="ghost"
               className="rounded-full text-primary/60 hover:text-primary"
-              disabled={!isCurrentYear}
+              disabled={isDisabled}
               asChild
             >
               <Trash className="p-2" />

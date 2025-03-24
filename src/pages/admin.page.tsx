@@ -1,4 +1,3 @@
-import { DatePicker } from "@/components/ui/date-picker";
 import { Layout } from "@/components/molecules/layout";
 import { LoadingButton } from "@/components/molecules/loadingButton";
 import {
@@ -8,12 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { BOOKABLE_ITEM_OPTIONS, CURRENT_YEAR } from "@/utils/CONSTANTS";
-import { useMemo, useState } from "react";
+import { kårer } from "@/data/committees";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { BOOKABLE_ITEM_OPTIONS, CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { type Kår } from "@/utils/interfaces";
+import { useMemo, useState } from "react";
 
 export const AdminPage = () => {
   return (
@@ -30,7 +32,7 @@ export const AdminPage = () => {
         </Card>
         <BookableItemsCard />
         <MottagningStartDateCard />
-        {/* <LockPlanEditingCard /> */}
+        <LockPlanEditingCard />
       </div>
     </Layout>
   );
@@ -103,14 +105,21 @@ const LockPlanEditingCard = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-2">
-        <div className="flex items-center gap-2">
-          <p>{planEditLocked ? "Lås upp redigering" : "Lås redigering"}</p>
-          <Switch
-            checked={planEditLocked}
-            onCheckedChange={lockPlans.mutate}
-            className="h-6 w-10 rounded-full bg-gray-200"
-          />
-        </div>
+        {(Object.keys(kårer) as Kår[]).map((kår) => {
+          return (
+            <div className="flex items-center gap-2" key={kår}>
+              <p className="w-[100px]">{kår}</p>
+              <Switch
+                checked={planEditLocked[kår]}
+                onCheckedChange={() =>
+                  lockPlans.mutate({ kår, newValue: !planEditLocked[kår] })
+                }
+                className="h-6 w-10 rounded-full bg-gray-200"
+              />
+              <p>{planEditLocked ? "Lås upp redigering" : "Lås redigering"}</p>
+            </div>
+          );
+        })}
       </CardContent>
     </Card>
   );

@@ -1,4 +1,4 @@
-import { createContext, useMemo, useRef } from "react";
+import { createContext, useEffect, useMemo, useRef } from "react";
 import {
   ScheduleComponent,
   Inject,
@@ -33,6 +33,7 @@ import { corridorsC } from "@/data/campusValla/rooms";
 import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
 import { NewBookingDialog } from "./NewBookingDialog";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -79,6 +80,7 @@ export const Schedule = () => {
   const { updateBookingMutation, deleteBookingMutation } = useBookingActions();
   const { id = "" } = useParams();
   const { currentDate } = useCurrentDate();
+  const { isPlanEditLocked } = useAdminSettings();
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
@@ -205,7 +207,7 @@ export const Schedule = () => {
         return;
       }
 
-      if (plan.userId !== user.id /* && !user.admin */) {
+      if (plan.userId !== user.id) {
         toast.error("Du kan inte uppdatera andra fadderiers bokningar");
         args.cancel = true;
         return;
@@ -221,6 +223,20 @@ export const Schedule = () => {
       );
     }
   };
+
+  useEffect(() => {
+    if (!isPlanEditLocked) return;
+
+    toast.warning("Redigering av bokningar är låst", {
+      id: "plan-edit-locked",
+      position: "bottom-left",
+      duration: Infinity,
+      action: {
+        label: "OK",
+        onClick: () => toast.dismiss("plan-edit-locked"),
+      },
+    });
+  }, []);
 
   return (
     <ScheduleContext.Provider
@@ -240,6 +256,7 @@ export const Schedule = () => {
       <div className="h-[calc(100vh-121px)]">
         <ScheduleToolbar />
         <ScheduleComponent
+          readonly={isPlanEditLocked}
           locale="sv"
           ref={scheduleObj}
           width="100%"

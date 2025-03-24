@@ -1,5 +1,5 @@
 import {
-  NumericBookableKeys,
+  type NumericBookableKeys,
   type AdminSettings,
   type Kår,
 } from "@/utils/interfaces";
@@ -17,11 +17,11 @@ export const DEFAULT_ITEMS: Record<NumericBookableKeys, number> = {
 };
 
 interface AdminStoreSlice {
-  planEditLocked: boolean;
+  planEditLocked: Record<Kår, boolean>;
   mottagningStart: Record<Kår, Date>;
   bookableItems: Record<NumericBookableKeys, number>;
 
-  updatedPlanEditLock: (value: boolean) => void;
+  updatedPlanEditLock: (value: boolean, kår: Kår) => void;
   updatedMottagningStartDateForKår: (date: Date, kår: Kår) => void;
   updatedBookableItems: (items: Record<string, number>) => void;
   loadedAdminSettings: (settings: AdminSettings) => void;
@@ -43,8 +43,13 @@ const createAdminStoreSlice: StateCreator<
   [],
   [],
   AdminStoreSlice
-> = (set, get) => ({
-  planEditLocked: false,
+> = (set) => ({
+  planEditLocked: {
+    Consensus: false,
+    StuFF: false,
+    LinTek: false,
+    Övrigt: false,
+  },
   mottagningStart: {
     Consensus: getMottagningStartWeek(),
     StuFF: getMottagningStartWeek(),
@@ -53,14 +58,20 @@ const createAdminStoreSlice: StateCreator<
   },
   bookableItems: DEFAULT_ITEMS,
 
-  updatedPlanEditLock: (value) => set(() => ({ planEditLocked: value })),
+  updatedPlanEditLock: (value, kår) =>
+    set((prev) => ({
+      planEditLocked: {
+        ...prev.planEditLocked,
+        [kår]: value,
+      },
+    })),
   updatedMottagningStartDateForKår: (date, kår) => {
-    set({
+    set((prev) => ({
       mottagningStart: {
-        ...get().mottagningStart,
+        ...prev.mottagningStart,
         [kår]: date,
       },
-    });
+    }));
   },
   updatedBookableItems: (items) => set(() => ({ bookableItems: items })),
   loadedAdminSettings: (settings) => set(() => settings),

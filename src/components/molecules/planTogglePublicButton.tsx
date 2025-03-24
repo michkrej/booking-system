@@ -4,6 +4,7 @@ import { Globe, GlobeLock, Loader } from "lucide-react";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { Button } from "../ui/button";
 import { useEditPlan } from "@/hooks/useEditPlan";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 
 type PlanTogglePublicButtonProps = {
   plan: Plan;
@@ -19,20 +20,22 @@ export const PlanTogglePublicButton = ({
   plan,
 }: PlanTogglePublicButtonProps) => {
   const { togglePublicPlan } = useEditPlan();
+  const { isPlanEditLocked } = useAdminSettings();
 
   const isCurrentYear = plan.year === CURRENT_YEAR;
+  const isDisabled = isCurrentYear || isPlanEditLocked;
 
   return (
     <Tooltip>
       <TooltipTrigger
-        disabled={!isCurrentYear}
-        className={!isCurrentYear ? "pointer-events-none" : ""}
+        disabled={isDisabled}
+        className={isDisabled ? "pointer-events-none opacity-50" : ""}
       >
         <Button
           size={"icon"}
           variant="ghost"
           className="rounded-full text-primary/60 hover:text-primary"
-          disabled={!isCurrentYear}
+          disabled={isDisabled}
           onClick={() => togglePublicPlan.mutate(plan)}
           asChild
         >

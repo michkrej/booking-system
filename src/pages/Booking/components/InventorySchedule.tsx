@@ -23,10 +23,11 @@ import {
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 import { ScheduleContext } from "./Schedule";
 import { ScheduleToolbar } from "./ScheduleToolbar";
-
-import "./localization";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
 import { useBoundStore } from "@/state/store";
+import { useAdminSettings } from "@/hooks/useAdminSettings";
+
+import "./localization";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template
@@ -44,6 +45,7 @@ export const InventorySchedule = () => {
   } = useBookingState();
   const { currentDate } = useCurrentDate();
   const bookableItemLimits = useBoundStore((state) => state.bookableItems);
+  const { isPlanEditLocked } = useAdminSettings();
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
@@ -128,6 +130,7 @@ export const InventorySchedule = () => {
       <div className="h-[calc(100vh-121px)]">
         <ScheduleToolbar hideDropdowns />
         <ScheduleComponent
+          readonly={isPlanEditLocked}
           locale="sv"
           ref={scheduleObj}
           width="100%"

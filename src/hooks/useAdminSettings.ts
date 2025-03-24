@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { adminService } from "@/services";
 import { type Kår } from "@/utils/interfaces";
 import { useStoreAdminSettings } from "./useStoreAdminSettings";
+import { useStoreUser } from "./useStoreUser";
 
 export const useAdminSettings = () => {
   const {
@@ -15,6 +16,7 @@ export const useAdminSettings = () => {
     updatedPlanEditLock,
     loadedAdminSettings,
   } = useStoreAdminSettings();
+  const { user } = useStoreUser();
 
   useQuery({
     queryKey: ["adminSettings"],
@@ -23,16 +25,17 @@ export const useAdminSettings = () => {
       loadedAdminSettings(settings);
       return settings;
     },
-    staleTime: Infinity,
+    gcTime: 1000 * 60,
+    placeholderData: (prev) => prev,
   });
 
   const lockPlans = useMutation({
-    mutationFn: (newValue: boolean) =>
-      adminService.lockAndUnlockPlans(newValue),
-    onSuccess: (value) => {
-      updatedPlanEditLock(value);
+    mutationFn: ({ kår, newValue }: { kår: Kår; newValue: boolean }) =>
+      adminService.lockAndUnlockPlans(newValue, kår),
+    onSuccess: (_, { kår, newValue }) => {
+      updatedPlanEditLock(newValue, kår);
       toast.success(
-        value
+        newValue
           ? "Låst redigering av bokningar"
           : "Låst upp redigering av bokningar",
       );
@@ -78,5 +81,6 @@ export const useAdminSettings = () => {
       mottagningStart,
       bookableItems,
     },
+    isPlanEditLocked: planEditLocked[user.kår],
   };
 };
