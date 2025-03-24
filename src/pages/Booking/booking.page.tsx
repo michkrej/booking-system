@@ -24,7 +24,7 @@ export const BookingPage = () => {
   }, []);
 
   return (
-    <Layout className="bg-white !p-0" hideFooter>
+    <Layout className="bg-white p-0!" hideFooter>
       <Schedule />
     </Layout>
   );

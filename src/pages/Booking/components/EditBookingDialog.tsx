@@ -357,7 +357,7 @@ export const EditBookingDialog = ({
                           disabled={disabledForm}
                         />
                       </FormControl>
-                      <FormLabel className="!mt-0">Mat?</FormLabel>
+                      <FormLabel className="mt-0!">Mat?</FormLabel>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -366,7 +366,7 @@ export const EditBookingDialog = ({
                   name="alcohol"
                   control={form.control}
                   render={({ field }) => (
-                    <FormItem className="!m-0 flex h-5 items-center justify-center gap-x-2">
+                    <FormItem className="m-0! flex h-5 items-center justify-center gap-x-2">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
@@ -374,7 +374,7 @@ export const EditBookingDialog = ({
                           disabled={disabledForm}
                         />
                       </FormControl>
-                      <FormLabel className="!mt-0">Alkohol?</FormLabel>
+                      <FormLabel className="mt-0!">Alkohol?</FormLabel>
                       <FormMessage />
                     </FormItem>
                   )}
