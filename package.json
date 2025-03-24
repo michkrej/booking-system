@@ -31,7 +31,7 @@
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "export-to-csv": "^1.4.0",
-    "firebase": "^10.12.3",
+    "firebase": "^11.5.0",
     "lucide-react": "^0.390.0",
     "next-themes": "^0.3.0",
     "react": "^18.2.0",
