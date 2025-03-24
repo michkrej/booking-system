@@ -66,22 +66,19 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
     );
   }
 
-  const isCurrentYear = plan.year === CURRENT_YEAR;
-  const isDisabled = isCurrentYear || isPlanEditLocked;
-
   return (
     <Dialog open={open} onOpenChange={() => setOpen((prev) => !prev)}>
-      <DialogTrigger disabled={isDisabled}>
+      <DialogTrigger disabled={isPlanEditLocked}>
         <Tooltip>
           <TooltipTrigger
             asChild
-            className={isDisabled ? "pointer-events-none opacity-50" : ""}
+            className={isPlanEditLocked ? "pointer-events-none opacity-50" : ""}
           >
             <Button
               size={"icon"}
               variant="ghost"
               className="rounded-full p-2 text-primary/60 hover:text-primary"
-              disabled={isDisabled}
+              disabled={isPlanEditLocked}
               asChild
             >
               <div>

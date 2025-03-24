@@ -4,17 +4,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAdminSettings } from "@/hooks/useAdminSettings";
 import { useStorePlanYear } from "@/hooks/useStorePlanYear";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export const PlanEditLockedWarningCard = () => {
-  const { isPlanEditLocked } = useAdminSettings();
   const { planYear } = useStorePlanYear();
 
   const isCurrentYear = planYear === CURRENT_YEAR;
-
-  if (!isPlanEditLocked || !isCurrentYear) return null;
 
   return (
     <Card className="col-span-2">

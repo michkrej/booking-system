@@ -22,20 +22,17 @@ export const PlanTogglePublicButton = ({
   const { togglePublicPlan } = useEditPlan();
   const { isPlanEditLocked } = useAdminSettings();
 
-  const isCurrentYear = plan.year === CURRENT_YEAR;
-  const isDisabled = isCurrentYear || isPlanEditLocked;
-
   return (
     <Tooltip>
       <TooltipTrigger
-        disabled={isDisabled}
-        className={isDisabled ? "pointer-events-none opacity-50" : ""}
+        disabled={isPlanEditLocked}
+        className={isPlanEditLocked ? "pointer-events-none opacity-50" : ""}
       >
         <Button
           size={"icon"}
           variant="ghost"
           className="rounded-full text-primary/60 hover:text-primary"
-          disabled={isDisabled}
+          disabled={isPlanEditLocked}
           onClick={() => togglePublicPlan.mutate(plan)}
           asChild
         >

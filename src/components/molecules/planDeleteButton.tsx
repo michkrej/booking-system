@@ -14,7 +14,6 @@ import { Button } from "../ui/button";
 import { type Plan } from "@/utils/interfaces";
 import { LoadingButton } from "./loadingButton";
 import { useState } from "react";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { useEditPlan } from "@/hooks/useEditPlan";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
 
@@ -38,22 +37,19 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
     });
   };
 
-  const isCurrentYear = plan.year === CURRENT_YEAR;
-  const isDisabled = isCurrentYear || isPlanEditLocked;
-
   return (
     <Dialog onOpenChange={() => setIsOpen((prev) => !prev)} open={isOpen}>
-      <DialogTrigger disabled={isDisabled}>
+      <DialogTrigger disabled={isPlanEditLocked}>
         <Tooltip>
           <TooltipTrigger
             asChild
-            className={isDisabled ? "pointer-events-none opacity-50" : ""}
+            className={isPlanEditLocked ? "pointer-events-none opacity-50" : ""}
           >
             <Button
               size={"icon"}
               variant="ghost"
               className="rounded-full text-primary/60 hover:text-primary"
-              disabled={isDisabled}
+              disabled={isPlanEditLocked}
               asChild
             >
               <Trash className="p-2" />

@@ -5,6 +5,8 @@ import { adminService } from "@/services";
 import { type Kår } from "@/utils/interfaces";
 import { useStoreAdminSettings } from "./useStoreAdminSettings";
 import { useStoreUser } from "./useStoreUser";
+import { useStorePlanYear } from "./useStorePlanYear";
+import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export const useAdminSettings = () => {
   const {
@@ -17,6 +19,7 @@ export const useAdminSettings = () => {
     loadedAdminSettings,
   } = useStoreAdminSettings();
   const { user } = useStoreUser();
+  const { planYear } = useStorePlanYear();
 
   useQuery({
     queryKey: ["adminSettings"],
@@ -81,6 +84,6 @@ export const useAdminSettings = () => {
       mottagningStart,
       bookableItems,
     },
-    isPlanEditLocked: planEditLocked[user.kår],
+    isPlanEditLocked: planEditLocked[user.kår] || planYear < CURRENT_YEAR,
   };
 };

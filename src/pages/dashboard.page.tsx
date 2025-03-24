@@ -10,7 +10,7 @@ import { UserPlansListCard } from "@/components/organisms/userPlansListCard";
 import { useAdminSettings } from "@/hooks/useAdminSettings";
 
 export function DashboardPage() {
-  const { planEditLocked } = useAdminSettings();
+  const { isPlanEditLocked } = useAdminSettings();
 
   return (
     <Layout>
@@ -18,7 +18,7 @@ export function DashboardPage() {
 
       <div className="grid-auto-rows grid grid-cols-7 gap-4">
         <div className="col-span-5 grid grid-cols-4 gap-4">
-          {!planEditLocked ? (
+          {!isPlanEditLocked ? (
             <CreateNewPlanCard />
           ) : (
             <PlanEditLockedWarningCard />
