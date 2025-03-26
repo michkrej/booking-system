@@ -16,6 +16,10 @@ export default [
     id: "793633a6-bb8b-4646-b9fb-3a303ea1bbda",
   },
   {
+    name: "KK - forumteatern",
+    id: "b452eaa3-b28c-41ee-ac04-13c1eb348f34",
+  },
+  {
     name: "KK",
     id: "a232bbef-b3c3-4e0b-9736-3775139578d9",
   },

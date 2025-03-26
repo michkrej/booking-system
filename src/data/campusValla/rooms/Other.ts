@@ -45,4 +45,12 @@ export default [
     name: "VAL1",
     id: "fd456f2e-d951-4cc5-af88-275469f4182e",
   },
+  {
+    name: "Lilla Hoben-tältet",
+    id: "2a7a9f83-9083-4f05-a6f4-6c8e4bb3ee3e",
+  },
+  {
+    name: "Stora Hoben-tältet",
+    id: "4931cb09-2dc1-40c9-91c7-d3f88378e7fe",
+  },
 ] as Room[];
