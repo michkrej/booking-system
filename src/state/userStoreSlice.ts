@@ -10,7 +10,7 @@ interface UserStoreSlice {
   closeVersionUpdateWarning: () => void;
 }
 
-export const CURRENT_APP_VERSION = "v3.2.0";
+export const CURRENT_APP_VERSION = "v3.3.0";
 
 const createUserStoreSlice: StateCreator<
   UserStoreSlice & PlanStoreSlice,
