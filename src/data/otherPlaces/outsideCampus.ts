@@ -27,8 +27,8 @@ export default [
     name: "Flamman",
     id: "70437e5a-932a-44cb-b718-cad203e94f50",
   },
-]; /* .map(({ name, id }) => ({
-  name,
-  id,
-  locationId: locations.others['Utanför campus'].id
-})) */
+  {
+    name: "VilleValla",
+    id: "851c117b-73b0-4160-abd8-2cb1f75c3dbf",
+  },
+];
