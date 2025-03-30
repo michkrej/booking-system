@@ -25,11 +25,12 @@ const Changelog = () => {
       <br /> */}
       <span className="font-semibold">Lokaler som har lagt till</span>
       <ul className="ml-4 list-disc">
-        <li>
+        {/* <li>
           Lilla och stora Hoben tältet under campus Valla {">"} "Övriga områden
           på campus"
         </li>
-        <li>KK - forumteatern under "Kårhus"</li>
+        <li>KK - forumteatern under "Kårhus"</li> */}
+        <li>VilleValla under "Utanför campus"</li>
       </ul>
     </div>
   );
