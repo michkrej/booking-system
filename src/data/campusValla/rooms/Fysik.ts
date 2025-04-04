@@ -57,4 +57,12 @@ export default [
     name: "FE242",
     id: "0eb7400d-13c4-493e-89e4-1cfc9af1684c",
   },
+  {
+    name: "Ingång 55",
+    id: "8cf3003a-02da-4e92-9066-28175a192e66",
+  },
+  {
+    name: "Ingång 57",
+    id: "b241aad0-a80f-49e0-93e3-d224a91a40aa",
+  },
 ] as Room[];
