@@ -5,9 +5,46 @@ import { siteConfig } from "@/config/site";
 import { Button } from "../ui/button";
 import { CURRENT_APP_VERSION } from "@/state/userStoreSlice";
 
+const addedLocations: {
+  campus: "US" | "Valla";
+  house: string;
+  rooms: string[];
+}[] = [
+  {
+    campus: "US",
+    house: "Clinicum",
+    rooms: ["Metodrum 1", "Metodrum 2", "Övrigt rum"],
+  },
+  {
+    campus: "Valla",
+    house: "B-huset",
+    rooms: ["Humanoidlabbet", "Systemet"],
+  },
+  {
+    campus: "Valla",
+    house: "C-huset",
+    rooms: ["Utanför C4"],
+  },
+  {
+    campus: "Valla",
+    house: "Fysikhuset",
+    rooms: ["Ingång 55", "Ingång 57"],
+  },
+  {
+    campus: "Valla",
+    house: "A-huset",
+    rooms: ["Ledsna Flickan"],
+  },
+  {
+    campus: "Valla",
+    house: "Studenthuset",
+    rooms: ["Byttan"],
+  },
+];
+
 const Changelog = () => {
   return (
-    <div>
+    <div className="grid grid-cols-2 gap-2">
       {/* <span className="font-semibold">Features</span>
       <ul className="ml-4 list-disc">
         <li>Mottagningsansvariga kan låsa planeringar per kår.</li>
@@ -23,15 +60,42 @@ const Changelog = () => {
         </li>
       </ul>
       <br /> */}
-      <span className="font-semibold">Lokaler som har lagt till</span>
-      <ul className="ml-4 list-disc">
-        {/* <li>
+      <div>
+        <span className="font-semibold text-red-500">Fixade buggar</span>
+        <ul className="ml-4 list-disc text-red-500">
+          {/* <li>
           Lilla och stora Hoben tältet under campus Valla {">"} "Övriga områden
           på campus"
         </li>
         <li>KK - forumteatern under "Kårhus"</li> */}
-        <li>VilleValla under "Utanför campus"</li>
-      </ul>
+          {/* <li>VilleValla under "Utanför campus"</li> */}
+          <li>
+            Gick inte att lägga till flera områden på en bokning eller ändra dem
+            i efterhand
+          </li>
+        </ul>
+      </div>
+      <div>
+        <span className="font-semibold">Tillagda lokaler/platser</span>
+        <ul className="ml-4 list-disc">
+          {/* <li>
+          Lilla och stora Hoben tältet under campus Valla {">"} "Övriga områden
+          på campus"
+        </li>
+        <li>KK - forumteatern under "Kårhus"</li> */}
+          {/*  <li>VilleValla under "Utanför campus"</li> */}
+          {addedLocations.map((location) => (
+            <li key={`${location.campus}-${location.house}`}>
+              {location.campus} - {location.house}
+              <ul className="ml-4 list-disc">
+                {location.rooms.map((room) => (
+                  <li key={room}>{room}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
