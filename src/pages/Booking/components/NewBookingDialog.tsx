@@ -163,7 +163,6 @@ export const NewBookingDialog = ({
       setRoomOptions(
         rooms.map((room) => ({ value: room.id, label: room.name })),
       );
-      return;
     }
 
     const corridors = new Set<string>(

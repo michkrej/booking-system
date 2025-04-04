@@ -170,7 +170,6 @@ export const EditBookingDialog = ({
       setRoomOptions(
         rooms.map((room) => ({ value: room.id, label: room.name })),
       );
-      return;
     }
 
     const corridors = new Set<string>(
@@ -207,6 +206,8 @@ export const EditBookingDialog = ({
       prevOptions.filter((room) => !selectedCorridorIds.has(room.value)),
     );
   };
+
+  console.log(form.getValues().rooms);
 
   const addBookableItemToBooking = (itemName: string) => {
     append({
