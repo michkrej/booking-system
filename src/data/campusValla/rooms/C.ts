@@ -35,7 +35,6 @@ const roomsC = [
   {
     name: "U1",
     id: "c9394b56-0e30-4b95-a821-ac33d7e632fc",
-
     corridorId: corridorsC.U.id,
   },
   {
@@ -59,7 +58,6 @@ const roomsC = [
   {
     name: "U6",
     id: "bc58d88b-2b23-4f2e-886a-240b9cb8c8f6",
-
     corridorId: corridorsC.U.id,
   },
   {
@@ -446,6 +444,10 @@ const roomsC = [
   {
     name: "Colosseum",
     id: "64f74234-8e86-4d99-827c-deb4774c809a",
+  },
+  {
+    name: "Utanför C4",
+    id: "72fdf53e-5b7e-48fb-87a3-e80ea422602b",
   },
 ] as Room[];
 
