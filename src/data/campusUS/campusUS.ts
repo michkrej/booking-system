@@ -1,3 +1,4 @@
+import Clinicum from "./Clinicum";
 import house001 from "./house001";
 import house240 from "./house240";
 import house420 from "./house420";
@@ -61,6 +62,11 @@ export const locationsUS = {
     name: "Hus 511",
     rooms: house511,
   },
+  Clinicum: {
+    id: "959128bf-f69e-4e67-afe2-4d5884f616fe",
+    name: "Clinicum",
+    rooms: Clinicum,
+  },
   "Övriga områden på campus US": {
     id: "56138ae6-f3f4-40cc-88ec-bd1d841e3770",
     name: "Övriga områden på campus",
@@ -78,5 +84,6 @@ export const roomsUS = [
   ...house463,
   ...house473,
   ...house511,
+  ...Clinicum,
   ...roomsOther,
 ];
