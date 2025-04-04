@@ -29,4 +29,8 @@ export default [
     name: "SH605",
     id: "58b85357-10b8-4331-bc75-89a99450aff3",
   },
+  {
+    name: "Byttan",
+    id: "6c84eb3e-6190-476a-9fa7-5b5d3ba14a86",
+  },
 ] as Room[];
