@@ -93,4 +93,12 @@ export default [
     name: "Linné",
     id: "30e26fb8-514b-49cb-9b9e-d17d5d5ed5e0",
   },
+  {
+    name: "Systemet",
+    id: "ccd12a29-11b3-4f9c-b45d-db132b9c6324",
+  },
+  {
+    name: "Humanoidlabbet",
+    id: "b47aa5c5-296c-4ff5-9855-1ee31696e181",
+  },
 ] as Room[];
