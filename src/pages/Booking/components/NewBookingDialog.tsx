@@ -17,6 +17,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -227,6 +228,7 @@ export const NewBookingDialog = ({
       <DialogContent className="flex max-h-[calc(100vh-50px)] max-w-[1200px] flex-col overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Lägg till bokning</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
 
         <Form {...form}>

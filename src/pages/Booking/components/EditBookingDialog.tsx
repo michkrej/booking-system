@@ -16,6 +16,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -207,8 +208,6 @@ export const EditBookingDialog = ({
     );
   };
 
-  console.log(form.getValues().rooms);
-
   const addBookableItemToBooking = (itemName: string) => {
     append({
       key: itemName,
@@ -230,6 +229,7 @@ export const EditBookingDialog = ({
       <DialogContent className="flex max-h-[calc(100vh-50px)] max-w-[1200px] flex-col overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Redigera bokning</DialogTitle>
+          <DialogDescription />
         </DialogHeader>
 
         <Form {...form}>
