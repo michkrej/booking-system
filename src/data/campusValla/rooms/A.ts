@@ -125,4 +125,8 @@ export default [
     name: "Ledsna Flickan",
     id: "ded3e52b-5526-4e17-9879-f04b1702e597",
   },
+  {
+    name: "Alfheim",
+    id: "e8612043-8aca-4989-a04c-a7c49f5c8640",
+  },
 ] as Room[];

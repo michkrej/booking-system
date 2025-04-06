@@ -33,7 +33,7 @@ const addedLocations: {
   {
     campus: "Valla",
     house: "A-huset",
-    rooms: ["Ledsna Flickan"],
+    rooms: ["Ledsna Flickan", "Alfheim"],
   },
   {
     campus: "Valla",
