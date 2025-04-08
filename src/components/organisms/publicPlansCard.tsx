@@ -170,7 +170,7 @@ export const PublicPlansCard = () => {
               <TableBody>
                 {publicPlans.map((plan) => {
                   const committee = getCommittee(plan.committeeId);
-                  const isÖvrigt = committee.kår === "Övrigt";
+                  const isÖvrigt = committee?.kår === "Övrigt";
                   return (
                     <TableRow
                       key={plan.id}
@@ -178,7 +178,7 @@ export const PublicPlansCard = () => {
                       className="hover:cursor-pointer"
                     >
                       <TableCell className="font-medium">
-                        {isÖvrigt ? plan.label : committee.name}
+                        {isÖvrigt ? plan.label : committee?.name}
                       </TableCell>
                       <TableCell>{committee?.kår}</TableCell>
                       <TableCell className="hidden md:table-cell">

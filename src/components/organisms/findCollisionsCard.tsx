@@ -21,9 +21,8 @@ import { useUserPlans } from "@/hooks/useUserPlans";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
-import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
-import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
 import { CollisionsTable } from "../molecules/CollisonsTable";
+import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();
@@ -45,47 +44,16 @@ export const FindCollisionsCard = () => {
     return publicPlans.filter((plan) => plan.id !== userPublicPlan.id);
   }, [userPlans, publicPlans]);
 
-  const findCollisions = (userPlan: Plan, publicPlans: Plan[]) => {
-    const allCollisions: {
-      roomCollisions: Record<string, Plan["events"]>;
-      inventoryCollisions: Record<string, Booking[]>;
-    } = {
-      roomCollisions: {},
-      inventoryCollisions: {},
-    };
-
-    publicPlans.forEach((plan) => {
-      const roomCollisions = findRoomCollisionsBetweenEvents([
-        ...userPlan.events,
-        ...plan.events,
-      ]);
-
-      const inventoryCollisions = findInventoryCollisionsBetweenEvents([
-        ...userPlan.events,
-        ...plan.events,
-      ]);
-
-      const collisionsWithUserPlan = inventoryCollisions.collisions.some(
-        (booking) => booking.planId === userPlan.id,
-      );
-
-      allCollisions.roomCollisions[plan.id] = roomCollisions;
-
-      allCollisions.inventoryCollisions[plan.id] = collisionsWithUserPlan
-        ? inventoryCollisions.collisions
-        : [];
-    });
-
-    return allCollisions;
-  };
-
   const onChangeSelect = (id: string) => {
     const plan = userPlans.find((plan) => plan.id === id);
     if (!plan) return;
 
     setSelectedUserPlan(plan);
 
-    const collisions = findCollisions(plan, publicPlansWithoutUserPlans);
+    const collisions = findCollisionsBetweenUserAndPublicPlans(
+      plan,
+      publicPlansWithoutUserPlans,
+    );
     setCollisions(collisions.roomCollisions);
     setInventoryCollisions(collisions.inventoryCollisions);
   };
@@ -104,6 +72,7 @@ export const FindCollisionsCard = () => {
     const roomPlanIds = roomCollisionEntries
       .filter(([, value]) => value.length > 0)
       .map(([key]) => key);
+
     const inventoryPlanIds = inventoryCollisionEntries
       .filter(([, value]) => value.length > 0)
       .map(([key]) => key);

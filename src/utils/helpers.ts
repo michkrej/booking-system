@@ -5,6 +5,8 @@ import { differenceInMilliseconds, format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
 import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
+import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
+import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
 
 export const exportPlans = async (
   plans: Plan[],
@@ -127,4 +129,41 @@ export const getPercentageProgress = (startDate: Date) => {
     ((totalWeeksToNolleP - weeksToNolleP) / totalWeeksToNolleP) * 100,
   );
   return progress;
+};
+
+export const findCollisionsBetweenUserAndPublicPlans = (
+  userPlan: Plan,
+  publicPlans: Plan[],
+) => {
+  const allCollisions: {
+    roomCollisions: Record<string, Plan["events"]>;
+    inventoryCollisions: Record<string, Booking[]>;
+  } = {
+    roomCollisions: {},
+    inventoryCollisions: {},
+  };
+
+  publicPlans.forEach((plan) => {
+    const roomCollisions = findRoomCollisionsBetweenEvents([
+      ...userPlan.events,
+      ...plan.events,
+    ]);
+
+    const inventoryCollisions = findInventoryCollisionsBetweenEvents([
+      ...userPlan.events,
+      ...plan.events,
+    ]);
+
+    const collisionsWithUserPlan = inventoryCollisions.collisions.some(
+      (booking) => booking.planId === userPlan.id,
+    );
+
+    allCollisions.roomCollisions[plan.id] = roomCollisions;
+
+    allCollisions.inventoryCollisions[plan.id] = collisionsWithUserPlan
+      ? inventoryCollisions.collisions
+      : [];
+  });
+
+  return allCollisions;
 };
