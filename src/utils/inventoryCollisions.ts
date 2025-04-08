@@ -186,18 +186,12 @@ export const findInventoryCollisionsBetweenEvents = (
   handleTextItemCollisions(items, groupedInventoryBookings);
   handleNumericItemCollisions(items, groupedInventoryBookings);
 
-  // Extract unique events by their 'id' to remove duplicates
-  const res = Array.from(
-    new Map(
-      Object.values(items)
-        // @ts-expect-error - Type 'Map<string, NumericBookableItem & Booking>' is not assignable to type 'NumericBookableItem & Booking'
-        .flatMap((item) => Array.from(item.events.values()))
-        .map((event) => [event.id, event]), // Ensure uniqueness by event id
-    ).values(),
-  );
+  const collisions = Object.values(items).flatMap((item) => [
+    ...item.events.values(),
+  ]);
 
   return {
-    collisions: res,
+    collisions,
     items: items,
   };
 };
