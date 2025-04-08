@@ -138,8 +138,11 @@ export const Schedule = () => {
 
   // Set the event color to the committee color
   const onEventRendered = (args: { element: HTMLElement; data: Booking }) => {
-    args.element.style.backgroundColor =
-      committees[args.data.committeeId].color;
+    const committee = committees[args.data.committeeId];
+    if (!committee) return;
+
+    args.element.style.backgroundColor = committee.color;
+    args.element.style.color = committee?.textColor ?? "white";
   };
 
   // Handle delete and drag and drop events
