@@ -99,7 +99,7 @@ export const PublicPlansCard = () => {
     }
 
     if (eventCollisions.length > 0 && inventoryCollisions.length > 0) {
-      toast.warning("Det finns krockar på båda lokal och inventarier");
+      toast.warning("Det finns krockar på både lokal och inventarier");
       setRoomCollisions(eventCollisions);
       setInventoryCollisions(inventoryCollisions);
       return;
