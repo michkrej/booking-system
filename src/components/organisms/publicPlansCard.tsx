@@ -92,7 +92,7 @@ export const PublicPlansCard = () => {
       findInventoryCollisionsBetweenEvents(events);
 
     if (eventCollisions.length === 0 && inventoryCollisions.length === 0) {
-      toast.warning(
+      toast.success(
         "Det finns inga bokningar som krockar på lokal eller inventarier",
       );
       return;
