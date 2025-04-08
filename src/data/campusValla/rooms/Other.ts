@@ -53,4 +53,12 @@ export default [
     name: "Stora Hoben-tältet",
     id: "4931cb09-2dc1-40c9-91c7-d3f88378e7fe",
   },
+  {
+    name: "Skogen bakom A-huset",
+    id: "2a53ce96-fa0a-4112-b2eb-d325b013a1fd",
+  },
+  {
+    name: "Studenthälsan",
+    id: "a27bac3a-c8b6-4f83-9398-a7c97684edd4",
+  },
 ] as Room[];
