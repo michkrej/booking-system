@@ -6,11 +6,11 @@ import { Button } from "../ui/button";
 import { CURRENT_APP_VERSION } from "@/state/userStoreSlice";
 
 const addedLocations: {
-  campus: "US" | "Valla";
+  campus: "US" | "Valla" | "Valla/US";
   house: string;
   rooms: string[];
 }[] = [
-  {
+  /*   {
     campus: "US",
     house: "Clinicum",
     rooms: ["Metodrum 1", "Metodrum 2", "Övrigt rum"],
@@ -39,6 +39,16 @@ const addedLocations: {
     campus: "Valla",
     house: "Studenthuset",
     rooms: ["Byttan"],
+  }, */
+  {
+    campus: "Valla/US",
+    house: "Utanför campus",
+    rooms: ["Ballpoint"],
+  },
+  {
+    campus: "Valla",
+    house: "Övriga områden på campus",
+    rooms: ["Skogen bakom A-huset", "Studenthälsan"],
   },
 ];
 
@@ -60,21 +70,15 @@ const Changelog = () => {
         </li>
       </ul>
       <br /> */}
-      <div>
+      {/* <div>
         <span className="font-semibold text-red-500">Fixade buggar</span>
         <ul className="ml-4 list-disc text-red-500">
-          {/* <li>
-          Lilla och stora Hoben tältet under campus Valla {">"} "Övriga områden
-          på campus"
-        </li>
-        <li>KK - forumteatern under "Kårhus"</li> */}
-          {/* <li>VilleValla under "Utanför campus"</li> */}
           <li>
             Gick inte att lägga till flera områden på en bokning eller ändra dem
             i efterhand
           </li>
         </ul>
-      </div>
+      </div> */}
       <div>
         <span className="font-semibold">Tillagda lokaler/platser</span>
         <ul className="ml-4 list-disc">
