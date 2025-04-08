@@ -9,14 +9,21 @@ type Committee<
   D extends "LinTek" | "Consensus" | "StuFF" | "Övrigt",
 > = Record<
   string,
-  { name: T; id: string; color: string; kår: D; hidden?: boolean }
+  {
+    name: T;
+    id: string;
+    color: string;
+    kår: D;
+    hidden?: boolean;
+    textColor?: "black";
+  }
 >;
 
-export const committeesLinTek = {
+export const committeesLinTek: Committee<LintekCommitee, "LinTek"> = {
   "102d533f-a760-4a4e-9746-b67d3e64b49a": {
     name: "CM",
     id: "102d533f-a760-4a4e-9746-b67d3e64b49a",
-    color: "#0A741A",
+    color: "#009516",
     kår: "LinTek",
   },
   "18ad0dcb-509d-4f89-9594-7cc5a1fba177": {
@@ -40,7 +47,7 @@ export const committeesLinTek = {
   "97584aca-276a-4fb8-98f4-82947f3c5e35": {
     name: "STABEN",
     id: "97584aca-276a-4fb8-98f4-82947f3c5e35",
-    color: "#f71902",
+    color: "#d51000",
     kår: "LinTek",
   },
   "3c5331e6-13a8-4445-a4eb-a4d84054e395": {
@@ -59,7 +66,7 @@ export const committeesLinTek = {
   "850e6ab4-e900-4f34-a593-0361bb0451a6": {
     name: "URF",
     id: "850e6ab4-e900-4f34-a593-0361bb0451a6",
-    color: "#006400",
+    color: "#166516",
     kår: "LinTek",
   },
   "be4ba79b-ed9a-43dd-8270-780c87eaac5d": {
@@ -68,9 +75,9 @@ export const committeesLinTek = {
     color: "#000000",
     kår: "LinTek",
   },
-} satisfies Committee<LintekCommitee, "LinTek">;
+};
 
-export const committeesConsensus = {
+export const committeesConsensus: Committee<ConsensusCommitee, "Consensus"> = {
   "e7ccfc17-e26e-4361-916d-edfafdd8adfc": {
     name: "ATtityd",
     id: "e7ccfc17-e26e-4361-916d-edfafdd8adfc",
@@ -133,9 +140,9 @@ export const committeesConsensus = {
     color: "#00b90f",
     kår: "Consensus",
   },
-} satisfies Committee<ConsensusCommitee, "Consensus">;
+};
 
-const committeesStuff = {
+const committeesStuff: Committee<StuffCommitee, "StuFF"> = {
   "9efac5f6-a2f7-4c18-85c5-d0bc59c31f11": {
     name: "FBI",
     id: "9efac5f6-a2f7-4c18-85c5-d0bc59c31f11",
@@ -209,16 +216,16 @@ const committeesStuff = {
     color: "#75d0c9",
     kår: "StuFF",
   },
-} satisfies Committee<StuffCommitee, "StuFF">;
+};
 
-const otherGroup = {
+const otherGroup: Committee<string, "Övrigt"> = {
   "a16c78ef-6f00-492c-926e-bf1bfe9fce32": {
     name: "Övrigt",
     id: "a16c78ef-6f00-492c-926e-bf1bfe9fce32",
     color: "#808080",
     kår: "Övrigt",
   },
-} satisfies Committee<string, "Övrigt">;
+};
 
 export const committees = {
   ...committeesConsensus,
