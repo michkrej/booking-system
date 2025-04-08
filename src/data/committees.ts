@@ -40,7 +40,7 @@ export const committeesLinTek = {
   "97584aca-276a-4fb8-98f4-82947f3c5e35": {
     name: "STABEN",
     id: "97584aca-276a-4fb8-98f4-82947f3c5e35",
-    color: "#f04837",
+    color: "#f71902",
     kår: "LinTek",
   },
   "3c5331e6-13a8-4445-a4eb-a4d84054e395": {
