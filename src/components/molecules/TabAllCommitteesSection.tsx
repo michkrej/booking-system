@@ -1,4 +1,4 @@
-import { Booking, Kår, Plan } from "@/utils/interfaces";
+import { Booking, Plan } from "@/utils/interfaces";
 import { TabsContent } from "../ui/tabs";
 import {
   Card,
@@ -20,8 +20,7 @@ import { formatDate, getCommittee } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { TabCommitteeButtons } from "./TabCommitteeButtons";
 
-type TabCommitteeSectionProps = {
-  kår: Kår;
+type TabAllCommitteesSectionProps = {
   plans: Plan[];
   isPending: boolean;
   roomCollisions: Booking[];
@@ -32,8 +31,7 @@ type TabCommitteeSectionProps = {
   handlePlanClick: (plan: Plan) => void;
 };
 
-export const TabCommitteeSection = ({
-  kår,
+export const TabAllCommitteesSection = ({
   plans,
   isPending,
   roomCollisions,
@@ -42,21 +40,35 @@ export const TabCommitteeSection = ({
   handleViewCollisionsClick,
   handleViewBookingsClick,
   handlePlanClick,
-}: TabCommitteeSectionProps) => {
+}: TabAllCommitteesSectionProps) => {
   return (
-    <TabsContent value={kår.toLowerCase()}>
+    <TabsContent value="all">
       <Card>
-        <CardHeader className="px-7">
-          <CardTitle>{kår} planeringar</CardTitle>
-          <CardDescription>
-            Publika planeringar för fadderier inom {kår}.
-          </CardDescription>
+        <CardHeader className="grid grid-cols-[2fr_1fr] px-7">
+          <div className="flex flex-col gap-y-2">
+            <CardTitle>Alla planeringar</CardTitle>
+            <CardDescription>
+              Publika planeringar för alla kårer.
+            </CardDescription>
+          </div>
+          <div className="flex flex-col justify-end gap-y-2">
+            <TabCommitteeButtons
+              disabled={plans.length === 0}
+              handleViewBookings={() => handleViewBookingsClick(plans)}
+              handleFindCollisions={() => handleFindCollisionsClick(plans)}
+              handleViewCollision={() => handleViewCollisionsClick(plans)}
+              showCollisions={
+                roomCollisions.length > 0 || inventoryCollisions.length > 0
+              }
+            />
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Fadderi</TableHead>
+                <TableHead>Kår</TableHead>
                 <TableHead className="hidden sm:table-cell">
                   Uppdaterad
                 </TableHead>
@@ -65,6 +77,7 @@ export const TabCommitteeSection = ({
             <TableBody>
               {plans.map((plan) => {
                 const committee = getCommittee(plan.committeeId);
+                const isÖvrigt = committee?.kår === "Övrigt";
                 return (
                   <TableRow
                     key={plan.id}
@@ -72,23 +85,27 @@ export const TabCommitteeSection = ({
                     className="hover:cursor-pointer"
                   >
                     <TableCell className="font-medium">
-                      {committee?.name}
+                      {isÖvrigt ? plan.label : committee?.name}
                     </TableCell>
+                    <TableCell>{committee?.kår}</TableCell>
                     <TableCell className="hidden md:table-cell">
                       {formatDate(plan.updatedAt)}
                     </TableCell>
                   </TableRow>
                 );
               })}
-              {!isPending && plans.length === 0 && (
+              {!isPending && !plans.length ? (
                 <TableRow>
-                  <TableCell colSpan={2}>
-                    Det finns inga publika planeringar för {kår}.
+                  <TableCell colSpan={3}>
+                    Det finns inga publika planeringar.
                   </TableCell>
                 </TableRow>
-              )}
+              ) : null}
               {isPending && plans.length === 0 ? (
                 <TableRow>
+                  <TableCell>
+                    <Skeleton className="h-4 w-full" />
+                  </TableCell>
                   <TableCell>
                     <Skeleton className="h-4 w-full" />
                   </TableCell>

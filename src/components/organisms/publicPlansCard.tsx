@@ -2,36 +2,20 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
 import { usePublicPlans } from "@/hooks/usePublicPlans";
 import { useStoreBookings } from "@/hooks/useStoreBookings";
 import { useStoreUser } from "@/hooks/useStoreUser";
-import { formatDate, getCommittee } from "@/lib/utils";
+import { getCommittee } from "@/lib/utils";
 import { useBoundStore } from "@/state/store";
 import { type Booking, type Plan } from "@/utils/interfaces";
 import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
 import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
 import { ExportPlansButton } from "../molecules/exportPlansButton";
-import { Button } from "../ui/button";
-import { Skeleton } from "../ui/skeleton";
 import { TabCommitteeSection } from "../molecules/TabCommitteeSection";
+import { usePublicPlansByKår } from "@/hooks/usePlansByKår";
+import { TabAllCommitteesSection } from "../molecules/TabAllCommitteesSection";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
@@ -40,6 +24,12 @@ export const PublicPlansCard = () => {
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
   const { resetCurrentDate } = useCurrentDate();
+
+  const {
+    stuff: plansStuFF,
+    lintek: plansLinTek,
+    consensus: plansConsensus,
+  } = usePublicPlansByKår();
 
   const [inventoryCollisions, setInventoryCollisions] = useState<Booking[]>([]);
   const [roomCollisions, setRoomCollisions] = useState<Booking[]>([]);
@@ -50,24 +40,6 @@ export const PublicPlansCard = () => {
     if (committee.kår === "Övrigt") return "all";
     return committee.kår.toLowerCase();
   }, [user.committeeId]);
-
-  const plansLinTek = useMemo(() => {
-    return publicPlans.filter(
-      (plan) => getCommittee(plan.committeeId)?.kår === "LinTek",
-    );
-  }, [publicPlans]);
-
-  const plansConsensus = useMemo(() => {
-    return publicPlans.filter(
-      (plan) => getCommittee(plan.committeeId)?.kår === "Consensus",
-    );
-  }, [publicPlans]);
-
-  const plansStuFF = useMemo(() => {
-    return publicPlans.filter(
-      (plan) => getCommittee(plan.committeeId)?.kår === "StuFF",
-    );
-  }, [publicPlans]);
 
   const handleViewBookingsClick = (plans: Plan[]) => {
     const events = plans.flatMap((plan) => plan.events);
@@ -148,95 +120,16 @@ export const PublicPlansCard = () => {
         </div>
       </div>
       {/* SECTION - all */}
-      <TabsContent value="all">
-        <Card>
-          <CardHeader className="px-7">
-            <CardTitle>Alla planeringar</CardTitle>
-            <CardDescription>
-              Publika planeringar för alla kårer.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Fadderi</TableHead>
-                  <TableHead>Kår</TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Uppdaterad
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {publicPlans.map((plan) => {
-                  const committee = getCommittee(plan.committeeId);
-                  const isÖvrigt = committee?.kår === "Övrigt";
-                  return (
-                    <TableRow
-                      key={plan.id}
-                      onClick={() => handlePlanClick(plan)}
-                      className="hover:cursor-pointer"
-                    >
-                      <TableCell className="font-medium">
-                        {isÖvrigt ? plan.label : committee?.name}
-                      </TableCell>
-                      <TableCell>{committee?.kår}</TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {formatDate(plan.updatedAt)}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-                {!isPending && !publicPlans.length ? (
-                  <TableRow>
-                    <TableCell colSpan={3}>
-                      Det finns inga publika planeringar.
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-                {isPending && publicPlans.length === 0 ? (
-                  <TableRow>
-                    <TableCell>
-                      <Skeleton className="h-4 w-full" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-full" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-full" />
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-              </TableBody>
-            </Table>
-          </CardContent>
-          <CardFooter className="flex justify-end gap-x-3">
-            <Button
-              onClick={() => handleViewBookingsClick(publicPlans)}
-              disabled={publicPlans.length === 0}
-              variant="outline"
-            >
-              Se bokningar
-            </Button>
-            {roomCollisions.length > 0 || inventoryCollisions.length > 0 ? (
-              <Button
-                onClick={() => handleViewCollisionsClick(publicPlans)}
-                className="w-32"
-              >
-                Se krockar
-              </Button>
-            ) : (
-              <Button
-                onClick={() => handleFindCollisionsClick(publicPlans)}
-                variant={"secondary"}
-                className="w-32"
-              >
-                Hitta krockar
-              </Button>
-            )}
-          </CardFooter>
-        </Card>
-      </TabsContent>
+      <TabAllCommitteesSection
+        plans={publicPlans}
+        isPending={isPending}
+        roomCollisions={roomCollisions}
+        inventoryCollisions={inventoryCollisions}
+        handleFindCollisionsClick={handleFindCollisionsClick}
+        handleViewCollisionsClick={handleViewCollisionsClick}
+        handleViewBookingsClick={handleViewBookingsClick}
+        handlePlanClick={handlePlanClick}
+      />
       {/* SECTION - Consensus */}
       <TabCommitteeSection
         plans={plansConsensus}

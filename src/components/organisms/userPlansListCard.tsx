@@ -23,6 +23,7 @@ const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
 
 export const UserPlansListCard = () => {
   const { isPending, userPlans } = useUserPlans();
+
   const loadedBookings = useBoundStore((state) => state.loadedBookings);
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();

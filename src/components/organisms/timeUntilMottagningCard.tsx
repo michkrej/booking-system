@@ -21,7 +21,6 @@ export const TimeUntilMottagningCard = () => {
   if (user.kår === "Övrigt") return null;
 
   const date = mottagningStart[user.kår];
-
   const weeksToNolleP = getWeeksLeftToNolleP(date);
   const progress = getPercentageProgress(date);
 
