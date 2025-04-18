@@ -35,7 +35,9 @@ export const LockPlanEditingCard = () => {
                 }
                 className="h-6 w-10 rounded-full bg-gray-200"
               />
-              <p>{planEditLocked ? "Lås upp redigering" : "Lås redigering"}</p>
+              <p>
+                {planEditLocked[kår] ? "Lås upp redigering" : "Lås redigering"}
+              </p>
             </div>
           );
         })}
