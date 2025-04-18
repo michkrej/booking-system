@@ -15,6 +15,7 @@ import { TabAllCommitteesSection } from "@components/molecules/TabAllCommitteesS
 import { TabCommitteeSection } from "@components/molecules/TabCommitteeSection";
 import { ExportPlansButton } from "@components/molecules/exportPlansButton";
 import { Tabs, TabsList, TabsTrigger } from "@ui/tabs";
+import { viewCollisionsPath } from "@/utils/CONSTANTS";
 
 export const PublicPlansCard = () => {
   const { user } = useStoreUser();
@@ -99,9 +100,9 @@ export const PublicPlansCard = () => {
 
     // Navigate to the appropriate page based on the collisions
     if (hasRoomCollisions) {
-      navigate(`/booking/view-collisions`);
+      navigate(`/booking/${viewCollisionsPath}`);
     } else if (hasInventoryCollisions) {
-      navigate(`/inventory/view-collisions`);
+      navigate(`/inventory/${viewCollisionsPath}`);
     }
   };
 

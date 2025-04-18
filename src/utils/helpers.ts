@@ -3,7 +3,7 @@ import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
 import { committees, committeesConsensus, kårer } from "../data/committees";
 import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
-import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
+import { BOOKABLE_ITEM_OPTIONS, viewCollisionsPath } from "./CONSTANTS";
 import { type Booking, type Kår, type Plan } from "./interfaces";
 import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
 import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
@@ -167,3 +167,9 @@ export const findCollisionsBetweenUserAndPublicPlans = (
 
   return allCollisions;
 };
+
+export const isRoomCollisionView = (string: string) =>
+  string.includes(viewCollisionsPath);
+
+export const isInventoryCollisionView = (string: string) =>
+  string.includes("inventory");

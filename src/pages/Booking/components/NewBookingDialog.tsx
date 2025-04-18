@@ -1,7 +1,3 @@
-import { corridorsC } from "@data/campusValla/rooms";
-import roomsC from "@data/campusValla/rooms/C";
-import { committees } from "@data/committees";
-import { campusLocationsMap } from "@data/locationsData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sv } from "date-fns/locale";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
@@ -9,17 +5,18 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { type z } from "zod";
-
 import { useBookingActions } from "@hooks/useBookingActions";
 import { useStoreBookings } from "@hooks/useStoreBookings";
 import { useStoreUser } from "@hooks/useStoreUser";
-
+import { corridorsC } from "@data/campusValla/rooms";
+import roomsC from "@data/campusValla/rooms/C";
+import { committees } from "@data/committees";
+import { campusLocationsMap } from "@data/locationsData";
 import {
   type BookableItem,
   type Booking,
   type NewBooking,
 } from "@utils/interfaces";
-
 import { LoadingButton } from "@components/molecules/loadingButton";
 import { Button } from "@ui/button";
 import { Checkbox } from "@ui/checkbox";
@@ -45,7 +42,7 @@ import { Input } from "@ui/input";
 import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
-
+import { viewCollisionsPath, viewPath } from "@/utils/CONSTANTS";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { ScheduleContext } from "./ScheduleContext";
@@ -76,7 +73,7 @@ export const NewBookingDialog = ({
     })),
   );
 
-  const disabledForm = planId === "view" || planId === "view-collisions";
+  const disabledForm = planId === viewPath || planId === viewCollisionsPath;
 
   const form = useForm<z.infer<typeof BookingSchema>>({
     resolver: zodResolver(BookingSchema),

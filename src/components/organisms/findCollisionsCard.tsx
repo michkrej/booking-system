@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
+import { viewCollisionsPath } from "@/utils/CONSTANTS";
 import { CollisionsTable } from "../molecules/CollisonsTable";
 
 export const FindCollisionsCard = () => {
@@ -86,12 +87,12 @@ export const FindCollisionsCard = () => {
 
     if (roomPlanIds.length === 0 && inventoryPlanIds.length > 0) {
       loadedBookings(inventoryCollisionEntries.flatMap(([, events]) => events));
-      navigate(`/inventory/view-collisions`);
+      navigate(`/inventory/${viewCollisionsPath}`);
       return;
     }
 
     loadedBookings(roomCollisionEntries.flatMap(([, events]) => events));
-    navigate(`/booking/view-collisions`);
+    navigate(`/booking/${viewCollisionsPath}`);
   };
 
   const showCollisionsButtonEnabled = useMemo(() => {

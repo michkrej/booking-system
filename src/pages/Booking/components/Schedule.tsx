@@ -1,6 +1,3 @@
-import { corridorsC } from "@data/campusValla/rooms";
-import { committees } from "@data/committees";
-import { campusLocationsMap } from "@data/locationsData";
 import {
   type ActionEventArgs,
   DragAndDrop,
@@ -17,14 +14,15 @@ import {
 import { useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useBookingActions } from "@hooks/useBookingActions";
 import { useBookingState } from "@hooks/useBookingState";
 import { useCurrentDate } from "@hooks/useCurrentDate";
-
+import { corridorsC } from "@data/campusValla/rooms";
+import { committees } from "@data/committees";
+import { campusLocationsMap } from "@data/locationsData";
 import { type Booking, type NewBooking } from "@utils/interfaces";
-
+import { viewCollisionsPath, viewPath } from "@/utils/CONSTANTS";
 import { EditBookingDialog } from "./EditBookingDialog";
 import { NewBookingDialog } from "./NewBookingDialog";
 import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
@@ -109,7 +107,7 @@ export const Schedule = () => {
     data: Booking;
     cancel: boolean;
   }) => {
-    if ((id === "view" || id === "view-collisions") && !e.data.id) {
+    if ((id === viewPath || id === viewCollisionsPath) && !e.data.id) {
       toast.error("Det går inte att skapa nya bokningar i denna vy");
       e.cancel = true;
       return;
