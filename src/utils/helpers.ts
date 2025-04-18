@@ -79,35 +79,6 @@ export const defaultCampus = (committeeId: string) => {
   return campuses.Valla;
 };
 
-export const formatCollisions = (collisions: Booking[]) => {
-  return `+${(collisions || []).map((collision) => collision.id).join("+")}`;
-};
-
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
-export const getYears = () => {
-  const startYear = 2023;
-  const currentYear = new Date().getFullYear();
-  const years = Array.from(
-    { length: currentYear - startYear + 1 },
-    (_, i) => i + startYear,
-  );
-  // Conditionally extend years with one year if the date is past october 1st
-  if (new Date().getMonth() >= 9) {
-    years.push(currentYear + 1);
-  }
-  return years;
-};
-
-export const getActiveYear = () => {
-  // The year should be the current year if the date is past october 1st
-  const currentYear = new Date().getFullYear();
-  if (new Date().getMonth() >= 9) {
-    return currentYear + 1;
-  }
-  return currentYear;
-};
-
 export const getWeeksLeftToNolleP = (startDate: Date) => {
   const now = new Date();
   const diff = differenceInMilliseconds(startDate, now);
