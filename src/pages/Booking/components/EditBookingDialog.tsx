@@ -1,22 +1,18 @@
-import { corridorsC } from "@data/campusValla/rooms";
-import roomsC from "@data/campusValla/rooms/C";
-import { committees } from "@data/committees";
-import { campusLocationsMap } from "@data/locationsData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sv } from "date-fns/locale";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
-
 import { useBookingActions } from "@hooks/useBookingActions";
 import { useStoreBookings } from "@hooks/useStoreBookings";
 import { useStoreUser } from "@hooks/useStoreUser";
-
+import { corridorsC } from "@data/campusValla/rooms";
+import roomsC from "@data/campusValla/rooms/C";
+import { committees } from "@data/committees";
+import { campusLocationsMap } from "@data/locationsData";
 import { type BookableItem, type Booking } from "@utils/interfaces";
-
 import { convertToDate } from "@lib/utils";
-
 import { LoadingButton } from "@components/molecules/loadingButton";
 import { Button } from "@ui/button";
 import { Checkbox } from "@ui/checkbox";
@@ -42,7 +38,6 @@ import { Input } from "@ui/input";
 import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
-
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { ScheduleContext } from "./ScheduleContext";

@@ -1,4 +1,3 @@
-import { campusLocationsMap } from "@data/locationsData";
 import { addDays, addMonths, format } from "date-fns";
 import { sv } from "date-fns/locale";
 import {
@@ -12,14 +11,11 @@ import {
 import { useContext, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-
 import { useCurrentDate } from "@hooks/useCurrentDate";
 import { useStoreBookings } from "@hooks/useStoreBookings";
-
+import { campusLocationsMap } from "@data/locationsData";
 import { type Location } from "@utils/interfaces";
-
 import { convertToDate } from "@lib/utils";
-
 import { Button } from "@ui/button";
 import {
   Select,
@@ -29,7 +25,6 @@ import {
   SelectValue,
 } from "@ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
-
 import { ScheduleContext } from "./ScheduleContext";
 
 const viewAdjustments = {

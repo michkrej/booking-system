@@ -1,5 +1,3 @@
-import { committees } from "@data/committees";
-import { locationsNonGrouped, rooms } from "@data/locationsData";
 import { differenceInDays, format } from "date-fns";
 import { sv } from "date-fns/locale";
 import {
@@ -9,7 +7,8 @@ import {
   MapPinIcon,
   UserIcon,
 } from "lucide-react";
-
+import { committees } from "@data/committees";
+import { locationsNonGrouped, rooms } from "@data/locationsData";
 import { type Booking } from "@utils/interfaces";
 
 const getFormattedDate = (startDate: Date, endDate: Date) => {

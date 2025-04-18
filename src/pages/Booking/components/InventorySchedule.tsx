@@ -10,24 +10,18 @@ import {
   ViewsDirective,
 } from "@syncfusion/ej2-react-schedule";
 import { useMemo, useRef } from "react";
-
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useBookingState } from "@hooks/useBookingState";
 import { useCurrentDate } from "@hooks/useCurrentDate";
-
 import { committees } from "@data/committees";
-
 import { useBoundStore } from "@state/store";
-
 import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 import {
   type BookableItem,
   type Booking,
   type NumericBookableKeys,
 } from "@utils/interfaces";
-
 import { convertToDate } from "@lib/utils";
-
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 import { ScheduleContext } from "./ScheduleContext";
 import { ScheduleToolbar } from "./ScheduleToolbar";
