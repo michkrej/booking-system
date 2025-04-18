@@ -1,5 +1,5 @@
 import { committees } from "@/data/committees";
-import { type Booking } from "@/utils/interfaces";
+import { type Booking } from "@utils/interfaces";
 import { Label } from "@radix-ui/react-label";
 import {
   BuildingIcon,
@@ -13,7 +13,7 @@ import { useContext } from "react";
 import { ScheduleContext } from "./ScheduleContext";
 import { differenceInDays, format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 
 const getFormattedDate = (startDate: Date, endDate: Date) => {
   const eventSpansSeveralDays = differenceInDays(endDate, startDate);

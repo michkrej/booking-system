@@ -1,12 +1,12 @@
-import { Button, buttonVariants } from "@/components/ui/button";
-import type { CalendarProps } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
+import { Button, buttonVariants } from "@components/ui/button";
+import type { CalendarProps } from "@components/ui/calendar";
+import { Input } from "@components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+} from "@components/ui/popover";
+import { cn } from "@lib/utils";
 import { add, format } from "date-fns";
 import { type Locale, enUS } from "date-fns/locale";
 import {
@@ -24,7 +24,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@components/ui/select";
 import { DayPicker } from "react-day-picker";
 
 // ---------- utils start ----------
@@ -353,7 +353,7 @@ function Calendar({
                   props.onMonthChange?.(newDate);
                 }}
               >
-                <SelectTrigger className="w-fit gap-1 border-none p-0 focus:bg-accent focus:text-accent-foreground">
+                <SelectTrigger className="focus:bg-accent focus:text-accent-foreground w-fit gap-1 border-none p-0">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -376,7 +376,7 @@ function Calendar({
                     props.onMonthChange?.(newDate);
                   }}
                 >
-                  <SelectTrigger className="w-fit gap-1 border-none p-0 focus:bg-accent focus:text-accent-foreground">
+                  <SelectTrigger className="focus:bg-accent focus:text-accent-foreground w-fit gap-1 border-none p-0">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -456,7 +456,7 @@ const TimePeriodSelect = React.forwardRef<
         >
           <SelectTrigger
             ref={ref}
-            className="w-[65px] focus:bg-accent focus:text-accent-foreground"
+            className="focus:bg-accent focus:text-accent-foreground w-[65px]"
             onKeyDown={handleKeyDown}
           >
             <SelectValue />
@@ -569,7 +569,7 @@ const TimePickerInput = React.forwardRef<
         id={id ?? picker}
         name={name ?? picker}
         className={cn(
-          "w-[48px] text-center font-mono text-base tabular-nums caret-transparent focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none",
+          "focus:bg-accent focus:text-accent-foreground w-[48px] text-center font-mono text-base tabular-nums caret-transparent [&::-webkit-inner-spin-button]:appearance-none",
           className,
         )}
         value={value ?? calculatedValue}
@@ -878,7 +878,7 @@ const DateTimePicker = React.forwardRef<
             {...props}
           />
           {granularity !== "day" && (
-            <div className="border-t border-border p-3">
+            <div className="border-border border-t p-3">
               <TimePicker
                 onChange={(value) => {
                   onChange?.(value);

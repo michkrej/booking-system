@@ -1,6 +1,6 @@
-import { Layout } from "@/components/molecules/layout";
+import { Layout } from "@components/molecules/layout";
 import { Schedule } from "./components/Schedule";
-import { usePublicPlans } from "@/hooks/usePublicPlans";
+import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";

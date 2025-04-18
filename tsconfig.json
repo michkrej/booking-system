@@ -28,13 +28,14 @@
     "paths": {
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
-      "@components": ["./src/components/"],
-      "@hooks": ["./src/hooks/"],
-      "@pages": ["./src/pages/"],
-      "@state": ["./src/state/"],
-      "@utils": ["./src/utils/"],
-      "@data": ["./src/data/"],
-      "@state/*": ["./src/state/*"]
+      "@components/*": ["./src/components/*"],
+      "@ui/*": ["./src/components/ui/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@state/*": ["./src/state/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@data/*": ["./src/data/*"],
+      "@lib/*": ["./src/lib/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.js"],

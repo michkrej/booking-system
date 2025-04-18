@@ -25,6 +25,7 @@ export default defineConfig({
       "@states": path.resolve(__dirname, "./src/state"),
       "@utils": path.resolve(__dirname, "./src/utils"),
       "@data": path.resolve(__dirname, "./src/data"),
+      "@lib": path.resolve(__dirname, "./src/lib"),
       process: "process/browser",
       util: "util",
     },
@@ -33,5 +34,4 @@ export default defineConfig({
     port: 4000,
     open: true,
   },
-  //base: './'
 });

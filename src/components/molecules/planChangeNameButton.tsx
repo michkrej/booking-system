@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -11,10 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { type Plan } from "@/utils/interfaces";
-import { useState } from "react";
-import { LoadingButton } from "./loadingButton";
+} from "@components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -22,16 +20,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@components/ui/form";
+import { Input } from "@components/ui/input";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "../ui/button";
-import { useEditPlan } from "@/hooks/useEditPlan";
-import { useAdminSettings } from "@/hooks/useAdminSettings";
+} from "@components/ui/tooltip";
+import { useAdminSettings } from "@hooks/useAdminSettings";
+import { useEditPlan } from "@hooks/useEditPlan";
+import { Button } from "@ui/button";
+import { type Plan } from "@utils/interfaces";
+import { LoadingButton } from "./loadingButton";
 
 const formSchema = z.object({
   newPlanName: z.string().min(1, "Du måste ange ett nytt namn för planeringen"),
@@ -76,7 +76,7 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
             <Button
               size={"icon"}
               variant="ghost"
-              className="rounded-full p-2 text-primary/60 hover:text-primary"
+              className="text-primary/60 hover:text-primary rounded-full p-2"
               disabled={isPlanEditLocked}
               asChild
             >

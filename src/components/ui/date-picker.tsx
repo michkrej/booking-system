@@ -1,13 +1,13 @@
 import { format } from "date-fns";
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@components/ui/button";
+import { Calendar } from "@components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@components/ui/popover";
 import { PencilIcon } from "lucide-react";
 import { sv } from "date-fns/locale";
 

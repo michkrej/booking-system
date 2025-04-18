@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
-import { type BookableItem } from "@/utils/interfaces";
+} from "@components/ui/select";
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
+import { type BookableItem } from "@utils/interfaces";
 import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 

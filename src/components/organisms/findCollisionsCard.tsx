@@ -1,5 +1,5 @@
-import { Booking, Plan } from "@/utils/interfaces";
-import { Button } from "../ui/button";
+import { Booking, Plan } from "@utils/interfaces";
+import { Button } from "@ui/button";
 import {
   Card,
   CardContent,
@@ -7,22 +7,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@components/ui/select";
 
 import { useMemo, useState } from "react";
-import { useUserPlans } from "@/hooks/useUserPlans";
-import { usePublicPlans } from "@/hooks/usePublicPlans";
+import { useUserPlans } from "@hooks/useUserPlans";
+import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useBoundStore } from "@/state/store";
 import { useNavigate } from "react-router-dom";
 import { CollisionsTable } from "../molecules/CollisonsTable";
-import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
+import { findCollisionsBetweenUserAndPublicPlans } from "@utils/helpers";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();

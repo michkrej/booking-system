@@ -7,13 +7,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+} from "@ui/dropdown-menu";
+import { Button } from "@ui/button";
 import { SiteLogo } from "../atoms/siteLogo";
 import { siteConfig } from "@/config/site";
-import { useStoreUser } from "@/hooks/useStoreUser";
-import { useStorePlanYear } from "@/hooks/useStorePlanYear";
-import { useSignOut } from "@/hooks/useSignOut";
+import { useStoreUser } from "@hooks/useStoreUser";
+import { useStorePlanYear } from "@hooks/useStorePlanYear";
+import { useSignOut } from "@hooks/useSignOut";
 
 export const Header = () => {
   const { logout } = useSignOut();
@@ -24,7 +24,7 @@ export const Header = () => {
     planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023;
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="bg-background sticky top-0 z-10 flex h-16 items-center gap-4 border-b px-4 md:px-6">
       <nav className="flex flex-1 flex-row items-center gap-4 text-sm font-medium md:gap-5 lg:gap-6">
         <Link to="/dashboard">
           <SiteLogo />
@@ -32,13 +32,13 @@ export const Header = () => {
         <div className="h-8 border-r" />
         <Link
           to="/dashboard"
-          className="text-foreground transition-colors hover:text-foreground"
+          className="text-foreground hover:text-foreground transition-colors"
         >
           Dashboard
         </Link>
         <a
           href={TF_URL}
-          className="text-muted-foreground transition-colors hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground transition-colors"
           target="_blank"
           rel="noreferrer"
         >
@@ -48,7 +48,7 @@ export const Header = () => {
         {user.admin && (
           <Link
             to="/admin"
-            className="text-muted-foreground transition-colors hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
             Admin
           </Link>

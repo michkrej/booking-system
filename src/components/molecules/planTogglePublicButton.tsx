@@ -1,9 +1,10 @@
-import { type Plan } from "@/utils/interfaces";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Globe, GlobeLock, Loader } from "lucide-react";
-import { Button } from "../ui/button";
-import { useEditPlan } from "@/hooks/useEditPlan";
-import { useAdminSettings } from "@/hooks/useAdminSettings";
+
+import { useAdminSettings } from "@hooks/useAdminSettings";
+import { useEditPlan } from "@hooks/useEditPlan";
+import { Button } from "@ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+import { type Plan } from "@utils/interfaces";
 
 type PlanTogglePublicButtonProps = {
   plan: Plan;
@@ -30,7 +31,7 @@ export const PlanTogglePublicButton = ({
         <Button
           size={"icon"}
           variant="ghost"
-          className="rounded-full text-primary/60 hover:text-primary"
+          className="text-primary/60 hover:text-primary rounded-full"
           disabled={isPlanEditLocked}
           onClick={() => togglePublicPlan.mutate(plan)}
           asChild

@@ -1,5 +1,5 @@
-import { Booking, Plan } from "@/utils/interfaces";
-import { TabsContent } from "../ui/tabs";
+import { Booking, Plan } from "@utils/interfaces";
+import { TabsContent } from "@ui/tabs";
 import {
   Card,
   CardContent,
@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@ui/card";
 import {
   Table,
   TableBody,
@@ -15,9 +15,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { formatDate, getCommittee } from "@/lib/utils";
-import { Skeleton } from "../ui/skeleton";
+} from "@ui/table";
+import { formatDate, getCommittee } from "@lib/utils";
+import { Skeleton } from "@ui/skeleton";
 import { TabCommitteeButtons } from "./TabCommitteeButtons";
 
 type TabAllCommitteesSectionProps = {

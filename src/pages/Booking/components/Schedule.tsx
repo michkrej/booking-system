@@ -12,22 +12,22 @@ import {
   TimelineMonth,
   type ActionEventArgs,
 } from "@syncfusion/ej2-react-schedule";
-import { type Booking, type NewBooking } from "@/utils/interfaces";
+import { type Booking, type NewBooking } from "@utils/interfaces";
 import { campusLocationsMap } from "@/data/locationsData";
 import { toast } from "sonner";
 import { EditBookingDialog } from "./EditBookingDialog";
 import { committees } from "@/data/committees";
 import { ScheduleToolbar } from "./ScheduleToolbar";
-import { useBookingState } from "@/hooks/useBookingState";
+import { useBookingState } from "@hooks/useBookingState";
 
 import "./localization";
-import { useBookingActions } from "@/hooks/useBookingActions";
+import { useBookingActions } from "@hooks/useBookingActions";
 import { useParams } from "react-router-dom";
 import { corridorsC } from "@/data/campusValla/rooms";
 import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
 import { NewBookingDialog } from "./NewBookingDialog";
-import { useCurrentDate } from "@/hooks/useCurrentDate";
-import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { useCurrentDate } from "@hooks/useCurrentDate";
+import { useAdminSettings } from "@hooks/useAdminSettings";
 import { ScheduleContext } from "./ScheduleContext";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources

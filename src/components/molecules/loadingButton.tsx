@@ -1,5 +1,5 @@
 import { LoaderCircle } from "lucide-react";
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button, ButtonProps } from "@components/ui/button";
 
 interface LoadingButtonProps extends ButtonProps {
   loading: boolean;

@@ -8,9 +8,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@components/ui/select";
 import { kårer } from "@/data/committees";
-import { getCommitteesForKår } from "@/utils/helpers";
+import { getCommitteesForKår } from "@utils/helpers";
 
 import {
   Form,
@@ -19,10 +19,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { type Kår, type User } from "@/utils/interfaces";
+} from "@components/ui/form";
+import { type Kår, type User } from "@utils/interfaces";
 import { LoadingButton } from "../molecules/loadingButton";
-import { useSignUp } from "@/hooks/useSignUp";
+import { useSignUp } from "@hooks/useSignUp";
 import { useEffect } from "react";
 
 const formSchemaGoogle = z.object({

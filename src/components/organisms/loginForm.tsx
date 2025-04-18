@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 
-import { LoadingButton } from "@/components/molecules/loadingButton";
+import { LoadingButton } from "@components/molecules/loadingButton";
 import {
   Form,
   FormControl,
@@ -11,9 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useLogin } from "@/hooks/useLogin";
+} from "@components/ui/form";
+import { Input } from "@components/ui/input";
+import { useLogin } from "@hooks/useLogin";
 
 const formSchema = z.object({
   email: z
@@ -42,7 +42,7 @@ export const LoginForm = () => {
     <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Logga in</h1>
-        <p className="text-balance text-muted-foreground">
+        <p className="text-muted-foreground text-balance">
           Ange din e-post och lösenord för att logga in
         </p>
       </div>

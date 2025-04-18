@@ -12,20 +12,20 @@ import {
 import { useMemo, useRef } from "react";
 
 import { committees } from "@/data/committees";
-import { useBookingState } from "@/hooks/useBookingState";
-import { useCurrentDate } from "@/hooks/useCurrentDate";
-import { convertToDate } from "@/lib/utils";
+import { useBookingState } from "@hooks/useBookingState";
+import { useCurrentDate } from "@hooks/useCurrentDate";
+import { convertToDate } from "@lib/utils";
 import {
   type BookableItem,
   type NumericBookableKeys,
   type Booking,
-} from "@/utils/interfaces";
+} from "@utils/interfaces";
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 import { ScheduleContext } from "./ScheduleContext";
 import { ScheduleToolbar } from "./ScheduleToolbar";
-import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 import { useBoundStore } from "@/state/store";
-import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { useAdminSettings } from "@hooks/useAdminSettings";
 
 import "./localization";
 

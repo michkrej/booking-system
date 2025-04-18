@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useBoundStore } from "@/state/store";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@ui/card";
 import { siteConfig } from "@/config/site";
-import { Button } from "../ui/button";
+import { Button } from "@ui/button";
 import { CURRENT_APP_VERSION } from "@/state/userStoreSlice";
 
 const addedLocations: {

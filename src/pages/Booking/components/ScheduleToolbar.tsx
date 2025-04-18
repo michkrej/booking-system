@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/ui/button";
 import { addDays, addMonths, format } from "date-fns";
 import {
   BaggageClaimIcon,
@@ -17,19 +17,19 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@components/ui/select";
 import { campusLocationsMap } from "@/data/locationsData";
-import { type Location } from "@/utils/interfaces";
+import { type Location } from "@utils/interfaces";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@components/ui/tooltip";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { useCurrentDate } from "@/hooks/useCurrentDate";
-import { useStoreBookings } from "@/hooks/useStoreBookings";
-import { convertToDate } from "@/lib/utils";
+import { useCurrentDate } from "@hooks/useCurrentDate";
+import { useStoreBookings } from "@hooks/useStoreBookings";
+import { convertToDate } from "@lib/utils";
 
 const viewAdjustments = {
   TimelineDay: (date: Date, step: number) => addDays(date, step),
@@ -159,7 +159,7 @@ export const ScheduleToolbar = ({
                 <Button
                   variant={"ghost"}
                   onClick={() => setBuilding(undefined)}
-                  className="flex gap-2 rounded-full px-2 text-primary"
+                  className="text-primary flex gap-2 rounded-full px-2"
                   disabled={!building}
                 >
                   <TrashIcon />
@@ -173,7 +173,7 @@ export const ScheduleToolbar = ({
                 <Button
                   variant={"ghost"}
                   onClick={handleInventoryButtonClick}
-                  className="flex gap-2 rounded-full px-2 text-primary"
+                  className="text-primary flex gap-2 rounded-full px-2"
                 >
                   <BaggageClaimIcon />
                 </Button>
@@ -188,7 +188,7 @@ export const ScheduleToolbar = ({
             <Button
               variant={"ghost"}
               onClick={() => navigate(`/booking/${id}`)}
-              className="flex gap-2 rounded-full px-2 text-primary"
+              className="text-primary flex gap-2 rounded-full px-2"
             >
               <CalendarIcon />
             </Button>
@@ -205,14 +205,14 @@ export const ScheduleToolbar = ({
               disabled={isAtFirstBooking}
               onClick={goToFirstBooking}
             >
-              <ChevronsLeft className="cursor-pointer hover:text-primary" />
+              <ChevronsLeft className="hover:text-primary cursor-pointer" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Gå till första bokningen</TooltipContent>
         </Tooltip>
         <div className="flex items-center gap-x-2">
           <Button size="icon" variant="ghost" onClick={goToPrevious}>
-            <ChevronLeft className="cursor-pointer hover:text-primary" />
+            <ChevronLeft className="hover:text-primary cursor-pointer" />
           </Button>
           <span className="pointer-events-none w-[180px] text-center">
             {currentView === "TimelineDay"
@@ -224,7 +224,7 @@ export const ScheduleToolbar = ({
               : null}
           </span>
           <Button size="icon" variant="ghost" onClick={goToNext}>
-            <ChevronRight className="cursor-pointer hover:text-primary" />
+            <ChevronRight className="hover:text-primary cursor-pointer" />
           </Button>
         </div>
         <Button

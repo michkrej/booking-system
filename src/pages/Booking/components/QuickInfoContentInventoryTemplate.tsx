@@ -1,5 +1,5 @@
 import { committees } from "@/data/committees";
-import { type Booking } from "@/utils/interfaces";
+import { type Booking } from "@utils/interfaces";
 import {
   BuildingIcon,
   CalendarClockIcon,

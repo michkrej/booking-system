@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { LoginForm } from "@/components/organisms/loginForm";
-import { NollePCarousel } from "@/components/organisms/nollePCarousel";
-import { SignUpForm } from "@/components/organisms/signUpForm";
-import { SiteLogo } from "@/components/atoms/siteLogo";
-import { SiteFooter } from "@/components/molecules/siteFooter";
-import { ForgotPasswordForm } from "@/components/organisms/forgotPasswordForm";
-import { useUserIsLoggedIn } from "@/hooks/useUserIsLoggedIn";
+import { LoginForm } from "@components/organisms/loginForm";
+import { NollePCarousel } from "@components/organisms/nollePCarousel";
+import { SignUpForm } from "@components/organisms/signUpForm";
+import { SiteLogo } from "@components/atoms/siteLogo";
+import { SiteFooter } from "@components/molecules/siteFooter";
+import { ForgotPasswordForm } from "@components/organisms/forgotPasswordForm";
+import { useUserIsLoggedIn } from "@hooks/useUserIsLoggedIn";
 
 export function LoginPage() {
   const { state } = useLocation() as { state: { mode?: string } };

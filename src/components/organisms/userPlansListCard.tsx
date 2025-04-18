@@ -1,10 +1,11 @@
-import { formatDate } from "@/lib/utils";
-import { PlanChangeNameButton } from "../molecules/planChangeNameButton";
-import { PlanDeleteButton } from "../molecules/planDeleteButton";
-import { PlanTogglePublicButton } from "../molecules/planTogglePublicButton";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Separator } from "../ui/separator";
-import { Skeleton } from "../ui/skeleton";
+import { formatDate } from "@lib/utils";
+import { useBoundStore } from "@/state/store";
+import { type Plan } from "@utils/interfaces";
+import { useCurrentDate } from "@hooks/useCurrentDate";
+import { useUserPlans } from "@hooks/useUserPlans";
+import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
+import { Separator } from "@ui/separator";
+import { Skeleton } from "@ui/skeleton";
 import {
   Table,
   TableBody,
@@ -12,12 +13,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "@ui/table";
 import { useNavigate } from "react-router-dom";
-import { type Plan } from "@/utils/interfaces";
-import { useUserPlans } from "@/hooks/useUserPlans";
-import { useBoundStore } from "@/state/store";
-import { useCurrentDate } from "@/hooks/useCurrentDate";
+import { PlanChangeNameButton } from "../molecules/planChangeNameButton";
+import { PlanDeleteButton } from "../molecules/planDeleteButton";
+import { PlanTogglePublicButton } from "../molecules/planTogglePublicButton";
 
 const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
 

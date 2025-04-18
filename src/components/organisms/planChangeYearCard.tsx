@@ -1,17 +1,17 @@
-import { Button } from "../ui/button";
+import { Button } from "@ui/button";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@ui/card";
 import { useMemo } from "react";
 import { MAX_YEAR, MIN_YEAR } from "@/state/planStoreSlice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useStorePlanYear } from "@/hooks/useStorePlanYear";
-import { useStoreUser } from "@/hooks/useStoreUser";
-import { cn } from "@/lib/utils";
+import { useStorePlanYear } from "@hooks/useStorePlanYear";
+import { useStoreUser } from "@hooks/useStoreUser";
+import { cn } from "@lib/utils";
 
 export const PlanChangeYearCard = () => {
   const { user } = useStoreUser();
@@ -32,7 +32,7 @@ export const PlanChangeYearCard = () => {
         <CardTitle>{planYear}</CardTitle>
       </CardHeader>
       <CardFooter className="flex justify-end gap-x-4 pb-4">
-        <div className="text-xs text-muted-foreground">Byt år:</div>
+        <div className="text-muted-foreground text-xs">Byt år:</div>
         <div>
           <Button
             variant="ghost"

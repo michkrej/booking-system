@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { Toaster } from "sonner";
 
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@components/ui/tooltip";
 import { AdminPage } from "./pages/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
 import { LoginPage } from "./pages/login.page";

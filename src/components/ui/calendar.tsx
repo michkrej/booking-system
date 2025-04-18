@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "@components/ui/button";
+import { cn } from "@lib/utils";
 import { differenceInCalendarDays } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
@@ -361,9 +361,9 @@ function Calendar({
                       <Button
                         key={i}
                         className={cn(
-                          "h-7 w-full text-sm font-normal text-foreground",
+                          "text-foreground h-7 w-full text-sm font-normal",
                           displayYears.from + i === new Date().getFullYear() &&
-                            "bg-accent font-medium text-accent-foreground",
+                            "bg-accent text-accent-foreground font-medium",
                         )}
                         variant="ghost"
                         onClick={() => {

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/ui/button";
 import { FormEmail } from "./FormEmail";
 import { FormGoogle } from "./FormGoogle";
 
@@ -27,7 +27,7 @@ export const SignUpForm = () => {
     <div className="mx-auto grid w-[300px] gap-6 md:w-[450px]">
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Skapa konto</h1>
-        <p className="text-balance text-muted-foreground">
+        <p className="text-muted-foreground text-balance">
           Fyll i din information för att skapa ett konto
         </p>
       </div>

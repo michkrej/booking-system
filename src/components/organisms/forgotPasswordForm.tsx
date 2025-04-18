@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from "@/components/ui/input";
+import { Input } from "@components/ui/input";
 import {
   Form,
   FormControl,
@@ -11,9 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { LoadingButton } from "@/components/molecules/loadingButton";
-import { useResetPassword } from "@/hooks/useResetPassword";
+} from "@components/ui/form";
+import { LoadingButton } from "@components/molecules/loadingButton";
+import { useResetPassword } from "@hooks/useResetPassword";
 
 const formSchema = z.object({
   email: z
@@ -47,7 +47,7 @@ export const ForgotPasswordForm = () => {
     <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Återställ lösenord</h1>
-        <p className="text-balance text-muted-foreground">
+        <p className="text-muted-foreground text-balance">
           Ange din e-post för att återställa ditt lösenord
         </p>
       </div>

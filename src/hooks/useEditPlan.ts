@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useIsMutating,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { plansService } from "@/services";
@@ -7,6 +11,8 @@ import { useStorePlanActions } from "./useStorePlanActions";
 import { useStoreUser } from "./useStoreUser";
 import { useStorePlanYear } from "./useStorePlanYear";
 import { useBoundStore } from "@/state/store";
+import { useStoreBookings } from "./useStoreBookings";
+import { useNavigate } from "react-router-dom";
 //import { useUserPlans } from "./useUserPlans";
 
 export const useEditPlan = () => {
@@ -19,9 +25,18 @@ export const useEditPlan = () => {
   } = useStorePlanActions();
   const { planYear } = useStorePlanYear();
   const hasPublicPlan = useBoundStore((state) => state.hasPublicPlan);
+  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const queryClient = useQueryClient();
+  const bookings = useStoreBookings();
+  const navigate = useNavigate();
 
-  const createPlan = useMutation({
+  const createPlanIsPending =
+    useIsMutating({
+      mutationKey: ["createPlan"],
+    }) > 0;
+
+  const createPlanMutation = useMutation({
+    mutationKey: ["createPlan"],
     mutationFn: (planName: string) => {
       return plansService.createPlan({
         label: planName,
@@ -40,6 +55,33 @@ export const useEditPlan = () => {
       toast.error("Kunde inte skapa planeringen");
     },
   });
+
+  const createPlan = ({
+    planName,
+    onSuccess,
+    onError,
+  }: {
+    planName: string;
+    onSuccess: () => void;
+    onError: () => void;
+  }) => {
+    createPlanMutation.mutate(planName, {
+      onSuccess: (newPlan) => {
+        userPlanCreated(newPlan);
+        changedActivePlans([newPlan]);
+        bookings.loadedBookings([]);
+
+        toast.success("Planeringen skapades");
+
+        navigate(`/booking/${newPlan.id}`);
+        onSuccess?.();
+      },
+      onError: () => {
+        toast.error("Kunde inte skapa planeringen");
+        onError?.();
+      },
+    });
+  };
 
   const updatePlanName = useMutation({
     mutationFn: ({
@@ -111,5 +153,6 @@ export const useEditPlan = () => {
     togglePublicPlan,
     deletePlan,
     createPlan,
+    createPlanIsPending,
   };
 };

@@ -1,6 +1,6 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { MultiSelect } from "@/components/ui/multi-select";
+import { Input } from "@components/ui/input";
+import { Label } from "@components/ui/label";
+import { MultiSelect } from "@components/ui/multi-select";
 import { v4 as uuidv4 } from "uuid";
 import {
   Form,
@@ -9,7 +9,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@components/ui/form";
 import { useFieldArray, useForm } from "react-hook-form";
 import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,10 +21,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@components/ui/dialog";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { Button } from "@components/ui/button";
+import { DateTimePicker } from "@components/ui/date-time-picker";
 import { sv } from "date-fns/locale";
 import { ScheduleContext } from "./ScheduleContext";
 import { committees } from "@/data/committees";
@@ -32,17 +32,17 @@ import {
   type NewBooking,
   type Booking,
   type BookableItem,
-} from "@/utils/interfaces";
+} from "@utils/interfaces";
 import { useParams } from "react-router-dom";
-import { LoadingButton } from "@/components/molecules/loadingButton";
-import { useStoreBookings } from "@/hooks/useStoreBookings";
-import { useStoreUser } from "@/hooks/useStoreUser";
-import { Checkbox } from "@/components/ui/checkbox";
+import { LoadingButton } from "@components/molecules/loadingButton";
+import { useStoreBookings } from "@hooks/useStoreBookings";
+import { useStoreUser } from "@hooks/useStoreUser";
+import { Checkbox } from "@components/ui/checkbox";
 import { campusLocationsMap } from "@/data/locationsData";
-import { useBookingActions } from "@/hooks/useBookingActions";
+import { useBookingActions } from "@hooks/useBookingActions";
 import { corridorsC } from "@/data/campusValla/rooms";
 import roomsC from "@/data/campusValla/rooms/C";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@components/ui/separator";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { BookingSchema } from "./schema";

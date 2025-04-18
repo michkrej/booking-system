@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 
-import { useAdminSettings } from "@/hooks/useAdminSettings";
-import { useStoreUser } from "@/hooks/useStoreUser";
+import { useAdminSettings } from "@hooks/useAdminSettings";
+import { useStoreUser } from "@hooks/useStoreUser";
 import {
   Card,
   CardContent,
@@ -10,9 +10,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Progress } from "../ui/progress";
-import { getPercentageProgress, getWeeksLeftToNolleP } from "@/utils/helpers";
+} from "@ui/card";
+import { Progress } from "@ui/progress";
+import { getPercentageProgress, getWeeksLeftToNolleP } from "@utils/helpers";
 
 export const TimeUntilMottagningCard = () => {
   const { mottagningStart } = useAdminSettings();

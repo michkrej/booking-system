@@ -2,19 +2,19 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useCurrentDate } from "@/hooks/useCurrentDate";
-import { usePublicPlans } from "@/hooks/usePublicPlans";
-import { useStoreBookings } from "@/hooks/useStoreBookings";
-import { useStoreUser } from "@/hooks/useStoreUser";
-import { getCommittee } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
+import { useCurrentDate } from "@hooks/useCurrentDate";
+import { usePublicPlans } from "@hooks/usePublicPlans";
+import { useStoreBookings } from "@hooks/useStoreBookings";
+import { useStoreUser } from "@hooks/useStoreUser";
+import { getCommittee } from "@lib/utils";
 import { useBoundStore } from "@/state/store";
-import { type Booking, type Plan } from "@/utils/interfaces";
-import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
-import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
+import { type Booking, type Plan } from "@utils/interfaces";
+import { findInventoryCollisionsBetweenEvents } from "@utils/inventoryCollisions";
+import { findRoomCollisionsBetweenEvents } from "@utils/roomCollisions";
 import { ExportPlansButton } from "../molecules/exportPlansButton";
 import { TabCommitteeSection } from "../molecules/TabCommitteeSection";
-import { usePublicPlansByKår } from "@/hooks/usePlansByKår";
+import { usePublicPlansByKår } from "@hooks/usePlansByKår";
 import { TabAllCommitteesSection } from "../molecules/TabAllCommitteesSection";
 
 export const PublicPlansCard = () => {

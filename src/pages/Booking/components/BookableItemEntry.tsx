@@ -1,9 +1,9 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { Input } from "@components/ui/input";
+import { Button } from "@components/ui/button";
+import { DateTimePicker } from "@components/ui/date-time-picker";
 import { TrashIcon } from "lucide-react";
-import { Comment } from "@/components/ui/comment";
-import { type BookableItem } from "@/utils/interfaces";
+import { Comment } from "@components/ui/comment";
+import { type BookableItem } from "@utils/interfaces";
 import { sv } from "date-fns/locale";
 import { type z } from "zod";
 import { type UseFormReturn } from "react-hook-form";
@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@components/ui/form";
 import { type BookingSchema } from "./schema";
-import { BOOKABLE_ITEM_OPTIONS } from "@/utils/CONSTANTS";
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 
 type InventoryItemProps = {
   item: BookableItem & { id: string };
@@ -109,7 +109,7 @@ export const BookableItemEntry = ({
         </Comment>
       </div>
       <Button
-        className="absolute right-1 top-1 h-7 w-7 rounded-full text-primary/60 hover:text-primary"
+        className="text-primary/60 hover:text-primary absolute top-1 right-1 h-7 w-7 rounded-full"
         size={"icon"}
         variant="ghost"
         onClick={handleDelete}

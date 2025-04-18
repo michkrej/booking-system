@@ -1,3 +1,6 @@
+import { Trash } from "lucide-react";
+import { useState } from "react";
+
 import {
   Dialog,
   DialogClose,
@@ -7,15 +10,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Trash } from "lucide-react";
-import { Button } from "../ui/button";
-import { type Plan } from "@/utils/interfaces";
+} from "@components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+import { Button } from "@ui/button";
+import { type Plan } from "@utils/interfaces";
 import { LoadingButton } from "./loadingButton";
-import { useState } from "react";
-import { useEditPlan } from "@/hooks/useEditPlan";
-import { useAdminSettings } from "@/hooks/useAdminSettings";
+import { useEditPlan } from "@hooks/useEditPlan";
+import { useAdminSettings } from "@hooks/useAdminSettings";
 
 type PlanDeleteButtonProps = {
   plan: Plan;
@@ -48,7 +49,7 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
             <Button
               size={"icon"}
               variant="ghost"
-              className="rounded-full text-primary/60 hover:text-primary"
+              className="text-primary/60 hover:text-primary rounded-full"
               disabled={isPlanEditLocked}
               asChild
             >

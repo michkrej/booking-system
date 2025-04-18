@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@components/ui/dialog";
 import { LoadingButton } from "../molecules/loadingButton";
 import { Button } from "@ui/button";
 import {
@@ -30,7 +30,7 @@ import {
 } from "@ui/form";
 import { Input } from "@ui/input";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { CURRENT_YEAR } from "@utils/CONSTANTS";
 import { useCreatePlan } from "@hooks/useCreatePlan";
 
 const formSchema = z.object({
