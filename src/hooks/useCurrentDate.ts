@@ -1,7 +1,7 @@
 import { useBoundStore } from "@/state/store";
-import { useStoreUser } from "./useStoreUser";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { useAdminSettings } from "./useAdminSettings";
+import { useStoreUser } from "./useStoreUser";
 
 export const useCurrentDate = () => {
   const currentDate = useBoundStore((state) => state.currentDate);

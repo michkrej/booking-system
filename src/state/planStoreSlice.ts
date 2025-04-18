@@ -1,11 +1,11 @@
-import { type Plan } from "@/utils/interfaces";
 import { type StateCreator } from "zustand";
-import { type UserStoreSlice } from "./userStoreSlice";
 import { convertToDate } from "@/lib/utils";
 import { CURRENT_YEAR } from "@/utils/CONSTANTS";
-import { type BookingStoreSlice } from "./bookingStoreSlice";
-import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
+import { type Plan } from "@/utils/interfaces";
 import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
+import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
+import { type BookingStoreSlice } from "./bookingStoreSlice";
+import { type UserStoreSlice } from "./userStoreSlice";
 
 export const MIN_YEAR = 2025;
 export const MAX_YEAR = CURRENT_YEAR + 1;

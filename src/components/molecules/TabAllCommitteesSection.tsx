@@ -1,5 +1,7 @@
+import { formatDate, getCommittee } from "@lib/utils";
+
 import { Booking, Plan } from "@utils/interfaces";
-import { TabsContent } from "@ui/tabs";
+
 import {
   Card,
   CardContent,
@@ -8,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/card";
+import { Skeleton } from "@ui/skeleton";
 import {
   Table,
   TableBody,
@@ -16,8 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
-import { formatDate, getCommittee } from "@lib/utils";
-import { Skeleton } from "@ui/skeleton";
+import { TabsContent } from "@ui/tabs";
+
 import { TabCommitteeButtons } from "./TabCommitteeButtons";
 
 type TabAllCommitteesSectionProps = {

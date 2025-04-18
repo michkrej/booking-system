@@ -1,11 +1,8 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@components/ui/card";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
+
 import { CURRENT_YEAR } from "@utils/CONSTANTS";
+
+import { Card, CardDescription, CardHeader, CardTitle } from "@ui/card";
 
 export const PlanEditLockedWarningCard = () => {
   const { planYear } = useStorePlanYear();

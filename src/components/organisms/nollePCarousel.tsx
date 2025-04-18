@@ -1,9 +1,6 @@
 import Autoplay from "embla-carousel-autoplay";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@components/ui/carousel";
+
+import { Carousel, CarouselContent, CarouselItem } from "@ui/carousel";
 
 import image_2019_1 from "@/assets/nolleP/2019_1-min.jpeg";
 import image_2019_2 from "@/assets/nolleP/2019_2-min.jpeg";

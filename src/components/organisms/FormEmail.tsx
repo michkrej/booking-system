@@ -1,17 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Input } from "@components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@components/ui/select";
-import { kårer } from "@/data/committees";
+import { useSignUp } from "@hooks/useSignUp";
+
+import { kårer } from "@data/committees";
+
 import { getCommitteesForKår } from "@utils/helpers";
+import { type Kår, type User } from "@utils/interfaces";
 
 import {
   Form,
@@ -21,11 +18,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@components/ui/form";
-import { type Kår, type User } from "@utils/interfaces";
+} from "@ui/form";
+import { Input } from "@ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/select";
+
 import { LoadingButton } from "../molecules/loadingButton";
-import { useSignUp } from "@hooks/useSignUp";
-import { useEffect } from "react";
 
 const formSchemaEmail = z
   .object({

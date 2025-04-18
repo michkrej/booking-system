@@ -1,21 +1,24 @@
-import { Input } from "@components/ui/input";
-import { Button } from "@components/ui/button";
-import { DateTimePicker } from "@components/ui/date-time-picker";
-import { TrashIcon } from "lucide-react";
-import { Comment } from "@components/ui/comment";
-import { type BookableItem } from "@utils/interfaces";
 import { sv } from "date-fns/locale";
-import { type z } from "zod";
+import { TrashIcon } from "lucide-react";
 import { type UseFormReturn } from "react-hook-form";
+import { type z } from "zod";
+
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
+import { type BookableItem } from "@utils/interfaces";
+
+import { Button } from "@ui/button";
+import { Comment } from "@ui/comment";
+import { DateTimePicker } from "@ui/date-time-picker";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@components/ui/form";
+} from "@ui/form";
+import { Input } from "@ui/input";
+
 import { type BookingSchema } from "./schema";
-import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 
 type InventoryItemProps = {
   item: BookableItem & { id: string };

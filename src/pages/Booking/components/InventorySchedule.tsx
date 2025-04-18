@@ -1,5 +1,6 @@
 import {
   Inject,
+  type PopupOpenEventArgs,
   ResourceDirective,
   ResourcesDirective,
   ScheduleComponent,
@@ -7,26 +8,29 @@ import {
   TimelineViews,
   ViewDirective,
   ViewsDirective,
-  type PopupOpenEventArgs,
 } from "@syncfusion/ej2-react-schedule";
 import { useMemo, useRef } from "react";
 
-import { committees } from "@/data/committees";
+import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useBookingState } from "@hooks/useBookingState";
 import { useCurrentDate } from "@hooks/useCurrentDate";
-import { convertToDate } from "@lib/utils";
+
+import { committees } from "@data/committees";
+
+import { useBoundStore } from "@state/store";
+
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 import {
   type BookableItem,
-  type NumericBookableKeys,
   type Booking,
+  type NumericBookableKeys,
 } from "@utils/interfaces";
+
+import { convertToDate } from "@lib/utils";
+
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 import { ScheduleContext } from "./ScheduleContext";
 import { ScheduleToolbar } from "./ScheduleToolbar";
-import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
-import { useBoundStore } from "@/state/store";
-import { useAdminSettings } from "@hooks/useAdminSettings";
-
 import "./localization";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources

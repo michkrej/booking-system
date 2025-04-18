@@ -1,4 +1,7 @@
+import { cn, formatDate, getCommittee } from "@lib/utils";
+
 import { Booking, Plan } from "@utils/interfaces";
+
 import {
   Table,
   TableBody,
@@ -7,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
-import { cn, formatDate, getCommittee } from "@lib/utils";
 
 type CollisionsTableProps = {
   publicPlans: Plan[];

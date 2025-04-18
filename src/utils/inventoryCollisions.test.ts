@@ -1,9 +1,8 @@
-import { describe, expect, it, beforeEach } from "vitest";
-
-import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
-import { type BookableItem, type Booking } from "./interfaces";
+import { beforeEach, describe, expect, it } from "vitest";
 import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
 import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
+import { type BookableItem, type Booking } from "./interfaces";
+import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
 
 describe("findInventoryCollisionsBetweenEvents", () => {
   let events: unknown[];

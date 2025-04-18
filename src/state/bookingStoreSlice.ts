@@ -1,6 +1,6 @@
 import { type StateCreator } from "zustand";
+import { type Booking, type Plan } from "@/utils/interfaces";
 import { type PlanStoreSlice } from "./planStoreSlice";
-import { type Plan, type Booking } from "@/utils/interfaces";
 
 type BookingStoreSlice = {
   bookings: Booking[];

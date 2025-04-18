@@ -1,12 +1,12 @@
+import { setISOWeek, startOfWeek } from "date-fns";
+import { type StateCreator } from "zustand";
+import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import {
-  type NumericBookableKeys,
   type AdminSettings,
   type Kår,
+  type NumericBookableKeys,
 } from "@/utils/interfaces";
-import { type StateCreator } from "zustand";
 import { type PlanStoreSlice } from "./planStoreSlice";
-import { setISOWeek, startOfWeek } from "date-fns";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 
 export const DEFAULT_ITEMS: Record<NumericBookableKeys, number> = {
   grillar: 8,

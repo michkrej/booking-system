@@ -1,5 +1,6 @@
-import { siteConfig } from "@/config/site";
 import { IntroductionPopover } from "@components/organisms/introductionPopover";
+
+import { siteConfig } from "@/config/site";
 
 export function SiteFooter() {
   return (

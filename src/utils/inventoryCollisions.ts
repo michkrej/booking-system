@@ -1,15 +1,15 @@
 import { areIntervalsOverlapping } from "date-fns";
-import {
-  type NumericBookableKeys,
-  type TextBookableKeys,
-  type BookableItem,
-  type NumericBookableItem,
-  type TextBookableItem,
-  type Booking,
-  type BookableItemNames,
-} from "./interfaces";
-import { useBoundStore } from "@/state/store";
 import { convertToDate } from "@/lib/utils";
+import { useBoundStore } from "@/state/store";
+import {
+  type BookableItem,
+  type BookableItemNames,
+  type Booking,
+  type NumericBookableItem,
+  type NumericBookableKeys,
+  type TextBookableItem,
+  type TextBookableKeys,
+} from "./interfaces";
 
 type NumericItems = Record<
   NumericBookableKeys,

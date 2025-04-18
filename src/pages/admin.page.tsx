@@ -1,3 +1,8 @@
+import { useMemo, useState } from "react";
+import { useAdminSettings } from "@hooks/useAdminSettings";
+import { kårer } from "@data/committees";
+import { BOOKABLE_ITEM_OPTIONS, CURRENT_YEAR } from "@utils/CONSTANTS";
+import { type Kår } from "@utils/interfaces";
 import { Layout } from "@components/molecules/layout";
 import { LoadingButton } from "@components/molecules/loadingButton";
 import {
@@ -6,16 +11,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@components/ui/card";
-import { DatePicker } from "@components/ui/date-picker";
-import { Input } from "@components/ui/input";
-import { Label } from "@components/ui/label";
-import { Switch } from "@components/ui/switch";
-import { kårer } from "@/data/committees";
-import { useAdminSettings } from "@hooks/useAdminSettings";
-import { BOOKABLE_ITEM_OPTIONS, CURRENT_YEAR } from "@utils/CONSTANTS";
-import { type Kår } from "@utils/interfaces";
-import { useMemo, useState } from "react";
+} from "@ui/card";
+import { DatePicker } from "@ui/date-picker";
+import { Input } from "@ui/input";
+import { Label } from "@ui/label";
+import { Switch } from "@ui/switch";
 
 export const AdminPage = () => {
   return (

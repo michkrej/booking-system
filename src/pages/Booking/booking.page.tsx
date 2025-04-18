@@ -1,9 +1,13 @@
-import { Layout } from "@components/molecules/layout";
-import { Schedule } from "./components/Schedule";
-import { usePublicPlans } from "@hooks/usePublicPlans";
-import { useBoundStore } from "@/state/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import { usePublicPlans } from "@hooks/usePublicPlans";
+
+import { useBoundStore } from "@state/store";
+
+import { Layout } from "@components/molecules/layout";
+
+import { Schedule } from "./components/Schedule";
 
 export const BookingPage = () => {
   const { id } = useParams();

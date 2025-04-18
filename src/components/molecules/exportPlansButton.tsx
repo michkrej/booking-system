@@ -1,7 +1,16 @@
+import { getCommittee } from "@lib/utils";
+import { download, generateCsv, mkConfig } from "export-to-csv";
 import { File } from "lucide-react";
-import { mkConfig, generateCsv, download } from "export-to-csv";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@components/ui/button";
+import { usePublicPlans } from "@hooks/usePublicPlans";
+
+import { exportPlans } from "@utils/helpers";
+import { type Kår, type Plan } from "@utils/interfaces";
+
+import { Button } from "@ui/button";
+import { Checkbox } from "@ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -10,23 +19,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@components/ui/dialog";
-import { Label } from "@components/ui/label";
+} from "@ui/dialog";
+import { Label } from "@ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@components/ui/select";
-import { Checkbox } from "@ui/checkbox";
-import { useState } from "react";
+} from "@ui/select";
+
 import { LoadingButton } from "./loadingButton";
-import { usePublicPlans } from "@hooks/usePublicPlans";
-import { getCommittee } from "@lib/utils";
-import { type Kår, type Plan } from "@utils/interfaces";
-import { exportPlans } from "@utils/helpers";
-import { toast } from "sonner";
 
 const getPlans = (plans: Plan[], kår: Omit<Kår, "Övrigt"> | "all") => {
   if (kår === "all") return plans;

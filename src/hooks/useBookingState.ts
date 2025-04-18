@@ -1,12 +1,12 @@
+import { useState } from "react";
 import { type View } from "@/pages/Booking/components/ScheduleToolbar";
 import { useBoundStore } from "@/state/store";
 import { defaultCampus } from "@/utils/helpers";
 import {
-  type Location,
   type Booking,
+  type Location,
   type NewBooking,
 } from "@/utils/interfaces";
-import { useState } from "react";
 import { useStoreBookings } from "./useStoreBookings";
 import { useStoreUser } from "./useStoreUser";
 

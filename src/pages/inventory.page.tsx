@@ -1,8 +1,8 @@
-import { Layout } from "@components/molecules/layout";
-import { usePublicPlans } from "@hooks/usePublicPlans";
-import { useBoundStore } from "@/state/store";
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { usePublicPlans } from "@hooks/usePublicPlans";
+import { useBoundStore } from "@state/store";
+import { Layout } from "@components/molecules/layout";
 import { InventorySchedule } from "./Booking/components/InventorySchedule";
 
 export const InventoryPage = () => {

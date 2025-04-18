@@ -9,13 +9,14 @@ import {
 } from "react-router-dom";
 import { Toaster } from "sonner";
 
-import { TooltipProvider } from "@components/ui/tooltip";
+import { TooltipProvider } from "@ui/tooltip";
+
+import { useUserIsLoggedIn } from "./hooks/useUserIsLoggedIn";
+import { BookingPage } from "./pages/Booking/booking.page";
 import { AdminPage } from "./pages/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
-import { LoginPage } from "./pages/login.page";
-import { BookingPage } from "./pages/Booking/booking.page";
-import { useUserIsLoggedIn } from "./hooks/useUserIsLoggedIn";
 import { InventoryPage } from "./pages/inventory.page";
+import { LoginPage } from "./pages/login.page";
 
 const queryClient = new QueryClient();
 

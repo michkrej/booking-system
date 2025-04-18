@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
-
+import { useEffect, useState } from "react";
 import { authService } from "@/services";
-import { getErrorMessage } from "@/utils/error.util";
 import { useBoundStore } from "@/state/store";
+import { getErrorMessage } from "@/utils/error.util";
 import { useStorePlanActions } from "./useStorePlanActions";
 
 export const useSignOut = () => {

@@ -1,7 +1,7 @@
-import { committees } from "@/data/committees";
 import { type ClassValue, clsx } from "clsx";
 import { Timestamp } from "firebase/firestore";
 import { twMerge } from "tailwind-merge";
+import { committees } from "@/data/committees";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

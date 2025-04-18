@@ -1,12 +1,12 @@
-import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
-import { committees, committeesConsensus, kårer } from "../data/committees";
-import { type Kår, type Booking, type Plan } from "./interfaces";
 import { differenceInMilliseconds, format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
+import { committees, committeesConsensus, kårer } from "../data/committees";
+import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
 import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
-import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
+import { type Booking, type Kår, type Plan } from "./interfaces";
 import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
+import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
 
 export const exportPlans = async (
   plans: Plan[],

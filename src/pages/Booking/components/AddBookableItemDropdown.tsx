@@ -1,15 +1,17 @@
-import { Button } from "@components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { useMemo, useState } from "react";
+
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
+import { type BookableItem } from "@utils/interfaces";
+
+import { Button } from "@ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@components/ui/select";
-import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
-import { type BookableItem } from "@utils/interfaces";
-import { PlusIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+} from "@ui/select";
 
 export const AddBookableItemDropdown = ({
   addBookableItemToBooking,

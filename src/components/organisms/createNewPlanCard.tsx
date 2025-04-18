@@ -2,16 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@components/ui/dialog";
-import { LoadingButton } from "../molecules/loadingButton";
+import { useCreatePlan } from "@hooks/useCreatePlan";
+import { useStorePlanYear } from "@hooks/useStorePlanYear";
+
+import { CURRENT_YEAR } from "@utils/CONSTANTS";
+
 import { Button } from "@ui/button";
 import {
   Card,
@@ -21,6 +16,15 @@ import {
   CardTitle,
 } from "@ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@ui/dialog";
+import {
   Form,
   FormControl,
   FormField,
@@ -29,9 +33,8 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
-import { useStorePlanYear } from "@hooks/useStorePlanYear";
-import { CURRENT_YEAR } from "@utils/CONSTANTS";
-import { useCreatePlan } from "@hooks/useCreatePlan";
+
+import { LoadingButton } from "../molecules/loadingButton";
 
 const formSchema = z.object({
   planName: z.string().min(1, "Du måste ange ett namn för planeringen"),

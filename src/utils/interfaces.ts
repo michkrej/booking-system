@@ -1,4 +1,4 @@
-import { type committees, type kårer } from "@/data/committees";
+import { type committees, type kårer } from "@data/committees";
 import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
 
 export type Room = {

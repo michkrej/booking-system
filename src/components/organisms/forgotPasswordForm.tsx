@@ -1,9 +1,12 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from "@components/ui/input";
+import { useResetPassword } from "@hooks/useResetPassword";
+
+import { LoadingButton } from "@components/molecules/loadingButton";
+
 import {
   Form,
   FormControl,
@@ -11,9 +14,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@components/ui/form";
-import { LoadingButton } from "@components/molecules/loadingButton";
-import { useResetPassword } from "@hooks/useResetPassword";
+} from "@ui/form";
+import { Input } from "@ui/input";
 
 const formSchema = z.object({
   email: z

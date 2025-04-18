@@ -1,5 +1,5 @@
-import { type User } from "@/utils/interfaces";
 import { type StateCreator } from "zustand";
+import { type User } from "@/utils/interfaces";
 import { type PlanStoreSlice } from "./planStoreSlice";
 
 interface UserStoreSlice {

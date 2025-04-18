@@ -1,6 +1,12 @@
 import { Trash } from "lucide-react";
 import { useState } from "react";
 
+import { useAdminSettings } from "@hooks/useAdminSettings";
+import { useEditPlan } from "@hooks/useEditPlan";
+
+import { type Plan } from "@utils/interfaces";
+
+import { Button } from "@ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,13 +16,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@components/ui/dialog";
+} from "@ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
-import { Button } from "@ui/button";
-import { type Plan } from "@utils/interfaces";
+
 import { LoadingButton } from "./loadingButton";
-import { useEditPlan } from "@hooks/useEditPlan";
-import { useAdminSettings } from "@hooks/useAdminSettings";
 
 type PlanDeleteButtonProps = {
   plan: Plan;

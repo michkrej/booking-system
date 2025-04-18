@@ -4,6 +4,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useAdminSettings } from "@hooks/useAdminSettings";
+import { useEditPlan } from "@hooks/useEditPlan";
+
+import { type Plan } from "@utils/interfaces";
+
+import { Button } from "@ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@components/ui/dialog";
+} from "@ui/dialog";
 import {
   Form,
   FormControl,
@@ -20,17 +26,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@components/ui/form";
-import { Input } from "@components/ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@components/ui/tooltip";
-import { useAdminSettings } from "@hooks/useAdminSettings";
-import { useEditPlan } from "@hooks/useEditPlan";
-import { Button } from "@ui/button";
-import { type Plan } from "@utils/interfaces";
+} from "@ui/form";
+import { Input } from "@ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+
 import { LoadingButton } from "./loadingButton";
 
 const formSchema = z.object({

@@ -1,9 +1,6 @@
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/ui/popover";
 import { Button } from "@ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
+
 import { siteConfig } from "@/config/site";
 
 export const IntroductionPopover = () => {

@@ -1,34 +1,36 @@
-import { useEffect, useMemo, useRef } from "react";
+import { corridorsC } from "@data/campusValla/rooms";
+import { committees } from "@data/committees";
+import { campusLocationsMap } from "@data/locationsData";
 import {
-  ScheduleComponent,
-  Inject,
-  ViewsDirective,
-  ViewDirective,
-  TimelineViews,
-  ResourcesDirective,
-  ResourceDirective,
-  Resize,
-  DragAndDrop,
-  TimelineMonth,
   type ActionEventArgs,
+  DragAndDrop,
+  Inject,
+  Resize,
+  ResourceDirective,
+  ResourcesDirective,
+  ScheduleComponent,
+  TimelineMonth,
+  TimelineViews,
+  ViewDirective,
+  ViewsDirective,
 } from "@syncfusion/ej2-react-schedule";
-import { type Booking, type NewBooking } from "@utils/interfaces";
-import { campusLocationsMap } from "@/data/locationsData";
-import { toast } from "sonner";
-import { EditBookingDialog } from "./EditBookingDialog";
-import { committees } from "@/data/committees";
-import { ScheduleToolbar } from "./ScheduleToolbar";
-import { useBookingState } from "@hooks/useBookingState";
-
-import "./localization";
-import { useBookingActions } from "@hooks/useBookingActions";
+import { useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { corridorsC } from "@/data/campusValla/rooms";
-import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
-import { NewBookingDialog } from "./NewBookingDialog";
-import { useCurrentDate } from "@hooks/useCurrentDate";
+import { toast } from "sonner";
+
 import { useAdminSettings } from "@hooks/useAdminSettings";
+import { useBookingActions } from "@hooks/useBookingActions";
+import { useBookingState } from "@hooks/useBookingState";
+import { useCurrentDate } from "@hooks/useCurrentDate";
+
+import { type Booking, type NewBooking } from "@utils/interfaces";
+
+import { EditBookingDialog } from "./EditBookingDialog";
+import { NewBookingDialog } from "./NewBookingDialog";
+import { QuickInfoContentTemplate } from "./QuickInfoContentTemplate";
 import { ScheduleContext } from "./ScheduleContext";
+import { ScheduleToolbar } from "./ScheduleToolbar";
+import "./localization";
 
 // Docs for this https://ej2.syncfusion.com/react/demos/#/bootstrap5/schedule/timeline-resources
 // https://ej2.syncfusion.com/react/documentation/schedule/editor-template

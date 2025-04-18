@@ -1,5 +1,6 @@
-import { Button } from "@components/ui/button";
+import { campusLocationsMap } from "@data/locationsData";
 import { addDays, addMonths, format } from "date-fns";
+import { sv } from "date-fns/locale";
 import {
   BaggageClaimIcon,
   CalendarIcon,
@@ -8,28 +9,28 @@ import {
   ChevronsLeft,
   TrashIcon,
 } from "lucide-react";
-import { ScheduleContext } from "./ScheduleContext";
 import { useContext, useMemo } from "react";
-import { sv } from "date-fns/locale";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+
+import { useCurrentDate } from "@hooks/useCurrentDate";
+import { useStoreBookings } from "@hooks/useStoreBookings";
+
+import { type Location } from "@utils/interfaces";
+
+import { convertToDate } from "@lib/utils";
+
+import { Button } from "@ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@components/ui/select";
-import { campusLocationsMap } from "@/data/locationsData";
-import { type Location } from "@utils/interfaces";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@components/ui/tooltip";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "sonner";
-import { useCurrentDate } from "@hooks/useCurrentDate";
-import { useStoreBookings } from "@hooks/useStoreBookings";
-import { convertToDate } from "@lib/utils";
+} from "@ui/select";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+
+import { ScheduleContext } from "./ScheduleContext";
 
 const viewAdjustments = {
   TimelineDay: (date: Date, step: number) => addDays(date, step),

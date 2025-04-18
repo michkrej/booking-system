@@ -1,4 +1,14 @@
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { usePublicPlans } from "@hooks/usePublicPlans";
+import { useUserPlans } from "@hooks/useUserPlans";
+
+import { useBoundStore } from "@state/store";
+
+import { findCollisionsBetweenUserAndPublicPlans } from "@utils/helpers";
 import { Booking, Plan } from "@utils/interfaces";
+
 import { Button } from "@ui/button";
 import {
   Card,
@@ -14,15 +24,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@components/ui/select";
+} from "@ui/select";
 
-import { useMemo, useState } from "react";
-import { useUserPlans } from "@hooks/useUserPlans";
-import { usePublicPlans } from "@hooks/usePublicPlans";
-import { useBoundStore } from "@/state/store";
-import { useNavigate } from "react-router-dom";
 import { CollisionsTable } from "../molecules/CollisonsTable";
-import { findCollisionsBetweenUserAndPublicPlans } from "@utils/helpers";
 
 export const FindCollisionsCard = () => {
   const { publicPlans } = usePublicPlans();

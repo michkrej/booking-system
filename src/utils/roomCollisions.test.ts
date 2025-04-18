@@ -1,8 +1,8 @@
-import { describe, expect, it, beforeEach } from "vitest";
-import { type Booking } from "./interfaces";
-import { locations } from "@/data/locationsData";
-import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
+import { beforeEach, describe, expect, it } from "vitest";
 import { committees } from "@/data/committees";
+import { locations } from "@/data/locationsData";
+import { type Booking } from "./interfaces";
+import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
 
 const LOCATION_ID = locations.campusValla["C-huset"].id;
 

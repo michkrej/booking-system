@@ -1,17 +1,16 @@
 import {
-  signInWithEmailAndPassword,
+  GoogleAuthProvider,
   signOut as _signOut,
   createUserWithEmailAndPassword,
-  updateProfile,
   sendPasswordResetEmail,
-  GoogleAuthProvider,
+  signInWithEmailAndPassword,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-
-import { auth, db } from "./config";
 import { getErrorMessage } from "@/utils/error.util";
-import { type UserDetails, type User } from "@/utils/interfaces";
+import { type User, type UserDetails } from "@/utils/interfaces";
+import { auth, db } from "./config";
 
 const signUpWithEmailAndPassword = async ({
   email,

@@ -1,18 +1,29 @@
-import { Input } from "@components/ui/input";
-import { Label } from "@components/ui/label";
-import { MultiSelect } from "@components/ui/multi-select";
-import { v4 as uuidv4 } from "uuid";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@components/ui/form";
-import { useFieldArray, useForm } from "react-hook-form";
-import { type z } from "zod";
+import { corridorsC } from "@data/campusValla/rooms";
+import roomsC from "@data/campusValla/rooms/C";
+import { committees } from "@data/committees";
+import { campusLocationsMap } from "@data/locationsData";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { sv } from "date-fns/locale";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { type z } from "zod";
+
+import { useBookingActions } from "@hooks/useBookingActions";
+import { useStoreBookings } from "@hooks/useStoreBookings";
+import { useStoreUser } from "@hooks/useStoreUser";
+
+import {
+  type BookableItem,
+  type Booking,
+  type NewBooking,
+} from "@utils/interfaces";
+
+import { LoadingButton } from "@components/molecules/loadingButton";
+import { Button } from "@ui/button";
+import { Checkbox } from "@ui/checkbox";
+import { DateTimePicker } from "@ui/date-time-picker";
 import {
   Dialog,
   DialogClose,
@@ -21,30 +32,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@components/ui/dialog";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { Button } from "@components/ui/button";
-import { DateTimePicker } from "@components/ui/date-time-picker";
-import { sv } from "date-fns/locale";
-import { ScheduleContext } from "./ScheduleContext";
-import { committees } from "@/data/committees";
+} from "@ui/dialog";
 import {
-  type NewBooking,
-  type Booking,
-  type BookableItem,
-} from "@utils/interfaces";
-import { useParams } from "react-router-dom";
-import { LoadingButton } from "@components/molecules/loadingButton";
-import { useStoreBookings } from "@hooks/useStoreBookings";
-import { useStoreUser } from "@hooks/useStoreUser";
-import { Checkbox } from "@components/ui/checkbox";
-import { campusLocationsMap } from "@/data/locationsData";
-import { useBookingActions } from "@hooks/useBookingActions";
-import { corridorsC } from "@/data/campusValla/rooms";
-import roomsC from "@/data/campusValla/rooms/C";
-import { Separator } from "@components/ui/separator";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@ui/form";
+import { Input } from "@ui/input";
+import { Label } from "@ui/label";
+import { MultiSelect } from "@ui/multi-select";
+import { Separator } from "@ui/separator";
+
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
+import { ScheduleContext } from "./ScheduleContext";
 import { BookingSchema } from "./schema";
 
 type EditorTemplateProps = {

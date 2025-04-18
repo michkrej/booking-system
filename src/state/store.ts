@@ -1,14 +1,14 @@
-import type {} from "@redux-devtools/extension"; // required for devtools typing
+// required for devtools typing
+import type {} from "@redux-devtools/extension";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-
-import { createPlanStoreSlice, type PlanStoreSlice } from "./planStoreSlice";
-import { createUserStoreSlice, type UserStoreSlice } from "./userStoreSlice";
 import { type AdminStoreSlice, createAdminStoreSlice } from "./adminStoreSlice";
 import {
   type BookingStoreSlice,
   createBookingStoreSlice,
 } from "./bookingStoreSlice";
+import { type PlanStoreSlice, createPlanStoreSlice } from "./planStoreSlice";
+import { type UserStoreSlice, createUserStoreSlice } from "./userStoreSlice";
 
 export const useBoundStore = create<
   UserStoreSlice & PlanStoreSlice & AdminStoreSlice & BookingStoreSlice

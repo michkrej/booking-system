@@ -1,13 +1,13 @@
+import { useAdminSettings } from "@hooks/useAdminSettings";
 import { Layout } from "@components/molecules/layout";
+import { NewUpdateCard } from "@components/organisms/NewUpdateCard";
 import { CreateNewPlanCard } from "@components/organisms/createNewPlanCard";
 import { FindCollisionsCard } from "@components/organisms/findCollisionsCard";
-import { NewUpdateCard } from "@components/organisms/NewUpdateCard";
 import { PlanChangeYearCard } from "@components/organisms/planChangeYearCard";
 import { PlanEditLockedWarningCard } from "@components/organisms/planEditLockedWarningCard";
 import { PublicPlansCard } from "@components/organisms/publicPlansCard";
 import { TimeUntilMottagningCard } from "@components/organisms/timeUntilMottagningCard";
 import { UserPlansListCard } from "@components/organisms/userPlansListCard";
-import { useAdminSettings } from "@hooks/useAdminSettings";
 
 export function DashboardPage() {
   const { isPlanEditLocked } = useAdminSettings();

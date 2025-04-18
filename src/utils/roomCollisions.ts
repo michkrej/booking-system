@@ -1,6 +1,6 @@
 import { areIntervalsOverlapping } from "date-fns";
-import { type Booking } from "./interfaces";
 import { convertToDate } from "@/lib/utils";
+import { type Booking } from "./interfaces";
 
 const eventsUseSameRooms = (event1: Booking, event2: Booking) => {
   const set1 = new Set(event1.roomId);

@@ -1,8 +1,17 @@
-import { formatDate } from "@lib/utils";
-import { useBoundStore } from "@/state/store";
-import { type Plan } from "@utils/interfaces";
+import { useNavigate } from "react-router-dom";
+
 import { useCurrentDate } from "@hooks/useCurrentDate";
 import { useUserPlans } from "@hooks/useUserPlans";
+
+import { useBoundStore } from "@state/store";
+
+import { type Plan } from "@utils/interfaces";
+
+import { formatDate } from "@lib/utils";
+
+import { PlanChangeNameButton } from "@components/molecules/planChangeNameButton";
+import { PlanDeleteButton } from "@components/molecules/planDeleteButton";
+import { PlanTogglePublicButton } from "@components/molecules/planTogglePublicButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
 import { Separator } from "@ui/separator";
 import { Skeleton } from "@ui/skeleton";
@@ -14,10 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
-import { useNavigate } from "react-router-dom";
-import { PlanChangeNameButton } from "../molecules/planChangeNameButton";
-import { PlanDeleteButton } from "../molecules/planDeleteButton";
-import { PlanTogglePublicButton } from "../molecules/planTogglePublicButton";
 
 const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
 

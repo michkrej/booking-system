@@ -1,12 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-
 import { adminService } from "@/services";
+import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import { type Kår } from "@/utils/interfaces";
 import { useStoreAdminSettings } from "./useStoreAdminSettings";
-import { useStoreUser } from "./useStoreUser";
 import { useStorePlanYear } from "./useStorePlanYear";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { useStoreUser } from "./useStoreUser";
 
 export const useAdminSettings = () => {
   const {

@@ -10,16 +10,15 @@ import {
   where,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-
+import { convertToDate } from "@/lib/utils";
 import { getErrorMessage } from "@/utils/error.util";
 import {
-  type DBPlan,
   type Booking,
+  type DBPlan,
   type EditablePlanDetails,
   type Plan,
 } from "@/utils/interfaces";
 import { db } from "./config";
-import { convertToDate } from "@/lib/utils";
 
 type CreatePlanParams = Omit<Plan, "createdAt" | "updatedAt" | "id">;
 const createPlan = async (plan: CreatePlanParams) => {

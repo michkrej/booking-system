@@ -1,16 +1,13 @@
+import { kårer } from "@data/committees";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@components/ui/select";
-import { kårer } from "@/data/committees";
+import { useSignUp } from "@hooks/useSignUp";
+
 import { getCommitteesForKår } from "@utils/helpers";
+import { type Kår, type User } from "@utils/interfaces";
 
 import {
   Form,
@@ -19,11 +16,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@components/ui/form";
-import { type Kår, type User } from "@utils/interfaces";
+} from "@ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@ui/select";
+
 import { LoadingButton } from "../molecules/loadingButton";
-import { useSignUp } from "@hooks/useSignUp";
-import { useEffect } from "react";
 
 const formSchemaGoogle = z.object({
   kår: z.string().min(1, "Val av kår saknas"),
