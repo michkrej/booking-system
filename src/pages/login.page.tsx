@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useUserIsLoggedIn } from "@hooks/useUserIsLoggedIn";
 import { SiteLogo } from "@components/atoms/siteLogo";
 import { SiteFooter } from "@components/molecules/siteFooter";
@@ -10,14 +9,11 @@ import { SignUpForm } from "@components/organisms/signUpForm";
 
 export function LoginPage() {
   const { state } = useLocation() as { state: { mode?: string } };
-  const navigate = useNavigate();
   const userIsLoggedIn = useUserIsLoggedIn();
 
-  useEffect(() => {
-    if (userIsLoggedIn) {
-      navigate("/dashboard");
-    }
-  }, [userIsLoggedIn]);
+  if (userIsLoggedIn) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <div className="flex min-h-screen w-full flex-col md:overflow-y-hidden lg:grid lg:grid-cols-2">
