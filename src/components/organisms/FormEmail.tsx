@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { kårer } from "@data/committees";
 import { getCommitteesForKår } from "@utils/helpers";
-import { type Kår, type User } from "@utils/interfaces";
+import { type User } from "@utils/interfaces";
 import { LoadingButton } from "@components/molecules/loadingButton";
 import {
   Form,
@@ -33,7 +33,7 @@ const formSchemaEmail = z
     passwordControl: z
       .string()
       .min(8, "Lösenordet måste vara minst 8 tecken långt"),
-    kår: z.string().min(1, "Val av kår saknas"),
+    kår: z.enum(["LinTek", "Consensus", "StuFF", "Övrigt"]),
     fadderi: z.string().min(1, "Val av fadderi saknas"),
   })
   .refine((data) => data.password === data.passwordControl, {
@@ -50,7 +50,7 @@ export const FormEmail = () => {
       email: "",
       password: "",
       passwordControl: "",
-      kår: "",
+      kår: "Consensus",
       fadderi: "",
     },
   });
@@ -65,7 +65,6 @@ export const FormEmail = () => {
   }
 
   const kårIsOther = form.watch("kår") === "Övrigt";
-  const kårIsEmpty = form.watch("kår") === "";
 
   useEffect(() => {
     if (kårIsOther) {
@@ -155,10 +154,8 @@ export const FormEmail = () => {
                 onValueChange={(val) => {
                   field.onChange(val);
                   if (val === "Övrigt") {
-                    form.setValue(
-                      "fadderi",
-                      kårer.Övrigt["a16c78ef-6f00-492c-926e-bf1bfe9fce32"].id,
-                    );
+                    const otherCommittee = Object.keys(kårer.Övrigt)[0]!;
+                    form.setValue("fadderi", otherCommittee);
                   } else {
                     form.setValue("fadderi", "");
                   }
@@ -189,15 +186,14 @@ export const FormEmail = () => {
           control={form.control}
           name="fadderi"
           render={({ field }) => {
-            const committees =
-              getCommitteesForKår(form.getValues().kår as Kår) || {};
+            const committees = getCommitteesForKår(form.getValues().kår) || {};
             return (
               <FormItem>
                 <FormLabel>Fadderi</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}
-                  disabled={kårIsOther || kårIsEmpty}
+                  disabled={kårIsOther}
                 >
                   <FormControl>
                     <SelectTrigger>

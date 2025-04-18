@@ -24,7 +24,7 @@ import { useSignup } from "@/hooks/useSignup";
 import { LoadingButton } from "../molecules/loadingButton";
 
 const formSchemaGoogle = z.object({
-  kår: z.string().min(1, "Val av kår saknas"),
+  kår: z.enum(["LinTek", "Consensus", "StuFF", "Övrigt"]),
   fadderi: z.string().min(1, "Val av fadderi saknas"),
 });
 
@@ -34,7 +34,7 @@ export const FormGoogle = () => {
   const form = useForm<z.infer<typeof formSchemaGoogle>>({
     resolver: zodResolver(formSchemaGoogle),
     defaultValues: {
-      kår: "",
+      kår: "Consensus",
       fadderi: "",
     },
   });
@@ -44,7 +44,6 @@ export const FormGoogle = () => {
   }
 
   const kårIsOther = form.watch("kår") === "Övrigt";
-  const kårIsEmpty = form.watch("kår") === "";
 
   useEffect(() => {
     if (kårIsOther) {
@@ -105,7 +104,7 @@ export const FormGoogle = () => {
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}
-                  disabled={kårIsOther || kårIsEmpty}
+                  disabled={kårIsOther}
                 >
                   <FormControl>
                     <SelectTrigger>
