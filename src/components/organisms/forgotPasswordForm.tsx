@@ -2,11 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-
 import { useResetPassword } from "@hooks/useResetPassword";
-
 import { LoadingButton } from "@components/molecules/loadingButton";
-
 import {
   Form,
   FormControl,
@@ -35,14 +32,13 @@ export const ForgotPasswordForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    resetPassword(values.email)
-      .then(() => {
-        navigate("/");
-      })
-      .catch(() => {
-        form.reset();
-      });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await resetPassword(values.email);
+      navigate("/");
+    } finally {
+      form.reset();
+    }
   }
 
   return (

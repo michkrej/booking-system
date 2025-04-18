@@ -1,14 +1,10 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useUserPlans } from "@hooks/useUserPlans";
-
 import { useBoundStore } from "@state/store";
-
 import { findCollisionsBetweenUserAndPublicPlans } from "@utils/helpers";
 import { Booking, Plan } from "@utils/interfaces";
-
 import { Button } from "@ui/button";
 import {
   Card,
@@ -25,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-
 import { CollisionsTable } from "../molecules/CollisonsTable";
 
 export const FindCollisionsCard = () => {
@@ -45,6 +40,7 @@ export const FindCollisionsCard = () => {
   const publicPlansWithoutUserPlans = useMemo(() => {
     const userPublicPlan = userPlans.find((plan) => plan.public);
     if (!userPublicPlan) return publicPlans;
+
     return publicPlans.filter((plan) => plan.id !== userPublicPlan.id);
   }, [userPlans, publicPlans]);
 

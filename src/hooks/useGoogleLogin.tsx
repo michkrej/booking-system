@@ -4,7 +4,7 @@ import { authService } from "@/services";
 import { useBoundStore } from "@/state/store";
 import { getErrorMessage } from "@/utils/error.util";
 
-export const useLogin = () => {
+export const useGoogleLogin = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const userUpdated = useBoundStore((state) => state.userUpdated);
@@ -42,32 +42,7 @@ export const useLogin = () => {
     }
   };
 
-  const loginWithEmailAndPassword = async (email: string, password: string) => {
-    setError(null);
-    setIsPending(true);
-    try {
-      const user = await authService.loginWithEmailAndPassword(email, password);
-      userUpdated(user);
-
-      if (isMounted.current) {
-        setIsPending(false);
-        setError(null);
-      }
-    } catch (error) {
-      if (isMounted.current) {
-        const errorMessage = getErrorMessage(error);
-        console.log(errorMessage);
-        setError(errorMessage);
-        setIsPending(false);
-        toast.error(errorMessage);
-      }
-    } finally {
-      setIsPending(false);
-    }
-  };
-
   return {
-    loginWithEmailAndPassword,
     loginWithGoogle,
     isPending,
     error,

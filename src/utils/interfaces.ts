@@ -149,7 +149,7 @@ export type StuffCommitee =
 
 export type UserDetails = {
   admin: boolean;
-  committeeId: keyof typeof committees;
+  committeeId: string;
 };
 export type User = {
   id: string;

@@ -1,14 +1,10 @@
-import { kårer } from "@data/committees";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import { useSignUp } from "@hooks/useSignUp";
-
+import { kårer } from "@data/committees";
 import { getCommitteesForKår } from "@utils/helpers";
 import { type Kår, type User } from "@utils/interfaces";
-
 import {
   Form,
   FormControl,
@@ -24,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-
+import { useSignup } from "@/hooks/useSignup";
 import { LoadingButton } from "../molecules/loadingButton";
 
 const formSchemaGoogle = z.object({
@@ -33,7 +29,7 @@ const formSchemaGoogle = z.object({
 });
 
 export const FormGoogle = () => {
-  const { signUpWithGoogle, isPending } = useSignUp();
+  const { signupWithGoogle, isPending } = useSignup();
 
   const form = useForm<z.infer<typeof formSchemaGoogle>>({
     resolver: zodResolver(formSchemaGoogle),
@@ -44,7 +40,7 @@ export const FormGoogle = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchemaGoogle>) {
-    await signUpWithGoogle(values.fadderi as User["committeeId"]);
+    await signupWithGoogle(values.fadderi as User["committeeId"]);
   }
 
   const kårIsOther = form.watch("kår") === "Övrigt";

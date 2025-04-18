@@ -102,7 +102,7 @@ const signInWithGoogle = async () => {
   } satisfies User;
 };
 
-const signUpWithGoogle = async (committeeId: string) => {
+const signupWithGoogle = async (committeeId: string) => {
   const { user } = await signInWithPopup(auth, googleProvider);
 
   if (!user.email) {
@@ -166,7 +166,7 @@ export const authService = {
   signUpWithEmailAndPassword,
   loginWithEmailAndPassword,
   signInWithGoogle,
-  signUpWithGoogle,
+  signupWithGoogle,
   updateUserDisplayName,
   resetPassword,
   signOut,

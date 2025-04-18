@@ -2,14 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import { useSignUp } from "@hooks/useSignUp";
-
 import { kårer } from "@data/committees";
-
 import { getCommitteesForKår } from "@utils/helpers";
 import { type Kår, type User } from "@utils/interfaces";
-
+import { LoadingButton } from "@components/molecules/loadingButton";
 import {
   Form,
   FormControl,
@@ -27,8 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-
-import { LoadingButton } from "../molecules/loadingButton";
+import { useSignup } from "@/hooks/useSignup";
 
 const formSchemaEmail = z
   .object({
@@ -47,7 +42,7 @@ const formSchemaEmail = z
   });
 
 export const FormEmail = () => {
-  const { signupWithEmailAndPassword, isPending } = useSignUp();
+  const { signupWithEmailAndPassword, isPending } = useSignup();
 
   const form = useForm<z.infer<typeof formSchemaEmail>>({
     resolver: zodResolver(formSchemaEmail),

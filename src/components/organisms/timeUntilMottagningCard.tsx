@@ -1,11 +1,8 @@
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useStoreUser } from "@hooks/useStoreUser";
-
 import { getPercentageProgress, getWeeksLeftToNolleP } from "@utils/helpers";
-
 import {
   Card,
   CardContent,

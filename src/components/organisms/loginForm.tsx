@@ -2,11 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-
-import { useLogin } from "@hooks/useLogin";
-
 import { LoadingButton } from "@components/molecules/loadingButton";
-
 import {
   Form,
   FormControl,
@@ -16,6 +12,8 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
+import { useEmailLogin } from "@/hooks/useEmailLogin";
+import { useGoogleLogin } from "@/hooks/useGoogleLogin";
 
 const formSchema = z.object({
   email: z
@@ -26,7 +24,8 @@ const formSchema = z.object({
 });
 
 export const LoginForm = () => {
-  const { loginWithEmailAndPassword, loginWithGoogle, isPending } = useLogin();
+  const { loginWithEmail, isPending: emailLoginIsPending } = useEmailLogin();
+  const { loginWithGoogle, isPending: googleLoginIsPending } = useGoogleLogin();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,7 +37,7 @@ export const LoginForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    void loginWithEmailAndPassword(values.email, values.password);
+    void loginWithEmail(values.email, values.password);
   }
   return (
     <div className="mx-auto grid w-[300px] gap-6 md:w-[350px]">
@@ -102,7 +101,11 @@ export const LoginForm = () => {
                 </FormItem>
               )}
             />
-            <LoadingButton loading={isPending} className="w-full" type="submit">
+            <LoadingButton
+              loading={emailLoginIsPending}
+              className="w-full"
+              type="submit"
+            >
               Logga in
             </LoadingButton>
           </form>
@@ -111,7 +114,7 @@ export const LoginForm = () => {
           variant="outline"
           className="w-full"
           onClick={loginWithGoogle}
-          loading={isPending}
+          loading={googleLoginIsPending}
         >
           Logga in med Google
         </LoadingButton>
