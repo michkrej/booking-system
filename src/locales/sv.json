@@ -1,0 +1,25 @@
+{
+  "updated": "Uppdaterad",
+  "created": "Skapad",
+  "name": "Namn",
+  "your_plans": "Dina planeringar",
+  "num_bookings": "Antal bokningar",
+  "you_do_not_have_any_plans_yet": "Du har inga planeringar än...",
+  "all": "Alla",
+  "corps": "Kår",
+  "committee": "Fadderi",
+  "collisions_on_locale": "Krockar på lokal",
+  "collisions_on_inventory": "Krockar på inventarie",
+  "no_plans_exist": "Det finns inga planerigar...",
+  "welcoming_week_for_committee_x_begins": "Mottagingen för {{committee}} börjar",
+  "x_weeks_left": "{{x}} veckor kvar",
+  "export": {
+    "button": "Export",
+    "title": "Exportera planeringar",
+    "description": "Exporterar planeringarnas data till en CSV fil. Filen går att öppna i bland annat Excel eller Google Sheets.",
+    "choose_corps": "Välj kår",
+    "export_only_bookable_locations_campus_valla": " Exportera endast bokningsbara områden på campus Valla",
+    "include_inventory": "Inkludera inventarier",
+    "do_export": "Exportera"
+  }
+}

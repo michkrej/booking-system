@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useCurrentDate } from "@hooks/useCurrentDate";
 import { useUserPlans } from "@hooks/useUserPlans";
@@ -22,6 +23,7 @@ import {
 const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
 
 export const UserPlansListCard = () => {
+  const { t } = useTranslation();
   const { isPending, userPlans } = useUserPlans();
 
   const loadedBookings = useBoundStore((state) => state.loadedBookings);
@@ -39,16 +41,16 @@ export const UserPlansListCard = () => {
   return (
     <Card className="col-span-full">
       <CardHeader className="pb-3">
-        <CardTitle>Dina planeringar</CardTitle>
+        <CardTitle>{t("your_plans")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Namn</TableHead>
-              <TableHead>Antal bokningar</TableHead>
-              <TableHead>Skapad</TableHead>
-              <TableHead>Uppdaterad</TableHead>
+              <TableHead>{t("name")}</TableHead>
+              <TableHead>{t("num_bookings")}</TableHead>
+              <TableHead>{t("created")}</TableHead>
+              <TableHead>{t("updated")}</TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
@@ -95,7 +97,9 @@ export const UserPlansListCard = () => {
                 ))}
             {!userPlans.length && !isPending ? (
               <TableRow>
-                <TableCell colSpan={4}>Du har inga planeringar än...</TableCell>
+                <TableCell colSpan={4}>
+                  {t("you_do_not_have_any_plans_yet")}
+                </TableCell>
               </TableRow>
             ) : null}
           </TableBody>

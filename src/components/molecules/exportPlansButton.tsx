@@ -1,14 +1,12 @@
-import { getCommittee } from "@lib/utils";
 import { download, generateCsv, mkConfig } from "export-to-csv";
 import { File } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-
 import { usePublicPlans } from "@hooks/usePublicPlans";
-
 import { exportPlans } from "@utils/helpers";
 import { type Kår, type Plan } from "@utils/interfaces";
-
+import { getCommittee } from "@lib/utils";
 import { Button } from "@ui/button";
 import { Checkbox } from "@ui/checkbox";
 import {
@@ -28,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-
 import { LoadingButton } from "./loadingButton";
 
 const getPlans = (plans: Plan[], kår: Omit<Kår, "Övrigt"> | "all") => {
@@ -39,6 +36,7 @@ const getPlans = (plans: Plan[], kår: Omit<Kår, "Övrigt"> | "all") => {
 };
 
 export const ExportPlansButton = () => {
+  const { t } = useTranslation();
   const [committee, setCommittee] = useState("all");
   const [onlyBookableLocationValla, setOnlyBookableLocationValla] =
     useState(false);
@@ -75,28 +73,25 @@ export const ExportPlansButton = () => {
       <DialogTrigger asChild>
         <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
           <File className="h-3.5 w-3.5" />
-          <span className="sr-only sm:not-sr-only">Export</span>
+          <span className="sr-only sm:not-sr-only">{t("export.button")}</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Exportera planeringar</DialogTitle>
+          <DialogTitle>{t("export.title")}</DialogTitle>
           <DialogDescription className="space-y-1.5">
-            <p>
-              Exporterar planeringarnas data till en CSV fil. Filen går att
-              öppna i bland annat Excel eller Google Sheets.{" "}
-            </p>
+            <p>{t("export.description")}</p>
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-1">
           <div className="mb-2">
-            <Label>Välj kår</Label>
+            <Label>{t("export.choose_corps")}</Label>
             <Select value={committee} onValueChange={setCommittee}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Alla</SelectItem>
+                <SelectItem value="all">{t("all")}</SelectItem>
                 <SelectItem value="consensus">Consensus</SelectItem>
                 <SelectItem value="lintek">LinTek</SelectItem>
                 <SelectItem value="stuff">StuFF</SelectItem>
@@ -110,19 +105,19 @@ export const ExportPlansButton = () => {
                 setOnlyBookableLocationValla((prev) => !prev)
               }
             />
-            <p>Exportera endast bokningsbara områden på campus Valla</p>
+            <p>{t("export.export_only_bookable_locations_campus_valla")}</p>
           </div>
           <div className="flex items-center space-x-2 text-sm">
             <Checkbox
               checked={includeInventory}
               onCheckedChange={() => setIncludeInventory((prev) => !prev)}
             />
-            <p>Inkludera inventarier</p>
+            <p>{t("export.include_inventory")}</p>
           </div>
         </div>
         <DialogFooter>
           <LoadingButton size="sm" onClick={handleExport} loading={false}>
-            Exportera
+            {t("export.do_export")}
           </LoadingButton>
         </DialogFooter>
       </DialogContent>

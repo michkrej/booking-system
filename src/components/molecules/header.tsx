@@ -1,12 +1,10 @@
-import { CircleUser } from "lucide-react";
+import { CircleUser, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-
 import { useSignOut } from "@hooks/useSignOut";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { useStoreUser } from "@hooks/useStoreUser";
-
 import { SiteLogo } from "@components/atoms/siteLogo";
-
 import { Button } from "@ui/button";
 import {
   DropdownMenu,
@@ -15,16 +13,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
-
 import { siteConfig } from "@/config/site";
 
 export const Header = () => {
   const { logout } = useSignOut();
   const { planYear } = useStorePlanYear();
   const { user } = useStoreUser();
+  const { i18n } = useTranslation();
 
   const TF_URL =
     planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023;
+
+  const handleToggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === "sv" ? "en" : "sv");
+  };
 
   return (
     <header className="bg-background sticky top-0 z-10 flex h-16 items-center gap-4 border-b px-4 md:px-6">
@@ -59,6 +61,16 @@ export const Header = () => {
       </nav>
 
       <div className="flex items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
+        {import.meta.env.DEV ? (
+          <Button
+            size="icon"
+            className="rounded-full"
+            variant="ghost"
+            onClick={handleToggleLanguage}
+          >
+            <Globe className="h-5 w-5" />
+          </Button>
+        ) : null}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">

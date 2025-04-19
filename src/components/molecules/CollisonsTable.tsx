@@ -1,7 +1,6 @@
-import { cn, formatDate, getCommittee } from "@lib/utils";
-
+import { useTranslation } from "react-i18next";
 import { Booking, Plan } from "@utils/interfaces";
-
+import { cn, formatDate, getCommittee } from "@lib/utils";
 import {
   Table,
   TableBody,
@@ -22,15 +21,16 @@ export const CollisionsTable = ({
   collisions,
   inventoryCollisions,
 }: CollisionsTableProps) => {
+  const { t } = useTranslation();
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Kår</TableHead>
-          <TableHead>Fadderi</TableHead>
-          <TableHead className="hidden sm:table-cell">Uppdaterad</TableHead>
-          <TableHead>Krockar på lokal</TableHead>
-          <TableHead>Krockar på inventarie</TableHead>
+          <TableHead>{t("corps")}</TableHead>
+          <TableHead>{t("committee")}</TableHead>
+          <TableHead className="hidden sm:table-cell">{t("updated")}</TableHead>
+          <TableHead>{t("collisions_on_locale")}</TableHead>
+          <TableHead>{t("collisions_on_inventory")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -71,9 +71,7 @@ export const CollisionsTable = ({
         })}
         {publicPlans.length === 0 && (
           <TableRow>
-            <TableCell colSpan={3}>
-              Det finns inga publika planeringar.
-            </TableCell>
+            <TableCell colSpan={3}>{t("no_plans_exist")}</TableCell>
           </TableRow>
         )}
       </TableBody>

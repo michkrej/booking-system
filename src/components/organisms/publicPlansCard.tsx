@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useCurrentDate } from "@hooks/useCurrentDate";
@@ -24,6 +25,7 @@ export const PublicPlansCard = () => {
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
   const { resetCurrentDate } = useCurrentDate();
+  const { t } = useTranslation();
 
   const {
     stuff: plansStuFF,
@@ -110,7 +112,7 @@ export const PublicPlansCard = () => {
     <Tabs defaultValue={defaultTab} className="col-span-2">
       <div className="flex items-center">
         <TabsList>
-          <TabsTrigger value="all">Alla</TabsTrigger>
+          <TabsTrigger value="all">{t("all")}</TabsTrigger>
           <TabsTrigger value="consensus">Consensus</TabsTrigger>
           <TabsTrigger value="lintek">LinTek</TabsTrigger>
           <TabsTrigger value="stuff">StuFF</TabsTrigger>

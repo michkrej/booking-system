@@ -1,10 +1,9 @@
-import { createRoot } from "react-dom/client";
-import { StrictMode } from "react";
-import { registerLicense } from "@syncfusion/ej2-base";
-
-import App from "./App";
-
 import "@fontsource-variable/inter";
+import { registerLicense } from "@syncfusion/ej2-base";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./i18n";
 import "./styles/global.css";
 import "./styles/scheduler.css";
 
