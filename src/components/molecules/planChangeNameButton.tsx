@@ -2,13 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
-
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useEditPlan } from "@hooks/useEditPlan";
-
 import { type Plan } from "@utils/interfaces";
-
 import { Button } from "@ui/button";
 import {
   Dialog,
@@ -29,7 +27,6 @@ import {
 } from "@ui/form";
 import { Input } from "@ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
-
 import { LoadingButton } from "./loadingButton";
 
 const formSchema = z.object({
@@ -44,6 +41,7 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
   const { updatePlanName } = useEditPlan();
   const [open, setOpen] = useState(false);
   const { isPlanEditLocked } = useAdminSettings();
+  const { t } = useTranslation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,16 +82,16 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
               </div>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Byt namn på planering</TooltipContent>
+          <TooltipContent>{}</TooltipContent>
         </Tooltip>
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
             <DialogHeader>
-              <DialogTitle>Byt namn på planering</DialogTitle>
+              <DialogTitle>{t("change_plan_name")}</DialogTitle>
               <DialogDescription>
-                Ange ett nytt namn för planeringen <strong>{plan.label}</strong>
+                {t("update_plan_name_for_plan_x", { x: plan.label })}
               </DialogDescription>
             </DialogHeader>
             <FormField
@@ -101,12 +99,14 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
               name="newPlanName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Namn</FormLabel>
+                  <FormLabel>{t("name")}</FormLabel>
                   <FormControl>
                     <Input
                       id="plan-name"
                       type="text"
-                      placeholder="Ange ett namn för planeringen"
+                      placeholder={t("update_plan_name_for_plan_x", {
+                        x: plan.label,
+                      })}
                       {...field}
                     />
                   </FormControl>
@@ -120,7 +120,7 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
                 loading={updatePlanName.isPending}
                 className="mt-4"
               >
-                Skapa
+                {t("create")}
               </LoadingButton>
             </DialogFooter>
           </form>

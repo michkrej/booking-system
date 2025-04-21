@@ -1,12 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
-
 import { useCreatePlan } from "@hooks/useCreatePlan";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
-
 import { CURRENT_YEAR } from "@utils/CONSTANTS";
-
 import { Button } from "@ui/button";
 import {
   Card,
@@ -33,7 +31,6 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
-
 import { LoadingButton } from "../molecules/loadingButton";
 
 const formSchema = z.object({
@@ -43,6 +40,7 @@ const formSchema = z.object({
 export const CreateNewPlanCard = () => {
   const { createPlan, isPending } = useCreatePlan();
   const { planYear } = useStorePlanYear();
+  const { t } = useTranslation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,17 +59,16 @@ export const CreateNewPlanCard = () => {
   return (
     <Card className="col-span-2">
       <CardHeader className="pb-3">
-        <CardTitle>Planeringar</CardTitle>
+        <CardTitle>{t("create_new_plan.title")}</CardTitle>
         <CardDescription className="max-w-lg leading-relaxed text-balance">
-          En planering kan ses som en google calender, den kan innehålla flera
-          event som sker på olika platser.
+          {t("create_new_plan.description")}
         </CardDescription>
       </CardHeader>
       <CardFooter>
         <Dialog>
           <DialogTrigger asChild disabled={planYear < CURRENT_YEAR}>
             <Button disabled={planYear < CURRENT_YEAR}>
-              Skapa ny planering
+              {t("create_new_plan.dialog_title")}
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -81,10 +78,9 @@ export const CreateNewPlanCard = () => {
                 className="grid gap-4"
               >
                 <DialogHeader>
-                  <DialogTitle>Skapa ny planering</DialogTitle>
+                  <DialogTitle>{t("create_new_plan.dialog_title")}</DialogTitle>
                   <DialogDescription>
-                    En planering kan ses som en google calender, den kan
-                    innehålla flera event som sker på olika platser.
+                    {t("create_new_plan.dialog_description")}
                   </DialogDescription>
                 </DialogHeader>
                 <FormField
@@ -92,12 +88,12 @@ export const CreateNewPlanCard = () => {
                   name="planName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Namn</FormLabel>
+                      <FormLabel>{t("name")}</FormLabel>
                       <FormControl>
                         <Input
                           id="plan-name"
                           type="text"
-                          placeholder="Ange ett namn för planeringen"
+                          placeholder={t("create_new_plan.dialog_placeholder")}
                           {...field}
                         />
                       </FormControl>
@@ -111,7 +107,7 @@ export const CreateNewPlanCard = () => {
                     loading={isPending}
                     className="mt-4"
                   >
-                    Skapa
+                    {t("create")}
                   </LoadingButton>
                 </DialogFooter>
               </form>

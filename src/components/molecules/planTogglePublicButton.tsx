@@ -1,10 +1,8 @@
 import { Globe, GlobeLock, Loader } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useEditPlan } from "@hooks/useEditPlan";
-
 import { type Plan } from "@utils/interfaces";
-
 import { Button } from "@ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 
@@ -23,6 +21,7 @@ export const PlanTogglePublicButton = ({
 }: PlanTogglePublicButtonProps) => {
   const { togglePublicPlan } = useEditPlan();
   const { isPlanEditLocked } = useAdminSettings();
+  const { t } = useTranslation();
 
   return (
     <Tooltip>
@@ -42,7 +41,7 @@ export const PlanTogglePublicButton = ({
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        Gör planering {`${plan.public ? "privat" : "publik"}`}
+        {plan.public ? t("make_plan_private") : t("make_plan_public")}
       </TooltipContent>
     </Tooltip>
   );

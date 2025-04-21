@@ -1,7 +1,6 @@
-import { formatDate, getCommittee } from "@lib/utils";
-
+import { useTranslation } from "react-i18next";
 import { Booking, Plan } from "@utils/interfaces";
-
+import { formatDate, getCommittee } from "@lib/utils";
 import {
   Card,
   CardContent,
@@ -20,7 +19,6 @@ import {
   TableRow,
 } from "@ui/table";
 import { TabsContent } from "@ui/tabs";
-
 import { TabCommitteeButtons } from "./TabCommitteeButtons";
 
 type TabAllCommitteesSectionProps = {
@@ -44,15 +42,15 @@ export const TabAllCommitteesSection = ({
   handleViewBookingsClick,
   handlePlanClick,
 }: TabAllCommitteesSectionProps) => {
+  const { t } = useTranslation();
+
   return (
     <TabsContent value="all">
       <Card>
         <CardHeader className="grid grid-cols-[2fr_1fr] px-7">
           <div className="flex flex-col gap-y-2">
-            <CardTitle>Alla planeringar</CardTitle>
-            <CardDescription>
-              Publika planeringar för alla kårer.
-            </CardDescription>
+            <CardTitle>{t("public_plans.title")}</CardTitle>
+            <CardDescription>{t("public_plans.description")}</CardDescription>
           </div>
           <div className="flex flex-col justify-end gap-y-2">
             <TabCommitteeButtons
@@ -70,10 +68,10 @@ export const TabAllCommitteesSection = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Fadderi</TableHead>
-                <TableHead>Kår</TableHead>
+                <TableHead>{t("committee")}</TableHead>
+                <TableHead>{t("corps")}</TableHead>
                 <TableHead className="hidden sm:table-cell">
-                  Uppdaterad
+                  {t("updated")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -99,9 +97,7 @@ export const TabAllCommitteesSection = ({
               })}
               {!isPending && !plans.length ? (
                 <TableRow>
-                  <TableCell colSpan={3}>
-                    Det finns inga publika planeringar.
-                  </TableCell>
+                  <TableCell colSpan={3}>{t("no_plans_exist")}</TableCell>
                 </TableRow>
               ) : null}
               {isPending && plans.length === 0 ? (

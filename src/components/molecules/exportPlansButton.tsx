@@ -57,8 +57,8 @@ export const ExportPlansButton = () => {
     );
 
     if (!data.length) {
-      toast.error("Exportering misslyckades", {
-        description: "Det fanns ingen data att exportera för den valda kåren",
+      toast.error(t("export.toast.error.header"), {
+        description: t("export.toast.error.description"),
       });
       return;
     }

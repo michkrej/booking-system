@@ -19,7 +19,7 @@ export const Header = () => {
   const { logout } = useSignOut();
   const { planYear } = useStorePlanYear();
   const { user } = useStoreUser();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const TF_URL =
     planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023;
@@ -39,7 +39,7 @@ export const Header = () => {
           to="/dashboard"
           className="text-foreground hover:text-foreground transition-colors"
         >
-          Dashboard
+          {t("dashboard")}
         </Link>
         <a
           href={TF_URL}
@@ -47,7 +47,7 @@ export const Header = () => {
           target="_blank"
           rel="noreferrer"
         >
-          Karta Trädgårdsföreningen
+          {t("map_tf")}
         </a>
 
         {user.admin && (
@@ -55,7 +55,7 @@ export const Header = () => {
             to="/admin"
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            Admin
+            {t("admin")}
           </Link>
         )}
       </nav>
@@ -82,20 +82,20 @@ export const Header = () => {
             <DropdownMenuItem
               onClick={() => window.open(siteConfig.links.instructionVideo)}
             >
-              Instruktionsvideo
+              {t("instruction_video")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => window.open(siteConfig.links.feedback)}
             >
-              Feedback
+              {t("feedback")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => logout()}
               className="font-semibold"
             >
-              Logga ut
+              {t("signout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

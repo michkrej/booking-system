@@ -1,11 +1,9 @@
 import { Trash } from "lucide-react";
 import { useState } from "react";
-
+import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useEditPlan } from "@hooks/useEditPlan";
-
 import { type Plan } from "@utils/interfaces";
-
 import { Button } from "@ui/button";
 import {
   Dialog,
@@ -18,7 +16,6 @@ import {
   DialogTrigger,
 } from "@ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
-
 import { LoadingButton } from "./loadingButton";
 
 type PlanDeleteButtonProps = {
@@ -29,6 +26,7 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { deletePlan } = useEditPlan();
   const { isPlanEditLocked } = useAdminSettings();
+  const { t } = useTranslation();
 
   const handleDelete = async () => {
     deletePlan.mutate(plan.id, {
@@ -59,23 +57,22 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
               <Trash className="p-2" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Radera planering</TooltipContent>
+          <TooltipContent>{t("delete_dialog.tooltip")}</TooltipContent>
         </Tooltip>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Är du helt säker?</DialogTitle>
+          <DialogTitle>{t("delete_dialog.title")}</DialogTitle>
           <DialogDescription>
-            Om du raderar planeringen <b>{plan.label}</b> kommer den att tas
-            bort permanent. Det går inte att ångra denna åtgärd.
+            {t("delete_dialog.description", { x: plan.label })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose>
-            <Button variant="secondary">Avbryt</Button>
+            <Button variant="secondary">{t("cancel")}</Button>
           </DialogClose>
           <LoadingButton loading={deletePlan.isPending} onClick={handleDelete}>
-            Radera
+            {t("delete")}
           </LoadingButton>
         </DialogFooter>
       </DialogContent>

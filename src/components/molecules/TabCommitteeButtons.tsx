@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@ui/button";
 
 type TabCommitteeButtonsProps = {
@@ -15,6 +16,8 @@ export const TabCommitteeButtons = ({
   handleViewCollision,
   showCollisions,
 }: TabCommitteeButtonsProps) => {
+  const { t } = useTranslation();
+
   return (
     <>
       <Button
@@ -22,13 +25,13 @@ export const TabCommitteeButtons = ({
         disabled={disabled}
         variant="outline"
       >
-        Se bokningar
+        {t("view_bookings")}
       </Button>
       {showCollisions ? (
-        <Button onClick={handleViewCollision}>Se krockar</Button>
+        <Button onClick={handleViewCollision}>{t("view_collisions")}</Button>
       ) : (
         <Button onClick={handleFindCollisions} variant={"secondary"}>
-          Hitta krockar
+          {t("find_collisions")}
         </Button>
       )}
     </>

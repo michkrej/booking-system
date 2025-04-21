@@ -1,25 +1,73 @@
 {
-  "updated": "Uppdaterad",
-  "created": "Skapad",
-  "name": "Namn",
-  "your_plans": "Dina planeringar",
-  "num_bookings": "Antal bokningar",
-  "you_do_not_have_any_plans_yet": "Du har inga planeringar än...",
+  "admin": "Admin",
   "all": "Alla",
-  "corps": "Kår",
-  "committee": "Fadderi",
-  "collisions_on_locale": "Krockar på lokal",
+  "bookable_items": {
+    "description": "Här kan du justera antalet av diverse bokningsbara material som finns tillgängliga för fadderisterna att boka. När du letar krockar kommer bokningar som överlappar i tid och överskrider mängden av nedan angivna material att visas.",
+    "footnote": "Om det saknas något material mejla mig så kan jag lägga till det.",
+    "title": "Bokningsbart material"
+  },
+  "built_by": "Byggt av",
+  "cancel": "Avbryt",
+  "change_plan_name": "Byt namn på planering",
+  "code_available_on": "Koden finnd på",
   "collisions_on_inventory": "Krockar på inventarie",
-  "no_plans_exist": "Det finns inga planerigar...",
-  "welcoming_week_for_committee_x_begins": "Mottagingen för {{committee}} börjar",
-  "x_weeks_left": "{{x}} veckor kvar",
+  "collisions_on_locale": "Krockar på lokal",
+  "committee": "Fadderi",
+  "corps": "Kår",
+  "create": "Skapa",
+  "create_new_plan": {
+    "description": "En planering kan ses som en google calender, den kan innehålla flera event som sker på olika platser.",
+    "dialog_description": "En planering kan ses som en google calender, den kan innehålla flera event som sker på olika platser.",
+    "dialog_placeholder": "Ange ett namn för planeringen",
+    "dialog_title": "Skapa ny planering",
+    "title": "Planeringar"
+  },
+  "created": "Skapad",
+  "dashboard": "Dashboard",
+  "delete": "Radera",
+  "delete_dialog": {
+    "description": "Om du raderar planeringen {{x}} kommer den att tas bort permanent. Det går inte att ångra denna åtgärd.",
+    "title": "Är du säker?",
+    "tooltip": "Radera planering"
+  },
   "export": {
     "button": "Export",
-    "title": "Exportera planeringar",
-    "description": "Exporterar planeringarnas data till en CSV fil. Filen går att öppna i bland annat Excel eller Google Sheets.",
     "choose_corps": "Välj kår",
+    "description": "Exporterar planeringarnas data till en CSV fil. Filen går att öppna i bland annat Excel eller Google Sheets.",
+    "do_export": "Exportera",
     "export_only_bookable_locations_campus_valla": " Exportera endast bokningsbara områden på campus Valla",
     "include_inventory": "Inkludera inventarier",
-    "do_export": "Exportera"
-  }
+    "title": "Exportera planeringar",
+    "toast": {
+      "error": {
+        "description": "Det fanns ingen data att exportera för den valda kåren",
+        "header": "Export misslyckades"
+      }
+    }
+  },
+  "feedback": "Feedback",
+  "find_collisions": "Hitta krockar",
+  "instruction_video": "Instruktionsvideo",
+  "make_plan_private": "Gör planeringen privat",
+  "make_plan_public": "Gör planeringen publik",
+  "map_tf": "Karta Trädgårsföreningen",
+  "name": "Namn",
+  "no_plans_exist": "Det finns inga planerigar...",
+  "num_bookings": "Antal bokningar",
+  "public_plans": {
+    "description": "Publika planeringar för alla kårer.",
+    "description_x": "Publika planeringar för fadderier inom {{x}}",
+    "title": "Alla planeringar",
+    "title_x": "{{x}} planeringar"
+  },
+  "save": "Spara",
+  "signout": "Logga ut",
+  "update_plan_name_for_plan_x": "Ange nytt namn för planering {{x}}",
+  "updated": "Uppdaterad",
+  "view_bookings": "Se bokningar",
+  "view_collisions": "Se krockar",
+  "welcoming_week_for_committee_x_begins": "Mottagingen för {{committee}} börjar",
+  "x_weeks_left": "{{x}} veckor kvar",
+  "you_do_not_have_any_plans_yet": "Du har inga planeringar än...",
+  "your_plans": "Dina planeringar"
 }

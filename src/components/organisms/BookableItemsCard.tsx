@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 import { LoadingButton } from "@components/molecules/loadingButton";
@@ -15,6 +16,7 @@ import { Label } from "@ui/label";
 export const BookableItemsCard = () => {
   const { bookableItems, updateBookableItems } = useAdminSettings();
   const [items, setItems] = useState(bookableItems);
+  const { t } = useTranslation();
 
   const itemsAmountsHaveChanged = useMemo(
     () =>
@@ -35,13 +37,8 @@ export const BookableItemsCard = () => {
   return (
     <Card className="row-span-3">
       <CardHeader>
-        <CardTitle>Bokningsbart material</CardTitle>
-        <CardDescription>
-          Här kan du justera antalet av diverse bokningsbara material som finns
-          tillgängliga för fadderisterna att boka. <br /> <br /> När du letar
-          krockar kommer bokningar som överlappar i tid och överskrider mängden
-          av nedan angivna material att visas.
-        </CardDescription>
+        <CardTitle>{t("bookable_items.title")}</CardTitle>
+        <CardDescription>{t("bookable_items.description")}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {Object.entries(items).map(([item, value]) => {
@@ -67,11 +64,9 @@ export const BookableItemsCard = () => {
           disabled={!itemsAmountsHaveChanged}
           onClick={() => updateBookableItems.mutate(items)}
         >
-          Spara
+          {t("save")}
         </LoadingButton>
-        <p className="text-center text-xs">
-          Om det saknas något material mejla mig så kan jag lägga till det.
-        </p>
+        <p className="text-center text-xs">{t("bookable_items.footnote")}</p>
       </CardContent>
     </Card>
   );
