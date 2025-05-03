@@ -1,13 +1,13 @@
 import { Layout } from "@components/molecules/layout";
 import { useRefetchPublicPlans } from "@/hooks/useRefetchPublicPlans";
-import { Schedule } from "./components/Schedule";
+import { InventorySchedule } from "./Booking/components/InventorySchedule";
 
-export const BookingPage = () => {
+export const InventorySchedulePage = () => {
   useRefetchPublicPlans();
 
   return (
     <Layout className="bg-white p-0!" hideFooter>
-      <Schedule />
+      <InventorySchedule />
     </Layout>
   );
 };

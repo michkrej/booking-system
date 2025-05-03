@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { CURRENT_YEAR } from "@utils/CONSTANTS";
 import {
@@ -10,14 +11,17 @@ import {
 import { DatePicker } from "@ui/date-picker";
 
 export const MottagningStartDateCard = () => {
+  const { t } = useTranslation();
   const { mottagningStart, updateMottagningStart } = useAdminSettings();
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Mottagningen {CURRENT_YEAR} startar</CardTitle>
+        <CardTitle>
+          {t("admin_reception_card.title", { year: CURRENT_YEAR })}
+        </CardTitle>
         <CardDescription>
-          Här kan du justera startdatum för mottagningen för samtliga kårer.
+          {t("admin_reception_card.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-2">
@@ -49,7 +53,7 @@ export const MottagningStartDateCard = () => {
           />
         </div>
         <div className="grid grid-cols-[100px_auto] gap-2">
-          <p>Övrigt: </p>
+          <p>{t("other")}: </p>
           <DatePicker
             date={mottagningStart.Övrigt}
             setDate={(date) =>

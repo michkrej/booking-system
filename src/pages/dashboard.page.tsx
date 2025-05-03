@@ -15,9 +15,8 @@ export function DashboardPage() {
   return (
     <Layout>
       <NewUpdateCard />
-
-      <div className="grid-auto-rows grid grid-cols-7 gap-4">
-        <div className="col-span-5 grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-8 grid grid-cols-4 gap-4 flex-3/4">
           {!isPlanEditLocked ? (
             <CreateNewPlanCard />
           ) : (
@@ -29,7 +28,9 @@ export function DashboardPage() {
           <FindCollisionsCard />
         </div>
 
-        <PublicPlansCard />
+        <div className="col-span-4 flex-1/4 row-span-12">
+          <PublicPlansCard />
+        </div>
       </div>
     </Layout>
   );

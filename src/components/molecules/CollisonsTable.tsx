@@ -1,6 +1,7 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Booking, Plan } from "@utils/interfaces";
-import { cn, formatDate, getCommittee } from "@lib/utils";
+import { formatDate, getCommittee } from "@lib/utils";
 import {
   Table,
   TableBody,
@@ -9,19 +10,43 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
+import { useFindCollisionsCard } from "@/hooks/useFindCollisionsCard";
 
-type CollisionsTableProps = {
-  publicPlans: Plan[];
-  collisions: Record<string, Plan["events"]>;
-  inventoryCollisions: Record<string, Booking[]>;
+const calculateNumCollisions = (
+  bookings: Booking[] | undefined,
+): number | null => {
+  if (!bookings) return null;
+  return Math.ceil(bookings.length / 2);
 };
 
-export const CollisionsTable = ({
-  publicPlans,
-  collisions,
-  inventoryCollisions,
-}: CollisionsTableProps) => {
+const numberOfColumns = 5;
+
+export const CollisionsTable = () => {
   const { t } = useTranslation();
+
+  const { publicPlansWithoutUserPlans, selectedUserPlan, collisions } =
+    useFindCollisionsCard();
+
+  const plansWithCollisions = useMemo(() => {
+    if (!selectedUserPlan) return [];
+
+    const planIdsWithCollisions = new Set([
+      ...Object.keys(collisions?.roomCollisions || {}),
+      ...Object.keys(collisions?.inventoryCollisions || {}),
+    ]);
+
+    return publicPlansWithoutUserPlans.filter((plan) =>
+      planIdsWithCollisions.has(plan.id),
+    );
+  }, [selectedUserPlan, collisions, publicPlansWithoutUserPlans]);
+
+  const noPlansWithCollisions =
+    plansWithCollisions.length === 0 && selectedUserPlan !== undefined;
+
+  console.log(plansWithCollisions);
+
+  console.log(selectedUserPlan);
+
   return (
     <Table>
       <TableHeader>
@@ -34,47 +59,74 @@ export const CollisionsTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {publicPlans.map((plan) => {
-          const committee = getCommittee(plan.committeeId);
-
-          if (!committee) return null;
-
-          const collisnsForPlan = collisions[plan.id];
-          const numCollisions = collisnsForPlan
-            ? Math.ceil(collisnsForPlan.length / 2)
-            : null;
-
-          const collisnsForInventoryPlan = inventoryCollisions[plan.id];
-          const numInventoryCollisions = collisnsForInventoryPlan
-            ? Math.ceil(collisnsForInventoryPlan.length / 2)
-            : null;
-          return (
-            <TableRow
-              key={plan.id}
-              className={cn(
-                numCollisions === 0 &&
-                  numInventoryCollisions === 0 &&
-                  "opacity-50",
-              )}
-            >
-              <TableCell>
-                {committee?.kår === "Övrigt" ? plan.label : committee.name}
-              </TableCell>
-              <TableCell className="font-medium">{committee.name}</TableCell>
-              <TableCell className="hidden md:table-cell">
-                {formatDate(plan.updatedAt)}
-              </TableCell>
-              <TableCell>{numCollisions ?? "-"}</TableCell>
-              <TableCell>{numInventoryCollisions ?? "-"}</TableCell>
-            </TableRow>
-          );
-        })}
-        {publicPlans.length === 0 && (
+        {!selectedUserPlan ? (
           <TableRow>
-            <TableCell colSpan={3}>{t("no_plans_exist")}</TableCell>
+            <TableCell
+              colSpan={numberOfColumns}
+              className="text-center text-gray-500"
+            >
+              {t("choose_a_plan")}
+            </TableCell>
           </TableRow>
+        ) : noPlansWithCollisions ? (
+          <TableRow>
+            <TableCell
+              colSpan={numberOfColumns}
+              className="text-center text-gray-500"
+            >
+              {t("no_plans_collisions_exist")}
+            </TableCell>
+          </TableRow>
+        ) : (
+          plansWithCollisions.map((plan) => (
+            <CollisionsTableRow
+              key={plan.id}
+              plan={plan}
+              roomCollisionsForPlan={collisions?.roomCollisions?.[plan.id]}
+              inventoryCollisionsForPlan={
+                collisions?.inventoryCollisions?.[plan.id]
+              }
+            />
+          ))
         )}
       </TableBody>
     </Table>
+  );
+};
+
+interface CollisionsTableRowProps {
+  plan: Plan;
+  roomCollisionsForPlan: Booking[] | undefined;
+  inventoryCollisionsForPlan: Booking[] | undefined;
+}
+
+const CollisionsTableRow = ({
+  plan,
+  roomCollisionsForPlan,
+  inventoryCollisionsForPlan,
+}: CollisionsTableRowProps) => {
+  const committee = getCommittee(plan.committeeId);
+
+  if (!committee) {
+    return null;
+  }
+
+  const numRoomCollisions = calculateNumCollisions(roomCollisionsForPlan);
+  const numInventoryCollisions = calculateNumCollisions(
+    inventoryCollisionsForPlan,
+  );
+
+  return (
+    <TableRow>
+      <TableCell>
+        {committee?.kår === "Övrigt" ? plan.label : committee.name}
+      </TableCell>
+      <TableCell className="font-medium">{committee.name}</TableCell>
+      <TableCell className="hidden md:table-cell">
+        {formatDate(plan.updatedAt)}
+      </TableCell>
+      <TableCell>{numRoomCollisions ?? "-"}</TableCell>
+      <TableCell>{numInventoryCollisions ?? "-"}</TableCell>
+    </TableRow>
   );
 };

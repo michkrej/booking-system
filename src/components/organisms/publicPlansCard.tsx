@@ -109,7 +109,7 @@ export const PublicPlansCard = () => {
   };
 
   return (
-    <Tabs defaultValue={defaultTab} className="col-span-2">
+    <Tabs defaultValue={defaultTab}>
       <div className="flex items-center">
         <TabsList>
           <TabsTrigger value="all">{t("all")}</TabsTrigger>

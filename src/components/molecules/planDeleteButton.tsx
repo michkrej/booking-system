@@ -30,10 +30,7 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
 
   const handleDelete = async () => {
     deletePlan.mutate(plan.id, {
-      onSuccess: () => {
-        setIsOpen(false);
-      },
-      onError: () => {
+      onSettled: () => {
         setIsOpen(false);
       },
     });

@@ -10,7 +10,7 @@ export const useUserPlans = () => {
   const { planYear: year } = useStorePlanYear();
   const { userPlansLoaded } = useStorePlanActions();
 
-  const { isFetching } = useQuery({
+  const { isPending } = useQuery({
     queryKey: ["userPlans", year, user.id],
     queryFn: async () => {
       const plans = await plansService.getUserPlans(user.id, year);
@@ -21,6 +21,6 @@ export const useUserPlans = () => {
 
   return {
     userPlans: useBoundStore((state) => state.userPlans) ?? [],
-    isPending: isFetching,
+    isPending,
   };
 };

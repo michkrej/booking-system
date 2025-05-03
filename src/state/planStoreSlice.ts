@@ -17,6 +17,7 @@ interface PlanStoreSlice {
   hasPublicPlan: boolean;
   activePlans: Plan[];
   currentDate: Date;
+  selectedUserPlan: Plan | undefined;
 
   userPlansLoaded: (plans: Plan[]) => void;
   publicPlansLoaded: (plans: Plan[]) => void;
@@ -37,6 +38,7 @@ interface PlanStoreSlice {
     isInventoryView?: boolean;
   }) => void;
   updatedCurrentDate: (date: Date) => void;
+  setSelectedUserPlan: (plan: Plan | undefined) => void;
 }
 
 const createPlanStoreSlice: StateCreator<
@@ -52,6 +54,7 @@ const createPlanStoreSlice: StateCreator<
   hasPublicPlan: false,
   activePlans: [],
   currentDate: new Date(`${CURRENT_YEAR}-08-18`),
+  selectedUserPlan: undefined,
 
   userPlansLoaded: (plans) => {
     const sortedPlans = plans.sort((a, b) => {
@@ -144,6 +147,9 @@ const createPlanStoreSlice: StateCreator<
   },
   updatedCurrentDate: (date) => {
     set({ currentDate: date });
+  },
+  setSelectedUserPlan: (plan) => {
+    set({ selectedUserPlan: plan });
   },
 });
 

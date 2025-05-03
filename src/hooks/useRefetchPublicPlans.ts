@@ -1,13 +1,11 @@
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { usePublicPlans } from "@hooks/usePublicPlans";
-import { useBoundStore } from "@state/store";
-import { Layout } from "@components/molecules/layout";
+import { useBoundStore } from "@/state/store";
 import { viewCollisionsPath, viewPath } from "@/utils/CONSTANTS";
 import { isInventoryCollisionView, isRoomCollisionView } from "@/utils/helpers";
-import { InventorySchedule } from "./Booking/components/InventorySchedule";
+import { usePublicPlans } from "./usePublicPlans";
 
-export const InventoryPage = () => {
+export const useRefetchPublicPlans = () => {
   const { id = "" } = useParams();
   const location = useLocation();
   const { refetch } = usePublicPlans();
@@ -25,10 +23,4 @@ export const InventoryPage = () => {
         });
     });
   }, []);
-
-  return (
-    <Layout className="bg-white p-0!" hideFooter>
-      <InventorySchedule />
-    </Layout>
-  );
 };

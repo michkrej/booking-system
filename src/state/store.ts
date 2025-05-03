@@ -23,7 +23,15 @@ export const useBoundStore = create<
           ...createBookingStoreSlice(...a),
         };
       },
-      { name: "app-storage" },
+      {
+        name: "app-storage",
+        partialize: (state) =>
+          Object.fromEntries(
+            Object.entries(state).filter(
+              ([key]) => !["selectedUserPlan"].includes(key),
+            ),
+          ),
+      },
     ),
   ),
 );

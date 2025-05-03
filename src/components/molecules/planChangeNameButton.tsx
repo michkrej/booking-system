@@ -38,10 +38,12 @@ type ChangePlanNameModalProps = {
 };
 
 export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
-  const { updatePlanName } = useEditPlan();
-  const [open, setOpen] = useState(false);
-  const { isPlanEditLocked } = useAdminSettings();
   const { t } = useTranslation();
+
+  const { updatePlanName } = useEditPlan();
+  const { isPlanEditLocked } = useAdminSettings();
+
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,7 +84,7 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
               </div>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>{}</TooltipContent>
+          <TooltipContent>{t("change_plan_name")}</TooltipContent>
         </Tooltip>
       </DialogTrigger>
       <DialogContent>

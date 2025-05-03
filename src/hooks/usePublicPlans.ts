@@ -7,7 +7,7 @@ export const usePublicPlans = () => {
 
   const {
     data = [],
-    isFetching,
+    isPending,
     refetch,
   } = useQuery({
     queryKey: ["publicPlans", year],
@@ -17,5 +17,5 @@ export const usePublicPlans = () => {
     },
   });
 
-  return { publicPlans: data, isPending: isFetching, refetch };
+  return { publicPlans: data, isPending, refetch };
 };

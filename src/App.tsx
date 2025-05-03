@@ -8,14 +8,12 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Toaster } from "sonner";
-
 import { TooltipProvider } from "@ui/tooltip";
-
 import { useUserIsLoggedIn } from "./hooks/useUserIsLoggedIn";
 import { BookingPage } from "./pages/Booking/booking.page";
 import { AdminPage } from "./pages/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
-import { InventoryPage } from "./pages/inventory.page";
+import { InventorySchedulePage } from "./pages/inventorySchedule.page";
 import { LoginPage } from "./pages/login.page";
 
 const queryClient = new QueryClient();
@@ -47,7 +45,10 @@ function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/booking/:id" element={<BookingPage />} />
-                <Route path="/inventory/:id" element={<InventoryPage />} />
+                <Route
+                  path="/inventory/:id"
+                  element={<InventorySchedulePage />}
+                />
               </Route>
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

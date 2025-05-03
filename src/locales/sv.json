@@ -69,5 +69,20 @@
   "welcoming_week_for_committee_x_begins": "Mottagingen för {{committee}} börjar",
   "x_weeks_left": "{{x}} veckor kvar",
   "you_do_not_have_any_plans_yet": "Du har inga planeringar än...",
-  "your_plans": "Dina planeringar"
+  "your_plans": "Dina planeringar",
+  "admin_card": {
+    "title": "Admin",
+    "description": "Här kan du justera antalet av diverse bokningsbara material som finns tillgängliga för fadderisterna att boka. När du letar krockar kommer bokningar som överlappar i tid och överskrider mängden av nedan angivna material att visas."
+  },
+  "admin_reception_card": {
+    "title": "Mottagningen {{year}} startar",
+    "description": "Här kan du justera startdatum för mottagningen för samtliga kårer."
+  },
+  "other": "Övrigt",
+  "admin_lock_card": {
+    "title": "Lås redigering av bokningar",
+    "description": "Som administratör kan du låsa redigering av bokningar för att förhindra att fadderisterna ändrar i sina bokningar efter bokningsmötet eller liknande."
+  },
+  "no_plans_collisions_exist": "Det finns inga krockar",
+  "choose_a_plan": "Välj en planering..."
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { kårer } from "@data/committees";
 import { type Kår } from "@utils/interfaces";
@@ -11,17 +12,14 @@ import {
 import { Switch } from "@ui/switch";
 
 export const LockPlanEditingCard = () => {
+  const { t } = useTranslation();
   const { lockPlans, planEditLocked } = useAdminSettings();
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Lås redigering av bokningar</CardTitle>
-        <CardDescription>
-          Som administratör kan du låsa redigering av bokningar för att
-          förhindra att fadderisterna ändrar i sina bokningar efter
-          bokningsmötet eller liknande.
-        </CardDescription>
+        <CardTitle>{t("admin_lock_card.title")}</CardTitle>
+        <CardDescription>{t("admin_lock_card.description")}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-2">
         {(Object.keys(kårer) as Kår[]).map((kår) => {
