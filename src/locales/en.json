@@ -1,1 +1,19 @@
-{}
+{
+  "change_password": "Change Password",
+  "change_password_dialog": {
+    "title": "Change Password",
+    "description": "Enter your current password and choose a new password.",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm New Password",
+    "submit": "Change Password",
+    "success": "Password has been changed",
+    "error": {
+      "current_password_required": "Current password is required",
+      "new_password_min": "New password must be at least 8 characters",
+      "confirm_password_match": "Passwords do not match",
+      "wrong_password": "Incorrect current password",
+      "generic": "Could not change password"
+    }
+  }
+}

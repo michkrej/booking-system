@@ -62,6 +62,23 @@
   },
   "save": "Spara",
   "signout": "Logga ut",
+  "change_password": "Byt lösenord",
+  "change_password_dialog": {
+    "title": "Byt lösenord",
+    "description": "Ange ditt nuvarande lösenord och välj ett nytt lösenord.",
+    "current_password": "Nuvarande lösenord",
+    "new_password": "Nytt lösenord",
+    "confirm_password": "Bekräfta nytt lösenord",
+    "submit": "Byt lösenord",
+    "success": "Lösenordet har ändrats",
+    "error": {
+      "current_password_required": "Nuvarande lösenord saknas",
+      "new_password_min": "Nytt lösenord måste vara minst 8 tecken",
+      "confirm_password_match": "Lösenorden matchar inte",
+      "wrong_password": "Felaktigt nuvarande lösenord",
+      "generic": "Kunde inte byta lösenord"
+    }
+  },
   "update_plan_name_for_plan_x": "Ange nytt namn för planering {{x}}",
   "updated": "Uppdaterad",
   "view_bookings": "Se bokningar",

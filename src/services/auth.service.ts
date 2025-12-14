@@ -1,10 +1,13 @@
 import {
+  EmailAuthProvider,
   GoogleAuthProvider,
   signOut as _signOut,
   createUserWithEmailAndPassword,
+  reauthenticateWithCredential,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
+  updatePassword,
   updateProfile,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -162,6 +165,27 @@ const updateUserDisplayName = async (newName: string) => {
   }
 };
 
+const changePassword = async (currentPassword: string, newPassword: string) => {
+  const user = auth.currentUser;
+
+  if (!user || !user.email) {
+    throw new Error("User not found");
+  }
+
+  try {
+    const credential = EmailAuthProvider.credential(
+      user.email,
+      currentPassword,
+    );
+    await reauthenticateWithCredential(user, credential);
+
+    await updatePassword(user, newPassword);
+  } catch (error) {
+    console.log(getErrorMessage(error));
+    throw error;
+  }
+};
+
 export const authService = {
   signUpWithEmailAndPassword,
   loginWithEmailAndPassword,
@@ -170,4 +194,5 @@ export const authService = {
   updateUserDisplayName,
   resetPassword,
   signOut,
+  changePassword,
 };

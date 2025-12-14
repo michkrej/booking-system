@@ -10,10 +10,9 @@ export const siteConfig = {
     portfolio: "https://michellekrejci.com",
     instructionVideo: "https://youtu.be/CrjEvRKp1A4",
     feedback: "https://forms.gle/tW28rpuNSWfQHNCq5",
-    TF_2023:
-      "https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/lkpg_tradgardsforeningen_folder_kartbild.pdf?49b5ff",
+
     TF_2024:
-      "https://www.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/orienteringskarta-tradgardsforeningen?496563",
+      "https://datavisualisering.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/orienteringskarta-tradgardsforeningen/",
   },
 };
 

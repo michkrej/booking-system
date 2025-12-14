@@ -1,10 +1,11 @@
 import { CircleUser, Globe } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useSignOut } from "@hooks/useSignOut";
-import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { SiteLogo } from "@components/atoms/siteLogo";
+import { ChangePasswordDialog } from "@components/molecules/changePasswordDialog";
 import { Button } from "@ui/button";
 import {
   DropdownMenu,
@@ -14,18 +15,27 @@ import {
   DropdownMenuTrigger,
 } from "@ui/dropdown-menu";
 import { siteConfig } from "@/config/site";
+import { auth } from "@/services/config";
 
 export const Header = () => {
   const { logout } = useSignOut();
-  const { planYear } = useStorePlanYear();
   const { user } = useStoreUser();
   const { i18n, t } = useTranslation();
 
-  const TF_URL =
-    planYear > 2023 ? siteConfig.links.TF_2024 : siteConfig.links.TF_2023;
+  const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
+    useState(false);
 
   const handleToggleLanguage = () => {
     i18n.changeLanguage(i18n.language === "sv" ? "en" : "sv");
+  };
+
+  const isEmailPasswordUser = () => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return false;
+
+    return currentUser.providerData.some(
+      (provider) => provider.providerId === "password",
+    );
   };
 
   return (
@@ -42,7 +52,7 @@ export const Header = () => {
           {t("dashboard")}
         </Link>
         <a
-          href={TF_URL}
+          href={siteConfig.links.TF_2024}
           className="text-muted-foreground hover:text-foreground transition-colors"
           target="_blank"
           rel="noreferrer"
@@ -90,6 +100,16 @@ export const Header = () => {
             >
               {t("feedback")}
             </DropdownMenuItem>
+            {isEmailPasswordUser() && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setChangePasswordDialogOpen(true)}
+                >
+                  {t("change_password")}
+                </DropdownMenuItem>
+              </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => logout()}
@@ -100,6 +120,10 @@ export const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <ChangePasswordDialog
+        open={changePasswordDialogOpen}
+        onOpenChange={setChangePasswordDialogOpen}
+      />
     </header>
   );
 };
