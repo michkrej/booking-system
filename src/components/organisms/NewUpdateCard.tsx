@@ -40,7 +40,7 @@ const addedLocations: {
     house: "Studenthuset",
     rooms: ["Byttan"],
   }, */
-  {
+  /* {
     campus: "Valla/US",
     house: "Utanför campus",
     rooms: ["Ballpoint"],
@@ -49,27 +49,21 @@ const addedLocations: {
     campus: "Valla",
     house: "Övriga områden på campus",
     rooms: ["Skogen bakom A-huset", "Studenthälsan"],
-  },
+  }, */
 ];
 
 const Changelog = () => {
   return (
-    <div className="grid grid-cols-2 gap-2">
-      {/* <span className="font-semibold">Features</span>
+    <div className="grid grid-cols-1 gap-2">
+      <span className="font-semibold">Features</span>
       <ul className="ml-4 list-disc">
-        <li>Mottagningsansvariga kan låsa planeringar per kår.</li>
-        <li>Bokningar har ett nytt fält för beskrivning</li>
         <li>
-          Se inventarie-bokningar i kalender-vyn genom att klicka på{" "}
-          <BaggageClaimIcon className="inline-block" /> i kalender-toolbaren
-        </li>
-        <li>
-          För att hitta krockar mellan samtliga publika planeringar klicka på
-          knappen "Hitta krockar" - om det finns krockar kommer knappen att
-          ändras till "Se krockar"
+          Om du använder e-post och lösenord för att logga in, så kan du ändra
+          lösenordet genom att klicka på knappen "Byt lösenord" i menyn uppe
+          till höger.
         </li>
       </ul>
-      <br /> */}
+      <br />
       {/* <div>
         <span className="font-semibold text-red-500">Fixade buggar</span>
         <ul className="ml-4 list-disc text-red-500">
@@ -79,15 +73,9 @@ const Changelog = () => {
           </li>
         </ul>
       </div> */}
-      <div>
+      {/* <div>
         <span className="font-semibold">Tillagda lokaler/platser</span>
         <ul className="ml-4 list-disc">
-          {/* <li>
-          Lilla och stora Hoben tältet under campus Valla {">"} "Övriga områden
-          på campus"
-        </li>
-        <li>KK - forumteatern under "Kårhus"</li> */}
-          {/*  <li>VilleValla under "Utanför campus"</li> */}
           {addedLocations.map((location) => (
             <li key={`${location.campus}-${location.house}`}>
               {location.campus} - {location.house}
@@ -99,7 +87,7 @@ const Changelog = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
