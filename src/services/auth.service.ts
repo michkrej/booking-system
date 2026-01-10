@@ -11,6 +11,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import posthog from "posthog-js";
 import { getErrorMessage } from "@/utils/error.util";
 import { type User, type UserDetails } from "@/utils/interfaces";
 import { auth, db } from "./config";
@@ -44,6 +45,8 @@ const signUpWithEmailAndPassword = async ({
       setDoc(doc(db, "users", user.uid), userDetailsDoc),
     ]);
 
+    posthog.identify(user.uid, { email: user.email });
+
     return {
       id: user.uid,
       email: user.email ?? email,
@@ -65,6 +68,9 @@ const loginWithEmailAndPassword = async (email: string, password: string) => {
     if (!userDetailsSnap.exists) {
       throw Error("Missing user details document");
     }
+
+    posthog.identify(user.uid, { email: user.email });
+
     const userDetails = userDetailsSnap.data() as UserDetails;
     return {
       id: user.uid,
@@ -94,6 +100,8 @@ const signInWithGoogle = async () => {
     throw Error("Missing email");
   }
 
+  posthog.identify(user.uid, { email: user.email });
+
   const userDetails = userDetailsSnap.data() as UserDetails;
   return {
     id: user.uid,
@@ -111,6 +119,8 @@ const signupWithGoogle = async (committeeId: string) => {
   if (!user.email) {
     throw Error("Missing email");
   }
+
+  posthog.identify(user.uid, { email: user.email });
 
   const userDetailsDoc = {
     committeeId,
@@ -134,6 +144,7 @@ const signupWithGoogle = async (committeeId: string) => {
 const signOut = async () => {
   try {
     await _signOut(auth);
+    posthog.reset();
   } catch (error) {
     console.log(getErrorMessage(error));
     throw error;

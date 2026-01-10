@@ -36,6 +36,7 @@
     "i18next-browser-languagedetector": "^8.0.5",
     "lucide-react": "^0.390.0",
     "next-themes": "^0.3.0",
+    "posthog-js": "^1.318.1",
     "react": "^18.2.0",
     "react-day-picker": "^9.5.1",
     "react-dom": "^18.2.0",
