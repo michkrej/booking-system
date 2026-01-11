@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-import { useSignup } from "@/hooks/useSignup";
+import { useSignUp } from "@/hooks/useSignUp";
 
 const formSchemaEmail = z
   .object({
@@ -42,7 +42,7 @@ const formSchemaEmail = z
   });
 
 export const FormEmail = () => {
-  const { signupWithEmailAndPassword, isPending } = useSignup();
+  const { signupWithEmailAndPassword, isPending } = useSignUp();
 
   const form = useForm<z.infer<typeof formSchemaEmail>>({
     resolver: zodResolver(formSchemaEmail),

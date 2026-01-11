@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
-import { useSignup } from "@/hooks/useSignup";
+import { useSignUp } from "@/hooks/useSignUp";
 import { LoadingButton } from "../molecules/loadingButton";
 
 const formSchemaGoogle = z.object({
@@ -29,7 +29,7 @@ const formSchemaGoogle = z.object({
 });
 
 export const FormGoogle = () => {
-  const { signupWithGoogle, isPending } = useSignup();
+  const { signupWithGoogle, isPending } = useSignUp();
 
   const form = useForm<z.infer<typeof formSchemaGoogle>>({
     resolver: zodResolver(formSchemaGoogle),
