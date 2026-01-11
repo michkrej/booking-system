@@ -1,6 +1,15 @@
 import "@fontsource-variable/inter";
 import { registerLicense } from "@syncfusion/ej2-base";
+import "@syncfusion/ej2-base/styles/material.css";
+import "@syncfusion/ej2-buttons/styles/material.css";
+import "@syncfusion/ej2-calendars/styles/material.css";
+import "@syncfusion/ej2-dropdowns/styles/material.css";
+import "@syncfusion/ej2-inputs/styles/material.css";
+import "@syncfusion/ej2-lists/styles/material.css";
+import "@syncfusion/ej2-navigations/styles/material.css";
+import "@syncfusion/ej2-popups/styles/material.css";
 import "@syncfusion/ej2-react-schedule/styles/material.css";
+import "@syncfusion/ej2-splitbuttons/styles/material.css";
 import { PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

@@ -62,11 +62,35 @@ importers:
       '@syncfusion/ej2-base':
         specifier: 32.1.22
         version: 32.1.22
+      '@syncfusion/ej2-buttons':
+        specifier: ^32.1.21
+        version: 32.1.21
+      '@syncfusion/ej2-calendars':
+        specifier: ^32.1.22
+        version: 32.1.22
       '@syncfusion/ej2-cldr-data':
         specifier: 32.1.19
         version: 32.1.19
+      '@syncfusion/ej2-dropdowns':
+        specifier: ^32.1.22
+        version: 32.1.22
+      '@syncfusion/ej2-inputs':
+        specifier: ^32.1.22
+        version: 32.1.22
+      '@syncfusion/ej2-lists':
+        specifier: ^32.1.19
+        version: 32.1.19
+      '@syncfusion/ej2-navigations':
+        specifier: ^32.1.19
+        version: 32.1.19
+      '@syncfusion/ej2-popups':
+        specifier: ^32.1.19
+        version: 32.1.19
       '@syncfusion/ej2-react-schedule':
         specifier: 32.1.22
+        version: 32.1.22
+      '@syncfusion/ej2-splitbuttons':
+        specifier: ^32.1.22
         version: 32.1.22
       '@tanstack/react-query':
         specifier: ^5.69.0
