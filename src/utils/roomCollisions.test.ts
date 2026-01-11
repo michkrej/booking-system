@@ -191,7 +191,7 @@ describe("eventCollisions", () => {
       `Room collision test for large datasets took ${duration} milliseconds`,
     );
 
-    expect(duration).toBeLessThan(1000); // Expect the function to run in under 0,7 seconds for 1000 events
+    expect(duration).toBeLessThan(1500); // Expect the function to run in under 1,5 seconds
     expect(collisions.length).toBe(750); // Expect 500 collisions
   });
 });

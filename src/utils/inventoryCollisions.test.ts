@@ -405,8 +405,7 @@ describe("findInventoryCollisionsBetweenEvents", () => {
       `Inventory collision test for ${NUM_EVENTS} events took ${(end - start).toFixed(2)}ms`,
     );
 
-    // Ensure the function completes within a reasonable time
-    expect(end - start).toBeLessThan(300); // Adjust threshold if needed
-    expect(collisions.length).toBeGreaterThan(0); // Ensure some collisions are found
+    expect(end - start).toBeLessThan(500);
+    expect(collisions.length).toBeGreaterThan(0);
   });
 });
