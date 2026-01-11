@@ -137,8 +137,6 @@ const createPlanStoreSlice: StateCreator<
           : findRoomCollisionsBetweenEvents(bookings);
       }
 
-      console.log(bookings);
-
       return {
         activePlans: updatedPlans,
         bookings,

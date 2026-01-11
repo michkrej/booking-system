@@ -43,10 +43,6 @@ export const CollisionsTable = () => {
   const noPlansWithCollisions =
     plansWithCollisions.length === 0 && selectedUserPlan !== undefined;
 
-  console.log(plansWithCollisions);
-
-  console.log(selectedUserPlan);
-
   return (
     <Table>
       <TableHeader>

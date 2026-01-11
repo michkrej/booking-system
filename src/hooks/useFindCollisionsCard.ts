@@ -135,8 +135,6 @@ export const useFindCollisionsCard = () => {
     );
   }, [collisions, selectedUserPlan]);
 
-  console.log(selectedUserPlan);
-
   return {
     userPlans,
     publicPlansWithoutUserPlans,

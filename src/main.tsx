@@ -1,5 +1,6 @@
 import "@fontsource-variable/inter";
 import { registerLicense } from "@syncfusion/ej2-base";
+import "@syncfusion/ej2-react-schedule/styles/material.css";
 import { PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
