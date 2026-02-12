@@ -1,3 +1,13 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/booking-system/static/:path(.*)",
+      "destination": "https://eu-assets.i.posthog.com/static/:path"
+    },
+    {
+      "source": "/booking-system/:path(.*)",
+      "destination": "https://eu.i.posthog.com/:path"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
