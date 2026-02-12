@@ -19,12 +19,12 @@ export const resources = {
 
 i18n
   // pass the i18n instance to react-i18next.
-  .use(LngDetector)
+  // .use(LngDetector)
   .use(initReactI18next)
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    fallbackLng: false,
+    lng: "sv",
     ns: ["default"],
     defaultNS,
     resources,
@@ -38,9 +38,9 @@ i18n
         console.log(`Missing translation: [${lngs}] ${ns}:${key}`);
       }
     },
-    detection: {
+    /* detection: {
       caches: ["localStorage", "cookie"],
-    },
+    }, */
   });
 
 const localeMap: Record<string, Locale> = {

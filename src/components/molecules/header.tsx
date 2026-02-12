@@ -26,6 +26,7 @@ export const Header = () => {
     useState(false);
 
   const handleToggleLanguage = () => {
+    console.log(i18n.language);
     i18n.changeLanguage(i18n.language === "sv" ? "en" : "sv");
   };
 
