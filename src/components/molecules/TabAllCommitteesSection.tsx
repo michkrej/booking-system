@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Booking, Plan } from "@utils/interfaces";
+import type { Booking, Plan } from "@utils/interfaces";
 import { formatDate, getCommittee } from "@lib/utils";
 import {
   Card,
@@ -30,6 +30,7 @@ type TabAllCommitteesSectionProps = {
   handleViewCollisionsClick: (plans: Plan[]) => void;
   handleViewBookingsClick: (plans: Plan[]) => void;
   handlePlanClick: (plan: Plan) => void;
+  getConflictsForPlan?: (planId: string) => number;
 };
 
 export const TabAllCommitteesSection = ({
@@ -41,6 +42,7 @@ export const TabAllCommitteesSection = ({
   handleViewCollisionsClick,
   handleViewBookingsClick,
   handlePlanClick,
+  getConflictsForPlan,
 }: TabAllCommitteesSectionProps) => {
   const { t } = useTranslation();
 
@@ -73,12 +75,14 @@ export const TabAllCommitteesSection = ({
                 <TableHead className="hidden sm:table-cell">
                   {t("updated")}
                 </TableHead>
+                <TableHead className="text-right">Krockar</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {plans.map((plan) => {
                 const committee = getCommittee(plan.committeeId);
                 const isÖvrigt = committee?.kår === "Övrigt";
+                const conflictCount = getConflictsForPlan?.(plan.id) || 0;
                 return (
                   <TableRow
                     key={plan.id}
@@ -86,11 +90,28 @@ export const TabAllCommitteesSection = ({
                     className="hover:cursor-pointer"
                   >
                     <TableCell className="font-medium">
-                      {isÖvrigt ? plan.label : committee?.name}
+                      <div className="flex items-center gap-2">
+                        {committee && (
+                          <span
+                            className="w-2 h-2 shrink-0"
+                            style={{ backgroundColor: committee.color }}
+                          />
+                        )}
+                        {isÖvrigt ? plan.label : committee?.name}
+                      </div>
                     </TableCell>
                     <TableCell>{committee?.kår}</TableCell>
                     <TableCell className="hidden md:table-cell">
                       {formatDate(plan.updatedAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {conflictCount > 0 ? (
+                        <span className="inline-flex items-center px-1.5 py-0.5 text-xs font-bold bg-red-50 border border-red-200 text-red-600">
+                          {conflictCount}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-green-600">&#10003;</span>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
@@ -110,6 +131,9 @@ export const TabAllCommitteesSection = ({
                   </TableCell>
                   <TableCell>
                     <Skeleton className="h-4 w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-8 ml-auto" />
                   </TableCell>
                 </TableRow>
               ) : null}

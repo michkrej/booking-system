@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { getCommittee } from "@/lib/utils";
 import { plansService } from "@/services";
 import { useStorePlanYear } from "./useStorePlanYear";
 
@@ -17,5 +19,15 @@ export const usePublicPlans = () => {
     },
   });
 
-  return { publicPlans: data, isPending, refetch };
+  const publicPlansByKar = useMemo(() => {
+    const filterByKår = (kår: string) =>
+      data?.filter((plan) => getCommittee(plan.committeeId)?.kår === kår);
+    return {
+      lintek: filterByKår("LinTek"),
+      consensus: filterByKår("Consensus"),
+      stuff: filterByKår("StuFF"),
+    };
+  }, [data]);
+
+  return { publicPlans: data, isPending, refetch, publicPlansByKar };
 };

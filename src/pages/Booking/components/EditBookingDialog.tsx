@@ -117,7 +117,7 @@ export const EditBookingDialog = ({
       })),
       food: data.food,
       alcohol: data.alcohol,
-      bookableItems: data.bookableItems.map((item) => ({
+      bookableItems: data.bookableItems?.map((item) => ({
         ...item,
         startDate: convertToDate(item.startDate),
         endDate: convertToDate(item.endDate),

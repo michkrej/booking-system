@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BOOKABLE_ITEM_KEYS } from "@/utils/CONSTANTS";
 
 export const BookingSchema = z
   .object({
@@ -15,7 +16,7 @@ export const BookingSchema = z
     bookableItems: z
       .array(
         z.object({
-          key: z.string(),
+          key: z.enum(BOOKABLE_ITEM_KEYS),
           value: z
             .string()
             .min(1, {

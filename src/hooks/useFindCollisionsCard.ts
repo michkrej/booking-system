@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useBoundStore } from "@/state/store";
 import { viewCollisionsPath } from "@/utils/CONSTANTS";
 import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
-import { Booking } from "@/utils/interfaces";
+import type { Booking } from "@/utils/interfaces";
 import { usePublicPlans } from "./usePublicPlans";
 import { useUserPlans } from "./useUserPlans";
 

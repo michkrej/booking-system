@@ -5,53 +5,6 @@ import { Button } from "@ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@ui/card";
 import { siteConfig } from "@/config/site";
 
-const addedLocations: {
-  campus: "US" | "Valla" | "Valla/US";
-  house: string;
-  rooms: string[];
-}[] = [
-  /*   {
-    campus: "US",
-    house: "Clinicum",
-    rooms: ["Metodrum 1", "Metodrum 2", "Övrigt rum"],
-  },
-  {
-    campus: "Valla",
-    house: "B-huset",
-    rooms: ["Humanoidlabbet", "Systemet"],
-  },
-  {
-    campus: "Valla",
-    house: "C-huset",
-    rooms: ["Utanför C4"],
-  },
-  {
-    campus: "Valla",
-    house: "Fysikhuset",
-    rooms: ["Ingång 55", "Ingång 57"],
-  },
-  {
-    campus: "Valla",
-    house: "A-huset",
-    rooms: ["Ledsna Flickan", "Alfheim"],
-  },
-  {
-    campus: "Valla",
-    house: "Studenthuset",
-    rooms: ["Byttan"],
-  }, */
-  /* {
-    campus: "Valla/US",
-    house: "Utanför campus",
-    rooms: ["Ballpoint"],
-  },
-  {
-    campus: "Valla",
-    house: "Övriga områden på campus",
-    rooms: ["Skogen bakom A-huset", "Studenthälsan"],
-  }, */
-];
-
 const Changelog = () => {
   return (
     <div className="grid grid-cols-1 gap-2">

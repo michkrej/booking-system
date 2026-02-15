@@ -7,6 +7,7 @@ import { usePublicPlansByKår } from "@hooks/usePlansByKår";
 import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useStoreBookings } from "@hooks/useStoreBookings";
 import { useStoreUser } from "@hooks/useStoreUser";
+import { useAllConflicts } from "@hooks/useAllConflicts";
 import { useBoundStore } from "@state/store";
 import { type Booking, type Plan } from "@utils/interfaces";
 import { findInventoryCollisionsBetweenEvents } from "@utils/inventoryCollisions";
@@ -32,6 +33,8 @@ export const PublicPlansCard = () => {
     lintek: plansLinTek,
     consensus: plansConsensus,
   } = usePublicPlansByKår();
+
+  const { getConflictsForPlan } = useAllConflicts();
 
   const [inventoryCollisions, setInventoryCollisions] = useState<Booking[]>([]);
   const [roomCollisions, setRoomCollisions] = useState<Booking[]>([]);
@@ -131,6 +134,7 @@ export const PublicPlansCard = () => {
         handleViewCollisionsClick={handleViewCollisionsClick}
         handleViewBookingsClick={handleViewBookingsClick}
         handlePlanClick={handlePlanClick}
+        getConflictsForPlan={getConflictsForPlan}
       />
       {/* SECTION - Consensus */}
       <TabCommitteeSection
@@ -143,6 +147,7 @@ export const PublicPlansCard = () => {
         handleViewCollisionsClick={handleViewCollisionsClick}
         handleViewBookingsClick={handleViewBookingsClick}
         handlePlanClick={handlePlanClick}
+        getConflictsForPlan={getConflictsForPlan}
       />
       {/* SECTION - LinTek */}
       <TabCommitteeSection
@@ -155,6 +160,7 @@ export const PublicPlansCard = () => {
         handleViewCollisionsClick={handleViewCollisionsClick}
         handleViewBookingsClick={handleViewBookingsClick}
         handlePlanClick={handlePlanClick}
+        getConflictsForPlan={getConflictsForPlan}
       />
       {/* SECTION - StuFF */}
       <TabCommitteeSection
@@ -167,6 +173,7 @@ export const PublicPlansCard = () => {
         handleViewCollisionsClick={handleViewCollisionsClick}
         handleViewBookingsClick={handleViewBookingsClick}
         handlePlanClick={handlePlanClick}
+        getConflictsForPlan={getConflictsForPlan}
       />
     </Tabs>
   );

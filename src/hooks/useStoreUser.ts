@@ -9,7 +9,8 @@ export const useStoreUser = () => {
   return {
     user: {
       ...user,
-      kår: committees[user.committeeId].kår,
+      kår: committees[user.committeeId]!.kår,
+      committee: committees[user.committeeId],
     },
   };
 };

@@ -1,3 +1,4 @@
+// @ts-expect-error - ignore
 import "@fontsource-variable/inter";
 import { registerLicense } from "@syncfusion/ej2-base";
 import "@syncfusion/ej2-base/styles/material.css";
@@ -18,7 +19,7 @@ import "./i18n";
 import "./styles/global.css";
 import "./styles/scheduler.css";
 
-registerLicense(import.meta.env.VITE_APP_SYNCFUSION_KEY);
+registerLicense(import.meta.env["VITE_APP_SYNCFUSION_KEY"]);
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
@@ -28,9 +29,9 @@ root.render(
       <App />
     ) : (
       <PostHogProvider
-        apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+        apiKey={import.meta.env["VITE_PUBLIC_POSTHOG_KEY"]}
         options={{
-          api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+          api_host: import.meta.env["VITE_PUBLIC_POSTHOG_HOST"],
           ui_host: "https://eu.posthog.com",
           defaults: "2025-05-24",
           capture_exceptions: true, // This enables capturing exceptions using Error Tracking, set to false if you don't want this

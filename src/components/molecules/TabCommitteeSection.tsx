@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Booking, Kår, Plan } from "@utils/interfaces";
+import type { Booking, Kår, Plan } from "@utils/interfaces";
 import { formatDate, getCommittee } from "@lib/utils";
 import {
   Card,
@@ -31,6 +31,7 @@ type TabCommitteeSectionProps = {
   handleViewCollisionsClick: (plans: Plan[]) => void;
   handleViewBookingsClick: (plans: Plan[]) => void;
   handlePlanClick: (plan: Plan) => void;
+  getConflictsForPlan?: (planId: string) => number;
 };
 
 export const TabCommitteeSection = ({
@@ -43,6 +44,7 @@ export const TabCommitteeSection = ({
   handleViewCollisionsClick,
   handleViewBookingsClick,
   handlePlanClick,
+  getConflictsForPlan,
 }: TabCommitteeSectionProps) => {
   const { t } = useTranslation();
 
@@ -63,11 +65,13 @@ export const TabCommitteeSection = ({
                 <TableHead className="hidden sm:table-cell">
                   {t("updated")}
                 </TableHead>
+                <TableHead className="text-right">Krockar</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {plans.map((plan) => {
                 const committee = getCommittee(plan.committeeId);
+                const conflictCount = getConflictsForPlan?.(plan.id) || 0;
                 return (
                   <TableRow
                     key={plan.id}
@@ -75,10 +79,27 @@ export const TabCommitteeSection = ({
                     className="hover:cursor-pointer"
                   >
                     <TableCell className="font-medium">
-                      {committee?.name}
+                      <div className="flex items-center gap-2">
+                        {committee && (
+                          <span
+                            className="w-2 h-2 shrink-0"
+                            style={{ backgroundColor: committee.color }}
+                          />
+                        )}
+                        {committee?.name}
+                      </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
                       {formatDate(plan.updatedAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {conflictCount > 0 ? (
+                        <span className="inline-flex items-center px-1.5 py-0.5 text-xs font-bold bg-red-50 border border-red-200 text-red-600">
+                          {conflictCount}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-green-600">&#10003;</span>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
@@ -95,6 +116,9 @@ export const TabCommitteeSection = ({
                   </TableCell>
                   <TableCell>
                     <Skeleton className="h-4 w-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-8 ml-auto" />
                   </TableCell>
                 </TableRow>
               ) : null}

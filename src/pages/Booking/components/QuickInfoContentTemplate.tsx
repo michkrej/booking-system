@@ -47,7 +47,7 @@ export const QuickInfoContentTemplate = (
       </div>
       <div className="grid grid-cols-[20px_auto] items-center">
         <UserIcon className="mr-2 h-4 w-4" />
-        {committees[props.committeeId].name}
+        {committees[props.committeeId]?.name}
       </div>
       <div className="grid grid-cols-[20px_auto] items-center">
         <BuildingIcon className="mr-2 h-4 w-4" />

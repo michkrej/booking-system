@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Booking, Plan } from "@utils/interfaces";
+import type { Booking, Plan } from "@utils/interfaces";
 import { formatDate, getCommittee } from "@lib/utils";
 import {
   Table,

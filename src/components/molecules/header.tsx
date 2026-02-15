@@ -91,6 +91,13 @@ export const Header = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
+              disabled
+              onClick={() => window.open(siteConfig.links.instructionVideo)}
+            >
+              {user.email}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
               onClick={() => window.open(siteConfig.links.instructionVideo)}
             >
               {t("instruction_video")}

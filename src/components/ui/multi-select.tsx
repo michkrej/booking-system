@@ -1,11 +1,10 @@
 "use client";
 
-import { cn } from "@lib/utils";
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
 import { X } from "lucide-react";
 import * as React from "react";
 import { forwardRef, useEffect } from "react";
-
+import { cn } from "@lib/utils";
 import { Badge } from "@ui/badge";
 import { Command, CommandGroup, CommandItem, CommandList } from "@ui/command";
 
@@ -255,8 +254,8 @@ const MultipleSelector = React.forwardRef<
             if (input.value === "" && selected.length > 0) {
               const lastSelectOption = selected[selected.length - 1];
               // If last item is fixed, we should not remove it.
-              if (!lastSelectOption.fixed) {
-                handleUnselect(selected[selected.length - 1]);
+              if (!lastSelectOption?.fixed) {
+                handleUnselect(selected[selected.length - 1]!);
               }
             }
           }

@@ -12,16 +12,19 @@ export const color = {
 
 export const CURRENT_YEAR = new Date().getFullYear();
 
+export const BOOKABLE_ITEM_KEYS = [
+  "bardiskar",
+  "bankset-hg",
+  "bankset-hoben",
+  "bankset-k",
+  "ff",
+  "forte",
+  "grillar",
+  "other-inventory",
+] as const;
+
 export const BOOKABLE_ITEM_OPTIONS: {
-  key:
-    | "bardiskar"
-    | "bankset-hg"
-    | "bankset-hoben"
-    | "bankset-k"
-    | "ff"
-    | "forte"
-    | "grillar"
-    | "other-inventory";
+  key: (typeof BOOKABLE_ITEM_KEYS)[number];
   value: string;
   comment?: string;
   inputType: "text" | "number";

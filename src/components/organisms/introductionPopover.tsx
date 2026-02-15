@@ -9,7 +9,7 @@ export const IntroductionPopover = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="group border-muted bg-card hover:bg-card rounded-full border border-solid text-lg shadow-sm hover:shadow-md md:mb-4 md:p-6 md:text-3xl"
+          className="group border-muted bg-card hover:bg-card rounded-full border border-solid text-lg shadow-sm hover:shadow-md md:mb-4 md:p-6 md:text-3xl hover:cursor-pointer"
         >
           <div className="group-hover:animate-wiggle origin-[70%_70%]">👋</div>
         </Button>

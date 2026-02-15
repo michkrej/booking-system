@@ -234,6 +234,32 @@ export const committees = {
   ...otherGroup,
 };
 
+const T = {
+  primary: "#670c47",
+  primary75: "#670c47b5",
+  primary50: "#670c4778",
+  primary25: "#670c473b",
+  secondary: "#60a595",
+  tertiary: "#818389",
+  bg: "hsl(321, 100%, 99%)",
+  card: "#ffffff",
+  foreground: "hsl(321, 5%, 10%)",
+  cardForeground: "hsl(321, 5%, 15%)",
+  muted: "hsl(283, 30%, 95%)",
+  mutedFg: "hsl(321, 5%, 40%)",
+  border: "hsl(321, 30%, 82%)",
+  accent: "hsl(283, 30%, 90%)",
+  destructive: "hsl(0, 100%, 50%)",
+  white: "#ffffff",
+};
+
+export const KAR = {
+  LinTek: { color: "#E1007A", bg: "#eff6ff", border: "#bfdbfe" },
+  Consensus: { color: "#2cb2bf", bg: "#f5f3ff", border: "#ddd6fe" },
+  StuFF: { color: "#007858", bg: "#fff7ed", border: "#fed7aa" },
+  Övrigt: { color: T.tertiary, bg: T.muted, border: T.border },
+};
+
 export const kårer = {
   Consensus: { ...committeesConsensus, ...otherGroup },
   LinTek: { ...committeesLinTek, ...otherGroup },

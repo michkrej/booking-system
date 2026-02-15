@@ -57,7 +57,7 @@ export const InventorySchedule = () => {
         ...bookableItem,
         startDate: convertToDate(bookableItem.startDate),
         endDate: convertToDate(bookableItem.endDate),
-        color: committees[booking.committeeId].color,
+        color: committees[booking.committeeId]?.color,
         item: bookableItem.key,
       })),
     );
@@ -67,7 +67,7 @@ export const InventorySchedule = () => {
     element: HTMLElement;
     data: (typeof itemBookings)[number];
   }) => {
-    args.element.style.backgroundColor = args.data.color;
+    args.element.style.backgroundColor = args.data.color ?? "#808080";
   };
 
   const QuickInfoHeader = (
@@ -89,7 +89,7 @@ export const InventorySchedule = () => {
       return;
     }
 
-    if (args.type === "QuickInfo" && !args?.data?.id) {
+    if (args.type === "QuickInfo" && !args?.data?.["id"]) {
       args.cancel = true;
       return;
     }

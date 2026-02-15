@@ -92,6 +92,7 @@ export type NumericBookableItem = {
   value: number;
   startDate: Date;
   endDate: Date;
+  type: "numeric";
 };
 
 export type TextBookableItem = {
@@ -99,6 +100,7 @@ export type TextBookableItem = {
   value: string;
   startDate: Date;
   endDate: Date;
+  type: "text";
 };
 
 // Unified type for bookable items

@@ -1,5 +1,5 @@
 import { download, generateCsv, mkConfig } from "export-to-csv";
-import { File } from "lucide-react";
+import { DownloadIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -71,9 +71,8 @@ export const ExportPlansButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-          <File className="h-3.5 w-3.5" />
-          <span className="sr-only sm:not-sr-only">{t("export.button")}</span>
+        <Button size="icon" variant="outline" className="h-8">
+          <DownloadIcon className="size-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>

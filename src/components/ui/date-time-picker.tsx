@@ -1,4 +1,3 @@
-import { cn } from "@lib/utils";
 import { add, format } from "date-fns";
 import { type Locale, enUS } from "date-fns/locale";
 import {
@@ -10,7 +9,7 @@ import { Clock } from "lucide-react";
 import * as React from "react";
 import { useImperativeHandle, useRef } from "react";
 import { DayPicker } from "react-day-picker";
-
+import { cn } from "@lib/utils";
 import { Button, buttonVariants } from "@ui/button";
 import type { CalendarProps } from "@ui/calendar";
 import { Input } from "@ui/input";
@@ -509,6 +508,7 @@ const TimePickerInput = React.forwardRef<
      * allow the user to enter the second digit within 2 seconds
      * otherwise start again with entering first digit
      */
+    // @ts-ignore
     React.useEffect(() => {
       if (flag) {
         const timer = setTimeout(() => {
