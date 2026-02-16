@@ -160,7 +160,7 @@ export function DashboardPage() {
 
           <div className="flex gap-4">
             {/* Mobile: Show content based on active tab */}
-            <div className=" lg:hidden space-y-4">
+            <div className="lg:hidden space-y-4 flex-1">
               {isPlanEditLocked && <PlanEditLockedWarningCard />}
 
               {plannerTab === "Mina" && (
@@ -171,7 +171,7 @@ export function DashboardPage() {
               )}
               {plannerTab === "Krockar" && <UserConflictsCard />}
               {plannerTab === "Alla" && (
-                <div className="border border-b-0 bg-card">
+                <div className="border border-b-0 bg-card w-full">
                   <SidebarPublicPlans />
                 </div>
               )}

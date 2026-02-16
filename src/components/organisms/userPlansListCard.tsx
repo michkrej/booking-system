@@ -1,13 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useCreatePlan } from "@hooks/useCreatePlan";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { CURRENT_YEAR } from "@utils/CONSTANTS";
-import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
-import { Skeleton } from "@ui/skeleton";
 import { Button } from "@ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
+import { Skeleton } from "@ui/skeleton";
 import {
   Table,
   TableBody,
@@ -76,12 +77,15 @@ export const UserPlansListCard = ({
 
   return (
     <Card>
-      <CardHeader className="pb-3 flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>{t("your_plans")}</CardTitle>
         {canCreatePlan && (
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="sm">+ {t("create_new_plan.dialog_title")}</Button>
+              <Button size="sm" className="flex gap-x-1">
+                <PlusIcon className="size-4" />{" "}
+                <span className="hidden md:inline">Ny planering</span>
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <Form {...form}>
@@ -90,7 +94,9 @@ export const UserPlansListCard = ({
                   className="grid gap-4"
                 >
                   <DialogHeader>
-                    <DialogTitle>{t("create_new_plan.dialog_title")}</DialogTitle>
+                    <DialogTitle>
+                      {t("create_new_plan.dialog_title")}
+                    </DialogTitle>
                     <DialogDescription>
                       {t("create_new_plan.dialog_description")}
                     </DialogDescription>
@@ -105,7 +111,9 @@ export const UserPlansListCard = ({
                           <Input
                             id="plan-name"
                             type="text"
-                            placeholder={t("create_new_plan.dialog_placeholder")}
+                            placeholder={t(
+                              "create_new_plan.dialog_placeholder",
+                            )}
                             {...field}
                           />
                         </FormControl>
@@ -133,10 +141,14 @@ export const UserPlansListCard = ({
           <TableHeader>
             <TableRow>
               <TableHead>{t("name")}</TableHead>
-              <TableHead className="hidden sm:table-cell">{t("num_bookings")}</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead className="hidden sm:table-cell">
+                {t("num_bookings")}
+              </TableHead>
+              <TableHead className="hidden sm:table-cell">Status</TableHead>
               <TableHead>Krockar</TableHead>
-              <TableHead className="hidden md:table-cell">{t("updated")}</TableHead>
+              <TableHead className="hidden md:table-cell">
+                {t("updated")}
+              </TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
@@ -153,7 +165,10 @@ export const UserPlansListCard = ({
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground">
+                  <TableCell
+                    colSpan={6}
+                    className="text-center text-muted-foreground"
+                  >
                     {t("you_do_not_have_any_plans_yet")}
                   </TableCell>
                 </TableRow>

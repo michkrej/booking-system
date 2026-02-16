@@ -8,12 +8,12 @@ export const PlanEditLockedWarningCard = () => {
   const isCurrentYear = planYear === CURRENT_YEAR;
 
   return (
-    <Card className="col-span-2">
+    <Card>
       <CardHeader className="h-full">
         <CardTitle className="text-red-600">
           Redigering av planeringar är låst!
         </CardTitle>
-        <CardDescription className="pt-2">
+        <CardDescription>
           {isCurrentYear ? (
             <p>
               En administratör har låst all redigering av bokningar för din kår.
@@ -21,7 +21,9 @@ export const PlanEditLockedWarningCard = () => {
               mottagningsansvarig.
             </p>
           ) : (
-            <p>Du kan inte redigera planeringar för föregående år.</p>
+            <p className="">
+              Du kan inte redigera planeringar för föregående år.
+            </p>
           )}
         </CardDescription>
       </CardHeader>

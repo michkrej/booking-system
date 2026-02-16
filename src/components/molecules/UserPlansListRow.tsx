@@ -43,7 +43,7 @@ export const UserPlansListRow = ({
       <TableCell className="hidden sm:table-cell">
         {plan.events.length}
       </TableCell>
-      <TableCell>
+      <TableCell className="hidden sm:table-cell">
         <StatusBadge status={status} />
       </TableCell>
       <TableCell>
@@ -58,7 +58,7 @@ export const UserPlansListRow = ({
       </TableCell>
       <TableCell className="flex items-center justify-end gap-2">
         <PlanDeleteButton plan={plan} />
-        <Separator orientation="vertical" className="h-5" />
+        <Separator orientation="vertical" className="h-5 hidden sm:block" />
         <PlanChangeNameButton plan={plan} />
         <PlanTogglePublicButton plan={plan} />
       </TableCell>

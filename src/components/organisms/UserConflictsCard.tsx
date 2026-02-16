@@ -154,7 +154,7 @@ export const UserConflictsCard = () => {
     });
   }, [conflictRows, karFilter, user.kår]);
 
-  const handleViewTimeline = (row: ConflictRow) => {
+  const handleViewTimeline = (row: ConflictRow, newTab: boolean = false) => {
     loadedBookings(row.bookings);
     changedActivePlans([row.userPlan, row.otherPlan]);
 
@@ -163,10 +163,14 @@ export const UserConflictsCard = () => {
       updatedCurrentDate(startDate);
     }
 
-    if (row.type === "Lokal") {
-      navigate(`/booking/${viewCollisionsPath}`);
+    const path =
+      row.type === "Lokal"
+        ? `/booking/${viewCollisionsPath}`
+        : `/inventory/${viewCollisionsPath}`;
+    if (newTab) {
+      window.open(path, "_blank");
     } else {
-      navigate(`/inventory/${viewCollisionsPath}`);
+      navigate(path);
     }
   };
 
@@ -224,7 +228,7 @@ export const UserConflictsCard = () => {
               Baserat på {userCommittee?.name || userPublicPlan.label} (publik)
             </CardDescription>
           </div>
-          <div className="flex">
+          <div className="flex justify-between flex-1 sm:flex-auto sm:justify-end">
             <Button
               variant="outline"
               size="sm"
@@ -285,11 +289,16 @@ export const UserConflictsCard = () => {
                     className="border-l-[3px]"
                     style={{ borderLeftColor: borderColor }}
                   >
-                    <TableCell>
+                    <TableCell
+                      onClick={() => handleViewTimeline(row)}
+                      onAuxClick={() => handleViewTimeline(row, true)}
+                      className="hover:cursor-pointer hover:underline"
+                    >
                       <FadderiTag
                         name={userCommittee?.name || row.userPlan.label}
                         kar={userCommittee?.kår || "Övrigt"}
                         color={userCommittee?.color || "#808080"}
+                        compact
                       />
                     </TableCell>
                     <TableCell>
@@ -297,6 +306,7 @@ export const UserConflictsCard = () => {
                         name={otherCommittee?.name || row.otherPlan.label}
                         kar={otherCommittee?.kår || "Övrigt"}
                         color={otherCommittee?.color || "#808080"}
+                        compact={karFilter !== "all"}
                       />
                     </TableCell>
                     <TableCell>
@@ -315,7 +325,7 @@ export const UserConflictsCard = () => {
                         {row.detail}
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <Button
                         variant="outline"
                         size="sm"

@@ -80,7 +80,7 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
               asChild
             >
               <div>
-                <Pencil />
+                <Pencil className="size-5 sm:size-6" />
               </div>
             </Button>
           </TooltipTrigger>

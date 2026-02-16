@@ -1,4 +1,4 @@
-import { Trash } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
@@ -51,7 +51,9 @@ export const PlanDeleteButton = ({ plan }: PlanDeleteButtonProps) => {
               disabled={isPlanEditLocked}
               asChild
             >
-              <Trash className="p-2" />
+              <div>
+                <TrashIcon className="size-5 sm:size-6" />
+              </div>
             </Button>
           </TooltipTrigger>
           <TooltipContent>{t("delete_dialog.tooltip")}</TooltipContent>

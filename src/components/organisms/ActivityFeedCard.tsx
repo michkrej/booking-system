@@ -21,7 +21,7 @@ export const ActivityFeedCard = () => {
 
   return (
     <Card>
-      <CardHeader className="pb-3">
+      <CardHeader>
         <CardTitle>Senaste aktivitet</CardTitle>
         <CardDescription>Uppdateringar från andra fadderier</CardDescription>
       </CardHeader>
@@ -49,7 +49,7 @@ export const ActivityFeedCard = () => {
             {activityItems.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center gap-2.5 px-5 py-3 border-b border-border last:border-b-0"
+                className="flex items-center gap-2.5 px-5 py-3 border-b border-border last:border-b-0 flex-wrap"
               >
                 <span
                   className="w-2 h-2 shrink-0"

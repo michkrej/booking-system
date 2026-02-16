@@ -31,7 +31,7 @@ export const FadderiTag = ({
       {!compact && (
         <span
           className={cn(
-            "text-xs font-semibold shrink-0",
+            "text-xs font-semibold shrink-0 hidden sm:inline",
             KAR_COLORS[kar] || KAR_COLORS["Övrigt"],
           )}
         >

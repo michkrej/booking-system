@@ -58,12 +58,12 @@ export const SidebarPublicPlans = () => {
   };
 
   return (
-    <Tabs value={karFilter}>
+    <Tabs value={karFilter} className="">
       <div className="px-5 pt-4 pb-2 relative flex flex-col gap-0.5">
-        <h3 className="text-[15px] leading-none font-bold">
+        <h3 className="text-lg leading-none font-bold">
           {t("public_plans.title")}
         </h3>
-        <div className="absolute right-2 top-4.5 space-x-3">
+        <div className="absolute right-2 top-3 space-x-3">
           <ExportPlansButton />
           <Button
             variant="outline"
@@ -74,7 +74,7 @@ export const SidebarPublicPlans = () => {
             <ArrowRightIcon className="size-4" />
           </Button>
         </div>
-        <p className="text-muted-foreground text-xs mt-0.5">
+        <p className="text-muted-foreground text-sm mt-0.5">
           {t("public_plans.description")}
         </p>
       </div>

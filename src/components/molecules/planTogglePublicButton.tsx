@@ -11,9 +11,9 @@ type PlanTogglePublicButtonProps = {
 };
 
 const getIcon = (pending: boolean, isPublic: boolean) => {
-  if (pending) return <Loader className="animate-spin p-2" />;
-  if (isPublic) return <GlobeLock className="p-2" />;
-  return <Globe className="p-2" />;
+  if (pending) return <Loader className="animate-spin sm:size-6 size-5" />;
+  if (isPublic) return <GlobeLock className="size-5 sm:size-6" />;
+  return <Globe className="size-5 sm:size-6" />;
 };
 
 export const PlanTogglePublicButton = ({
@@ -37,7 +37,7 @@ export const PlanTogglePublicButton = ({
           onClick={() => togglePublicPlan.mutate(plan)}
           asChild
         >
-          {getIcon(togglePublicPlan.isPending, plan.public)}
+          <div>{getIcon(togglePublicPlan.isPending, plan.public)}</div>
         </Button>
       </TooltipTrigger>
       <TooltipContent>
