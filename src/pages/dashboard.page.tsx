@@ -75,7 +75,8 @@ export function DashboardPage() {
   const committee = getCommittee(user.committeeId);
 
   // Determine if user is a spectator (has no plans)
-  const isSpectator = !isLoadingPlans && userPlans.length === 0;
+  const isSpectator =
+    import.meta.env.DEV && !isLoadingPlans && userPlans.length === 0;
 
   // Context label changes for spectators
   const contextLabel = isSpectator
