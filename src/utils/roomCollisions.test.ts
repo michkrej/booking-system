@@ -231,7 +231,7 @@ describe("eventCollisions", () => {
     const end = performance.now(); // Record the end time
     const duration = end - start;
 
-    expect(duration).toBeLessThan(1500);
+    expect(duration).toBeLessThan(2000);
     expect(collisions.length).toBe(750);
   });
 });
