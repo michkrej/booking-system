@@ -1,5 +1,6 @@
 import { type StateCreator } from "zustand";
 import { type User } from "@/interfaces/interfaces";
+import { version } from "../../package.json";
 import { type PlanStoreSlice } from "./planStoreSlice";
 
 interface UserStoreSlice {
@@ -12,7 +13,7 @@ interface UserStoreSlice {
   changedAppMode: (appMode: "user" | "spectator") => void;
 }
 
-export const CURRENT_APP_VERSION = "v3.7.0";
+export const CURRENT_APP_VERSION = version;
 
 const createUserStoreSlice: StateCreator<
   UserStoreSlice & PlanStoreSlice,

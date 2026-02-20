@@ -48,7 +48,7 @@ export const NewUpdateCard = () => {
         <Card className="col-span-full flex">
           <CardHeader className="w-full flex-row items-center gap-x-10">
             <CardTitle>
-              👩‍💻 Bokningsplanering {CURRENT_APP_VERSION} - Nyheter
+              👩‍💻 Bokningsplanering v{CURRENT_APP_VERSION} - Nyheter
             </CardTitle>
             <CardDescription className="flex-1">
               Det har släppts en ny version av appen! Här är en lista över vad
