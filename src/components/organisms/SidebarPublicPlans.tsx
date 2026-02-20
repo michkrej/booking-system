@@ -29,7 +29,7 @@ export const SidebarPublicPlans = () => {
   const { loadedBookings } = useStoreBookings();
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const navigate = useNavigate();
-  const { resetCurrentDate } = useCurrentDate();
+  const { resetCurrentDate, updatedCurrentDate } = useCurrentDate();
   const { t } = useTranslation();
   const { getConflictsForPlan } = useAllConflicts();
 
@@ -53,7 +53,13 @@ export const SidebarPublicPlans = () => {
   const handlePlanClick = (plan: Plan) => {
     loadedBookings(plan.events);
     changedActivePlans([plan]);
-    resetCurrentDate();
+
+    if (plan.events.length > 0) {
+      updatedCurrentDate(plan.events[0]!.startDate);
+    } else {
+      resetCurrentDate();
+    }
+
     navigate(`/booking/view`);
   };
 
