@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
+import { ArrowRightIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAllConflicts } from "@hooks/useAllConflicts";
@@ -24,6 +25,7 @@ import {
   TableRow,
 } from "@ui/table";
 import { locationsNonGrouped } from "@/data/locationsData";
+import { useCurrentDate } from "@/hooks/useCurrentDate";
 import { type Booking, type Plan } from "@/interfaces/interfaces";
 import { useBoundStore } from "@/state/store";
 import { KAR_COLORS } from "@/utils/colors";
@@ -60,9 +62,10 @@ export const SpectatorDashboard = ({
 }: SpectatorDashboardProps) => {
   const navigate = useNavigate();
   const { publicPlans } = usePublicPlans();
-  const { summary } = useAllConflicts();
+  const { summary, getConflictsForPlan } = useAllConflicts();
   const loadedBookings = useBoundStore((state) => state.loadedBookings);
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
+  const { updatedCurrentDate } = useCurrentDate();
 
   const [karFilter, setKarFilter] = useState<
     (typeof TABS)[keyof typeof TABS]["value"]
@@ -232,9 +235,29 @@ export const SpectatorDashboard = ({
     return stats;
   }, [allConflicts]);
 
+  const handleViewAllConflicts = () => {
+    loadedBookings(allConflicts.flatMap((row) => row.bookings));
+    const plans = publicPlans
+      .filter((plan) => getConflictsForPlan(plan.id) > 0)
+      .flatMap((plan) => plan);
+    changedActivePlans(plans);
+
+    const date = allConflicts[0]!.bookings[0]!.startDate;
+    updatedCurrentDate(date);
+
+    const hasRoomCollisions = allConflicts.some((row) => row.type === "Lokal");
+
+    if (hasRoomCollisions) {
+      navigate(`/booking/${viewCollisionsPath}`);
+    } else {
+      navigate(`/inventory/${viewCollisionsPath}`);
+    }
+  };
+
   const handleViewConflict = (row: ConflictRow) => {
     loadedBookings(row.bookings);
     changedActivePlans([row.plan1, row.plan2]);
+    updatedCurrentDate(row.bookings[0]!.startDate);
 
     if (row.type === "Lokal") {
       navigate(`/booking/${viewCollisionsPath}`);
@@ -309,17 +332,24 @@ export const SpectatorDashboard = ({
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <CardTitle>Alla krockar</CardTitle>
-            <ToggleGroup
-              type="single"
-              value={karFilter}
-              onValueChange={(value) => setKarFilter(value as typeof karFilter)}
-            >
-              {Object.values(TABS).map((tab) => (
-                <ToggleGroupItem value={tab.value} key={tab.value}>
-                  {tab.label}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
+            <div className="flex  gap-x-4">
+              <ToggleGroup
+                type="single"
+                value={karFilter}
+                onValueChange={(value) =>
+                  setKarFilter(value as typeof karFilter)
+                }
+              >
+                {Object.values(TABS).map((tab) => (
+                  <ToggleGroupItem value={tab.value} key={tab.value}>
+                    {tab.label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+              <Button onClick={handleViewAllConflicts}>
+                Tidslinje <ArrowRightIcon className="ml-1 size-4" />
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-0">
