@@ -1,4 +1,4 @@
-import { cn } from "@lib/utils";
+import { cn } from "@/utils/utils";
 
 type Status = "draft" | "public" | "locked";
 
@@ -41,7 +41,7 @@ export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
         config.bg,
         config.border,
         config.text,
-        className
+        className,
       )}
     >
       {config.icon} {config.label}

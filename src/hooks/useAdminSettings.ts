@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { type Kår } from "@/interfaces/interfaces";
 import { adminService } from "@/services";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
-import { type Kår } from "@/utils/interfaces";
+import { CURRENT_YEAR } from "@/utils/constants";
 import { useStoreAdminSettings } from "./useStoreAdminSettings";
 import { useStorePlanYear } from "./useStorePlanYear";
 import { useStoreUser } from "./useStoreUser";

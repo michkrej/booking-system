@@ -1,11 +1,11 @@
 import { setISOWeek, startOfWeek } from "date-fns";
 import { type StateCreator } from "zustand";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
 import {
   type AdminSettings,
   type Kår,
   type NumericBookableKeys,
-} from "@/utils/interfaces";
+} from "@/interfaces/interfaces";
+import { CURRENT_YEAR } from "@/utils/constants";
 import { type PlanStoreSlice } from "./planStoreSlice";
 
 export const DEFAULT_ITEMS: Record<NumericBookableKeys, number> = {

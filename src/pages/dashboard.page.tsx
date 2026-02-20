@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -8,8 +8,6 @@ import { useCreatePlan } from "@hooks/useCreatePlan";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useUserPlans } from "@hooks/useUserPlans";
-import { CURRENT_YEAR } from "@utils/CONSTANTS";
-import { getCommittee } from "@lib/utils";
 import { InlineYearSelector } from "@components/molecules/InlineYearSelector";
 import {
   MobileTabNav,
@@ -44,7 +42,11 @@ import {
 import { Input } from "@ui/input";
 import { DashboardLayout } from "@/components/molecules/DashboardLayout";
 import { SidebarPublicPlans } from "@/components/organisms/SidebarPublicPlans";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { MAX_YEAR, MIN_YEAR } from "@/state/planStoreSlice";
+import { useBoundStore } from "@/state/store";
+import { CURRENT_YEAR } from "@/utils/constants";
+import { cn, getCommittee } from "@/utils/utils";
 
 const formSchema = z.object({
   planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
@@ -57,6 +59,8 @@ export function DashboardPage() {
   const { planYear, incrementPlanYear, decrementPlanYear } = useStorePlanYear();
   const { userPlans, isPending: isLoadingPlans } = useUserPlans();
   const { createPlan, isPending: isCreating } = useCreatePlan();
+  const appMode = useBoundStore((state) => state.appMode);
+  const changedAppMode = useBoundStore((state) => state.changedAppMode);
 
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [plannerTab, setPlannerTab] = useState<PlannerTab>("Mina");
@@ -71,24 +75,12 @@ export function DashboardPage() {
 
   const isMinYear = useMemo(() => planYear <= MIN_YEAR, [planYear]);
   const isMaxYear = useMemo(() => planYear >= MAX_YEAR, [planYear]);
-
   const committee = getCommittee(user.committeeId);
-
-  // Determine if user is a spectator (has no plans)
-  const isSpectator =
-    import.meta.env.DEV && !isLoadingPlans && userPlans.length === 0;
-
-  // Context label changes for spectators
-  const contextLabel = isSpectator
-    ? "Översikt för alla planeringar"
-    : committee
-      ? `${user.kår} · ${committee.name}`
-      : user.kår;
+  const isSpectator = appMode === "spectator";
+  const canCreatePlan = !isPlanEditLocked && planYear >= CURRENT_YEAR;
 
   const handleCreatePlan = () => {
-    if (!isPlanEditLocked && planYear >= CURRENT_YEAR) {
-      setShowCreateDialog(true);
-    }
+    setShowCreateDialog(true);
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -101,21 +93,59 @@ export function DashboardPage() {
     });
   };
 
+  useEffect(() => {
+    if (!isLoadingPlans && userPlans.length === 0) {
+      changedAppMode("spectator");
+    } else {
+      changedAppMode("user");
+    }
+  }, [isLoadingPlans, userPlans, planYear]);
+
   return (
     <DashboardLayout sidebar={<SidebarPublicPlans />} hideFooter>
       {/* Dashboard Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground">{contextLabel}</p>
+          <p className="text-sm text-muted-foreground">
+            {isSpectator
+              ? "Översikt för alla planeringar"
+              : committee
+                ? `${user.kår} · ${committee.name}`
+                : user.kår}
+          </p>
         </div>
-        <InlineYearSelector
-          year={planYear}
-          onIncrement={incrementPlanYear}
-          onDecrement={decrementPlanYear}
-          isMinYear={isMinYear}
-          isMaxYear={isMaxYear}
-        />
+
+        <div className="flex gap-x-4">
+          {userPlans.length > 0 && (
+            <ToggleGroup
+              type="single"
+              value={appMode}
+              onValueChange={changedAppMode}
+              variant="outline"
+            >
+              <ToggleGroupItem
+                value="user"
+                className={cn(!isSpectator && "bg-secondary!")}
+              >
+                Översikt
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="spectator"
+                className={cn(isSpectator && "bg-secondary!")}
+              >
+                Krockar
+              </ToggleGroupItem>
+            </ToggleGroup>
+          )}
+          <InlineYearSelector
+            year={planYear}
+            onIncrement={incrementPlanYear}
+            onDecrement={decrementPlanYear}
+            isMinYear={isMinYear}
+            isMaxYear={isMaxYear}
+          />
+        </div>
       </div>
 
       {isSpectator ? (
@@ -133,17 +163,23 @@ export function DashboardPage() {
             {/* Mobile: Show content based on active tab */}
             <div className="lg:hidden space-y-4">
               {spectatorTab === "Översikt" && (
-                <SpectatorDashboard onCreatePlan={handleCreatePlan} />
+                <SpectatorDashboard
+                  onCreatePlan={canCreatePlan ? handleCreatePlan : undefined}
+                />
               )}
               {spectatorTab === "Krockar" && (
-                <SpectatorDashboard onCreatePlan={handleCreatePlan} />
+                <SpectatorDashboard
+                  onCreatePlan={canCreatePlan ? handleCreatePlan : undefined}
+                />
               )}
               {spectatorTab === "Planeringar" && <PublicPlansCard />}
             </div>
 
             {/* Desktop: Show full layout */}
             <div className="hidden lg:block w-full">
-              <SpectatorDashboard onCreatePlan={handleCreatePlan} />
+              <SpectatorDashboard
+                onCreatePlan={canCreatePlan ? handleCreatePlan : undefined}
+              />
             </div>
           </div>
         </>

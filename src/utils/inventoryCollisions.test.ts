@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
-import { BOOKABLE_ITEM_OPTIONS } from "./CONSTANTS";
-import { type BookableItem, type Booking } from "./interfaces";
+import { type BookableItem, type Booking } from "../interfaces/interfaces";
+import { BOOKABLE_ITEM_OPTIONS } from "./constants";
 import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
 
 describe("findInventoryCollisionsBetweenEvents", () => {

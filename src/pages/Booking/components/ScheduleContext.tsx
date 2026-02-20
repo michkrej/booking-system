@@ -1,6 +1,6 @@
 import { ScheduleComponent } from "@syncfusion/ej2-react-schedule";
 import { createContext } from "react";
-import type { Location, Plan, Room } from "@utils/interfaces";
+import type { Location, Plan, Room } from "@/interfaces/interfaces";
 import type { View } from "./ScheduleToolbar";
 
 type ScheduleContextType = {

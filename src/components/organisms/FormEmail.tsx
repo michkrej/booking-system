@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { kårer } from "@data/committees";
 import { getCommitteesForKår } from "@utils/helpers";
-import { type User } from "@utils/interfaces";
 import { LoadingButton } from "@components/molecules/loadingButton";
 import {
   Form,
@@ -24,6 +23,7 @@ import {
   SelectValue,
 } from "@ui/select";
 import { useSignUp } from "@/hooks/useSignUp";
+import { type User } from "@/interfaces/interfaces";
 
 const formSchemaEmail = z
   .object({

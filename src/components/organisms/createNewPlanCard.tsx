@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useCreatePlan } from "@hooks/useCreatePlan";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
-import { CURRENT_YEAR } from "@utils/CONSTANTS";
 import { Button } from "@ui/button";
 import {
   Card,
@@ -31,6 +30,7 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
+import { CURRENT_YEAR } from "@/utils/constants";
 import { LoadingButton } from "../molecules/loadingButton";
 
 const formSchema = z.object({

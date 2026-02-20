@@ -3,8 +3,8 @@ import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
 import { committees, committeesConsensus, kårer } from "../data/committees";
 import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
-import { BOOKABLE_ITEM_OPTIONS, viewCollisionsPath } from "./CONSTANTS";
-import { type Booking, type Kår, type Plan } from "./interfaces";
+import { type Booking, type Kår, type Plan } from "../interfaces/interfaces";
+import { BOOKABLE_ITEM_OPTIONS, viewCollisionsPath } from "./constants";
 import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
 import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
 

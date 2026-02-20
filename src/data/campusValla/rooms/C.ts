@@ -1,4 +1,4 @@
-import { type Room } from "../../../utils/interfaces";
+import { type Room } from "../../../interfaces/interfaces";
 
 const locationId = "550ddbe9-6fa1-49de-9336-01744c67b233";
 

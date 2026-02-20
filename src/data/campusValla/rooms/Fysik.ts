@@ -1,4 +1,4 @@
-import type { Room } from "../../../utils/interfaces";
+import type { Room } from "../../../interfaces/interfaces";
 
 export default [
   {

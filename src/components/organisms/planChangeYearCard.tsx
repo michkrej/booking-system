@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { MAX_YEAR, MIN_YEAR } from "@state/planStoreSlice";
-import { cn } from "@lib/utils";
 import { Button } from "@ui/button";
 import {
   Card,
@@ -12,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/card";
+import { cn } from "@/utils/utils";
 
 export const PlanChangeYearCard = () => {
   const { user } = useStoreUser();

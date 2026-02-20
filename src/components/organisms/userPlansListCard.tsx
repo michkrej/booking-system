@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useCreatePlan } from "@hooks/useCreatePlan";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
-import { CURRENT_YEAR } from "@utils/CONSTANTS";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
 import {
@@ -37,6 +36,7 @@ import {
 } from "@ui/table";
 import { usePlansListCard } from "@/hooks/usePlansListCard";
 import { useUserPlanConflicts } from "@/hooks/useUserPlanConflicts";
+import { CURRENT_YEAR } from "@/utils/constants";
 import { UserPlansListRow } from "../molecules/UserPlansListRow";
 import { LoadingButton } from "../molecules/loadingButton";
 

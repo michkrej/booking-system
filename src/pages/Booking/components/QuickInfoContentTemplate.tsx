@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { useContext } from "react";
 import { committees } from "@data/committees";
-import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
-import { type Booking } from "@utils/interfaces";
+import { type Booking } from "@/interfaces/interfaces";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
 import { ScheduleContext } from "./ScheduleContext";
 
 const getFormattedDate = (startDate: Date, endDate: Date) => {

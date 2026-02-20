@@ -1,6 +1,4 @@
 import { useTranslation } from "react-i18next";
-import type { Booking, Kår, Plan } from "@utils/interfaces";
-import { formatDate, getCommittee } from "@lib/utils";
 import {
   Card,
   CardContent,
@@ -19,6 +17,8 @@ import {
   TableRow,
 } from "@ui/table";
 import { TabsContent } from "@ui/tabs";
+import type { Booking, Kår, Plan } from "@/interfaces/interfaces";
+import { formatDate, getCommittee } from "@/utils/utils";
 import { TabCommitteeButtons } from "./TabCommitteeButtons";
 
 type TabCommitteeSectionProps = {

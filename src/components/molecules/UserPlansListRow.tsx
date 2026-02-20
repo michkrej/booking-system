@@ -1,6 +1,6 @@
 import { type PlanConflictCounts } from "@/hooks/useUserPlanConflicts";
-import { formatDate, getCommittee } from "@/lib/utils";
-import type { Plan } from "@/utils/interfaces";
+import type { Plan } from "@/interfaces/interfaces";
+import { formatDate, getCommittee } from "@/utils/utils";
 import { Separator } from "../ui/separator";
 import { TableCell, TableRow } from "../ui/table";
 import { ConflictBadge } from "./ConflictBadge";

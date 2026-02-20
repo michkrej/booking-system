@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useBoundStore } from "@/state/store";
-import { viewCollisionsPath, viewPath } from "@/utils/CONSTANTS";
+import { viewCollisionsPath, viewPath } from "@/utils/constants";
 import { isInventoryCollisionView, isRoomCollisionView } from "@/utils/helpers";
 import { usePublicPlans } from "./usePublicPlans";
 

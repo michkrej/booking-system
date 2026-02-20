@@ -1,7 +1,8 @@
 import { formatDistanceToNow } from "date-fns";
 import { sv } from "date-fns/locale";
 import { useMemo } from "react";
-import { convertToDate, getCommittee } from "@/lib/utils";
+import type { committees } from "@/data/committees";
+import { convertToDate, getCommittee } from "@/utils/utils";
 import { usePublicPlans } from "./usePublicPlans";
 import { useUserPlans } from "./useUserPlans";
 
@@ -9,7 +10,7 @@ export interface ActivityItem {
   id: string;
   planId: string;
   fadderiName: string;
-  kar: string;
+  kar: (typeof committees)[keyof typeof committees]["kår"];
   color: string;
   action: string;
   timeAgo: string;

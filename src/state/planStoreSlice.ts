@@ -1,9 +1,9 @@
 import { type StateCreator } from "zustand";
-import { convertToDate } from "@/lib/utils";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
-import { type Plan } from "@/utils/interfaces";
+import { type Plan } from "@/interfaces/interfaces";
+import { CURRENT_YEAR } from "@/utils/constants";
 import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
 import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
+import { convertToDate } from "@/utils/utils";
 import { type BookingStoreSlice } from "./bookingStoreSlice";
 import { type UserStoreSlice } from "./userStoreSlice";
 

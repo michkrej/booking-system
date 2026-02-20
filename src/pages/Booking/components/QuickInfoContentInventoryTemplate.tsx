@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { committees } from "@data/committees";
 import { locationsNonGrouped, rooms } from "@data/locationsData";
-import { type Booking } from "@utils/interfaces";
+import { type Booking } from "@/interfaces/interfaces";
 
 const getFormattedDate = (startDate: Date, endDate: Date) => {
   const eventSpansSeveralDays = differenceInDays(endDate, startDate);

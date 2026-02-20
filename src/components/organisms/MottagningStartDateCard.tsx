@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
-import { CURRENT_YEAR } from "@utils/CONSTANTS";
 import {
   Card,
   CardContent,
@@ -9,6 +8,7 @@ import {
   CardTitle,
 } from "@ui/card";
 import { DatePicker } from "@ui/date-picker";
+import { CURRENT_YEAR } from "@/utils/constants";
 
 export const MottagningStartDateCard = () => {
   const { t } = useTranslation();

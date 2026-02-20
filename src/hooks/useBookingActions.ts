@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { type Booking, type Plan } from "@/interfaces/interfaces";
 import { plansService } from "@/services";
-import { type Booking, type Plan } from "@/utils/interfaces";
 
 export const useBookingActions = () => {
   const addBookingToPlanMutation = useMutation({

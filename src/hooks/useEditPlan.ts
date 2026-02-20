@@ -5,9 +5,9 @@ import {
 } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { type Plan } from "@/interfaces/interfaces";
 import { plansService } from "@/services";
 import { useBoundStore } from "@/state/store";
-import { type Plan } from "@/utils/interfaces";
 import { useStoreBookings } from "./useStoreBookings";
 import { useStorePlanActions } from "./useStorePlanActions";
 import { useStorePlanYear } from "./useStorePlanYear";

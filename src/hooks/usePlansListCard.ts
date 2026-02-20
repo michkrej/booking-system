@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import type { Plan } from "@/interfaces/interfaces";
 import { useBoundStore } from "@/state/store";
-import type { Plan } from "@/utils/interfaces";
 import { useCurrentDate } from "./useCurrentDate";
 import { useUserPlans } from "./useUserPlans";
 

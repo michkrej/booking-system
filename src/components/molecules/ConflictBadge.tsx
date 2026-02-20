@@ -1,4 +1,4 @@
-import { cn } from "@lib/utils";
+import { cn } from "@/utils/utils";
 
 interface ConflictBadgeProps {
   location: number;
@@ -17,9 +17,7 @@ export const ConflictBadge = ({
 
   if (total === 0) {
     return (
-      <span
-        className={cn("text-xs font-semibold text-green-600", className)}
-      >
+      <span className={cn("text-xs font-semibold text-green-600", className)}>
         &#10003; Inga krockar
       </span>
     );
@@ -30,7 +28,7 @@ export const ConflictBadge = ({
       className={cn(
         "inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold",
         "bg-red-50 border border-red-200 text-red-600",
-        className
+        className,
       )}
     >
       &#9888; {total} krockar

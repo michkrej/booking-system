@@ -15,13 +15,13 @@ import { useBookingState } from "@hooks/useBookingState";
 import { useCurrentDate } from "@hooks/useCurrentDate";
 import { committees } from "@data/committees";
 import { useBoundStore } from "@state/store";
-import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 import {
   type BookableItem,
   type Booking,
   type NumericBookableKeys,
-} from "@utils/interfaces";
-import { convertToDate } from "@lib/utils";
+} from "@/interfaces/interfaces";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
+import { convertToDate } from "@/utils/utils";
 import { QuickInfoContentInventoryTemplate } from "./QuickInfoContentInventoryTemplate";
 import { ScheduleContext } from "./ScheduleContext";
 import { ScheduleToolbar } from "./ScheduleToolbar";

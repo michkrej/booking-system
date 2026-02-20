@@ -1,4 +1,4 @@
-import { cn } from "@lib/utils";
+import { cn } from "@/utils/utils";
 
 export type PlannerTab = "Mina" | "Krockar" | "Alla";
 export type SpectatorTab = "Översikt" | "Krockar" | "Planeringar";
@@ -20,7 +20,7 @@ export function MobileTabNav<T extends string>({
     <div
       className={cn(
         "flex bg-card border-b border-border overflow-x-auto lg:hidden",
-        className
+        className,
       )}
     >
       {tabs.map((tab) => (
@@ -31,7 +31,7 @@ export function MobileTabNav<T extends string>({
             "flex-1 px-3 py-2.5 text-sm font-normal whitespace-nowrap border-b-2 transition-colors",
             activeTab === tab
               ? "font-bold text-primary bg-primary/10 border-primary"
-              : "text-muted-foreground border-transparent hover:text-foreground hover:bg-muted"
+              : "text-muted-foreground border-transparent hover:text-foreground hover:bg-muted",
           )}
         >
           {tab}

@@ -1,5 +1,5 @@
 import { type StateCreator } from "zustand";
-import { type Booking, type Plan } from "@/utils/interfaces";
+import { type Booking, type Plan } from "@/interfaces/interfaces";
 import { type PlanStoreSlice } from "./planStoreSlice";
 
 type BookingStoreSlice = {

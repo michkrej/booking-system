@@ -1,7 +1,8 @@
 import { format } from "date-fns";
 import { CheckIcon, DotIcon } from "lucide-react";
-import { KAR, committees } from "@/data/committees";
-import type { Plan } from "@/utils/interfaces";
+import { committees } from "@/data/committees";
+import type { Plan } from "@/interfaces/interfaces";
+import { KAR_COLORS } from "@/utils/colors";
 
 export const SidebarPlanItem = ({
   item,
@@ -28,7 +29,7 @@ export const SidebarPlanItem = ({
           <span className="text-[13px] font-semibold">{committee.name}</span>
           <span
             className="text-[11px] font-semibold"
-            style={{ color: KAR[committee.kår].color }}
+            style={{ color: KAR_COLORS[committee.kår].color }}
           >
             {committee.kår}
           </span>

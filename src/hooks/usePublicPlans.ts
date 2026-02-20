@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { getCommittee } from "@/lib/utils";
 import { plansService } from "@/services";
+import { getCommittee } from "@/utils/utils";
 import { useStorePlanYear } from "./useStorePlanYear";
 
 export const usePublicPlans = () => {

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { kårer } from "@data/committees";
 import { getCommitteesForKår } from "@utils/helpers";
-import { type Kår, type User } from "@utils/interfaces";
 import {
   Form,
   FormControl,
@@ -21,6 +20,7 @@ import {
   SelectValue,
 } from "@ui/select";
 import { useSignUp } from "@/hooks/useSignUp";
+import { type Kår, type User } from "@/interfaces/interfaces";
 import { LoadingButton } from "../molecules/loadingButton";
 
 const formSchemaGoogle = z.object({

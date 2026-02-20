@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Booking } from "@/interfaces/interfaces";
 import { useBoundStore } from "@/state/store";
-import { viewCollisionsPath } from "@/utils/CONSTANTS";
+import { viewCollisionsPath } from "@/utils/constants";
 import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
-import type { Booking } from "@/utils/interfaces";
 import { usePublicPlans } from "./usePublicPlans";
 import { useUserPlans } from "./useUserPlans";
 

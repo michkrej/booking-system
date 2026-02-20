@@ -2,9 +2,9 @@ import { Globe, GlobeLock, Loader } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useEditPlan } from "@hooks/useEditPlan";
-import { type Plan } from "@utils/interfaces";
 import { Button } from "@ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+import { type Plan } from "@/interfaces/interfaces";
 
 type PlanTogglePublicButtonProps = {
   plan: Plan;

@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { kårer } from "@data/committees";
-import { type Kår } from "@utils/interfaces";
 import {
   Card,
   CardContent,
@@ -10,6 +9,7 @@ import {
   CardTitle,
 } from "@ui/card";
 import { Switch } from "@ui/switch";
+import { type Kår } from "@/interfaces/interfaces";
 
 export const LockPlanEditingCard = () => {
   const { t } = useTranslation();

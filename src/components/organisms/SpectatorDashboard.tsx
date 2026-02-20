@@ -1,32 +1,37 @@
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAllConflicts } from "@hooks/useAllConflicts";
 import { usePublicPlans } from "@hooks/usePublicPlans";
-import { getCommittee } from "@lib/utils";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@ui/pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@ui/table";
 import { locationsNonGrouped } from "@/data/locationsData";
+import { type Booking, type Plan } from "@/interfaces/interfaces";
 import { useBoundStore } from "@/state/store";
-import { viewCollisionsPath } from "@/utils/CONSTANTS";
+import { KAR_COLORS } from "@/utils/colors";
+import { viewCollisionsPath } from "@/utils/constants";
 import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
-import { type Booking, type Plan } from "@/utils/interfaces";
+import { getCommittee } from "@/utils/utils";
 import { FadderiTag } from "../molecules/FadderiTag";
-import { KarTabs } from "../molecules/KarTabs";
-
-const KAR_COLORS: Record<
-  string,
-  { color: string; bg: string; border: string }
-> = {
-  LinTek: { color: "#E1007A", bg: "#eff6ff", border: "#bfdbfe" },
-  Consensus: {
-    color: "#2cb2bf",
-    bg: "bg-violet-50",
-    border: "border-violet-200",
-  },
-  StuFF: { color: "#007858", bg: "bg-orange-50", border: "border-orange-200" },
-};
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
 type ConflictType = "Lokal" | "Inventarie";
 
@@ -40,7 +45,7 @@ interface ConflictRow {
 }
 
 interface SpectatorDashboardProps {
-  onCreatePlan: () => void;
+  onCreatePlan?: () => void;
 }
 
 const TABS = {
@@ -62,6 +67,9 @@ export const SpectatorDashboard = ({
   const [karFilter, setKarFilter] = useState<
     (typeof TABS)[keyof typeof TABS]["value"]
   >(TABS.Alla.value);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 10;
 
   // Calculate all conflicts between public plans
   const allConflicts = useMemo(() => {
@@ -169,6 +177,34 @@ export const SpectatorDashboard = ({
     });
   }, [allConflicts, karFilter]);
 
+  const totalPages = Math.ceil(filteredConflicts.length / PAGE_SIZE);
+  const paginatedConflicts = filteredConflicts.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [karFilter]);
+
+  const generatePageNumbers = (): (number | "ellipsis")[] => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | "ellipsis")[] = [1];
+    if (currentPage > 3) pages.push("ellipsis");
+    for (
+      let i = Math.max(2, currentPage - 1);
+      i <= Math.min(totalPages - 1, currentPage + 1);
+      i++
+    ) {
+      pages.push(i);
+    }
+    if (currentPage < totalPages - 2) pages.push("ellipsis");
+    if (totalPages > 1) pages.push(totalPages);
+    return pages;
+  };
+
   // Calculate per-kår stats
   const karStats = useMemo(() => {
     const stats = {
@@ -231,12 +267,12 @@ export const SpectatorDashboard = ({
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-orange-400">
           <CardContent className="p-4">
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
               Inventarie-krockar
             </div>
-            <div className="text-2xl font-bold text-orange-600">
+            <div className="text-2xl font-bold text-orange-400">
               {summary.inventory}
             </div>
           </CardContent>
@@ -254,88 +290,184 @@ export const SpectatorDashboard = ({
       </div>
 
       {/* CTA Banner */}
-      <div className="bg-primary/10 border border-primary/30 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div>
-          <span className="font-semibold text-foreground">
-            Vill du skapa en egen planering?
-          </span>
-          <span className="text-muted-foreground ml-2">
-            Boka events och hitta krockar med andra grupper.
-          </span>
+      {onCreatePlan && (
+        <div className="bg-primary/10 border border-primary/30 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <span className="font-semibold text-foreground">
+              Vill du skapa en egen planering?
+            </span>
+            <span className="text-muted-foreground ml-2">
+              Boka events och hitta krockar med andra grupper.
+            </span>
+          </div>
+          <Button onClick={onCreatePlan}>Skapa planering</Button>
         </div>
-        <Button onClick={onCreatePlan}>Skapa planering</Button>
-      </div>
+      )}
 
       {/* All Conflicts Card */}
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <CardTitle>Alla krockar</CardTitle>
-            <KarTabs
-              tabs={Object.values(TABS)}
-              active={karFilter}
-              onSelect={setKarFilter}
-            />
+            <ToggleGroup
+              type="single"
+              value={karFilter}
+              onValueChange={(value) => setKarFilter(value as typeof karFilter)}
+            >
+              {Object.values(TABS).map((tab) => (
+                <ToggleGroupItem value={tab.value} key={tab.value}>
+                  {tab.label}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          {/* Column headers */}
-          <div className="grid grid-cols-[1fr_1fr_80px_1fr_auto] gap-2 px-5 py-2 border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-            <span>Fadderi 1</span>
-            <span>Fadderi 2</span>
-            <span>Typ</span>
-            <span className="hidden sm:block">Detaljer</span>
-            <span />
-          </div>
-
-          {filteredConflicts.length === 0 ? (
-            <div className="px-5 py-8 text-center text-muted-foreground">
-              Inga krockar hittades
-            </div>
-          ) : (
-            filteredConflicts.slice(0, 10).map((row) => {
-              const committee1 = getCommittee(row.plan1.committeeId);
-              const committee2 = getCommittee(row.plan2.committeeId);
-              const borderColor = row.type === "Lokal" ? "#dc2626" : "#ea580c";
-
-              return (
-                <div
-                  key={row.id}
-                  className="grid grid-cols-[1fr_1fr_80px_1fr_auto] gap-2 items-center px-5 py-3 border-b border-border last:border-b-0"
-                  style={{ borderLeftWidth: 3, borderLeftColor: borderColor }}
-                >
-                  <FadderiTag
-                    name={committee1?.name || row.plan1.label}
-                    kar={committee1?.kår || "Övrigt"}
-                    color={committee1?.color || "#808080"}
-                  />
-                  <FadderiTag
-                    name={committee2?.name || row.plan2.label}
-                    kar={committee2?.kår || "Övrigt"}
-                    color={committee2?.color || "#808080"}
-                  />
-                  <span
-                    className={`text-xs font-semibold px-2 py-0.5 w-fit ${
-                      row.type === "Lokal"
-                        ? "bg-red-50 border border-red-200 text-red-600"
-                        : "bg-orange-50 border border-orange-200 text-orange-600"
-                    }`}
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Fadderi 1</TableHead>
+                <TableHead>Fadderi 2</TableHead>
+                <TableHead className="w-[80px]">Typ</TableHead>
+                <TableHead className="hidden sm:table-cell">Detaljer</TableHead>
+                <TableHead className="w-[80px]" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {paginatedConflicts.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    className="text-center py-8 text-muted-foreground"
                   >
-                    {row.type}
-                  </span>
-                  <span className="text-sm text-muted-foreground hidden sm:block truncate">
-                    {row.detail}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleViewConflict(row)}
-                  >
-                    Visa &rarr;
-                  </Button>
+                    Inga krockar hittades
+                  </TableCell>
+                </TableRow>
+              ) : (
+                paginatedConflicts.map((row) => {
+                  const committee1 = getCommittee(row.plan1.committeeId);
+                  const committee2 = getCommittee(row.plan2.committeeId);
+                  const borderColor =
+                    row.type === "Lokal" ? "#dc2626" : "#ea580c";
+
+                  // Determine display order: selected kår's committee goes on the left
+                  const shouldSwap =
+                    karFilter !== "all" &&
+                    committee2?.kår.toLowerCase() === karFilter.toLowerCase() &&
+                    committee1?.kår.toLowerCase() !== karFilter.toLowerCase();
+
+                  const [leftPlan, rightPlan] = shouldSwap
+                    ? [row.plan2, row.plan1]
+                    : [row.plan1, row.plan2];
+                  const [leftCommittee, rightCommittee] = shouldSwap
+                    ? [committee2, committee1]
+                    : [committee1, committee2];
+
+                  return (
+                    <TableRow
+                      key={row.id}
+                      style={{
+                        borderLeftWidth: 3,
+                        borderLeftColor: borderColor,
+                      }}
+                    >
+                      <TableCell>
+                        <FadderiTag
+                          name={leftCommittee?.name || leftPlan.label}
+                          kar={leftCommittee?.kår || "Övrigt"}
+                          color={leftCommittee?.color || "#808080"}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <FadderiTag
+                          name={rightCommittee?.name || rightPlan.label}
+                          kar={rightCommittee?.kår || "Övrigt"}
+                          color={rightCommittee?.color || "#808080"}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`text-xs font-semibold px-2 py-0.5 w-fit ${
+                            row.type === "Lokal"
+                              ? "bg-red-50 border border-red-200 text-red-600"
+                              : "bg-orange-50 border border-orange-200 text-orange-600"
+                          }`}
+                        >
+                          {row.type}
+                        </span>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <span className="text-sm text-muted-foreground truncate">
+                          {row.detail}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewConflict(row)}
+                        >
+                          Visa &rarr;
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              )}
+            </TableBody>
+          </Table>
+
+          {totalPages > 1 && (
+            <Pagination className="py-4">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    size="default"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(1, prev - 1))
+                    }
+                    className={
+                      currentPage === 1
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }
+                  />
+                </PaginationItem>
+                <div className="flex items-center justify-center w-[180px]">
+                  {generatePageNumbers().map((page, index) =>
+                    page === "ellipsis" ? (
+                      <PaginationItem key={`ellipsis-${index}`}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    ) : (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          size="icon"
+                          onClick={() => setCurrentPage(page)}
+                          isActive={currentPage === page}
+                          className="cursor-pointer"
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ),
+                  )}
                 </div>
-              );
-            })
+                <PaginationItem>
+                  <PaginationNext
+                    size="default"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                    }
+                    className={
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           )}
         </CardContent>
       </Card>
@@ -346,7 +478,7 @@ export const SpectatorDashboard = ({
           <Card
             key={kar}
             className="border-t-4"
-            style={{ borderTopColor: KAR_COLORS[kar]?.color }}
+            style={{ borderTopColor: KAR_COLORS[kar].color }}
           >
             <CardContent className="p-4 text-center">
               <div className="text-sm font-bold text-foreground">{kar}</div>

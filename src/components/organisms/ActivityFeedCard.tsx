@@ -1,4 +1,3 @@
-import { cn } from "@lib/utils";
 import {
   Card,
   CardContent,
@@ -8,13 +7,8 @@ import {
 } from "@ui/card";
 import { Skeleton } from "@ui/skeleton";
 import { useActivityFeed } from "@/hooks/useActivityFeed";
-
-const KAR_COLORS: Record<string, string> = {
-  LinTek: "#E1007A",
-  Consensus: "2cb2bf",
-  StuFF: "007858",
-  Övrigt: "text-muted-foreground",
-};
+import { KAR_COLORS } from "@/utils/colors";
+import { FadderiTag } from "../molecules/FadderiTag";
 
 export const ActivityFeedCard = () => {
   const { activityItems, isPending } = useActivityFeed(5);
@@ -46,34 +40,30 @@ export const ActivityFeedCard = () => {
           </div>
         ) : (
           <div className="space-y-0">
-            {activityItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-2.5 px-5 py-3 border-b border-border last:border-b-0 flex-wrap"
-              >
-                <span
-                  className="w-2 h-2 shrink-0"
-                  style={{ backgroundColor: item.color }}
-                />
-                <span className="text-sm font-semibold text-foreground">
-                  {item.fadderiName}
-                </span>
-                <span
-                  className={cn(
-                    "text-xs font-semibold shrink-0",
-                    KAR_COLORS[item.kar] || KAR_COLORS["Övrigt"],
-                  )}
+            {activityItems.map((item) => {
+              const color =
+                KAR_COLORS[item.kar]?.color || KAR_COLORS["Övrigt"].color;
+
+              return (
+                <div
+                  key={item.id}
+                  className="flex items-center gap-2.5 px-5 py-3 border-b border-border last:border-b-0 flex-wrap"
                 >
-                  {item.kar}
-                </span>
-                <span className="text-sm text-muted-foreground truncate">
-                  {item.action}
-                </span>
-                <span className="text-xs text-muted-foreground ml-auto shrink-0">
-                  {item.timeAgo}
-                </span>
-              </div>
-            ))}
+                  <FadderiTag
+                    name={item.fadderiName}
+                    kar={item.kar}
+                    color={color}
+                  />
+
+                  <span className="text-sm text-muted-foreground truncate">
+                    {item.action}
+                  </span>
+                  <span className="text-xs text-muted-foreground ml-auto shrink-0">
+                    {item.timeAgo}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         )}
       </CardContent>

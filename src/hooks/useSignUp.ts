@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { type User } from "@/interfaces/interfaces";
 import { authService } from "@/services";
 import { useBoundStore } from "@/state/store";
 import { getErrorMessage } from "@/utils/error.util";
-import { type User } from "@/utils/interfaces";
 
 export const useSignUp = () => {
   const [isPending, setIsPending] = useState(false);

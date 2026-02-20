@@ -9,7 +9,6 @@ import { Clock } from "lucide-react";
 import * as React from "react";
 import { useImperativeHandle, useRef } from "react";
 import { DayPicker } from "react-day-picker";
-import { cn } from "@lib/utils";
 import { Button, buttonVariants } from "@ui/button";
 import type { CalendarProps } from "@ui/calendar";
 import { Input } from "@ui/input";
@@ -21,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
+import { cn } from "@/utils/utils";
 
 // ---------- utils start ----------
 /**

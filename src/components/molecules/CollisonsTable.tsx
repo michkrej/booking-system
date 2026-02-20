@@ -1,7 +1,5 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import type { Booking, Plan } from "@utils/interfaces";
-import { formatDate, getCommittee } from "@lib/utils";
 import {
   Table,
   TableBody,
@@ -11,6 +9,8 @@ import {
   TableRow,
 } from "@ui/table";
 import { useFindCollisionsCard } from "@/hooks/useFindCollisionsCard";
+import type { Booking, Plan } from "@/interfaces/interfaces";
+import { formatDate, getCommittee } from "@/utils/utils";
 
 const calculateNumCollisions = (
   bookings: Booking[] | undefined,

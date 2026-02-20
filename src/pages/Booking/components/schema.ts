@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BOOKABLE_ITEM_KEYS } from "@/utils/CONSTANTS";
+import { BOOKABLE_ITEM_KEYS } from "@/utils/constants";
 
 export const BookingSchema = z
   .object({

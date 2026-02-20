@@ -1,7 +1,7 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { convertToDate } from "@/lib/utils";
+import { type AdminSettings, type Kår } from "@/interfaces/interfaces";
 import { getErrorMessage } from "@/utils/error.util";
-import { type AdminSettings, type Kår } from "@/utils/interfaces";
+import { convertToDate } from "@/utils/utils";
 import { db } from "./config";
 
 const KEY = "adminValues";

@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useEditPlan } from "@hooks/useEditPlan";
-import { type Plan } from "@utils/interfaces";
 import { Button } from "@ui/button";
 import {
   Dialog,
@@ -27,6 +26,7 @@ import {
 } from "@ui/form";
 import { Input } from "@ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+import { type Plan } from "@/interfaces/interfaces";
 import { LoadingButton } from "./loadingButton";
 
 const formSchema = z.object({

@@ -2,8 +2,6 @@ import { sv } from "date-fns/locale";
 import { TrashIcon } from "lucide-react";
 import { type UseFormReturn } from "react-hook-form";
 import { type z } from "zod";
-import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
-import { type BookableItem } from "@utils/interfaces";
 import { Button } from "@ui/button";
 import { Comment } from "@ui/comment";
 import { DateTimePicker } from "@ui/date-time-picker";
@@ -15,6 +13,8 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
+import { type BookableItem } from "@/interfaces/interfaces";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
 import { type BookingSchema } from "./schema";
 
 type InventoryItemProps = {

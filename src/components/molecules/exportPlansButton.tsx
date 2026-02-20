@@ -5,8 +5,6 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { usePublicPlans } from "@hooks/usePublicPlans";
 import { exportPlans } from "@utils/helpers";
-import { type Kår, type Plan } from "@utils/interfaces";
-import { getCommittee } from "@lib/utils";
 import { Button } from "@ui/button";
 import { Checkbox } from "@ui/checkbox";
 import {
@@ -26,6 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
+import { type Kår, type Plan } from "@/interfaces/interfaces";
+import { getCommittee } from "@/utils/utils";
 import { LoadingButton } from "./loadingButton";
 
 const getPlans = (plans: Plan[], kår: Omit<Kår, "Övrigt"> | "all") => {

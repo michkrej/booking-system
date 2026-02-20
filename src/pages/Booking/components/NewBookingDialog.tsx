@@ -12,11 +12,6 @@ import { corridorsC } from "@data/campusValla/rooms";
 import roomsC from "@data/campusValla/rooms/C";
 import { committees } from "@data/committees";
 import { campusLocationsMap } from "@data/locationsData";
-import {
-  type BookableItem,
-  type Booking,
-  type NewBooking,
-} from "@utils/interfaces";
 import { LoadingButton } from "@components/molecules/loadingButton";
 import { Button } from "@ui/button";
 import { Checkbox } from "@ui/checkbox";
@@ -42,7 +37,12 @@ import { Input } from "@ui/input";
 import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
-import { viewCollisionsPath, viewPath } from "@/utils/CONSTANTS";
+import {
+  type BookableItem,
+  type Booking,
+  type NewBooking,
+} from "@/interfaces/interfaces";
+import { viewCollisionsPath, viewPath } from "@/utils/constants";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { ScheduleContext } from "./ScheduleContext";

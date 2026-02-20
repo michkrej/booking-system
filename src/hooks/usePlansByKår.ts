@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { getCommittee } from "@/lib/utils";
+import { getCommittee } from "@/utils/utils";
 import { usePublicPlans } from "./usePublicPlans";
 
 export const usePublicPlansByKår = () => {

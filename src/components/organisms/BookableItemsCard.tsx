@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
-import { BOOKABLE_ITEM_OPTIONS } from "@utils/CONSTANTS";
 import { LoadingButton } from "@components/molecules/loadingButton";
 import {
   Card,
@@ -12,6 +11,7 @@ import {
 } from "@ui/card";
 import { Input } from "@ui/input";
 import { Label } from "@ui/label";
+import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
 
 export const BookableItemsCard = () => {
   const { bookableItems, updateBookableItems } = useAdminSettings();

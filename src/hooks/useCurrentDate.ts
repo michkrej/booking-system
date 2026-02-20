@@ -1,5 +1,5 @@
 import { useBoundStore } from "@/state/store";
-import { CURRENT_YEAR } from "@/utils/CONSTANTS";
+import { CURRENT_YEAR } from "@/utils/constants";
 import { useAdminSettings } from "./useAdminSettings";
 import { useStoreUser } from "./useStoreUser";
 

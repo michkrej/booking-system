@@ -14,8 +14,6 @@ import { toast } from "sonner";
 import { useCurrentDate } from "@hooks/useCurrentDate";
 import { useStoreBookings } from "@hooks/useStoreBookings";
 import { campusLocationsMap } from "@data/locationsData";
-import { type Location } from "@utils/interfaces";
-import { convertToDate } from "@lib/utils";
 import { Button } from "@ui/button";
 import {
   Select,
@@ -25,6 +23,8 @@ import {
   SelectValue,
 } from "@ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+import { type Location } from "@/interfaces/interfaces";
+import { convertToDate } from "@/utils/utils";
 import { ScheduleContext } from "./ScheduleContext";
 
 const viewAdjustments = {

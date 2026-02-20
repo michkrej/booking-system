@@ -12,8 +12,8 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import posthog from "posthog-js";
+import { type User, type UserDetails } from "@/interfaces/interfaces";
 import { getErrorMessage } from "@/utils/error.util";
-import { type User, type UserDetails } from "@/utils/interfaces";
 import { auth, db } from "./config";
 
 const signUpWithEmailAndPassword = async ({

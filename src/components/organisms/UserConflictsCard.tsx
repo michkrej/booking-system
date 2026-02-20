@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useUserPlans } from "@hooks/useUserPlans";
-import { cn, getCommittee } from "@lib/utils";
 import { Button } from "@ui/button";
 import {
   Card,
@@ -25,10 +24,11 @@ import {
 } from "@ui/table";
 import { locationsNonGrouped } from "@/data/locationsData";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
+import { type Booking, type Plan } from "@/interfaces/interfaces";
 import { useBoundStore } from "@/state/store";
-import { viewCollisionsPath } from "@/utils/CONSTANTS";
+import { viewCollisionsPath } from "@/utils/constants";
 import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
-import { type Booking, type Plan } from "@/utils/interfaces";
+import { cn, getCommittee } from "@/utils/utils";
 import { FadderiTag } from "../molecules/FadderiTag";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
@@ -240,7 +240,6 @@ export const UserConflictsCard = () => {
             <ToggleGroup
               type="single"
               size="sm"
-              variant="outline"
               value={karFilter}
               onValueChange={(value) => setKarFilter(value as "own" | "all")}
               spacing={0}
