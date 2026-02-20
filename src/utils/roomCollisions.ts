@@ -2,13 +2,12 @@ import { areIntervalsOverlapping } from "date-fns";
 import { convertToDate } from "@/utils/utils";
 import { type Booking } from "../interfaces/interfaces";
 
-const eventsUseSameRooms = (event1: Booking, event2: Booking) => {
-  const set1 = new Set(event1.roomId);
-  const set2 = new Set(event2.roomId);
+const eventsUseSameRooms = (set1: Set<string>, set2: Set<string>) => {
+  // Iterate over the smaller set for efficiency
+  const [smaller, larger] = set1.size <= set2.size ? [set1, set2] : [set2, set1];
 
-  // Check if there's any intersection between the two sets
-  for (const room of set1) {
-    if (set2.has(room)) return true;
+  for (const room of smaller) {
+    if (larger.has(room)) return true;
   }
   return false;
 };
@@ -21,6 +20,7 @@ export const findRoomCollisionsBetweenEvents = (events: Booking[]) => {
       ...event,
       startDate: convertToDate(event.startDate),
       endDate: convertToDate(event.endDate),
+      roomIdSet: new Set(event.roomId),
     }))
     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
@@ -52,7 +52,7 @@ export const findRoomCollisionsBetweenEvents = (events: Booking[]) => {
 
       if (areIntervalsOverlapping(range1, range2)) {
         // Check for room or corridor collisions
-        if (eventsUseSameRooms(event1, event2)) {
+        if (eventsUseSameRooms(event1.roomIdSet, event2.roomIdSet)) {
           collidingEvents.set(event1.id, event1);
           collidingEvents.set(event2.id, event2);
         }

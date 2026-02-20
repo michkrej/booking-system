@@ -5,16 +5,8 @@ import {
   type Kår,
   type NumericBookableKeys,
 } from "@/interfaces/interfaces";
-import { CURRENT_YEAR } from "@/utils/constants";
+import { CURRENT_YEAR, DEFAULT_ITEMS } from "@/utils/constants";
 import { type PlanStoreSlice } from "./planStoreSlice";
-
-export const DEFAULT_ITEMS: Record<NumericBookableKeys, number> = {
-  grillar: 8,
-  bardiskar: 6,
-  "bankset-hg": 20,
-  "bankset-k": 25,
-  "bankset-hoben": 50,
-};
 
 interface AdminStoreSlice {
   planEditLocked: Record<Kår, boolean>;

@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { DEFAULT_ITEMS } from "@/state/adminStoreSlice";
 import { type BookableItem, type Booking } from "../interfaces/interfaces";
-import { BOOKABLE_ITEM_OPTIONS } from "./constants";
+import { BOOKABLE_ITEM_OPTIONS, DEFAULT_ITEMS } from "./constants";
 import { findInventoryCollisionsBetweenEvents } from "./inventoryCollisions";
 
 describe("findInventoryCollisionsBetweenEvents", () => {
@@ -327,6 +326,76 @@ describe("findInventoryCollisionsBetweenEvents", () => {
       events as Booking[],
     );
     expect(collisions).toEqual([]); // No collision expected
+  });
+
+  it("should not return collisions for overlapping numeric items that sum exactly to the limit", () => {
+    events.push(
+      {
+        id: "27",
+        planId: "1",
+        bookableItems: [
+          {
+            key: "grillar",
+            value: Math.floor(DEFAULT_ITEMS.grillar / 2),
+            startDate: new Date("2025-01-01"),
+            endDate: new Date("2025-01-02"),
+          },
+        ],
+      },
+      {
+        id: "28",
+        planId: "2",
+        bookableItems: [
+          {
+            key: "grillar",
+            value:
+              DEFAULT_ITEMS.grillar - Math.floor(DEFAULT_ITEMS.grillar / 2), // Together equals exactly the limit
+            startDate: new Date("2025-01-01"),
+            endDate: new Date("2025-01-02"),
+          },
+        ],
+      },
+    );
+
+    const { collisions } = findInventoryCollisionsBetweenEvents(
+      events as Booking[],
+    );
+    expect(collisions).toEqual([]); // No collision since sum equals limit exactly
+  });
+
+  it("should not return collisions for text items with same key but different values", () => {
+    events.push(
+      {
+        id: "29",
+        planId: "1",
+        bookableItems: [
+          {
+            key: "ff",
+            value: "Elverk", // Different value
+            startDate: new Date("2025-01-01"),
+            endDate: new Date("2025-01-02"),
+          },
+        ],
+      },
+      {
+        id: "30",
+        planId: "2",
+        bookableItems: [
+          {
+            key: "ff",
+            value: "Scen", // Different value - same key but different equipment
+            startDate: new Date("2025-01-01"),
+            endDate: new Date("2025-01-02"),
+          },
+        ],
+      },
+    );
+
+    const { collisions } = findInventoryCollisionsBetweenEvents(
+      events as Booking[],
+    );
+    // Text items with the same key collide regardless of value (they use the same physical item type)
+    expect(collisions.flatMap((col) => col.id)).toEqual(["29", "30"]);
   });
 
   it("Should run efficiently with 50 bookings with the same inventory booking", () => {

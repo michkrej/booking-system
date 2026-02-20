@@ -156,6 +156,50 @@ describe("eventCollisions", () => {
     expect(collisions.length).toEqual(2); // Both events should be in the collision list
   });
 
+  it("does not return a collision when events have empty roomId arrays", () => {
+    const event1 = {
+      ...event,
+      id: "1",
+      planId: "1",
+      roomId: [], // Empty roomId array
+    } satisfies Booking;
+
+    const event2 = {
+      ...event,
+      id: "2",
+      planId: "2",
+      roomId: [], // Empty roomId array
+      startDate: new Date("2021-05-01 13:00"), // Overlapping time
+      endDate: new Date("2021-05-01 15:00"),
+    } satisfies Booking;
+
+    const collisions = findRoomCollisionsBetweenEvents([event1, event2]);
+
+    expect(collisions).toEqual([]); // No collision because no rooms to compare
+  });
+
+  it("returns a collision when one event is entirely contained within another", () => {
+    const event1 = {
+      ...event,
+      id: "1",
+      planId: "1",
+      startDate: new Date("2021-05-01 10:00"),
+      endDate: new Date("2021-05-01 18:00"),
+    } satisfies Booking;
+
+    const event2 = {
+      ...event,
+      id: "2",
+      planId: "2",
+      startDate: new Date("2021-05-01 12:00"), // Entirely within event1
+      endDate: new Date("2021-05-01 14:00"),
+    } satisfies Booking;
+
+    const collisions = findRoomCollisionsBetweenEvents([event1, event2]);
+
+    expect(collisions.length).toEqual(2); // Both events should be in the collision list
+  });
+
   it("handles large datasets efficiently", () => {
     const numEvents = 1500;
     const events: Booking[] = [];
@@ -187,11 +231,7 @@ describe("eventCollisions", () => {
     const end = performance.now(); // Record the end time
     const duration = end - start;
 
-    console.log(
-      `Room collision test for large datasets took ${duration} milliseconds`,
-    );
-
-    expect(duration).toBeLessThan(1500); // Expect the function to run in under 1,5 seconds
-    expect(collisions.length).toBe(750); // Expect 500 collisions
+    expect(duration).toBeLessThan(1500);
+    expect(collisions.length).toBe(750);
   });
 });

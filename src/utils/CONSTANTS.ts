@@ -1,3 +1,5 @@
+import type { NumericBookableKeys } from "@/interfaces/interfaces";
+
 export const adminError =
   "Möjligheten att skapa och redigera planeringar har låsts av en administratör";
 
@@ -69,6 +71,14 @@ export const BOOKABLE_ITEM_OPTIONS: {
     inputType: "text",
   },
 ] as const;
+
+export const DEFAULT_ITEMS: Record<NumericBookableKeys, number> = {
+  grillar: 8,
+  bardiskar: 6,
+  "bankset-hg": 20,
+  "bankset-k": 25,
+  "bankset-hoben": 50,
+};
 
 export const viewCollisionsPath = "view-collisions";
 export const viewPath = "view";

@@ -98,13 +98,14 @@ const handleNumericItemCollisions = (
   for (const [, bookings] of Object.entries(numericBookings)) {
     // for each booking, find all the other bookings that overlap with it and then sum up their values
     for (let i = 0; i < bookings.length; i++) {
-      const booking1 = bookings[i]!;
-      const overlappingBookings = [booking1];
+      const booking1 = bookings[i];
 
       if (!booking1) {
         console.warn("Missing booking data:", { booking1 });
         continue;
       }
+
+      const overlappingBookings = [booking1];
 
       let sum = +booking1.value;
       for (let j = i + 1; j < bookings.length; j++) {
@@ -115,9 +116,9 @@ const handleNumericItemCollisions = (
           continue; // Skip the current booking
         }
 
-        // Skip comparing the item bookings of the same plan
-        if (booking1.planId === booking2.planId) continue;
+        // Skip comparing the same underlying booking or bookings from the same plan
         if (booking1.id === booking2.id) continue;
+        if (booking1.planId === booking2.planId) continue;
 
         const range1 = {
           start: booking1.startDate,
@@ -165,10 +166,12 @@ export const createGroupedInventoryBookings = (events: Booking[]) => {
     (Booking & BookableItem)[]
   >();
   for (const booking of sortedInventoryBookings) {
-    groupedBookings.set(booking.key, [
-      ...(groupedBookings.get(booking.key) ?? []),
-      booking,
-    ]);
+    const existing = groupedBookings.get(booking.key);
+    if (existing) {
+      existing.push(booking);
+    } else {
+      groupedBookings.set(booking.key, [booking]);
+    }
   }
 
   return groupedBookings;
