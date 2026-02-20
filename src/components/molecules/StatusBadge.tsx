@@ -1,3 +1,4 @@
+import { CircleSmall, GlobeIcon, LockIcon } from "lucide-react";
 import { cn } from "@/utils/utils";
 
 type Status = "draft" | "public" | "locked";
@@ -13,21 +14,21 @@ const statusConfig = {
     border: "border-orange-200",
     text: "text-orange-600",
     label: "Utkast",
-    icon: "\u25CC", // ◌
+    icon: <CircleSmall className="size-3" />,
   },
   public: {
     bg: "bg-green-50",
     border: "border-green-200",
     text: "text-green-600",
     label: "Publik",
-    icon: "\u25C9", // ◉
+    icon: <GlobeIcon className="size-3" />,
   },
   locked: {
     bg: "bg-muted",
     border: "border-border",
     text: "text-muted-foreground",
     label: "Låst",
-    icon: "\uD83D\uDD12", // 🔒
+    icon: <LockIcon className="size-3" />,
   },
 } as const;
 

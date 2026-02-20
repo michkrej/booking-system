@@ -1,3 +1,4 @@
+import { useAdminSettings } from "@/hooks/useAdminSettings";
 import { type PlanConflictCounts } from "@/hooks/useUserPlanConflicts";
 import type { Plan } from "@/interfaces/interfaces";
 import { formatDate, getCommittee } from "@/utils/utils";
@@ -20,9 +21,11 @@ export const UserPlansListRow = ({
   conflicts,
   onPlanClick,
 }: UserPlansListRowProps) => {
+  const { isPlanEditLocked } = useAdminSettings();
   const updatedAt = formatDate(plan.updatedAt);
   const committee = getCommittee(plan.committeeId);
-  const status = plan.public ? "public" : "draft";
+
+  const status = isPlanEditLocked ? "locked" : plan.public ? "public" : "draft";
 
   return (
     <TableRow key={plan.id}>

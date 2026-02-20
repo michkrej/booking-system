@@ -1,4 +1,4 @@
-import { Globe, GlobeLock, Loader } from "lucide-react";
+import { Globe, GlobeOffIcon, Loader } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useEditPlan } from "@hooks/useEditPlan";
@@ -12,7 +12,7 @@ type PlanTogglePublicButtonProps = {
 
 const getIcon = (pending: boolean, isPublic: boolean) => {
   if (pending) return <Loader className="animate-spin sm:size-6 size-5" />;
-  if (isPublic) return <GlobeLock className="size-5 sm:size-6" />;
+  if (isPublic) return <GlobeOffIcon className="size-5 sm:size-6" />;
   return <Globe className="size-5 sm:size-6" />;
 };
 
