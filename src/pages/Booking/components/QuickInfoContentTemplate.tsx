@@ -1,4 +1,3 @@
-import { Label } from "@radix-ui/react-label";
 import { differenceInDays, format } from "date-fns";
 import { sv } from "date-fns/locale";
 import {
@@ -11,6 +10,7 @@ import {
 } from "lucide-react";
 import { useContext } from "react";
 import { committees } from "@data/committees";
+import { Label } from "@/components/ui/label";
 import { type Booking } from "@/interfaces/interfaces";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
 import { ScheduleContext } from "./ScheduleContext";

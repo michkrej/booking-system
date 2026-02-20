@@ -1,16 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { LoadingButton } from "@components/molecules/loadingButton";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form";
+import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 import { useEmailLogin } from "@/hooks/useEmailLogin";
 import { useGoogleLogin } from "@/hooks/useGoogleLogin";
@@ -48,68 +41,62 @@ export const LoginForm = () => {
         </p>
       </div>
       <div className="grid gap-4">
-        <Form {...form}>
-          <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-            {/* Email Field */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="email">E-post</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      autoComplete="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+          {/* Email Field */}
+          <Controller
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="email">E-post</FieldLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  autoComplete="email"
+                  {...field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
 
-            {/* Password Field */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center">
-                    <FormLabel htmlFor="password">Lösenord</FormLabel>
-                    <span
-                      onClick={() =>
-                        navigate("/", { state: { mode: "forgotPassword" } })
-                      }
-                      className="ml-auto inline-block text-sm underline hover:cursor-pointer"
-                      tabIndex={-1}
-                    >
-                      Glömt ditt lösenord?
-                    </span>
-                  </div>
-                  <FormControl>
-                    <Input
-                      id="password"
-                      type="password"
-                      autoComplete="current-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <LoadingButton
-              loading={emailLoginIsPending}
-              className="w-full"
-              type="submit"
-            >
-              Logga in
-            </LoadingButton>
-          </form>
-        </Form>
+          {/* Password Field */}
+          <Controller
+            control={form.control}
+            name="password"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="password">Lösenord</FieldLabel>
+                  <span
+                    onClick={() =>
+                      navigate("/", { state: { mode: "forgotPassword" } })
+                    }
+                    className="ml-auto inline-block text-sm underline hover:cursor-pointer"
+                    tabIndex={-1}
+                  >
+                    Glömt ditt lösenord?
+                  </span>
+                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  {...field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          <LoadingButton
+            loading={emailLoginIsPending}
+            className="w-full"
+            type="submit"
+          >
+            Logga in
+          </LoadingButton>
+        </form>
         <LoadingButton
           variant="outline"
           className="w-full"

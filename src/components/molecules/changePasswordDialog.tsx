@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useChangePassword } from "@hooks/useChangePassword";
@@ -11,14 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form";
+import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 import { LoadingButton } from "./loadingButton";
 
@@ -68,85 +61,77 @@ export const ChangePasswordDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-            <DialogHeader>
-              <DialogTitle>{t("change_password_dialog.title")}</DialogTitle>
-              <DialogDescription>
-                {t("change_password_dialog.description")}
-              </DialogDescription>
-            </DialogHeader>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+          <DialogHeader>
+            <DialogTitle>{t("change_password_dialog.title")}</DialogTitle>
+            <DialogDescription>
+              {t("change_password_dialog.description")}
+            </DialogDescription>
+          </DialogHeader>
 
-            <FormField
-              control={form.control}
-              name="currentPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t("change_password_dialog.current_password")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      id="current-password"
-                      type="password"
-                      autoComplete="current-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <Controller
+            control={form.control}
+            name="currentPassword"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>
+                  {t("change_password_dialog.current_password")}
+                </FieldLabel>
+                <Input
+                  id="current-password"
+                  type="password"
+                  autoComplete="current-password"
+                  {...field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="newPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t("change_password_dialog.new_password")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      id="new-password"
-                      type="password"
-                      autoComplete="new-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <Controller
+            control={form.control}
+            name="newPassword"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>
+                  {t("change_password_dialog.new_password")}
+                </FieldLabel>
+                <Input
+                  id="new-password"
+                  type="password"
+                  autoComplete="new-password"
+                  {...field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    {t("change_password_dialog.confirm_password")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      id="confirm-password"
-                      type="password"
-                      autoComplete="new-password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <Controller
+            control={form.control}
+            name="confirmPassword"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>
+                  {t("change_password_dialog.confirm_password")}
+                </FieldLabel>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  autoComplete="new-password"
+                  {...field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
 
-            <DialogFooter>
-              <LoadingButton type="submit" loading={isPending} className="mt-4">
-                {t("change_password_dialog.submit")}
-              </LoadingButton>
-            </DialogFooter>
-          </form>
-        </Form>
+          <DialogFooter>
+            <LoadingButton type="submit" loading={isPending} className="mt-4">
+              {t("change_password_dialog.submit")}
+            </LoadingButton>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -58,7 +58,11 @@ export const SidebarPublicPlans = () => {
   };
 
   return (
-    <Tabs value={karFilter} className="">
+    <Tabs
+      value={karFilter}
+      className="flex flex-col flex-1"
+      orientation="vertical"
+    >
       <div className="px-5 pt-4 pb-2 relative flex flex-col gap-0.5">
         <h3 className="text-lg leading-none font-bold">
           {t("public_plans.title")}

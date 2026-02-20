@@ -1,19 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { kårer } from "@data/committees";
 import { getCommitteesForKår } from "@utils/helpers";
 import { LoadingButton } from "@components/molecules/loadingButton";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form";
 import { Input } from "@ui/input";
 import {
   Select,
@@ -24,6 +15,7 @@ import {
 } from "@ui/select";
 import { useSignUp } from "@/hooks/useSignUp";
 import { type User } from "@/interfaces/interfaces";
+import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
 
 const formSchemaEmail = z
   .object({
@@ -75,157 +67,151 @@ export const FormEmail = () => {
   }, [kårIsOther]);
 
   return (
-    <Form {...form}>
-      <form
-        className="grid gap-4 md:col-span-2"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        {/* Email Field */}
+    <form
+      className="grid gap-4 md:col-span-2"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
+      {/* Email Field */}
+      <Controller
+        control={form.control}
+        name="email"
+        render={({ field, fieldState }) => (
+          <Field className="md:col-span-2" data-invalid={fieldState.invalid}>
+            <FieldLabel>E-post</FieldLabel>
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="md:col-span-2">
-              <FormLabel>E-post</FormLabel>
-              <FormControl>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  autoComplete="email"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>Tips: använd din fadderimejl</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <Input
+              id="email"
+              type="email"
+              placeholder="m@example.com"
+              autoComplete="email"
+              {...field}
+            />
 
-        {/* Password Field */}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Lösenord</FormLabel>
-              <FormControl>
-                <Input
-                  id="password"
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FieldDescription>Tips: använd din fadderimejl</FieldDescription>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
 
-        {/* Password Confirmation Field */}
-        <FormField
-          control={form.control}
-          name="passwordControl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bekräfta lösenord</FormLabel>
-              <FormControl>
-                <Input
-                  id="passwordControl"
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      {/* Password Field */}
+      <Controller
+        control={form.control}
+        name="password"
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel>Lösenord</FieldLabel>
 
-        {/* Kår Select Field */}
-        <FormField
-          control={form.control}
-          name="kår"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Kår</FormLabel>
+            <Input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              {...field}
+            />
+
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      {/* Password Confirmation Field */}
+      <Controller
+        control={form.control}
+        name="passwordControl"
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel>Bekräfta lösenord</FieldLabel>
+
+            <Input
+              id="passwordControl"
+              type="password"
+              autoComplete="new-password"
+              {...field}
+            />
+
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      {/* Kår Select Field */}
+      <Controller
+        control={form.control}
+        name="kår"
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel>Kår</FieldLabel>
+            <Select
+              onValueChange={(val) => {
+                field.onChange(val);
+                if (val === "Övrigt") {
+                  const otherCommittee = Object.keys(kårer.Övrigt)[0]!;
+                  form.setValue("fadderi", otherCommittee);
+                } else {
+                  form.setValue("fadderi", "");
+                }
+              }}
+              defaultValue={field.value}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Kår" />
+              </SelectTrigger>
+
+              <SelectContent>
+                {Object.keys(kårer).map((val) => {
+                  return (
+                    <SelectItem key={val} value={val}>
+                      {val}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+      {/* Fadderi Select Field */}
+      <Controller
+        control={form.control}
+        name="fadderi"
+        render={({ field, fieldState }) => {
+          const committees = getCommitteesForKår(form.getValues().kår) || {};
+          return (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Fadderi</FieldLabel>
               <Select
-                onValueChange={(val) => {
-                  field.onChange(val);
-                  if (val === "Övrigt") {
-                    const otherCommittee = Object.keys(kårer.Övrigt)[0]!;
-                    form.setValue("fadderi", otherCommittee);
-                  } else {
-                    form.setValue("fadderi", "");
-                  }
-                }}
-                defaultValue={field.value}
+                onValueChange={field.onChange}
+                value={field.value}
+                disabled={kårIsOther}
               >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Kår" />
-                  </SelectTrigger>
-                </FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder={"Fadderi"} />
+                </SelectTrigger>
                 <SelectContent>
-                  {Object.keys(kårer).map((val) => {
-                    return (
-                      <SelectItem key={val} value={val}>
-                        {val}
+                  {Object.values(committees)
+                    .filter((c: { hidden?: boolean }) => c?.hidden !== true)
+                    .map((assignee: { name: string; id: string }) => (
+                      <SelectItem key={assignee.name} value={assignee.id}>
+                        {assignee.name}
                       </SelectItem>
-                    );
-                  })}
+                    ))}
                 </SelectContent>
               </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Fadderi Select Field */}
-        <FormField
-          control={form.control}
-          name="fadderi"
-          render={({ field }) => {
-            const committees = getCommitteesForKår(form.getValues().kår) || {};
-            return (
-              <FormItem>
-                <FormLabel>Fadderi</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  disabled={kårIsOther}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={"Fadderi"} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {Object.values(committees)
-                      .filter((c: { hidden?: boolean }) => c?.hidden !== true)
-                      .map((assignee: { name: string; id: string }) => (
-                        <SelectItem key={assignee.name} value={assignee.id}>
-                          {assignee.name}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          );
+        }}
+      />
 
-        {/* Submit Button */}
-        <LoadingButton
-          loading={isPending}
-          type="submit"
-          className="w-full md:col-span-2"
-          onClick={() => onSubmit(form.getValues())}
-        >
-          Skapa ett konto
-        </LoadingButton>
-      </form>
-    </Form>
+      {/* Submit Button */}
+      <LoadingButton
+        loading={isPending}
+        type="submit"
+        className="w-full md:col-span-2"
+        onClick={() => onSubmit(form.getValues())}
+      >
+        Skapa ett konto
+      </LoadingButton>
+    </form>
   );
 };

@@ -1,16 +1,10 @@
 import { sv } from "date-fns/locale";
 import { TrashIcon } from "lucide-react";
-import { type UseFormReturn } from "react-hook-form";
+import { Controller, type UseFormReturn } from "react-hook-form";
 import { Button } from "@ui/button";
 import { Comment } from "@ui/comment";
 import { DateTimePicker } from "@ui/date-time-picker";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form";
+import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
 import {
@@ -45,63 +39,57 @@ export const BookableItemEntry = ({
         type="hidden"
         value={item.key}
       />
-      <FormField
+      <Controller
         name={`bookableItems.${index}.value`}
         control={form.control}
-        render={({ field }) => (
-          <FormItem className="col-span-full space-y-0">
-            <FormLabel>{optionData.value}</FormLabel>
+        render={({ field, fieldState }) => (
+          <Field className="col-span-full" data-invalid={fieldState.invalid}>
+            <FieldLabel>{optionData.value}</FieldLabel>
             {optionData.comment ? (
               <Comment>{optionData.comment}</Comment>
             ) : null}
-            <FormControl>
-              <Input type={optionData.inputType} min={1} {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
+            <Input type={optionData.inputType} min={1} {...field} />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
         )}
       />
       <div className="mt-2 grid grid-cols-2 gap-x-4">
-        <FormField
+        <Controller
           name={`bookableItems.${index}.startDate`}
           control={form.control}
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>Hämta</FormLabel>
-              <FormControl>
-                <DateTimePicker
-                  {...field}
-                  locale={sv}
-                  weekStartsOn={1}
-                  granularity="minute"
-                  hourCycle={24}
-                  yearRange={0}
-                  placeholder="Startdatum"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Hämta</FieldLabel>
+              <DateTimePicker
+                {...field}
+                locale={sv}
+                weekStartsOn={1}
+                granularity="minute"
+                hourCycle={24}
+                yearRange={0}
+                placeholder="Startdatum"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
         />
-        <FormField
+        <Controller
           name={`bookableItems.${index}.endDate`}
           control={form.control}
-          render={({ field }) => (
-            <FormItem className="space-y-0">
-              <FormLabel>Hämta</FormLabel>
-              <FormControl>
-                <DateTimePicker
-                  {...field}
-                  locale={sv}
-                  weekStartsOn={1}
-                  granularity="minute"
-                  hourCycle={24}
-                  yearRange={0}
-                  placeholder="Startdatum"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Hämta</FieldLabel>
+              <DateTimePicker
+                {...field}
+                locale={sv}
+                weekStartsOn={1}
+                granularity="minute"
+                hourCycle={24}
+                yearRange={0}
+                placeholder="Startdatum"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
         />
         <Comment className="col-span-full">

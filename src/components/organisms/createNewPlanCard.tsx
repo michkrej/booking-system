@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useCreatePlan } from "@hooks/useCreatePlan";
@@ -21,14 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form";
+import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 import { CURRENT_YEAR } from "@/utils/constants";
 import { LoadingButton } from "../molecules/loadingButton";
@@ -72,46 +65,42 @@ export const CreateNewPlanCard = () => {
             </Button>
           </DialogTrigger>
           <DialogContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid gap-4"
-              >
-                <DialogHeader>
-                  <DialogTitle>{t("create_new_plan.dialog_title")}</DialogTitle>
-                  <DialogDescription>
-                    {t("create_new_plan.dialog_description")}
-                  </DialogDescription>
-                </DialogHeader>
-                <FormField
-                  control={form.control}
-                  name="planName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("name")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="plan-name"
-                          type="text"
-                          placeholder={t("create_new_plan.dialog_placeholder")}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <DialogFooter>
-                  <LoadingButton
-                    type="submit"
-                    loading={isPending}
-                    className="mt-4"
-                  >
-                    {t("create")}
-                  </LoadingButton>
-                </DialogFooter>
-              </form>
-            </Form>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid gap-4"
+            >
+              <DialogHeader>
+                <DialogTitle>{t("create_new_plan.dialog_title")}</DialogTitle>
+                <DialogDescription>
+                  {t("create_new_plan.dialog_description")}
+                </DialogDescription>
+              </DialogHeader>
+              <Controller
+                control={form.control}
+                name="planName"
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>{t("name")}</FieldLabel>
+                    <Input
+                      id="plan-name"
+                      type="text"
+                      placeholder={t("create_new_plan.dialog_placeholder")}
+                      {...field}
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <DialogFooter>
+                <LoadingButton
+                  type="submit"
+                  loading={isPending}
+                  className="mt-4"
+                >
+                  {t("create")}
+                </LoadingButton>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </CardFooter>

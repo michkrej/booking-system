@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sv } from "date-fns/locale";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
 import { useBookingActions } from "@hooks/useBookingActions";
@@ -24,14 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form";
+import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
@@ -141,7 +134,7 @@ export const EditBookingDialog = ({
         shiftBookableItemTimes(
           convertToDate(data.startDate),
           values.startDate,
-          values.bookableItems
+          values.bookableItems,
         ) ?? values.bookableItems;
     }
 
@@ -244,214 +237,240 @@ export const EditBookingDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[calc(100vh-50px)] max-w-[1200px] flex-col overflow-y-auto">
+      <DialogContent className="flex max-h-[calc(100vh-3rem)] sm:max-w-[calc(100%-2rem)] flex-col overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Redigera bokning</DialogTitle>
           <DialogDescription />
         </DialogHeader>
 
-        <Form {...form}>
-          <form
-            className="grid grid-cols-[1fr_1px_1fr] gap-x-4 text-sm"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-            <div className="row-span-1 grid grid-cols-2 gap-x-4 gap-y-2 pb-40">
-              <FormField
-                name="title"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem className="col-span-full space-y-0">
-                    <FormLabel>Aktivitet</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="newPlanName"
-                        type="text"
-                        placeholder="Ange aktivitet"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="description"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem className="col-span-full space-y-0">
-                    <FormLabel>Beskrivning</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="description"
-                        type="text"
-                        placeholder="Ange beskrivning"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="startDate"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel>Startdatum</FormLabel>
-                    <FormControl>
-                      <DateTimePicker
-                        {...field}
-                        locale={sv}
-                        weekStartsOn={1}
-                        granularity="minute"
-                        hourCycle={24}
-                        yearRange={0}
-                        placeholder="Startdatum"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="endDate"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel>Slutdatum</FormLabel>
-                    <FormControl>
-                      <DateTimePicker
-                        {...field}
-                        locale={sv}
-                        weekStartsOn={1}
-                        granularity="minute"
-                        hourCycle={24}
-                        yearRange={0}
-                        placeholder="Slutdatum"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div>
-                <Label>Fadderi</Label>
-                <Input
-                  disabled
-                  value={data ? (committees[data.committeeId]?.name ?? "??") : "??"}
-                />
-              </div>
-              <div>
-                <Label>Byggnad</Label>
-                <Input disabled value={building?.name ?? "Välj byggnad"} />
-              </div>
-              <FormField
-                name="rooms"
-                control={form.control}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="col-span-full space-y-0">
-                      <FormLabel>Rum</FormLabel>
-                      <MultiSelect
-                        {...field}
-                        onChange={onRoomsSelect}
-                        options={roomOptions}
-                        placeholder="Välj rum"
-                        emptyIndicator="Inga rum hittades"
-                      />
-                    </FormItem>
-                  );
-                }}
-              />
-              <div className="col-span-full my-2 flex justify-center gap-x-4">
-                <FormField
-                  name="food"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem className="flex h-5 items-center justify-center gap-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={disabledForm}
-                        />
-                      </FormControl>
-                      <FormLabel className="mt-0!">Mat?</FormLabel>
-                      <FormMessage />
-                    </FormItem>
+        <form
+          className="grid grid-cols-[1fr_1px_1fr] gap-x-4 text-sm"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <div className="row-span-1 grid grid-cols-2 gap-x-4 gap-y-2 pb-40">
+            <Controller
+              name="title"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field
+                  className="col-span-full"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel>Aktivitet</FieldLabel>
+                  <Input
+                    id="newPlanName"
+                    type="text"
+                    placeholder="Ange aktivitet"
+                    {...field}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
                   )}
-                />
-                <FormField
-                  name="alcohol"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem className="m-0! flex h-5 items-center justify-center gap-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={disabledForm}
-                        />
-                      </FormControl>
-                      <FormLabel className="mt-0!">Alkohol?</FormLabel>
-                      <FormMessage />
-                    </FormItem>
+                </Field>
+              )}
+            />
+            <Controller
+              name="description"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field
+                  className="col-span-full"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel>Beskrivning</FieldLabel>
+                  <Input
+                    id="description"
+                    type="text"
+                    placeholder="Ange beskrivning"
+                    {...field}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
                   )}
-                />
-              </div>
-              <FormField
-                name="link"
+                </Field>
+              )}
+            />
+            <Controller
+              name="startDate"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Startdatum</FieldLabel>
+                  <DateTimePicker
+                    {...field}
+                    locale={sv}
+                    weekStartsOn={1}
+                    granularity="minute"
+                    hourCycle={24}
+                    yearRange={0}
+                    placeholder="Startdatum"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name="endDate"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Slutdatum</FieldLabel>
+                  <DateTimePicker
+                    {...field}
+                    locale={sv}
+                    weekStartsOn={1}
+                    granularity="minute"
+                    hourCycle={24}
+                    yearRange={0}
+                    placeholder="Slutdatum"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Field>
+              <Label>Fadderi</Label>
+              <Input
+                disabled
+                value={
+                  data ? (committees[data.committeeId]?.name ?? "??") : "??"
+                }
+              />
+            </Field>
+
+            <Field>
+              <Label>Byggnad</Label>
+              <Input disabled value={building?.name ?? "Välj byggnad"} />
+            </Field>
+
+            <Controller
+              name="rooms"
+              control={form.control}
+              render={({ field, fieldState }) => {
+                return (
+                  <Field
+                    className="col-span-full"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldLabel>Rum</FieldLabel>
+                    <MultiSelect
+                      {...field}
+                      onChange={onRoomsSelect}
+                      options={roomOptions}
+                      placeholder="Välj rum"
+                      emptyIndicator="Inga rum hittades"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
+            <div className="col-span-full my-2 flex justify-center gap-x-4">
+              <Controller
+                name="food"
                 control={form.control}
-                render={({ field }) => (
-                  <FormItem className="col-span-full space-y-0">
-                    <FormLabel>
-                      Google Maps länk till plats (t.ex. för hajk eller
-                      stadsvandring)
-                    </FormLabel>
-                    <FormControl>
-                      <Input id="link" type="text" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="horizontal"
+                    className="h-5 w-auto items-center justify-center gap-x-2"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={disabledForm}
+                    />
+                    <FieldLabel>Mat?</FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="alcohol"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="horizontal"
+                    className="h-5 w-auto items-center justify-center gap-x-2"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={disabledForm}
+                    />
+                    <FieldLabel>Alkohol?</FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
               />
             </div>
-            <Separator orientation="vertical" className="row-span-3" />
-            <section className="row-span-3 mt-5 flex flex-col gap-y-4">
-              <AddBookableItemDropdown
-                addBookableItemToBooking={addBookableItemToBooking}
-                bookableItems={fields}
-              />
-              <div className="flex max-h-[calc(100vh-300px)] flex-col gap-y-4 overflow-y-auto">
-                {(fields || []).map((item, index) => {
-                  return (
-                    <BookableItemEntry
-                      item={item}
-                      key={item.id}
-                      handleDelete={() => removeBookableItem(item)}
-                      form={form}
-                      index={index}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-            <DialogFooter className="col-span-full mt-4">
-              <LoadingButton
-                type="submit"
-                loading={addBookingToPlanMutation.isPending}
-                disabled={disabledForm}
-              >
-                Spara
-              </LoadingButton>
-              <DialogClose asChild>
-                <Button variant="outline" type="button">
-                  Avbryt
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
-        </Form>
+            <Controller
+              name="link"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field
+                  className="col-span-full"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldLabel>
+                    Google Maps länk till plats (t.ex. för hajk eller
+                    stadsvandring)
+                  </FieldLabel>
+                  <Input id="link" type="text" {...field} />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <Separator orientation="vertical" className="row-span-3" />
+          <section className="row-span-3 mt-5 flex flex-col gap-y-4">
+            <AddBookableItemDropdown
+              addBookableItemToBooking={addBookableItemToBooking}
+              bookableItems={fields}
+            />
+            <div className="flex max-h-[calc(100vh-300px)] flex-col gap-y-4 overflow-y-auto">
+              {(fields || []).map((item, index) => {
+                return (
+                  <BookableItemEntry
+                    item={item}
+                    key={item.id}
+                    handleDelete={() => removeBookableItem(item)}
+                    form={form}
+                    index={index}
+                  />
+                );
+              })}
+            </div>
+          </section>
+          <DialogFooter className="col-span-full mt-4">
+            <LoadingButton
+              type="submit"
+              loading={addBookingToPlanMutation.isPending}
+              disabled={disabledForm}
+            >
+              Spara
+            </LoadingButton>
+            <DialogClose asChild>
+              <Button variant="outline" type="button">
+                Avbryt
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

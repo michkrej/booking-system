@@ -1,17 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useResetPassword } from "@hooks/useResetPassword";
 import { LoadingButton } from "@components/molecules/loadingButton";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@ui/form";
+import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 
 const formSchema = z.object({
@@ -50,32 +43,28 @@ export const ForgotPasswordForm = () => {
         </p>
       </div>
       <div className="grid gap-4">
-        <Form {...form}>
-          <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-            {/* Email Field */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-post</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <LoadingButton loading={isPending} className="w-full" type="submit">
-              Skicka återställningslänk
-            </LoadingButton>
-          </form>
-        </Form>
+        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
+          {/* Email Field */}
+          <Controller
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>E-post</FieldLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  {...field}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          <LoadingButton loading={isPending} className="w-full" type="submit">
+            Skicka återställningslänk
+          </LoadingButton>
+        </form>
       </div>
       <div className="text-center text-sm">
         Klar?{" "}
