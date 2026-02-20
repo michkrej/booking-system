@@ -38,8 +38,8 @@ export const useAdminSettings = () => {
       updatedPlanEditLock(newValue, kår);
       toast.success(
         newValue
-          ? "Låst redigering av bokningar"
-          : "Låst upp redigering av bokningar",
+          ? `Låst redigering av planeringar för ${kår}`
+          : `Låst upp redigering av planeringar för ${kår}`,
       );
     },
     onError: () => {

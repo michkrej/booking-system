@@ -1,5 +1,5 @@
 import { type committees, type kårer } from "@data/committees";
-import { BOOKABLE_ITEM_OPTIONS } from "../utils/constants";
+import { BOOKABLE_ITEM_OPTIONS } from "@utils/constants";
 
 export type Room = {
   name: string;

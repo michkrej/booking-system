@@ -46,7 +46,7 @@ export const AddBookableItemDropdown = ({
         </Select>
         <Button
           size="icon"
-          className="flex aspect-square w-10 items-center justify-center rounded-full"
+          className="flex aspect-square w-10 items-center justify-center"
           type="button"
           onClick={() => {
             addBookableItemToBooking(itemName);

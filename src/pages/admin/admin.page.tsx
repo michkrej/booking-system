@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Layout } from "@components/molecules/layout";
 import { Card, CardDescription, CardHeader, CardTitle } from "@ui/card";
-import { BookableItemsCard } from "@/components/organisms/BookableItemsCard";
-import { LockPlanEditingCard } from "@/components/organisms/LockPlanEditCard";
-import { MottagningStartDateCard } from "@/components/organisms/MottagningStartDateCard";
+import { BookableItemsCard } from "@/pages/admin/components/BookableItemsCard";
+import { MottagningStartDateCard } from "@/pages/admin/components/MottagningStartDateCard";
+import { LockPlanEditingCard } from "./components/LockPlanEditCard";
 
 export const AdminPage = () => {
   const { t } = useTranslation();

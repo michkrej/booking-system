@@ -26,7 +26,9 @@ export const SidebarPlanItem = ({
             className="w-2 h-2"
             style={{ backgroundColor: committee?.color }}
           />
-          <span className="text-[13px] font-semibold">{committee.name}</span>
+          <span className="text-[13px] font-semibold">
+            {committee.name === "Övrigt" ? item.label : committee.name}
+          </span>
           <span
             className="text-[11px] font-semibold"
             style={{ color: KAR_COLORS[committee.kår].color }}

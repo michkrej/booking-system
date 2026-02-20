@@ -89,7 +89,7 @@
   "your_plans": "Dina planeringar",
   "admin_card": {
     "title": "Admin",
-    "description": "Här kan du justera antalet av diverse bokningsbara material som finns tillgängliga för fadderisterna att boka. När du letar krockar kommer bokningar som överlappar i tid och överskrider mängden av nedan angivna material att visas."
+    "description": "Här kan du justera antalet bokningsbara material, startdatum för mottagingen samt låsa redigering av planeringar."
   },
   "admin_reception_card": {
     "title": "Mottagningen {{year}} startar",

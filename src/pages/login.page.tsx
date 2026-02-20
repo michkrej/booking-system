@@ -2,10 +2,10 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useUserIsLoggedIn } from "@hooks/useUserIsLoggedIn";
 import { SiteLogo } from "@components/atoms/siteLogo";
 import { SiteFooter } from "@components/molecules/siteFooter";
-import { ForgotPasswordForm } from "@components/organisms/forgotPasswordForm";
-import { LoginForm } from "@components/organisms/loginForm";
 import { NollePCarousel } from "@components/organisms/nollePCarousel";
-import { SignUpForm } from "@components/organisms/signUpForm";
+import { FormForgotPassword } from "@/components/organisms/FormForgotPassword";
+import { FormLogin } from "@/components/organisms/FormLogin";
+import { FormSignup } from "@/components/organisms/FormSignup";
 
 export function LoginPage() {
   const { state } = useLocation() as { state: { mode?: string } };
@@ -22,11 +22,11 @@ export function LoginPage() {
       </div>
       <div className="relative mt-20 flex items-center justify-center lg:mt-0">
         {state?.mode === "forgotPassword" ? (
-          <ForgotPasswordForm />
+          <FormForgotPassword />
         ) : state?.mode === "signup" ? (
-          <SignUpForm />
+          <FormSignup />
         ) : (
-          <LoginForm />
+          <FormLogin />
         )}
         <div className="absolute bottom-0 hidden w-full justify-center lg:flex">
           <SiteFooter />

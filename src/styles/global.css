@@ -33,9 +33,9 @@
   --color-card-foreground: hsl(var(--card-foreground));
 
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-xl : calc(var(--radius) - 6px);
+  --radius-md: var(--radius);
+  --radius-sm: var(--radius);
+  --radius-xl : var(--radius);
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -87,16 +87,7 @@
   }
 }
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 2rem;
-  @media (width >= --theme(--breakpoint-sm)) {
-    max-width: none;
-  }
-  @media (width >= 1400px) {
-    max-width: 1400px;
-  }
-}
+
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,

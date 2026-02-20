@@ -21,7 +21,11 @@ export const usePublicPlans = () => {
 
   const publicPlansByKar = useMemo(() => {
     const filterByKår = (kår: string) =>
-      data?.filter((plan) => getCommittee(plan.committeeId)?.kår === kår);
+      data?.filter(
+        (plan) =>
+          getCommittee(plan.committeeId)?.kår === kår ||
+          getCommittee(plan.committeeId)?.kår === "Övrigt",
+      ) ?? [];
     return {
       lintek: filterByKår("LinTek"),
       consensus: filterByKår("Consensus"),

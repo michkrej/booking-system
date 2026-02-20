@@ -14,7 +14,7 @@ const formSchema = z.object({
     .email("Felaktig e-postadress"),
 });
 
-export const ForgotPasswordForm = () => {
+export const FormForgotPassword = () => {
   const { resetPassword, isPending } = useResetPassword();
   const navigate = useNavigate();
 

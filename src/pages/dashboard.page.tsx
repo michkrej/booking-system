@@ -14,11 +14,11 @@ import {
 import { ActivityFeedCard } from "@components/organisms/ActivityFeedCard";
 import { SpectatorDashboard } from "@components/organisms/SpectatorDashboard";
 import { UserConflictsCard } from "@components/organisms/UserConflictsCard";
-import { PlanEditLockedWarningCard } from "@components/organisms/planEditLockedWarningCard";
-import { UserPlansListCard } from "@components/organisms/userPlansListCard";
 import { CreateNewPlanDialog } from "@/components/molecules/CreateNewPlanDialog";
 import { DashboardLayout } from "@/components/molecules/DashboardLayout";
+import { EditPlansLockedCard } from "@/components/organisms/EditPlansLockedCard";
 import { SidebarPublicPlans } from "@/components/organisms/SidebarPublicPlans";
+import { UserPlansCard } from "@/components/organisms/UserPlansCard";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { MAX_YEAR, MIN_YEAR } from "@/state/planStoreSlice";
 import { useBoundStore } from "@/state/store";
@@ -70,7 +70,7 @@ export function DashboardPage() {
           </p>
         </div>
 
-        <div className="flex gap-x-4">
+        <div className="flex gap-x-4 gap-y-2 flex-col sm:flex-row">
           {userPlans.length > 0 && (
             <ToggleGroup
               type="single"
@@ -113,9 +113,9 @@ export function DashboardPage() {
             className="mb-4 -mx-4 sm:-mx-6 px-0"
           />
 
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             {/* Mobile: Show content based on active tab */}
-            <div className="lg:hidden space-y-4 flex-1">
+            <div className="lg:hidden space-y-2 flex-1">
               {spectatorTab !== "Planeringar" ? (
                 <SpectatorDashboard
                   onCreatePlan={canCreatePlan ? handleCreatePlan : undefined}
@@ -143,17 +143,17 @@ export function DashboardPage() {
             tabs={PLANNER_TABS}
             activeTab={plannerTab}
             onTabChange={setPlannerTab}
-            className="mb-4 -mx-4 sm:-mx-6 px-0"
+            className="mb-2 -mx-2 sm:-mx-4 px-0"
           />
 
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             {/* Mobile: Show content based on active tab */}
-            <div className="lg:hidden space-y-4 flex-1">
-              {isPlanEditLocked && <PlanEditLockedWarningCard />}
+            <div className="lg:hidden space-y-2 flex-1">
+              {isPlanEditLocked && <EditPlansLockedCard />}
 
               {plannerTab === "Mina" && (
                 <>
-                  <UserPlansListCard showCreateButton={!isPlanEditLocked} />
+                  <UserPlansCard showCreateButton={!isPlanEditLocked} />
                   <ActivityFeedCard />
                 </>
               )}
@@ -167,9 +167,9 @@ export function DashboardPage() {
 
             {/* Desktop: Show full layout */}
             <div className="hidden lg:block w-full space-y-4">
-              {isPlanEditLocked && <PlanEditLockedWarningCard />}
+              {isPlanEditLocked && <EditPlansLockedCard />}
 
-              <UserPlansListCard showCreateButton={!isPlanEditLocked} />
+              <UserPlansCard showCreateButton={!isPlanEditLocked} />
 
               <UserConflictsCard />
 

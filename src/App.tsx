@@ -11,7 +11,7 @@ import { Toaster } from "sonner";
 import { TooltipProvider } from "@ui/tooltip";
 import { useUserIsLoggedIn } from "./hooks/useUserIsLoggedIn";
 import { BookingPage } from "./pages/Booking/booking.page";
-import { AdminPage } from "./pages/admin.page";
+import { AdminPage } from "./pages/admin/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
 import { InventorySchedulePage } from "./pages/inventorySchedule.page";
 import { LoginPage } from "./pages/login.page";

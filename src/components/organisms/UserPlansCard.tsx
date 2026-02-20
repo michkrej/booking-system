@@ -21,13 +21,13 @@ import { UserPlansListRow } from "../molecules/UserPlansListRow";
 
 const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
 
-interface UserPlansListCardProps {
+interface UserPlansCardProps {
   showCreateButton?: boolean;
 }
 
-export const UserPlansListCard = ({
+export const UserPlansCard = ({
   showCreateButton = true,
-}: UserPlansListCardProps) => {
+}: UserPlansCardProps) => {
   const { t } = useTranslation();
   const { userPlans, isPending, handlePlanClick } = usePlansListCard();
   const { getConflictsForPlan } = useUserPlanConflicts();

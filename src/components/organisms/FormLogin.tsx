@@ -16,7 +16,7 @@ const formSchema = z.object({
   password: z.string().min(8, "Lösenord saknas"),
 });
 
-export const LoginForm = () => {
+export const FormLogin = () => {
   const { loginWithEmail, isPending: emailLoginIsPending } = useEmailLogin();
   const { loginWithGoogle, isPending: googleLoginIsPending } = useGoogleLogin();
   const navigate = useNavigate();

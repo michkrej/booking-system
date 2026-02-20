@@ -8,7 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/card";
-import { Switch } from "@ui/switch";
+import { Label } from "@/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { type Kår } from "@/interfaces/interfaces";
 
 export const LockPlanEditingCard = () => {
@@ -21,21 +22,22 @@ export const LockPlanEditingCard = () => {
         <CardTitle>{t("admin_lock_card.title")}</CardTitle>
         <CardDescription>{t("admin_lock_card.description")}</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-2">
+      <CardContent className="space-y-2">
         {(Object.keys(kårer) as Kår[]).map((kår) => {
           return (
             <div className="flex items-center gap-2" key={kår}>
-              <p className="w-[100px]">{kår}</p>
-              <Switch
-                checked={planEditLocked[kår]}
-                onCheckedChange={() =>
-                  lockPlans.mutate({ kår, newValue: !planEditLocked[kår] })
+              <Label className="min-w-[100px]">{kår}</Label>
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                defaultValue={planEditLocked[kår] ? "locked" : "unlocked"}
+                onValueChange={(value) =>
+                  lockPlans.mutate({ kår, newValue: value === "locked" })
                 }
-                className="h-6 w-10 rounded-full bg-gray-200"
-              />
-              <p>
-                {planEditLocked[kår] ? "Lås upp redigering" : "Lås redigering"}
-              </p>
+              >
+                <ToggleGroupItem value="unlocked">upplåst</ToggleGroupItem>
+                <ToggleGroupItem value="locked">låst</ToggleGroupItem>
+              </ToggleGroup>
             </div>
           );
         })}

@@ -9,7 +9,7 @@ const ACCOUNT_TYPE = {
   google: "google",
 } as const;
 
-export const SignUpForm = () => {
+export const FormSignup = () => {
   const navigate = useNavigate();
 
   const [createAccountWith, setCreateAccountWith] = useState<

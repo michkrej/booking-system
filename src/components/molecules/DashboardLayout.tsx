@@ -17,7 +17,11 @@ export const DashboardLayout = ({
     <div className="bg-muted flex min-h-screen w-full flex-col">
       <Header />
       <div className="flex flex-1">
-        <main className={cn("flex flex-1 flex-col gap-4 py-6 px-4 sm:px-7")}>
+        <main
+          className={cn(
+            "flex flex-1 flex-col sm:gap-4 gap-2 py-2 sm:py-6 px-2 sm:px-7",
+          )}
+        >
           {children}
         </main>
         <aside className="hidden lg:block w-[340px] border-l bg-card overflow-y-auto">
