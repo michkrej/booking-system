@@ -17,6 +17,7 @@ import { UserConflictsCard } from "@components/organisms/UserConflictsCard";
 import { CreateNewPlanDialog } from "@/components/molecules/CreateNewPlanDialog";
 import { DashboardLayout } from "@/components/molecules/DashboardLayout";
 import { EditPlansLockedCard } from "@/components/organisms/EditPlansLockedCard";
+import { NewUpdateCard } from "@/components/organisms/NewUpdateCard";
 import { SidebarPublicPlans } from "@/components/organisms/SidebarPublicPlans";
 import { UserPlansCard } from "@/components/organisms/UserPlansCard";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -101,6 +102,8 @@ export function DashboardPage() {
           />
         </div>
       </div>
+
+      <NewUpdateCard />
 
       {isSpectator ? (
         /* Spectator View */

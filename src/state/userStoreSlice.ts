@@ -12,7 +12,7 @@ interface UserStoreSlice {
   changedAppMode: (appMode: "user" | "spectator") => void;
 }
 
-export const CURRENT_APP_VERSION = "v3.6.1";
+export const CURRENT_APP_VERSION = "v3.7.0";
 
 const createUserStoreSlice: StateCreator<
   UserStoreSlice & PlanStoreSlice,
