@@ -22,6 +22,7 @@ import { corridorsC } from "@data/campusValla/rooms";
 import { committees } from "@data/committees";
 import { campusLocationsMap } from "@data/locationsData";
 import { type Booking, type NewBooking } from "@/interfaces/interfaces";
+import { shiftBookableItemTimes } from "@/utils/bookingUtils";
 import { viewCollisionsPath, viewPath } from "@/utils/constants";
 import { EditBookingDialog } from "./EditBookingDialog";
 import { NewBookingDialog } from "./NewBookingDialog";
@@ -195,11 +196,23 @@ export const Schedule = () => {
         return;
       }
 
+      // Find original booking to shift inventory times relative to event move
+      const originalBooking = bookings.find((b) => b.id === updatedEvent.id);
+      let finalBooking = updatedEvent;
+      if (originalBooking?.bookableItems?.length) {
+        const shiftedItems = shiftBookableItemTimes(
+          originalBooking.startDate,
+          updatedEvent.startDate,
+          originalBooking.bookableItems
+        );
+        finalBooking = { ...updatedEvent, bookableItems: shiftedItems };
+      }
+
       updateBookingMutation.mutate(
-        { booking: updatedEvent, plan },
+        { booking: finalBooking, plan },
         {
           onSuccess: () => {
-            updatedBooking(updatedEvent);
+            updatedBooking(finalBooking);
           },
         },
       );

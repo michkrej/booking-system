@@ -37,6 +37,7 @@ import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
 import { type Booking } from "@/interfaces/interfaces";
+import { shiftBookableItemTimes } from "@/utils/bookingUtils";
 import { convertToDate } from "@/utils/utils";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
@@ -129,6 +130,21 @@ export const EditBookingDialog = ({
   async function onSubmit(values: z.infer<typeof BookingSchema>) {
     if (!planId) return;
     if (!data) return;
+
+    // Shift inventory times if event start time changed
+    let finalBookableItems = values.bookableItems;
+    if (
+      convertToDate(data.startDate).getTime() !== values.startDate.getTime() &&
+      values.bookableItems?.length
+    ) {
+      finalBookableItems =
+        shiftBookableItemTimes(
+          convertToDate(data.startDate),
+          values.startDate,
+          values.bookableItems
+        ) ?? values.bookableItems;
+    }
+
     const bookingData = {
       id: data.id,
       title: values.title,
@@ -145,7 +161,7 @@ export const EditBookingDialog = ({
       link: values.link,
       createdAt: new Date(),
       updatedAt: new Date(),
-      bookableItems: values.bookableItems,
+      bookableItems: finalBookableItems,
     } satisfies Booking;
 
     await updateBookingMutation.mutateAsync(
