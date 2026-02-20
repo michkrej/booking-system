@@ -1,3 +1,4 @@
+import { usePostHog } from "posthog-js/react";
 import { useBoundStore } from "@state/store";
 import { CURRENT_APP_VERSION } from "@state/userStoreSlice";
 import { Button } from "@ui/button";
@@ -9,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/card";
-import { siteConfig } from "@/config/site";
 
 const Changelog = () => {
   return (
@@ -39,6 +39,8 @@ export const NewUpdateCard = () => {
     (state) => state.closeVersionUpdateWarning,
   );
 
+  const posthog = usePostHog();
+
   const versionUpdateWarningClosed =
     versionUpdateWarning === CURRENT_APP_VERSION;
 
@@ -61,13 +63,12 @@ export const NewUpdateCard = () => {
           <CardFooter className="flex justify-between">
             <i>
               Om något inte fungerar{" "}
-              <a
+              <button
                 className="text-primary decoration-primary font-semibold hover:underline"
-                href={siteConfig.links.feedback}
-                target="__blank"
+                onClick={() => posthog.capture("feedback_click")}
               >
                 rapportera det
-              </a>
+              </button>
             </i>
             <Button
               variant="secondary"

@@ -1,4 +1,5 @@
 import { CircleUser } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { siteConfig } from "@/config/site";
@@ -19,6 +20,7 @@ export const AccountDropdown = () => {
   const { t } = useTranslation();
   const { user } = useStoreUser();
   const { logout } = useSignOut();
+  const posthog = usePostHog();
 
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
@@ -55,9 +57,7 @@ export const AccountDropdown = () => {
             {t("instruction_video")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => window.open(siteConfig.links.feedback)}
-          >
+          <DropdownMenuItem onClick={() => posthog.capture("feedback_click")}>
             {t("feedback")}
           </DropdownMenuItem>
           {isEmailPasswordUser() && (
