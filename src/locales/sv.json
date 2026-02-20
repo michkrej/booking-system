@@ -23,7 +23,7 @@
     "title": "Planeringar"
   },
   "created": "Skapad",
-  "dashboard": "Dashboard",
+  "dashboard": "Hem",
   "delete": "Radera",
   "delete_dialog": {
     "description": "Om du raderar planeringen {{x}} kommer den att tas bort permanent. Det går inte att ångra denna åtgärd.",

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useUserPlans } from "@hooks/useUserPlans";
-import { getCommittee } from "@lib/utils";
+import { cn, getCommittee } from "@lib/utils";
 import { Button } from "@ui/button";
 import {
   Card,
@@ -30,7 +30,7 @@ import { viewCollisionsPath } from "@/utils/CONSTANTS";
 import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
 import { type Booking, type Plan } from "@/utils/interfaces";
 import { FadderiTag } from "../molecules/FadderiTag";
-import { KarTabs } from "../molecules/KarTabs";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
 type ConflictType = "Lokal" | "Inventarie";
 
@@ -237,11 +237,17 @@ export const UserConflictsCard = () => {
             >
               Tidslinje <ArrowRightIcon className="ml-1 size-4" />
             </Button>
-            <KarTabs
-              tabs={Object.values(TABS)}
-              active={karFilter}
-              onSelect={setKarFilter}
-            />
+            <ToggleGroup
+              type="single"
+              size="sm"
+              variant="outline"
+              value={karFilter}
+              onValueChange={(value) => setKarFilter(value as "own" | "all")}
+              spacing={0}
+            >
+              <ToggleGroupItem value="own">Din kår</ToggleGroupItem>
+              <ToggleGroupItem value="all">Alla</ToggleGroupItem>
+            </ToggleGroup>
           </div>
         </div>
       </CardHeader>
@@ -280,14 +286,16 @@ export const UserConflictsCard = () => {
               filteredRows.map((row) => {
                 const userCommittee = getCommittee(row.userPlan.committeeId);
                 const otherCommittee = getCommittee(row.otherPlan.committeeId);
-                const borderColor =
-                  row.type === "Lokal" ? "#dc2626" : "#dc2626";
 
                 return (
                   <TableRow
                     key={row.id}
-                    className="border-l-[3px]"
-                    style={{ borderLeftColor: borderColor }}
+                    className={cn(
+                      "border-l-[3px] last:border-l-[3px]!",
+                      row.type === "Lokal"
+                        ? "border-l-red-500"
+                        : "border-l-orange-300",
+                    )}
                   >
                     <TableCell
                       onClick={() => handleViewTimeline(row)}
