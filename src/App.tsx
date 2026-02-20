@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@ui/tooltip";
+import { ErrorBoundary } from "./components/molecules/ErrorBoundary";
 import { useUserIsLoggedIn } from "./hooks/useUserIsLoggedIn";
 import { BookingPage } from "./pages/Booking/booking.page";
 import { AdminPage } from "./pages/admin/admin.page";
@@ -38,21 +39,23 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
         <TooltipProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<LoginPage />} />
-              <Route element={<RequireAuth />}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/booking/:id" element={<BookingPage />} />
-                <Route
-                  path="/inventory/:id"
-                  element={<InventorySchedulePage />}
-                />
-              </Route>
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </BrowserRouter>
+          <ErrorBoundary>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<LoginPage />} />
+                <Route element={<RequireAuth />}>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path="/booking/:id" element={<BookingPage />} />
+                  <Route
+                    path="/inventory/:id"
+                    element={<InventorySchedulePage />}
+                  />
+                </Route>
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </BrowserRouter>
+          </ErrorBoundary>
           <Toaster position="top-center" />
         </TooltipProvider>
       </div>
