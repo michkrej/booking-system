@@ -229,14 +229,6 @@ export const UserConflictsCard = () => {
             </CardDescription>
           </div>
           <div className="flex justify-between flex-1 sm:flex-auto sm:justify-end">
-            <Button
-              variant="outline"
-              size="sm"
-              className="mr-4"
-              onClick={handleViewAllConflictsTimeline}
-            >
-              Tidslinje <ArrowRightIcon className="ml-1 size-4" />
-            </Button>
             <ToggleGroup
               type="single"
               size="sm"
@@ -247,6 +239,14 @@ export const UserConflictsCard = () => {
               <ToggleGroupItem value="own">Din kår</ToggleGroupItem>
               <ToggleGroupItem value="all">Alla</ToggleGroupItem>
             </ToggleGroup>
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-4"
+              onClick={handleViewAllConflictsTimeline}
+            >
+              Tidslinje <ArrowRightIcon className="ml-1 size-4" />
+            </Button>
           </div>
         </div>
       </CardHeader>
