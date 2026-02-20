@@ -4,7 +4,6 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { kårer } from "@data/committees";
 import { getCommitteesForKår } from "@utils/helpers";
-import { LoadingButton } from "@components/molecules/loadingButton";
 import { Input } from "@ui/input";
 import {
   Select,
@@ -13,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ui/select";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { useSignUp } from "@/hooks/useSignUp";
 import { type User } from "@/interfaces/interfaces";
 import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";

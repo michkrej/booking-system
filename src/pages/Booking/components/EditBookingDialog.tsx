@@ -11,7 +11,6 @@ import { corridorsC } from "@data/campusValla/rooms";
 import roomsC from "@data/campusValla/rooms/C";
 import { committees } from "@data/committees";
 import { campusLocationsMap } from "@data/locationsData";
-import { LoadingButton } from "@components/molecules/loadingButton";
 import { Button } from "@ui/button";
 import { Checkbox } from "@ui/checkbox";
 import { DateTimePicker } from "@ui/date-time-picker";
@@ -29,13 +28,14 @@ import { Input } from "@ui/input";
 import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { type Booking } from "@/interfaces/interfaces";
 import { shiftBookableItemTimes } from "@/utils/bookingUtils";
 import { convertToDate } from "@/utils/utils";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { ScheduleContext } from "./ScheduleContext";
-import { type BookableItemInput, BookingSchema } from "./schema";
+import { BookingSchema, type BookingSchemaInput } from "./schema";
 
 type EditorTemplateProps = {
   data?: Booking;
@@ -84,7 +84,7 @@ export const EditBookingDialog = ({
 
   const disabledForm = currentPlan?.userId !== user.id;
 
-  const form = useForm<z.infer<typeof BookingSchema>>({
+  const form = useForm({
     resolver: zodResolver(BookingSchema),
     disabled: disabledForm,
   });
@@ -228,7 +228,9 @@ export const EditBookingDialog = ({
     } as unknown as (typeof fields)[number]);
   };
 
-  const removeBookableItem = (item: BookableItemInput) => {
+  const removeBookableItem = (
+    item: NonNullable<BookingSchemaInput["bookableItems"]>[number],
+  ) => {
     const index = fields.findIndex((i) => i.key === item.key);
     if (index === -1) return;
 
@@ -298,6 +300,7 @@ export const EditBookingDialog = ({
                   <FieldLabel>Startdatum</FieldLabel>
                   <DateTimePicker
                     {...field}
+                    value={field.value as Date}
                     locale={sv}
                     weekStartsOn={1}
                     granularity="minute"
@@ -319,6 +322,7 @@ export const EditBookingDialog = ({
                   <FieldLabel>Slutdatum</FieldLabel>
                   <DateTimePicker
                     {...field}
+                    value={field.value as Date}
                     locale={sv}
                     weekStartsOn={1}
                     granularity="minute"

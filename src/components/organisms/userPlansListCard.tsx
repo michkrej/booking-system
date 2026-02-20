@@ -1,23 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
-import { useCreatePlan } from "@hooks/useCreatePlan";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@ui/dialog";
-import { Field, FieldError, FieldLabel } from "@ui/field";
-import { Input } from "@ui/input";
 import { Skeleton } from "@ui/skeleton";
 import {
   Table,
@@ -30,14 +16,10 @@ import {
 import { usePlansListCard } from "@/hooks/usePlansListCard";
 import { useUserPlanConflicts } from "@/hooks/useUserPlanConflicts";
 import { CURRENT_YEAR } from "@/utils/constants";
+import { CreateNewPlanDialog } from "../molecules/CreateNewPlanDialog";
 import { UserPlansListRow } from "../molecules/UserPlansListRow";
-import { LoadingButton } from "../molecules/loadingButton";
 
 const loadingTableEntries = Array.from({ length: 1 }, (_, i) => i);
-
-const formSchema = z.object({
-  planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
-});
 
 interface UserPlansListCardProps {
   showCreateButton?: boolean;
@@ -49,146 +31,96 @@ export const UserPlansListCard = ({
   const { t } = useTranslation();
   const { userPlans, isPending, handlePlanClick } = usePlansListCard();
   const { getConflictsForPlan } = useUserPlanConflicts();
-  const { createPlan, isPending: isCreating } = useCreatePlan();
   const { planYear } = useStorePlanYear();
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      planName: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    createPlan({
-      planName: values.planName,
-      onSettled: () => form.reset(),
-    });
-  }
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   const canCreatePlan = showCreateButton && planYear >= CURRENT_YEAR;
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>{t("your_plans")}</CardTitle>
-        {canCreatePlan && (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="sm" className="flex gap-x-1">
-                <PlusIcon className="size-4" />{" "}
-                <span className="hidden md:inline">Ny planering</span>
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid gap-4"
-              >
-                <DialogHeader>
-                  <DialogTitle>
-                    {t("create_new_plan.dialog_title")}
-                  </DialogTitle>
-                  <DialogDescription>
-                    {t("create_new_plan.dialog_description")}
-                  </DialogDescription>
-                </DialogHeader>
-                <Controller
-                  control={form.control}
-                  name="planName"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel>{t("name")}</FieldLabel>
-                      <Input
-                        id="plan-name"
-                        type="text"
-                        placeholder={t(
-                          "create_new_plan.dialog_placeholder",
-                        )}
-                        {...field}
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <DialogFooter>
-                  <LoadingButton
-                    type="submit"
-                    loading={isCreating}
-                    className="mt-4"
-                  >
-                    {t("create")}
-                  </LoadingButton>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
-        )}
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{t("name")}</TableHead>
-              <TableHead className="hidden sm:table-cell">
-                {t("num_bookings")}
-              </TableHead>
-              <TableHead className="hidden sm:table-cell">Status</TableHead>
-              <TableHead>Krockar</TableHead>
-              <TableHead className="hidden md:table-cell">
-                {t("updated")}
-              </TableHead>
-              <TableHead />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {!isPending ? (
-              userPlans.length > 0 ? (
-                userPlans.map((plan) => (
-                  <UserPlansListRow
-                    key={plan.id}
-                    plan={plan}
-                    conflicts={getConflictsForPlan(plan.id)}
-                    onPlanClick={handlePlanClick}
-                  />
-                ))
+    <>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>{t("your_plans")}</CardTitle>
+          {canCreatePlan && (
+            <Button
+              size="sm"
+              className="flex gap-x-1"
+              onClick={() => setShowCreateDialog(true)}
+            >
+              <PlusIcon className="size-4" />{" "}
+              <span className="hidden md:inline">Ny planering</span>
+            </Button>
+          )}
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t("name")}</TableHead>
+                <TableHead className="hidden sm:table-cell">
+                  {t("num_bookings")}
+                </TableHead>
+                <TableHead className="hidden sm:table-cell">Status</TableHead>
+                <TableHead>Krockar</TableHead>
+                <TableHead className="hidden md:table-cell">
+                  {t("updated")}
+                </TableHead>
+                <TableHead />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {!isPending ? (
+                userPlans.length > 0 ? (
+                  userPlans.map((plan) => (
+                    <UserPlansListRow
+                      key={plan.id}
+                      plan={plan}
+                      conflicts={getConflictsForPlan(plan.id)}
+                      onPlanClick={handlePlanClick}
+                    />
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={6}
+                      className="text-center text-muted-foreground"
+                    >
+                      {t("you_do_not_have_any_plans_yet")}
+                    </TableCell>
+                  </TableRow>
+                )
               ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="text-center text-muted-foreground"
-                  >
-                    {t("you_do_not_have_any_plans_yet")}
-                  </TableCell>
-                </TableRow>
-              )
-            ) : (
-              loadingTableEntries.map((index) => (
-                <TableRow key={`table-row-${index}`}>
-                  <TableCell>
-                    <Skeleton className="h-5 w-full" />
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Skeleton className="h-5 w-full" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-5 w-16" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-5 w-20" />
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Skeleton className="h-5 w-full" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-5 w-20" />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+                loadingTableEntries.map((index) => (
+                  <TableRow key={`table-row-${index}`}>
+                    <TableCell>
+                      <Skeleton className="h-5 w-full" />
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      <Skeleton className="h-5 w-full" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-5 w-16" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-5 w-20" />
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <Skeleton className="h-5 w-full" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-5 w-20" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+      <CreateNewPlanDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+      />
+    </>
   );
 };

@@ -9,7 +9,7 @@ export const PlanEditLockedWarningCard = () => {
 
   return (
     <Card>
-      <CardHeader className="h-full">
+      <CardHeader>
         <CardTitle className="text-red-600">
           Redigering av planeringar är låst!
         </CardTitle>

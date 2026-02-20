@@ -13,8 +13,8 @@ import {
 } from "@ui/select";
 import { useSignUp } from "@/hooks/useSignUp";
 import { type Kår, type User } from "@/interfaces/interfaces";
-import { LoadingButton } from "../molecules/loadingButton";
 import { Field, FieldError, FieldLabel } from "../ui/field";
+import { LoadingButton } from "../ui/loading-button";
 
 const formSchemaGoogle = z.object({
   kår: z.enum(["LinTek", "Consensus", "StuFF", "Övrigt"]),

@@ -26,7 +26,7 @@ import {
 } from "@ui/select";
 import { type Kår, type Plan } from "@/interfaces/interfaces";
 import { getCommittee } from "@/utils/utils";
-import { LoadingButton } from "./loadingButton";
+import { LoadingButton } from "../ui/loading-button";
 
 const getPlans = (plans: Plan[], kår: Omit<Kår, "Övrigt"> | "all") => {
   if (kår === "all") return plans;

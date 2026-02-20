@@ -16,7 +16,7 @@ import {
 } from "@ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { type Plan } from "@/interfaces/interfaces";
-import { LoadingButton } from "./loadingButton";
+import { LoadingButton } from "../ui/loading-button";
 
 type PlanDeleteButtonProps = {
   plan: Plan;

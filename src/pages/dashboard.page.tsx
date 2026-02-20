@@ -1,10 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { z } from "zod";
 import { useAdminSettings } from "@hooks/useAdminSettings";
-import { useCreatePlan } from "@hooks/useCreatePlan";
 import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useUserPlans } from "@hooks/useUserPlans";
@@ -16,23 +11,12 @@ import {
   SPECTATOR_TABS,
   type SpectatorTab,
 } from "@components/molecules/MobileTabNav";
-import { LoadingButton } from "@components/molecules/loadingButton";
 import { ActivityFeedCard } from "@components/organisms/ActivityFeedCard";
 import { SpectatorDashboard } from "@components/organisms/SpectatorDashboard";
 import { UserConflictsCard } from "@components/organisms/UserConflictsCard";
 import { PlanEditLockedWarningCard } from "@components/organisms/planEditLockedWarningCard";
-import { PublicPlansCard } from "@components/organisms/publicPlansCard";
 import { UserPlansListCard } from "@components/organisms/userPlansListCard";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@ui/dialog";
-import { Field, FieldError, FieldLabel } from "@ui/field";
-import { Input } from "@ui/input";
+import { CreateNewPlanDialog } from "@/components/molecules/CreateNewPlanDialog";
 import { DashboardLayout } from "@/components/molecules/DashboardLayout";
 import { SidebarPublicPlans } from "@/components/organisms/SidebarPublicPlans";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -41,30 +25,17 @@ import { useBoundStore } from "@/state/store";
 import { CURRENT_YEAR } from "@/utils/constants";
 import { cn, getCommittee } from "@/utils/utils";
 
-const formSchema = z.object({
-  planName: z.string().min(1, "Du måste ange ett namn för planeringen"),
-});
-
 export function DashboardPage() {
-  const { t } = useTranslation();
   const { isPlanEditLocked } = useAdminSettings();
   const { user } = useStoreUser();
   const { planYear, incrementPlanYear, decrementPlanYear } = useStorePlanYear();
   const { userPlans, isPending: isLoadingPlans } = useUserPlans();
-  const { createPlan, isPending: isCreating } = useCreatePlan();
   const appMode = useBoundStore((state) => state.appMode);
   const changedAppMode = useBoundStore((state) => state.changedAppMode);
 
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [plannerTab, setPlannerTab] = useState<PlannerTab>("Mina");
   const [spectatorTab, setSpectatorTab] = useState<SpectatorTab>("Översikt");
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      planName: user.committee?.name ?? "",
-    },
-  });
 
   const isMinYear = useMemo(() => planYear <= MIN_YEAR, [planYear]);
   const isMaxYear = useMemo(() => planYear >= MAX_YEAR, [planYear]);
@@ -74,16 +45,6 @@ export function DashboardPage() {
 
   const handleCreatePlan = () => {
     setShowCreateDialog(true);
-  };
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    createPlan({
-      planName: values.planName,
-      onSettled: () => {
-        form.reset();
-        setShowCreateDialog(false);
-      },
-    });
   };
 
   useEffect(() => {
@@ -154,18 +115,16 @@ export function DashboardPage() {
 
           <div className="flex gap-4">
             {/* Mobile: Show content based on active tab */}
-            <div className="lg:hidden space-y-4">
-              {spectatorTab === "Översikt" && (
+            <div className="lg:hidden space-y-4 flex-1">
+              {spectatorTab !== "Planeringar" ? (
                 <SpectatorDashboard
                   onCreatePlan={canCreatePlan ? handleCreatePlan : undefined}
                 />
+              ) : (
+                <div className="border border-b-0 bg-card w-full">
+                  <SidebarPublicPlans />
+                </div>
               )}
-              {spectatorTab === "Krockar" && (
-                <SpectatorDashboard
-                  onCreatePlan={canCreatePlan ? handleCreatePlan : undefined}
-                />
-              )}
-              {spectatorTab === "Planeringar" && <PublicPlansCard />}
             </div>
 
             {/* Desktop: Show full layout */}
@@ -220,50 +179,10 @@ export function DashboardPage() {
         </>
       )}
 
-      {/* Create Plan Dialog */}
-      <Dialog
+      <CreateNewPlanDialog
+        onOpenChange={setShowCreateDialog}
         open={showCreateDialog}
-        onOpenChange={(state) => {
-          setShowCreateDialog(state);
-          form.reset();
-        }}
-      >
-        <DialogContent>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-            <DialogHeader>
-              <DialogTitle>{t("create_new_plan.dialog_title")}</DialogTitle>
-              <DialogDescription>
-                {t("create_new_plan.dialog_description")}
-              </DialogDescription>
-            </DialogHeader>
-            <Controller
-              control={form.control}
-              name="planName"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>{t("name")}</FieldLabel>
-                  <Input
-                    id="plan-name"
-                    type="text"
-                    placeholder={t("create_new_plan.dialog_placeholder")}
-                    {...field}
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-            <DialogFooter>
-              <LoadingButton
-                type="submit"
-                loading={isCreating}
-                className="mt-4"
-              >
-                {t("create")}
-              </LoadingButton>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      />
     </DashboardLayout>
   );
 }

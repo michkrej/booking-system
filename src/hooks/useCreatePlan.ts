@@ -33,47 +33,22 @@ export const useCreatePlan = () => {
         events: [],
       });
     },
-    onSuccess: (value) => {
-      userPlanCreated(value);
+    onSuccess: (newPlan) => {
+      userPlanCreated(newPlan);
+      changedActivePlans([newPlan]);
+      bookings.loadedBookings([]);
+
       toast.success("Planeringen skapades");
+
+      navigate(`/booking/${newPlan.id}`);
     },
     onError: () => {
       toast.error("Kunde inte skapa planeringen");
     },
   });
 
-  const createPlan = ({
-    planName,
-    onSuccess,
-    onError,
-    onSettled,
-  }: {
-    planName: string;
-    onSuccess?: () => void;
-    onError?: () => void;
-    onSettled?: () => void;
-  }) => {
-    createPlanMutation.mutate(planName, {
-      onSuccess: (newPlan) => {
-        userPlanCreated(newPlan);
-        changedActivePlans([newPlan]);
-        bookings.loadedBookings([]);
-
-        toast.success("Planeringen skapades");
-
-        navigate(`/booking/${newPlan.id}`);
-        onSuccess?.();
-      },
-      onError: () => {
-        toast.error("Kunde inte skapa planeringen");
-        onError?.();
-      },
-      onSettled: () => onSettled?.(),
-    });
-  };
-
   return {
-    createPlan,
+    createPlan: createPlanMutation.mutate,
     isPending: createPlanIsPending,
   };
 };

@@ -13,7 +13,7 @@ import {
 } from "@ui/dialog";
 import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
-import { LoadingButton } from "./loadingButton";
+import { LoadingButton } from "../ui/loading-button";
 
 const formSchema = z
   .object({
@@ -83,7 +83,9 @@ export const ChangePasswordDialog = ({
                   autoComplete="current-password"
                   {...field}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -102,7 +104,9 @@ export const ChangePasswordDialog = ({
                   autoComplete="new-password"
                   {...field}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -121,7 +125,9 @@ export const ChangePasswordDialog = ({
                   autoComplete="new-password"
                   {...field}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />

@@ -45,7 +45,9 @@ export const BookingSchema = z
             type: z.enum(["text", "numeric"]).optional(),
           })
           .transform((bookableItem) => {
-            if (NUMERIC_KEYS.includes(bookableItem.key as NumericBookableKeys)) {
+            if (
+              NUMERIC_KEYS.includes(bookableItem.key as NumericBookableKeys)
+            ) {
               return {
                 key: bookableItem.key as NumericBookableKeys,
                 value: Number(bookableItem.value),
@@ -76,14 +78,6 @@ export const BookingSchema = z
       });
     }
   });
-
-export type BookableItemInput = {
-  key: (typeof BOOKABLE_ITEM_KEYS)[number];
-  value: string | number;
-  startDate: Date;
-  endDate: Date;
-  type?: "text" | "numeric";
-};
 
 export type BookingSchemaInput = z.input<typeof BookingSchema>;
 export type BookingSchemaOutput = z.infer<typeof BookingSchema>;

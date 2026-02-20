@@ -20,7 +20,7 @@ import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
 import { type Plan } from "@/interfaces/interfaces";
-import { LoadingButton } from "./loadingButton";
+import { LoadingButton } from "../ui/loading-button";
 
 const formSchema = z.object({
   newPlanName: z.string().min(1, "Du måste ange ett nytt namn för planeringen"),
@@ -102,7 +102,9 @@ export const PlanChangeNameButton = ({ plan }: ChangePlanNameModalProps) => {
                   })}
                   {...field}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />

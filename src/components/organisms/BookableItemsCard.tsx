@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAdminSettings } from "@hooks/useAdminSettings";
-import { LoadingButton } from "@components/molecules/loadingButton";
 import {
   Card,
   CardContent,
@@ -11,6 +10,7 @@ import {
 } from "@ui/card";
 import { Input } from "@ui/input";
 import { Label } from "@ui/label";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
 
 export const BookableItemsCard = () => {

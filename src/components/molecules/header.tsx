@@ -1,42 +1,19 @@
-import { CircleUser, Globe } from "lucide-react";
-import { useState } from "react";
+import { Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useSignOut } from "@hooks/useSignOut";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { SiteLogo } from "@components/atoms/siteLogo";
-import { ChangePasswordDialog } from "@components/molecules/changePasswordDialog";
 import { Button } from "@ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
 import { siteConfig } from "@/config/site";
-import { auth } from "@/services/config";
+import { AccountDropdown } from "./AccountDropdown";
 
 export const Header = () => {
-  const { logout } = useSignOut();
   const { user } = useStoreUser();
   const { i18n, t } = useTranslation();
-
-  const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
-    useState(false);
 
   const handleToggleLanguage = () => {
     console.log(i18n.language);
     i18n.changeLanguage(i18n.language === "sv" ? "en" : "sv");
-  };
-
-  const isEmailPasswordUser = () => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) return false;
-
-    return currentUser.providerData.some(
-      (provider) => provider.providerId === "password",
-    );
   };
 
   return (
@@ -82,56 +59,8 @@ export const Header = () => {
             <Globe className="h-5 w-5" />
           </Button>
         ) : null}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <CircleUser className="h-5 w-5" />
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              disabled
-              onClick={() => window.open(siteConfig.links.instructionVideo)}
-            >
-              {user.email}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => window.open(siteConfig.links.instructionVideo)}
-            >
-              {t("instruction_video")}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => window.open(siteConfig.links.feedback)}
-            >
-              {t("feedback")}
-            </DropdownMenuItem>
-            {isEmailPasswordUser() && (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => setChangePasswordDialogOpen(true)}
-                >
-                  {t("change_password")}
-                </DropdownMenuItem>
-              </>
-            )}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => logout()}
-              className="font-semibold"
-            >
-              {t("signout")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <AccountDropdown />
       </div>
-      <ChangePasswordDialog
-        open={changePasswordDialogOpen}
-        onOpenChange={setChangePasswordDialogOpen}
-      />
     </header>
   );
 };

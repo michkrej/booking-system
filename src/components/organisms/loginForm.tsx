@@ -2,9 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { LoadingButton } from "@components/molecules/loadingButton";
 import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { useEmailLogin } from "@/hooks/useEmailLogin";
 import { useGoogleLogin } from "@/hooks/useGoogleLogin";
 
@@ -56,7 +56,9 @@ export const LoginForm = () => {
                   autoComplete="email"
                   {...field}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -85,7 +87,9 @@ export const LoginForm = () => {
                   autoComplete="current-password"
                   {...field}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />

@@ -10,21 +10,21 @@ import {
 } from "@ui/select";
 import { Field } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
-import { type BookableItem } from "@/interfaces/interfaces";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
+import type { BookingSchemaInput } from "./schema";
 
 export const AddBookableItemDropdown = ({
   addBookableItemToBooking,
   bookableItems,
 }: {
   addBookableItemToBooking: (itemName: string) => void;
-  bookableItems: BookableItem[];
+  bookableItems: BookingSchemaInput["bookableItems"];
 }) => {
   const [itemName, setItemName] = useState("");
 
   const options = useMemo(() => {
     return BOOKABLE_ITEM_OPTIONS.filter(
-      (option) => !bookableItems.find((item) => item.key === option.key),
+      (option) => !bookableItems?.find((item) => item.key === option.key),
     );
   }, [bookableItems]);
 

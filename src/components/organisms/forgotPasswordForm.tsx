@@ -3,9 +3,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useResetPassword } from "@hooks/useResetPassword";
-import { LoadingButton } from "@components/molecules/loadingButton";
 import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const formSchema = z.object({
   email: z
@@ -57,7 +57,9 @@ export const ForgotPasswordForm = () => {
                   placeholder="m@example.com"
                   {...field}
                 />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />

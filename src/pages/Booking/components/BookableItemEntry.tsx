@@ -7,17 +7,16 @@ import { DateTimePicker } from "@ui/date-time-picker";
 import { Field, FieldError, FieldLabel } from "@ui/field";
 import { Input } from "@ui/input";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
-import {
-  type BookableItemInput,
-  type BookingSchemaOutput,
-} from "./schema";
+import { type BookingSchemaInput } from "./schema";
 
 type InventoryItemProps = {
-  item: BookableItemInput & { id: string };
+  item: NonNullable<BookingSchemaInput["bookableItems"]>[number] & {
+    id: string;
+  };
   index: number;
   handleDelete: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: UseFormReturn<BookingSchemaOutput, any, any>;
+  form: UseFormReturn<BookingSchemaInput, any, any>;
 };
 
 export const BookableItemEntry = ({
@@ -62,6 +61,7 @@ export const BookableItemEntry = ({
               <FieldLabel>Hämta</FieldLabel>
               <DateTimePicker
                 {...field}
+                value={field.value as Date}
                 locale={sv}
                 weekStartsOn={1}
                 granularity="minute"
@@ -81,6 +81,7 @@ export const BookableItemEntry = ({
               <FieldLabel>Hämta</FieldLabel>
               <DateTimePicker
                 {...field}
+                value={field.value as Date}
                 locale={sv}
                 weekStartsOn={1}
                 granularity="minute"
