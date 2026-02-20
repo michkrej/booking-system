@@ -37,16 +37,12 @@ import { Input } from "@ui/input";
 import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
-import {
-  type BookableItem,
-  type Booking,
-  type NewBooking,
-} from "@/interfaces/interfaces";
+import { type Booking, type NewBooking } from "@/interfaces/interfaces";
 import { viewCollisionsPath, viewPath } from "@/utils/constants";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
 import { ScheduleContext } from "./ScheduleContext";
-import { BookingSchema } from "./schema";
+import { type BookableItemInput, BookingSchema } from "./schema";
 
 type EditorTemplateProps = {
   data?: NewBooking;
@@ -203,12 +199,14 @@ export const NewBookingDialog = ({
   };
 
   const addBookableItemToBooking = (itemName: string) => {
+    // Type assertion needed because useFieldArray uses output types,
+    // but we're providing input values that will be transformed
     append({
       key: itemName,
       value: "",
-      startDate: form.getValues("startDate"),
-      endDate: form.getValues("endDate"),
-    });
+      startDate: form.getValues("startDate") ?? new Date(),
+      endDate: form.getValues("endDate") ?? new Date(),
+    } as unknown as (typeof fields)[number]);
 
     fields.forEach((item, i) => {
       if (item.value === undefined) {
@@ -217,7 +215,7 @@ export const NewBookingDialog = ({
     });
   };
 
-  const removeBookableItem = (item: BookableItem) => {
+  const removeBookableItem = (item: BookableItemInput) => {
     const index = fields.findIndex((i) => i.key === item.key);
     if (index === -1) return;
 
@@ -318,7 +316,7 @@ export const NewBookingDialog = ({
               />
               <div>
                 <Label>Fadderi</Label>
-                <Input disabled value={committees[user.committeeId].name} />
+                <Input disabled value={committees[user.committeeId]?.name ?? ""} />
               </div>
               <div>
                 <Label>Byggnad</Label>

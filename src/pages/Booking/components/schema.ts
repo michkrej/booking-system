@@ -1,5 +1,17 @@
 import { z } from "zod";
+import type {
+  NumericBookableKeys,
+  TextBookableKeys,
+} from "@/interfaces/interfaces";
 import { BOOKABLE_ITEM_KEYS } from "@/utils/constants";
+
+const NUMERIC_KEYS: NumericBookableKeys[] = [
+  "bardiskar",
+  "bankset-hg",
+  "bankset-hoben",
+  "bankset-k",
+  "grillar",
+];
 
 export const BookingSchema = z
   .object({
@@ -15,21 +27,42 @@ export const BookingSchema = z
     link: z.string(),
     bookableItems: z
       .array(
-        z.object({
-          key: z.enum(BOOKABLE_ITEM_KEYS),
-          value: z
-            .string()
-            .min(1, {
-              message: "Fältet är obligatoriskt",
-            })
-            .or(
-              z.number().min(1, {
+        z
+          .object({
+            key: z.enum(BOOKABLE_ITEM_KEYS),
+            value: z
+              .string()
+              .min(1, {
                 message: "Fältet är obligatoriskt",
-              }),
-            ),
-          startDate: z.coerce.date(),
-          endDate: z.coerce.date(),
-        }),
+              })
+              .or(
+                z.number().min(1, {
+                  message: "Fältet är obligatoriskt",
+                }),
+              ),
+            startDate: z.coerce.date(),
+            endDate: z.coerce.date(),
+            type: z.enum(["text", "numeric"]).optional(),
+          })
+          .transform((bookableItem) => {
+            if (NUMERIC_KEYS.includes(bookableItem.key as NumericBookableKeys)) {
+              return {
+                key: bookableItem.key as NumericBookableKeys,
+                value: Number(bookableItem.value),
+                startDate: bookableItem.startDate,
+                endDate: bookableItem.endDate,
+                type: "numeric" as const,
+              };
+            } else {
+              return {
+                key: bookableItem.key as TextBookableKeys,
+                value: String(bookableItem.value),
+                startDate: bookableItem.startDate,
+                endDate: bookableItem.endDate,
+                type: "text" as const,
+              };
+            }
+          }),
       )
       .optional()
       .default([]),
@@ -43,3 +76,14 @@ export const BookingSchema = z
       });
     }
   });
+
+export type BookableItemInput = {
+  key: (typeof BOOKABLE_ITEM_KEYS)[number];
+  value: string | number;
+  startDate: Date;
+  endDate: Date;
+  type?: "text" | "numeric";
+};
+
+export type BookingSchemaInput = z.input<typeof BookingSchema>;
+export type BookingSchemaOutput = z.infer<typeof BookingSchema>;

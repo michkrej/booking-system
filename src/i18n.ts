@@ -1,7 +1,7 @@
 import { type Locale, format } from "date-fns";
 import { enUS, sv } from "date-fns/locale";
 import i18n from "i18next";
-import LngDetector from "i18next-browser-languagedetector";
+// import LngDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import enJson from "./locales/en.json";
 import svJson from "./locales/sv.json";

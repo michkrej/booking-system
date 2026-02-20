@@ -1,7 +1,6 @@
 import { sv } from "date-fns/locale";
 import { TrashIcon } from "lucide-react";
 import { type UseFormReturn } from "react-hook-form";
-import { type z } from "zod";
 import { Button } from "@ui/button";
 import { Comment } from "@ui/comment";
 import { DateTimePicker } from "@ui/date-time-picker";
@@ -13,16 +12,18 @@ import {
   FormMessage,
 } from "@ui/form";
 import { Input } from "@ui/input";
-import { type BookableItem } from "@/interfaces/interfaces";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
-import { type BookingSchema } from "./schema";
+import {
+  type BookableItemInput,
+  type BookingSchemaOutput,
+} from "./schema";
 
 type InventoryItemProps = {
-  item: BookableItem & { id: string };
+  item: BookableItemInput & { id: string };
   index: number;
   handleDelete: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: UseFormReturn<z.infer<typeof BookingSchema>, any, undefined>;
+  form: UseFormReturn<BookingSchemaOutput, any, any>;
 };
 
 export const BookableItemEntry = ({
