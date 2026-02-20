@@ -51,8 +51,8 @@ export const NewUpdateCard = () => {
               👩‍💻 Bokningsplanering v{CURRENT_APP_VERSION} - Nyheter
             </CardTitle>
             <CardDescription className="flex-1">
-              Det har släppts en ny version av appen! Här är en lista över vad
-              som har ändrats.
+              Det har släppts en ny version av hemsidan! Här är en lista över
+              vad som har ändrats.
             </CardDescription>
           </CardHeader>
           <CardContent>
