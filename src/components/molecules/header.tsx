@@ -17,7 +17,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-background sticky top-0 z-10 flex h-16 items-center gap-4 border-b px-4 md:px-6">
+    <header className="bg-background sticky top-0 z-12 flex h-16 items-center gap-4 border-b px-4 md:px-6">
       <nav className="flex flex-1 flex-row items-center gap-4 text-sm font-medium md:gap-5 lg:gap-6">
         <Link to="/dashboard">
           <SiteLogo />
