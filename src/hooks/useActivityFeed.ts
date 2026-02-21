@@ -55,10 +55,15 @@ export const useActivityFeed = (limit = 5) => {
         ? "Publicerade sin planering"
         : "Uppdaterade sin planering";
 
+      const fadderiName =
+        committee?.name === "Övrigt"
+          ? plan.label
+          : committee?.name || plan.label;
+
       return {
         id: plan.id,
         planId: plan.id,
-        fadderiName: committee?.name || plan.label,
+        fadderiName,
         kar: committee?.kår || "Övrigt",
         color: committee?.color || "#808080",
         action,

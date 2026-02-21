@@ -393,6 +393,15 @@ export const SpectatorDashboard = ({
                     ? [committee2, committee1]
                     : [committee1, committee2];
 
+                  const leftDisplayName =
+                    leftCommittee?.name === "Övrigt"
+                      ? leftPlan.label
+                      : leftCommittee?.name || leftPlan.label;
+                  const rightDisplayName =
+                    rightCommittee?.name === "Övrigt"
+                      ? rightPlan.label
+                      : rightCommittee?.name || rightPlan.label;
+
                   return (
                     <TableRow
                       key={row.id}
@@ -403,14 +412,14 @@ export const SpectatorDashboard = ({
                     >
                       <TableCell>
                         <FadderiTag
-                          name={leftCommittee?.name || leftPlan.label}
+                          name={leftDisplayName}
                           kar={leftCommittee?.kår || "Övrigt"}
                           color={leftCommittee?.color || "#808080"}
                         />
                       </TableCell>
                       <TableCell>
                         <FadderiTag
-                          name={rightCommittee?.name || rightPlan.label}
+                          name={rightDisplayName}
                           kar={rightCommittee?.kår || "Övrigt"}
                           color={rightCommittee?.color || "#808080"}
                         />
