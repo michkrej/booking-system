@@ -11,13 +11,13 @@ import { PlanTogglePublicButton } from "./planTogglePublicButton";
 
 interface UserPlansListRowProps {
   plan: Plan;
-  conflicts: { room: number; inventory: number };
+  collisions: { room: number; inventory: number };
   onPlanClick: (plan: Plan) => void;
 }
 
 export const UserPlansListRow = ({
   plan,
-  conflicts,
+  collisions,
   onPlanClick,
 }: UserPlansListRowProps) => {
   const { isPlanEditLocked } = useAdminSettings();
@@ -50,8 +50,8 @@ export const UserPlansListRow = ({
       </TableCell>
       <TableCell>
         <ConflictBadge
-          location={conflicts.room}
-          inventory={conflicts.inventory}
+          location={collisions.room}
+          inventory={collisions.inventory}
           compact
         />
       </TableCell>

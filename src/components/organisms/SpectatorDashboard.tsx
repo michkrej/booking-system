@@ -47,7 +47,7 @@ export const SpectatorDashboard = ({
 }: SpectatorDashboardProps) => {
   const navigate = useNavigate();
   const { publicPlans } = usePublicPlans();
-  const { summary, getConflictsForPlan, collisionsByKar, displayRows } =
+  const { summary, getNumCollisionsForPlan, collisionsByKar, displayRows } =
     useCollisions();
   const loadedBookings = useBoundStore((state) => state.loadedBookings);
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
@@ -60,7 +60,7 @@ export const SpectatorDashboard = ({
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 10;
 
-  // Filter conflicts by kår
+  // Filter collisions by kår
   const filteredConflicts = useMemo(() => {
     if (karFilter === "all") return displayRows;
 
@@ -105,7 +105,7 @@ export const SpectatorDashboard = ({
   const handleViewAllConflicts = (e: React.MouseEvent<HTMLButtonElement>) => {
     loadedBookings(displayRows.flatMap((row) => row.bookings));
     const plans = publicPlans
-      .filter((plan) => getConflictsForPlan(plan.id).summary > 0)
+      .filter((plan) => getNumCollisionsForPlan(plan.id).summary > 0)
       .flatMap((plan) => plan);
     changedActivePlans(plans);
 

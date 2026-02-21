@@ -16,18 +16,18 @@ export interface PlanConflictCounts {
 export const useUserPlanConflicts = () => {
   const { publicPlan: userPublicPlan } = useUserPlans();
   const { publicPlans } = usePublicPlans();
-  const { getConflictsForPlan, collisionInstances } = useCollisions();
+  const { getNumCollisionsForPlan, collisionInstances } = useCollisions();
 
   const conflictRows: CollisionDisplayRow[] = useMemo(() => {
     if (!userPublicPlan) return [];
 
-    const conflicts = collisionInstances[userPublicPlan.id];
-    if (!conflicts) return [];
+    const collisions = collisionInstances[userPublicPlan.id];
+    if (!collisions) return [];
 
     const displayRows = getUserConflictsDisplayRows(
       userPublicPlan,
       publicPlans.filter((plan) => plan.id !== userPublicPlan.id),
-      conflicts,
+      collisions,
     );
 
     return displayRows;
@@ -35,6 +35,6 @@ export const useUserPlanConflicts = () => {
 
   return {
     conflictRows,
-    getConflictsForPlan,
+    getNumCollisionsForPlan,
   };
 };

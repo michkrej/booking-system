@@ -30,7 +30,7 @@ export const UserPlansCard = ({
 }: UserPlansCardProps) => {
   const { t } = useTranslation();
   const { userPlans, isPending, handlePlanClick } = usePlansListCard();
-  const { getConflictsForPlan } = useUserPlanConflicts();
+  const { getNumCollisionsForPlan } = useUserPlanConflicts();
   const { planYear } = useStorePlanYear();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
@@ -75,7 +75,7 @@ export const UserPlansCard = ({
                     <UserPlansListRow
                       key={plan.id}
                       plan={plan}
-                      conflicts={getConflictsForPlan(plan.id)}
+                      collisions={getNumCollisionsForPlan(plan.id)}
                       onPlanClick={handlePlanClick}
                     />
                   ))

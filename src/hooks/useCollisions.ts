@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import type { CollisionsPerPlan } from "@/utils/collision/findRoomCollisionsBetweenPlans";
 import {
   type CollisionDisplayRow,
+  type CollisionInstancesPerPlan,
   type CollisionSummary,
   type CollisionsByKar,
   type NumCollisionsPerPlanId,
@@ -11,14 +11,14 @@ import { usePublicPlans } from "./usePublicPlans";
 
 export interface UseCollisionsReturn {
   summary: CollisionSummary;
-  conflictsByPlanId: NumCollisionsPerPlanId;
-  getConflictsForPlan: (planId: string) => {
+  collisionsByPlanId: NumCollisionsPerPlanId;
+  getNumCollisionsForPlan: (planId: string) => {
     room: number;
     inventory: number;
     summary: number;
   };
   collisionsByKar: CollisionsByKar;
-  collisionInstances: CollisionsPerPlan;
+  collisionInstances: CollisionInstancesPerPlan;
   displayRows: CollisionDisplayRow[];
   isPending: boolean;
 }
@@ -28,16 +28,16 @@ export const useCollisions = (): UseCollisionsReturn => {
 
   const result = useMemo(() => computeCollisionsV2(publicPlans), [publicPlans]);
 
-  const getNumConflictsForPlan = (planId: string) => {
+  const getNumCollisionsForPlan = (planId: string) => {
     return (
-      result.conflictsByPlanId[planId] || { room: 0, inventory: 0, summary: 0 }
+      result.collisionsByPlanId[planId] || { room: 0, inventory: 0, summary: 0 }
     );
   };
 
   return {
     summary: result.summary,
-    conflictsByPlanId: result.conflictsByPlanId,
-    getConflictsForPlan: getNumConflictsForPlan,
+    collisionsByPlanId: result.collisionsByPlanId,
+    getNumCollisionsForPlan,
     collisionsByKar: result.collisionsByKar,
     displayRows: result.spectatorDisplayRows,
     collisionInstances: result.collisionInstances,

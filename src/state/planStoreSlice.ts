@@ -123,7 +123,7 @@ const createPlanStoreSlice: StateCreator<
     set({ activePlans: plans });
   },
   // TODO - this causes a bug when viewing a single collision instead of all in timeline
-  // Instead of only showing the given conflict it shows all conflicts between the given plans
+  // Instead of only showing the given conflict it shows all collisions between the given plans
   updatedActivePlans: ({ plans, isCollisionView, isInventoryView }) => {
     set((state) => {
       const updatedPlans = state.activePlans.map((plan) => {

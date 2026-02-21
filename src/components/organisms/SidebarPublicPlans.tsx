@@ -31,7 +31,7 @@ export const SidebarPublicPlans = () => {
   const navigate = useNavigate();
   const { resetCurrentDate, updatedCurrentDate } = useCurrentDate();
   const { t } = useTranslation();
-  const { getConflictsForPlan } = useCollisions();
+  const { getNumCollisionsForPlan } = useCollisions();
 
   const committee = getCommittee(user.committeeId);
   const kar = committee?.kår;
@@ -100,7 +100,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id).summary}
+            conflictCount={getNumCollisionsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}
@@ -110,7 +110,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id).summary}
+            conflictCount={getNumCollisionsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}
@@ -120,7 +120,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id).summary}
+            conflictCount={getNumCollisionsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}
@@ -130,7 +130,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id).summary}
+            conflictCount={getNumCollisionsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}
