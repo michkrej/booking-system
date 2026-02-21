@@ -363,6 +363,103 @@ describe("findInventoryCollisionsBetweenEvents", () => {
     expect(collisions).toEqual([]); // No collision since sum equals limit exactly
   });
 
+  it("should detect collision when 3 partially-overlapping events together exceed limit", () => {
+    events.push(
+      {
+        id: "31",
+        planId: "1",
+        bookableItems: [
+          {
+            key: "grillar",
+            value: 3,
+            startDate: new Date("2025-01-01T09:00:00"),
+            endDate: new Date("2025-01-01T11:00:00"),
+          },
+        ],
+      },
+      {
+        id: "32",
+        planId: "2",
+        bookableItems: [
+          {
+            key: "grillar",
+            value: 3,
+            startDate: new Date("2025-01-01T10:00:00"),
+            endDate: new Date("2025-01-01T12:00:00"),
+          },
+        ],
+      },
+      {
+        id: "33",
+        planId: "3",
+        bookableItems: [
+          {
+            key: "grillar",
+            value: 3,
+            startDate: new Date("2025-01-01T10:30:00"),
+            endDate: new Date("2025-01-01T11:30:00"),
+          },
+        ],
+      },
+    );
+
+    const { collisions, items } = findInventoryCollisionsBetweenEvents(
+      events as Booking[],
+    );
+
+    expect(collisions.flatMap((col) => col.id)).toEqual(
+      expect.arrayContaining(["31", "32", "33"]),
+    );
+    expect(items.grillar.sum).toBe(9);
+  });
+
+  it("should not detect collision when 3 events never all overlap at same time", () => {
+    events.push(
+      {
+        id: "34",
+        planId: "1",
+        bookableItems: [
+          {
+            key: "grillar",
+            value: 3,
+            startDate: new Date("2025-01-01T09:00:00"),
+            endDate: new Date("2025-01-01T10:00:00"),
+          },
+        ],
+      },
+      {
+        id: "35",
+        planId: "2",
+        bookableItems: [
+          {
+            key: "grillar",
+            value: 3,
+            startDate: new Date("2025-01-01T10:00:00"),
+            endDate: new Date("2025-01-01T11:00:00"),
+          },
+        ],
+      },
+      {
+        id: "36",
+        planId: "3",
+        bookableItems: [
+          {
+            key: "grillar",
+            value: 3,
+            startDate: new Date("2025-01-01T09:30:00"),
+            endDate: new Date("2025-01-01T10:30:00"),
+          },
+        ],
+      },
+    );
+
+    const { collisions } = findInventoryCollisionsBetweenEvents(
+      events as Booking[],
+    );
+
+    expect(collisions).toEqual([]);
+  });
+
   it("should not return collisions for text items with same key but different values", () => {
     events.push(
       {

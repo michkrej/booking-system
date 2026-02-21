@@ -95,52 +95,89 @@ const handleNumericItemCollisions = (
     grillar: groupedBookings.get("grillar") ?? [],
   } as Record<NumericBookableKeys, (Booking & NumericBookableItem)[]>;
 
-  for (const [, bookings] of Object.entries(numericBookings)) {
-    // for each booking, find all the other bookings that overlap with it and then sum up their values
-    for (let i = 0; i < bookings.length; i++) {
-      const booking1 = bookings[i];
+  // Sweep line algorithm: detects when ANY combination of overlapping events exceeds limits
+  type SweepEvent = {
+    time: Date;
+    type: "START" | "END";
+    bookingId: string;
+    planId: string;
+    value: number;
+    booking: Booking & NumericBookableItem;
+  };
 
-      if (!booking1) {
-        console.warn("Missing booking data:", { booking1 });
+  for (const [key, bookings] of Object.entries(numericBookings)) {
+    if (bookings.length === 0) continue;
+
+    const limit = bookableItemLimits[key as NumericBookableKeys];
+
+    // Create sweep line events for each booking
+    const events: SweepEvent[] = [];
+    for (const booking of bookings) {
+      if (!booking) {
+        console.warn("Missing booking data:", { booking });
         continue;
       }
 
-      const overlappingBookings = [booking1];
+      events.push({
+        time: booking.startDate,
+        type: "START",
+        bookingId: booking.id,
+        planId: booking.planId,
+        value: +booking.value,
+        booking,
+      });
+      events.push({
+        time: booking.endDate,
+        type: "END",
+        bookingId: booking.id,
+        planId: booking.planId,
+        value: +booking.value,
+        booking,
+      });
+    }
 
-      let sum = +booking1.value;
-      for (let j = i + 1; j < bookings.length; j++) {
-        const booking2 = bookings[j];
-
-        if (!booking2) {
-          console.warn("Missing booking data:", { booking2 });
-          continue; // Skip the current booking
-        }
-
-        // Skip comparing the same underlying booking or bookings from the same plan
-        if (booking1.id === booking2.id) continue;
-        if (booking1.planId === booking2.planId) continue;
-
-        const range1 = {
-          start: booking1.startDate,
-          end: booking1.endDate,
-        };
-        const range2 = {
-          start: booking2.startDate,
-          end: booking2.endDate,
-        };
-
-        if (areIntervalsOverlapping(range1, range2)) {
-          overlappingBookings.push(booking2);
-          sum += +booking2.value;
-        }
+    // Sort: by time, then END before START (adjacent intervals don't collide)
+    events.sort((a, b) => {
+      const timeDiff = a.time.getTime() - b.time.getTime();
+      if (timeDiff !== 0) return timeDiff;
+      if (a.type !== b.type) {
+        return a.type === "END" ? -1 : 1;
       }
+      return 0;
+    });
 
-      const key = booking1.key;
-      if (sum > bookableItemLimits[key]) {
-        items[key].sum = sum;
+    // Sweep through events, tracking concurrent usage at each point
+    let currentSum = 0;
+    let maxSum = 0;
+    const activeBookings = new Map<string, Booking & NumericBookableItem>();
+    const collidingIds = new Set<string>();
 
-        for (const booking of overlappingBookings) {
-          items[key].events.set(booking.id, booking);
+    for (const event of events) {
+      if (event.type === "START") {
+        currentSum += event.value;
+        activeBookings.set(event.bookingId, event.booking);
+
+        // Check for collision after each START event
+        if (currentSum > limit) {
+          maxSum = Math.max(maxSum, currentSum);
+          // Mark all currently active bookings as collisions
+          for (const id of activeBookings.keys()) {
+            collidingIds.add(id);
+          }
+        }
+      } else {
+        currentSum -= event.value;
+        activeBookings.delete(event.bookingId);
+      }
+    }
+
+    // Record results
+    const typedKey = key as NumericBookableKeys;
+    if (collidingIds.size > 0) {
+      items[typedKey].sum = maxSum;
+      for (const booking of bookings) {
+        if (collidingIds.has(booking.id)) {
+          items[typedKey].events.set(booking.id, booking);
         }
       }
     }
