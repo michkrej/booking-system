@@ -91,6 +91,11 @@ export const SpectatorDashboard = ({
         ([planId, bookings]) => {
           if (bookings.length === 0) return;
 
+          // Verify collision involves events from BOTH plans
+          const hasEventsFromPlan1 = bookings.some((b) => b.planId === plan.id);
+          const hasEventsFromPlan2 = bookings.some((b) => b.planId === planId);
+          if (!hasEventsFromPlan1 || !hasEventsFromPlan2) return;
+
           const pairKey = [plan.id, planId].sort().join("-");
           if (seenPairs.has(pairKey)) return;
           seenPairs.add(pairKey);
@@ -137,6 +142,11 @@ export const SpectatorDashboard = ({
       Object.entries(collisions.inventoryCollisions).forEach(
         ([planId, bookings]) => {
           if (bookings.length === 0) return;
+
+          // Verify collision involves events from BOTH plans
+          const hasEventsFromPlan1 = bookings.some((b) => b.planId === plan.id);
+          const hasEventsFromPlan2 = bookings.some((b) => b.planId === planId);
+          if (!hasEventsFromPlan1 || !hasEventsFromPlan2) return;
 
           const pairKey = [plan.id, planId].sort().join("-inv");
           if (seenPairs.has(pairKey)) return;
