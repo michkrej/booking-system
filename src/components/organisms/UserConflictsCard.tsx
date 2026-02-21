@@ -1,9 +1,6 @@
-import { format } from "date-fns";
-import { sv } from "date-fns/locale";
 import { ArrowRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useUserPlans } from "@hooks/useUserPlans";
 import { Button } from "@ui/button";
@@ -22,26 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
-import { locationsNonGrouped } from "@/data/locationsData";
 import { useCurrentDate } from "@/hooks/useCurrentDate";
-import { type Booking, type Plan } from "@/interfaces/interfaces";
+import { useUserPlanConflicts } from "@/hooks/useUserPlanConflicts";
 import { useBoundStore } from "@/state/store";
+import type { CollisionDisplayRow } from "@/utils/collisionComputation";
 import { viewCollisionsPath } from "@/utils/constants";
-import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
 import { cn, getCommittee } from "@/utils/utils";
 import { FadderiTag } from "../molecules/FadderiTag";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-
-type ConflictType = "Lokal" | "Inventarie";
-
-interface ConflictRow {
-  id: string;
-  userPlan: Plan;
-  otherPlan: Plan;
-  type: ConflictType;
-  detail: string;
-  bookings: Booking[];
-}
 
 const TABS = {
   Alla: { label: "Alla", value: "all" },
@@ -52,10 +37,10 @@ export const UserConflictsCard = () => {
   const navigate = useNavigate();
   const { user } = useStoreUser();
   const { userPlans } = useUserPlans();
-  const { publicPlans } = usePublicPlans();
   const loadedBookings = useBoundStore((state) => state.loadedBookings);
   const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
   const { updatedCurrentDate } = useCurrentDate();
+  const { conflictRows } = useUserPlanConflicts();
 
   const [karFilter, setKarFilter] = useState<
     (typeof TABS)[keyof typeof TABS]["value"]
@@ -66,97 +51,22 @@ export const UserConflictsCard = () => {
     return userPlans.find((plan) => plan.public);
   }, [userPlans]);
 
-  // Calculate conflicts
-  const conflictRows = useMemo(() => {
-    if (!userPublicPlan) return [];
-
-    const otherPublicPlans = publicPlans.filter(
-      (plan) => plan.id !== userPublicPlan.id,
-    );
-
-    const collisions = findCollisionsBetweenUserAndPublicPlans(
-      userPublicPlan,
-      otherPublicPlans,
-    );
-
-    const rows: ConflictRow[] = [];
-
-    // Process room collisions
-    Object.entries(collisions.roomCollisions).forEach(([planId, bookings]) => {
-      if (bookings.length === 0) return;
-
-      const otherPlan = publicPlans.find((p) => p.id === planId);
-      if (!otherPlan) return;
-
-      // Group bookings by location to get meaningful details
-      const locationMap = new Map<string, Booking[]>();
-      bookings.forEach((booking) => {
-        const key = booking.locationId;
-        if (!locationMap.has(key)) {
-          locationMap.set(key, []);
-        }
-        locationMap.get(key)!.push(booking);
-      });
-
-      locationMap.forEach((locationBookings, locationId) => {
-        const location = locationsNonGrouped.find((l) => l.id === locationId);
-        const firstBooking = locationBookings[0];
-        if (!firstBooking) return;
-        const dateStr = format(firstBooking.startDate, "d MMM HH:mm", {
-          locale: sv,
-        });
-        const endStr = format(firstBooking.endDate, "HH:mm", { locale: sv });
-
-        rows.push({
-          id: `room-${planId}-${locationId}`,
-          userPlan: userPublicPlan,
-          otherPlan,
-          type: "Lokal",
-          detail: `${location?.name || "Okänd plats"}, ${dateStr}–${endStr}`,
-          bookings: locationBookings,
-        });
-      });
-    });
-
-    // Process inventory collisions
-    Object.entries(collisions.inventoryCollisions).forEach(
-      ([planId, bookings]) => {
-        if (bookings.length === 0) return;
-
-        const otherPlan = publicPlans.find((p) => p.id === planId);
-        if (!otherPlan) return;
-
-        const firstBooking = bookings[0];
-        if (!firstBooking) return;
-        const dateStr = format(firstBooking.startDate, "d MMM", { locale: sv });
-
-        rows.push({
-          id: `inv-${planId}`,
-          userPlan: userPublicPlan,
-          otherPlan,
-          type: "Inventarie",
-          detail: `Inventarier, ${dateStr}`,
-          bookings,
-        });
-      },
-    );
-
-    return rows;
-  }, [userPublicPlan, publicPlans]);
-
   // Filter by kår
   const filteredRows = useMemo(() => {
     if (karFilter === "all") return conflictRows;
 
     return conflictRows.filter((row) => {
-      const otherCommittee = getCommittee(row.otherPlan.committeeId);
+      const otherCommittee = getCommittee(row.plan2.committeeId);
       return otherCommittee?.kår === user.kår;
     });
   }, [conflictRows, karFilter, user.kår]);
 
-  const handleViewTimeline = (row: ConflictRow, newTab: boolean = false) => {
+  const handleViewTimeline = (
+    row: CollisionDisplayRow,
+    newTab: boolean = false,
+  ) => {
     loadedBookings(row.bookings);
-    changedActivePlans([row.userPlan, row.otherPlan]);
+    changedActivePlans([row.plan1, row.plan2]);
 
     const startDate = row.bookings.at(0)?.startDate;
     if (startDate) {
@@ -164,7 +74,7 @@ export const UserConflictsCard = () => {
     }
 
     const path =
-      row.type === "Lokal"
+      row.type === "room"
         ? `/booking/${viewCollisionsPath}`
         : `/inventory/${viewCollisionsPath}`;
     if (newTab) {
@@ -177,18 +87,16 @@ export const UserConflictsCard = () => {
   const handleViewAllConflictsTimeline = () => {
     if (!userPublicPlan) return;
 
-    const hasRoomCollisions = conflictRows.some(
-      (conf) => conf.type === "Lokal",
-    );
+    const hasRoomCollisions = conflictRows.some((conf) => conf.type === "room");
 
     const conflictBookings = hasRoomCollisions
       ? conflictRows
-          .filter((row) => row.type === "Lokal")
+          .filter((row) => row.type === "room")
           .flatMap((row) => row.bookings)
       : conflictRows
-          .filter((row) => row.type === "Inventarie")
+          .filter((row) => row.type === "inventory")
           .flatMap((row) => row.bookings);
-    const conflictPlans = conflictRows.flatMap((row) => row.otherPlan);
+    const conflictPlans = conflictRows.flatMap((row) => row.plan2);
 
     loadedBookings(conflictBookings);
     changedActivePlans([userPublicPlan, ...conflictPlans]);
@@ -283,15 +191,15 @@ export const UserConflictsCard = () => {
               </TableRow>
             ) : (
               filteredRows.map((row) => {
-                const userCommittee = getCommittee(row.userPlan.committeeId);
-                const otherCommittee = getCommittee(row.otherPlan.committeeId);
+                const userCommittee = getCommittee(row.plan1.committeeId);
+                const otherCommittee = getCommittee(row.plan2.committeeId);
 
                 return (
                   <TableRow
                     key={row.id}
                     className={cn(
                       "border-l-[3px] last:border-l-[3px]!",
-                      row.type === "Lokal"
+                      row.type === "room"
                         ? "border-l-red-500"
                         : "border-l-orange-300",
                     )}
@@ -302,7 +210,7 @@ export const UserConflictsCard = () => {
                       className="hover:cursor-pointer hover:underline"
                     >
                       <FadderiTag
-                        name={userCommittee?.name || row.userPlan.label}
+                        name={userCommittee?.name || row.plan1.label}
                         kar={userCommittee?.kår || "Övrigt"}
                         color={userCommittee?.color || "#808080"}
                         compact
@@ -310,7 +218,7 @@ export const UserConflictsCard = () => {
                     </TableCell>
                     <TableCell>
                       <FadderiTag
-                        name={otherCommittee?.name || row.otherPlan.label}
+                        name={otherCommittee?.name || row.plan2.label}
                         kar={otherCommittee?.kår || "Övrigt"}
                         color={otherCommittee?.color || "#808080"}
                         compact={karFilter !== "all"}
@@ -319,12 +227,12 @@ export const UserConflictsCard = () => {
                     <TableCell>
                       <span
                         className={`text-xs font-semibold px-2 py-0.5 w-fit ${
-                          row.type === "Lokal"
+                          row.type === "room"
                             ? "bg-red-50 border border-red-200 text-red-600"
                             : "bg-orange-50 border border-orange-200 text-orange-600"
                         }`}
                       >
-                        {row.type}
+                        {row.type === "room" ? "Lokal" : "Inventarie"}
                       </span>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
@@ -337,6 +245,7 @@ export const UserConflictsCard = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleViewTimeline(row)}
+                        onAuxClick={() => handleViewTimeline(row, true)}
                       >
                         Visa <ArrowRightIcon className="ml-1 size-4" />
                       </Button>

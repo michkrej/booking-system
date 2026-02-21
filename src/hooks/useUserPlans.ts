@@ -19,8 +19,11 @@ export const useUserPlans = () => {
     },
   });
 
+  const plans = useBoundStore((state) => state.userPlans) ?? [];
+
   return {
-    userPlans: useBoundStore((state) => state.userPlans) ?? [],
+    userPlans: plans,
+    publicPlan: plans.filter((plan) => plan.public)[0] ?? null,
     isPending,
   };
 };

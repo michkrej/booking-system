@@ -2,13 +2,13 @@ import { ArrowRightIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useAllConflicts } from "@hooks/useAllConflicts";
 import { useCurrentDate } from "@hooks/useCurrentDate";
 import { usePublicPlans } from "@hooks/usePublicPlans";
 import { useStoreBookings } from "@hooks/useStoreBookings";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useBoundStore } from "@state/store";
 import { Tabs, TabsContent } from "@ui/tabs";
+import { useCollisions } from "@/hooks/useCollisions";
 import { type Plan } from "@/interfaces/interfaces";
 import { getCommittee } from "@/utils/utils";
 import { KarTabs } from "../molecules/KarTabs";
@@ -31,7 +31,7 @@ export const SidebarPublicPlans = () => {
   const navigate = useNavigate();
   const { resetCurrentDate, updatedCurrentDate } = useCurrentDate();
   const { t } = useTranslation();
-  const { getConflictsForPlan } = useAllConflicts();
+  const { getConflictsForPlan } = useCollisions();
 
   const committee = getCommittee(user.committeeId);
   const kar = committee?.kår;
@@ -100,7 +100,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id)}
+            conflictCount={getConflictsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}
@@ -110,7 +110,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id)}
+            conflictCount={getConflictsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}
@@ -120,7 +120,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id)}
+            conflictCount={getConflictsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}
@@ -130,7 +130,7 @@ export const SidebarPublicPlans = () => {
           <SidebarPlanItem
             key={plan.id}
             item={plan}
-            conflictCount={getConflictsForPlan(plan.id)}
+            conflictCount={getConflictsForPlan(plan.id).summary}
             onClick={() => handlePlanClick(plan)}
           />
         ))}

@@ -14,7 +14,23 @@ export const locationsNonGrouped = Object.values({
   ...locationsOther,
 });
 
+export const locationMap = locationsNonGrouped.reduce(
+  (acc, location) => ({
+    ...acc,
+    [location.id]: location,
+  }),
+  {} as Record<string, (typeof locationsNonGrouped)[number]>,
+);
+
 export const rooms = [...roomsValla, ...roomsUS, ...roomsOther] as const;
+
+export const roomMap = rooms.reduce(
+  (acc, room) => ({
+    ...acc,
+    [room.id]: room,
+  }),
+  {} as Record<string, (typeof rooms)[number]>,
+);
 
 const VALLA_CAMPUS = {
   label: "Valla",

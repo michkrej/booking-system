@@ -1,5 +1,4 @@
 import { useAdminSettings } from "@/hooks/useAdminSettings";
-import { type PlanConflictCounts } from "@/hooks/useUserPlanConflicts";
 import type { Plan } from "@/interfaces/interfaces";
 import { formatDate, getCommittee } from "@/utils/utils";
 import { Separator } from "../ui/separator";
@@ -12,7 +11,7 @@ import { PlanTogglePublicButton } from "./planTogglePublicButton";
 
 interface UserPlansListRowProps {
   plan: Plan;
-  conflicts: PlanConflictCounts;
+  conflicts: { room: number; inventory: number };
   onPlanClick: (plan: Plan) => void;
 }
 
@@ -51,7 +50,7 @@ export const UserPlansListRow = ({
       </TableCell>
       <TableCell>
         <ConflictBadge
-          location={conflicts.location}
+          location={conflicts.room}
           inventory={conflicts.inventory}
           compact
         />

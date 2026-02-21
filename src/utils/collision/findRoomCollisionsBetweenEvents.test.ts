@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { committees } from "@/data/committees";
 import { locations } from "@/data/locationsData";
-import { type Booking } from "../interfaces/interfaces";
-import { findRoomCollisionsBetweenEvents } from "./roomCollisions";
+import type { Booking } from "@/interfaces/interfaces";
+import { findRoomCollisionsBetweenEvents } from "./findRoomCollisionsBetweenEvents";
 
 const LOCATION_ID = locations.campusValla["C-huset"].id;
+const ROOM_ID = "c9394b56-0e30-4b95-a821-ac33d7e632fc";
 
-describe("eventCollisions", () => {
+describe("findRoomCollisionsBetweenEvents", () => {
   let event: Booking;
 
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe("eventCollisions", () => {
       bookableItems: [],
 
       locationId: LOCATION_ID,
-      roomId: ["c9394b56-0e30-4b95-a821-ac33d7e632fc"],
+      roomId: [ROOM_ID],
       startDate: new Date("2021-05-01 12:00"),
       endDate: new Date("2021-05-01 14:00"),
 

@@ -1,5 +1,9 @@
 import { useMemo } from "react";
-import { findCollisionsBetweenUserAndPublicPlans } from "@/utils/helpers";
+import {
+  type CollisionDisplayRow,
+  getUserConflictsDisplayRows,
+} from "@/utils/collisionComputation";
+import { useCollisions } from "./useCollisions";
 import { usePublicPlans } from "./usePublicPlans";
 import { useUserPlans } from "./useUserPlans";
 
@@ -10,56 +14,27 @@ export interface PlanConflictCounts {
 }
 
 export const useUserPlanConflicts = () => {
-  const { userPlans } = useUserPlans();
+  const { publicPlan: userPublicPlan } = useUserPlans();
   const { publicPlans } = usePublicPlans();
+  const { getConflictsForPlan, collisionInstances } = useCollisions();
 
-  const conflictsByPlanId = useMemo(() => {
-    const result: Record<string, PlanConflictCounts> = {};
+  const conflictRows: CollisionDisplayRow[] = useMemo(() => {
+    if (!userPublicPlan) return [];
 
-    userPlans.forEach((userPlan) => {
-      // Filter out the user's own public plan from comparison
-      const otherPublicPlans = publicPlans.filter(
-        (plan) => plan.id !== userPlan.id,
-      );
+    const conflicts = collisionInstances[userPublicPlan.id];
+    if (!conflicts) return [];
 
-      if (otherPublicPlans.length === 0) {
-        result[userPlan.id] = { location: 0, inventory: 0, total: 0 };
-        return;
-      }
+    const displayRows = getUserConflictsDisplayRows(
+      userPublicPlan,
+      publicPlans.filter((plan) => plan.id !== userPublicPlan.id),
+      conflicts,
+    );
 
-      const collisions = findCollisionsBetweenUserAndPublicPlans(
-        userPlan,
-        otherPublicPlans,
-      );
-
-      // Count unique collisions (divide by 2 since each collision appears twice)
-      let locationCount = 0;
-      let inventoryCount = 0;
-
-      Object.values(collisions.roomCollisions).forEach((bookings) => {
-        locationCount += Math.ceil(bookings.length / 2);
-      });
-
-      Object.values(collisions.inventoryCollisions).forEach((bookings) => {
-        inventoryCount += Math.ceil(bookings.length / 2);
-      });
-
-      result[userPlan.id] = {
-        location: locationCount,
-        inventory: inventoryCount,
-        total: locationCount + inventoryCount,
-      };
-    });
-
-    return result;
-  }, [userPlans, publicPlans]);
-
-  const getConflictsForPlan = (planId: string): PlanConflictCounts => {
-    return conflictsByPlanId[planId] || { location: 0, inventory: 0, total: 0 };
-  };
+    return displayRows;
+  }, [userPublicPlan, publicPlans]);
 
   return {
-    conflictsByPlanId,
+    conflictRows,
     getConflictsForPlan,
   };
 };

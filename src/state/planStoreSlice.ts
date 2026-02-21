@@ -1,8 +1,8 @@
 import { type StateCreator } from "zustand";
 import { type Plan } from "@/interfaces/interfaces";
+import { findRoomCollisionsBetweenEvents } from "@/utils/collision/findRoomCollisionsBetweenEvents";
 import { CURRENT_YEAR } from "@/utils/constants";
 import { findInventoryCollisionsBetweenEvents } from "@/utils/inventoryCollisions";
-import { findRoomCollisionsBetweenEvents } from "@/utils/roomCollisions";
 import { convertToDate } from "@/utils/utils";
 import { type BookingStoreSlice } from "./bookingStoreSlice";
 import { type UserStoreSlice } from "./userStoreSlice";
@@ -122,6 +122,8 @@ const createPlanStoreSlice: StateCreator<
   changedActivePlans: (plans) => {
     set({ activePlans: plans });
   },
+  // TODO - this causes a bug when viewing a single collision instead of all in timeline
+  // Instead of only showing the given conflict it shows all conflicts between the given plans
   updatedActivePlans: ({ plans, isCollisionView, isInventoryView }) => {
     set((state) => {
       const updatedPlans = state.activePlans.map((plan) => {
