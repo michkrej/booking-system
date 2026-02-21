@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { ArrowRightIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAllConflicts } from "@hooks/useAllConflicts";
 import { usePublicPlans } from "@hooks/usePublicPlans";
@@ -235,7 +235,7 @@ export const SpectatorDashboard = ({
     return stats;
   }, [allConflicts]);
 
-  const handleViewAllConflicts = () => {
+  const handleViewAllConflicts = (e: React.MouseEvent<HTMLButtonElement>) => {
     loadedBookings(allConflicts.flatMap((row) => row.bookings));
     const plans = publicPlans
       .filter((plan) => getConflictsForPlan(plan.id) > 0)
@@ -247,22 +247,31 @@ export const SpectatorDashboard = ({
 
     const hasRoomCollisions = allConflicts.some((row) => row.type === "Lokal");
 
-    if (hasRoomCollisions) {
-      navigate(`/booking/${viewCollisionsPath}`);
+    const url = hasRoomCollisions
+      ? `/booking/${viewCollisionsPath}`
+      : `/inventory/${viewCollisionsPath}`;
+
+    if (e.ctrlKey || e.metaKey) {
+      window.open(url, "_blank");
     } else {
-      navigate(`/inventory/${viewCollisionsPath}`);
+      navigate(url);
     }
   };
 
-  const handleViewConflict = (row: ConflictRow) => {
+  const handleViewConflict = (row: ConflictRow, newTab = false) => {
     loadedBookings(row.bookings);
     changedActivePlans([row.plan1, row.plan2]);
     updatedCurrentDate(row.bookings[0]!.startDate);
 
-    if (row.type === "Lokal") {
-      navigate(`/booking/${viewCollisionsPath}`);
+    const url =
+      row.type === "Lokal"
+        ? `/booking/${viewCollisionsPath}`
+        : `/inventory/${viewCollisionsPath}`;
+
+    if (newTab) {
+      window.open(url, "_blank");
     } else {
-      navigate(`/inventory/${viewCollisionsPath}`);
+      navigate(url);
     }
   };
 
@@ -444,9 +453,11 @@ export const SpectatorDashboard = ({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleViewConflict(row)}
+                          onClick={(e) => {
+                            handleViewConflict(row, e.ctrlKey || e.metaKey);
+                          }}
                         >
-                          Visa &rarr;
+                          Visa <ArrowRightIcon className="ml-1 size-4" />
                         </Button>
                       </TableCell>
                     </TableRow>
