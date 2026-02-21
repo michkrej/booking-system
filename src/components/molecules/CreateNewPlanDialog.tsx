@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import z from "zod";
 import { useCreatePlan } from "@/hooks/useCreatePlan";
 import { useStoreUser } from "@/hooks/useStoreUser";
+import { useBoundStore } from "@/state/store";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,7 @@ export const CreateNewPlanDialog = ({
   const { t } = useTranslation();
   const { user } = useStoreUser();
   const { createPlan, isPending: isCreating } = useCreatePlan();
+  const changedAppMode = useBoundStore((state) => state.changedAppMode);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,6 +45,9 @@ export const CreateNewPlanDialog = ({
       onSettled: () => {
         form.reset();
         onOpenChange(false);
+      },
+      onSuccess: () => {
+        changedAppMode("user");
       },
     });
   };

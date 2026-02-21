@@ -51,8 +51,6 @@ export function DashboardPage() {
   useEffect(() => {
     if (!isLoadingPlans && userPlans.length === 0) {
       changedAppMode("spectator");
-    } else {
-      changedAppMode("user");
     }
   }, [isLoadingPlans, userPlans, planYear]);
 
