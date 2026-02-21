@@ -14,6 +14,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.71.1(react@19.2.4))
+      '@posthog/react':
+        specifier: ^1.8.0
+        version: 1.8.0(@types/react@18.3.12)(posthog-js@1.346.0)(react@19.2.4)
       '@syncfusion/ej2-base':
         specifier: 32.1.22
         version: 32.1.22
@@ -980,6 +983,16 @@ packages:
 
   '@posthog/core@1.22.0':
     resolution: {integrity: sha512-WkmOnq95aAOu6yk6r5LWr5cfXsQdpVbWDCwOxQwxSne8YV6GuZET1ziO5toSQXgrgbdcjrSz2/GopAfiL6iiAA==}
+
+  '@posthog/react@1.8.0':
+    resolution: {integrity: sha512-UEX3BAIXMrzN7r/JoVotMY9BSTfJ1umiQqfsU30X1OZAW59cO5cPf50YDj4XNhHTCZpiLqenmvJdtJLsx5Pn4Q==}
+    peerDependencies:
+      '@types/react': '>=16.8.0'
+      posthog-js: '>=1.257.2'
+      react: '>=16.8.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   '@posthog/types@1.346.0':
     resolution: {integrity: sha512-TpHqR2ldcKNEgUbofjpSLH+H4VeGilbs90CMKImJJV38gocOg/0QfLnKMyvmDHn9GjtzJmEHPI8D/WI55BgpOA==}
@@ -5126,6 +5139,13 @@ snapshots:
   '@posthog/core@1.22.0':
     dependencies:
       cross-spawn: 7.0.6
+
+  '@posthog/react@1.8.0(@types/react@18.3.12)(posthog-js@1.346.0)(react@19.2.4)':
+    dependencies:
+      posthog-js: 1.346.0
+      react: 19.2.4
+    optionalDependencies:
+      '@types/react': 18.3.12
 
   '@posthog/types@1.346.0': {}
 

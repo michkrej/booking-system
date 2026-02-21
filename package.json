@@ -6,6 +6,7 @@
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.5",
     "@hookform/resolvers": "^5.2.2",
+    "@posthog/react": "^1.8.0",
     "@syncfusion/ej2-base": "32.1.22",
     "@syncfusion/ej2-buttons": "^32.1.21",
     "@syncfusion/ej2-calendars": "^32.1.22",
