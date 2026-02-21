@@ -19,19 +19,26 @@ const Changelog = () => {
           Nytt gränsnitt för översikten ✨
           <ul className="list-disc ml-4">
             <li>
-              I vyn &quot;översikt&quot; ser du dina krockar med andra fadderier
+              I vyn &quot;översikt&quot; ser du dina krockar med andra
+              fadderier.
             </li>
             <li>
-              I vyn &quot;krockar&quot; kan du samtliga krockar mellan fadderier
+              I vyn &quot;krockar&quot; kan du samtliga krockar mellan
+              fadderier.
             </li>
           </ul>
+        </li>
+        <li>
+          När du flyttar en områdesbokning med tillhörande inventariebokningar
+          kommer tiden för inventariebokningen att flyttas relativt till själva
+          bokningen av området.
         </li>
       </ul>
     </div>
   );
 };
 
-export const NewUpdateCard = () => {
+export const ChangelogCard = () => {
   const versionUpdateWarning = useBoundStore(
     (state) => state.versionUpdateWarningClosed,
   );
