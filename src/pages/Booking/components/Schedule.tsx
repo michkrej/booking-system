@@ -203,7 +203,7 @@ export const Schedule = () => {
         const shiftedItems = shiftBookableItemTimes(
           originalBooking.startDate,
           updatedEvent.startDate,
-          originalBooking.bookableItems
+          originalBooking.bookableItems,
         );
         finalBooking = { ...updatedEvent, bookableItems: shiftedItems };
       }
@@ -224,7 +224,6 @@ export const Schedule = () => {
 
     toast.warning("Redigering av bokningar är låst", {
       id: "plan-edit-locked",
-      position: "bottom-left",
       duration: Infinity,
       action: {
         label: "OK",
