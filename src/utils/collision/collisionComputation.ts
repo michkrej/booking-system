@@ -122,6 +122,11 @@ const computeCollisionsV2 = (
     collisionInstances[planId] = collisionInstancesForPlan;
   }
 
+  const spectatorDisplayRows = [
+    ...roomDisplayRows,
+    ...inventoryDisplayRows,
+  ].sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+
   return {
     summary: {
       total: numLocationCollisions + numInventoryCollisions,
@@ -131,7 +136,7 @@ const computeCollisionsV2 = (
     },
     collisionsByPlanId: numConflictsPerPlanId,
     collisionsByKar: getSumConflictsByKar(planMap, numConflictsPerPlanId),
-    spectatorDisplayRows: [...roomDisplayRows, ...inventoryDisplayRows],
+    spectatorDisplayRows: spectatorDisplayRows,
     collisionInstances: collisionInstances,
   };
 };
@@ -387,7 +392,9 @@ const getUserConflictsDisplayRows = (
     throw new Error("Invalid collision instance");
   }
 
-  return displayRows;
+  return displayRows.sort(
+    (a, b) => a.startDate.getTime() - b.startDate.getTime(),
+  );
 };
 
 /**
