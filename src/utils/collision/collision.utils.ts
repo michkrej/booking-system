@@ -77,47 +77,57 @@ const findCollisionPairs = (
   const { collectRoomIds = false } = options;
   const collisionPairs: CollisionPair[] = [];
 
-  const sortedEvents = [...events].sort(
-    (a, b) => a.startDate.getTime() - b.startDate.getTime(),
-  );
+  const byLocation = new Map<string, ConvertedEvent[]>();
+  for (const event of events) {
+    const group = byLocation.get(event.locationId);
+    if (group) {
+      group.push(event);
+    } else {
+      byLocation.set(event.locationId, [event]);
+    }
+  }
 
-  for (let i = 0; i < sortedEvents.length; i++) {
-    const event1 = sortedEvents[i];
+  for (const locationEvents of byLocation.values()) {
+    if (locationEvents.length < 2) continue;
 
-    for (let j = i + 1; j < sortedEvents.length; j++) {
-      const event2 = sortedEvents[j];
+    const sortedEvents = locationEvents.sort(
+      (a, b) => a.startDate.getTime() - b.startDate.getTime(),
+    );
 
-      if (!event1 || !event2) continue;
+    for (let i = 0; i < sortedEvents.length; i++) {
+      const event1 = sortedEvents[i];
 
-      // Skip events from the same plan or different locations
-      if (
-        event1.planId === event2.planId ||
-        event1.locationId !== event2.locationId
-      ) {
-        continue;
-      }
+      for (let j = i + 1; j < sortedEvents.length; j++) {
+        const event2 = sortedEvents[j];
 
-      const range1 = interval(event1.startDate, event1.endDate);
-      const range2 = interval(event2.startDate, event2.endDate);
+        if (!event1 || !event2) continue;
 
-      if (areIntervalsOverlapping(range1, range2)) {
-        if (collectRoomIds) {
-          const collidingRooms = eventsUseSameRooms(
-            event1.roomIdSet,
-            event2.roomIdSet,
-            true,
-          );
-          if (collidingRooms.length > 0) {
-            collisionPairs.push({ event1, event2, collidingRooms });
+        if (event1.planId === event2.planId) {
+          continue;
+        }
+
+        const range1 = interval(event1.startDate, event1.endDate);
+        const range2 = interval(event2.startDate, event2.endDate);
+
+        if (areIntervalsOverlapping(range1, range2)) {
+          if (collectRoomIds) {
+            const collidingRooms = eventsUseSameRooms(
+              event1.roomIdSet,
+              event2.roomIdSet,
+              true,
+            );
+            if (collidingRooms.length > 0) {
+              collisionPairs.push({ event1, event2, collidingRooms });
+            }
+          } else {
+            if (eventsUseSameRooms(event1.roomIdSet, event2.roomIdSet, false)) {
+              collisionPairs.push({ event1, event2, collidingRooms: null });
+            }
           }
         } else {
-          if (eventsUseSameRooms(event1.roomIdSet, event2.roomIdSet, false)) {
-            collisionPairs.push({ event1, event2, collidingRooms: null });
-          }
+          // Since the array is sorted, we can stop checking further if events don't overlap
+          break;
         }
-      } else {
-        // Since the array is sorted, we can stop checking further if events don't overlap
-        break;
       }
     }
   }

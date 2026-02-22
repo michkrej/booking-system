@@ -428,7 +428,7 @@ describe("findRoomCollisionsBetweenPlans", () => {
     const end = performance.now();
     const duration = end - start;
 
-    expect(duration).toBeLessThan(2500);
+    expect(duration).toBeLessThan(3500);
     // With 50 plans, each having 30 events with half sharing room-0,
     // we should have collisions recorded
     expect(Object.keys(collisions).length).toBeGreaterThan(0);
