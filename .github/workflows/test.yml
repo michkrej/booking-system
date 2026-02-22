@@ -32,6 +32,7 @@ jobs:
         run: pnpm test -- --run
       
       - name: 'notify vercel'
+        if: always()
         uses: 'vercel/repository-dispatch/actions/status@v1'
         with:
           name: 'Vercel - booking-system: Tests have passed'
