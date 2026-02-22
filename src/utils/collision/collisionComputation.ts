@@ -58,7 +58,6 @@ type CollisionInstance =
 type CollisionInstancesPerPlan = Record<string, CollisionInstance[]>;
 
 const computeCollisionsV2 = (
-  plans: Plan[],
   planMap: Record<string, Plan>,
   bookableItems: Record<NumericBookableKeys, number>,
 ): {
@@ -68,7 +67,8 @@ const computeCollisionsV2 = (
   spectatorDisplayRows: CollisionDisplayRow[];
   collisionInstances: CollisionInstancesPerPlan;
 } => {
-  if (plans.length === 0) {
+  const plansList = Object.values(planMap);
+  if (plansList.length === 0) {
     return {
       summary: {
         total: 0,
@@ -84,9 +84,9 @@ const computeCollisionsV2 = (
   }
 
   // Find all room collisions
-  const roomCollisions = findRoomCollisionsBetweenPlans(plans);
+  const roomCollisions = findRoomCollisionsBetweenPlans(plansList);
   const inventoryCollisions = findInventoryCollisionsBetweenPlans(
-    plans,
+    plansList,
     bookableItems,
   );
 
@@ -98,7 +98,7 @@ const computeCollisionsV2 = (
     inventoryCollisions,
   );
 
-  const roomDisplayRows = getSpectatorRoomDisplayRows(plans, roomCollisions);
+  const roomDisplayRows = getSpectatorRoomDisplayRows(planMap, roomCollisions);
   const inventoryDisplayRows = getSpectatorInventoryDisplayRows(
     planMap,
     inventoryCollisions,
@@ -127,10 +127,10 @@ const computeCollisionsV2 = (
       total: numLocationCollisions + numInventoryCollisions,
       location: numLocationCollisions,
       inventory: numInventoryCollisions,
-      publicPlansCount: plans.length,
+      publicPlansCount: plansList.length,
     },
     collisionsByPlanId: numConflictsPerPlanId,
-    collisionsByKar: getSumConflictsByKar(plans, numConflictsPerPlanId),
+    collisionsByKar: getSumConflictsByKar(planMap, numConflictsPerPlanId),
     spectatorDisplayRows: [...roomDisplayRows, ...inventoryDisplayRows],
     collisionInstances: collisionInstances,
   };
@@ -173,7 +173,7 @@ const getNumConflictsPerPlanId = (
 };
 
 const getSpectatorRoomDisplayRows = (
-  plans: Plan[],
+  plans: Record<string, Plan>,
   planCollisions: CollisionsPerPlan,
 ): CollisionDisplayRow[] => {
   const displayRows: CollisionDisplayRow[] = [];
@@ -184,7 +184,7 @@ const getSpectatorRoomDisplayRows = (
    */
 
   for (const [planId, collisions] of Object.entries(planCollisions)) {
-    const plan1Details = plans.find((p) => p.id === planId);
+    const plan1Details = plans[planId];
     if (!plan1Details) continue;
 
     for (const [booking1, booking2] of collisions) {
@@ -194,7 +194,7 @@ const getSpectatorRoomDisplayRows = (
       )
         continue;
 
-      const plan2Details = plans.find((p) => p.id === booking2.planId);
+      const plan2Details = plans[booking2.planId];
       if (!plan2Details) continue;
 
       const overlappingTimes = getDateRangeOverLaps(
@@ -394,7 +394,7 @@ const getUserConflictsDisplayRows = (
  * Sums up the number of collisions by kår for a given set of plans and collisions.
  */
 const getSumConflictsByKar = (
-  plans: Plan[],
+  plans: Record<string, Plan>,
   numCollisionsByPlan: NumCollisionsPerPlanId,
 ): CollisionsByKar => {
   const collisionsByKar: CollisionsByKar = {
@@ -405,7 +405,7 @@ const getSumConflictsByKar = (
   };
 
   for (const id of Object.keys(numCollisionsByPlan)) {
-    const planDetails = plans.find((p) => p.id === id);
+    const planDetails = plans[id];
     if (!planDetails) continue;
 
     const committee = getCommittee(planDetails.committeeId);

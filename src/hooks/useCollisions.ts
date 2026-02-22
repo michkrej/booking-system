@@ -25,14 +25,14 @@ export interface UseCollisionsReturn {
 }
 
 export const useCollisions = (): UseCollisionsReturn => {
-  const { publicPlans, isPending, publicPlansMap } = usePublicPlans();
+  const { isPending, publicPlansMap } = usePublicPlans();
   const {
     settings: { bookableItems },
   } = useAdminSettings();
 
   const result = useMemo(
-    () => computeCollisionsV2(publicPlans, publicPlansMap, bookableItems),
-    [publicPlans],
+    () => computeCollisionsV2(publicPlansMap, bookableItems),
+    [publicPlansMap],
   );
 
   const getNumCollisionsForPlan = (planId: string) => {
