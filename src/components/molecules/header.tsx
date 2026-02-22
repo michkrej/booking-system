@@ -48,7 +48,7 @@ export const Header = () => {
         )}
       </nav>
 
-      <div className="flex items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
+      <div className="flex items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4 ">
         {import.meta.env.DEV ? (
           <Button
             size="icon"

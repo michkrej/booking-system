@@ -157,9 +157,9 @@ export const SpectatorDashboard = ({
       {/* All Conflicts Card */}
       <Card>
         <CardHeader className="pb-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center justify-between  gap-2 flex-col sm:flex-row">
             <CardTitle>Alla krockar</CardTitle>
-            <div className="flex justify-between flex-1 sm:flex-auto sm:justify-end flex-wrap gap-y-2">
+            <div className="flex justify-between flex-1 sm:flex-auto sm:justify-end items-center flex-col sm:flex-row">
               <ToggleGroup
                 type="single"
                 value={karFilter}
