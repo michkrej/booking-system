@@ -1,5 +1,7 @@
-import { useBoundStore } from "@/state/store";
+import { useContext } from "react";
+import { AuthContext } from "@/providers/AuthProvider";
 
 export const useUserIsLoggedIn = () => {
-  return useBoundStore((state) => state.user) !== null;
+  const user = useContext(AuthContext).user;
+  return user !== null;
 };

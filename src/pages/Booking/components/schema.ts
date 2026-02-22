@@ -73,7 +73,8 @@ export const BookingSchema = z
     if (booking.startDate > booking.endDate) {
       ctx.addIssue({
         path: ["endDate"],
-        code: z.ZodIssueCode.custom,
+        code: "custom",
+        values: [booking.endDate.toLocaleString()],
         message: "Sludatumet är före startdatumet",
       });
     }

@@ -1,87 +1,17 @@
-import {
-  useIsMutating,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { type Plan } from "@/interfaces/interfaces";
 import { plansService } from "@/services";
-import { useBoundStore } from "@/state/store";
-import { useStoreBookings } from "./useStoreBookings";
-import { useStorePlanActions } from "./useStorePlanActions";
-import { useStorePlanYear } from "./useStorePlanYear";
+import { useActiveYear } from "./useActiveYear";
 import { useStoreUser } from "./useStoreUser";
-
-//import { useUserPlans } from "./useUserPlans";
+import { useUserPlans, userPlansQueryKey } from "./useUserPlans";
 
 export const useEditPlan = () => {
   const { user } = useStoreUser();
-  const {
-    userPlanDeleted,
-    userPlanUpdated,
-    userPlanCreated,
-    userPlanPublicToggled,
-  } = useStorePlanActions();
-  const { planYear } = useStorePlanYear();
-  const hasPublicPlan = useBoundStore((state) => state.hasPublicPlan);
-  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
+  const { publicPlan: userPublicPlan } = useUserPlans();
+  const { activeYear } = useActiveYear();
+
   const queryClient = useQueryClient();
-  const bookings = useStoreBookings();
-  const navigate = useNavigate();
-
-  const createPlanIsPending =
-    useIsMutating({
-      mutationKey: ["createPlan"],
-    }) > 0;
-
-  const createPlanMutation = useMutation({
-    mutationKey: ["createPlan"],
-    mutationFn: (planName: string) => {
-      return plansService.createPlan({
-        label: planName,
-        userId: user.id,
-        public: false,
-        committeeId: user.committeeId,
-        year: planYear,
-        events: [],
-      });
-    },
-    onSuccess: (value) => {
-      userPlanCreated(value);
-      toast.success("Planeringen skapades");
-    },
-    onError: () => {
-      toast.error("Kunde inte skapa planeringen");
-    },
-  });
-
-  const createPlan = ({
-    planName,
-    onSuccess,
-    onError,
-  }: {
-    planName: string;
-    onSuccess: () => void;
-    onError: () => void;
-  }) => {
-    createPlanMutation.mutate(planName, {
-      onSuccess: (newPlan) => {
-        userPlanCreated(newPlan);
-        changedActivePlans([newPlan]);
-        bookings.loadedBookings([]);
-
-        toast.success("Planeringen skapades");
-
-        navigate(`/booking/${newPlan.id}`);
-        onSuccess?.();
-      },
-      onError: () => {
-        toast.error("Kunde inte skapa planeringen");
-        onError?.();
-      },
-    });
-  };
 
   const updatePlanName = useMutation({
     mutationFn: ({
@@ -94,11 +24,21 @@ export const useEditPlan = () => {
       return plansService.updatePlanDetails(plan.id, { label: newPlanName });
     },
     onSuccess: (value, { plan: { label: oldName } }) => {
-      userPlanUpdated({
-        id: value.id,
-        label: value.label,
-        updatedAt: value.updatedAt,
-      });
+      queryClient.setQueryData(
+        userPlansQueryKey(activeYear, user.id),
+        (prev: Plan[]) =>
+          prev.map((plan) => {
+            if (plan.id === plan.id) {
+              return {
+                ...plan,
+                label: value.label,
+                updatedAt: value.updatedAt,
+              };
+            }
+            return plan;
+          }),
+      );
+
       toast.success(
         `Planeringen '${oldName}' bytte namn till '${value.label}'`,
       );
@@ -114,7 +54,11 @@ export const useEditPlan = () => {
     },
     onSuccess: (id) => {
       toast.success("Planeringen har raderats");
-      userPlanDeleted(id);
+
+      queryClient.setQueryData(
+        userPlansQueryKey(activeYear, user.id),
+        (prev: Plan[]) => prev.filter((plan) => plan.id !== id),
+      );
     },
     onError: () => {
       toast.error("Kunde inte radera planeringen");
@@ -123,9 +67,10 @@ export const useEditPlan = () => {
 
   const togglePublicPlan = useMutation({
     mutationFn: (plan: Plan) => {
-      if (!plan.public && hasPublicPlan) {
+      if (!plan.public && userPublicPlan) {
         throw new Error("singlePublicPlan");
       }
+
       return plansService.updatePlanDetails(plan.id, {
         public: !plan.public,
       });
@@ -134,9 +79,23 @@ export const useEditPlan = () => {
       toast.success(
         `Planeringen '${oldPlan.label}' är nu ${!oldPlan.public ? "publik" : "privat"}`,
       );
-      userPlanPublicToggled(value.id);
+
+      queryClient.setQueryData(
+        userPlansQueryKey(activeYear, user.id),
+        (prev: Plan[]) =>
+          prev.map((plan) => {
+            if (plan.id === value.id) {
+              return {
+                ...plan,
+                public: !plan.public,
+              };
+            }
+            return plan;
+          }),
+      );
+
       void queryClient.invalidateQueries({
-        queryKey: ["publicPlans", planYear],
+        queryKey: ["publicPlans", activeYear],
       });
     },
     onError: (error) => {
@@ -152,7 +111,5 @@ export const useEditPlan = () => {
     updatePlanName,
     togglePublicPlan,
     deletePlan,
-    createPlan,
-    createPlanIsPending,
   };
 };

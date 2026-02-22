@@ -1,24 +1,25 @@
+import { CheckIcon, TriangleAlertIcon } from "lucide-react";
 import { cn } from "@/utils/utils";
 
 interface ConflictBadgeProps {
-  location: number;
-  inventory: number;
-  compact?: boolean;
+  numConflicts: number;
   className?: string;
 }
 
 export const ConflictBadge = ({
-  location,
-  inventory,
-  compact = false,
+  numConflicts,
   className,
 }: ConflictBadgeProps) => {
-  const total = location + inventory;
-
-  if (total === 0) {
+  if (numConflicts === 0) {
     return (
-      <span className={cn("text-xs font-semibold text-green-600", className)}>
-        &#10003; Inga krockar
+      <span
+        className={cn(
+          "text-xs font-semibold text-green-600 flex items-center gap-1",
+          className,
+        )}
+      >
+        <CheckIcon className="sm:size-4 size-5" />
+        <span className="hidden sm:inline"> Inga krockar</span>
       </span>
     );
   }
@@ -31,12 +32,8 @@ export const ConflictBadge = ({
         className,
       )}
     >
-      &#9888; {total} krockar
-      {!compact && (
-        <span className="font-normal text-red-700">
-          ({location} lokal, {inventory} inv.)
-        </span>
-      )}
+      <TriangleAlertIcon className="size-5 sm:size-4" />
+      <span className="hidden sm:inline"> {numConflicts} krockar</span>
     </span>
   );
 };

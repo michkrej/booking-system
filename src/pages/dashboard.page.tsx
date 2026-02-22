@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAdminSettings } from "@hooks/useAdminSettings";
-import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useUserPlans } from "@hooks/useUserPlans";
 import { InlineYearSelector } from "@components/molecules/InlineYearSelector";
@@ -21,28 +20,30 @@ import { EditPlansLockedCard } from "@/components/organisms/EditPlansLockedCard"
 import { SidebarPublicPlans } from "@/components/organisms/SidebarPublicPlans";
 import { UserPlansCard } from "@/components/organisms/UserPlansCard";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { MAX_YEAR, MIN_YEAR } from "@/state/planStoreSlice";
-import { useBoundStore } from "@/state/store";
-import { CURRENT_YEAR } from "@/utils/constants";
+import { useActiveYear } from "@/hooks/useActiveYear";
+import { useAppMode } from "@/hooks/useAppMode";
+import { useTimelineEvents } from "@/hooks/useTimelineEvents";
+import { CURRENT_YEAR, MAX_YEAR, MIN_YEAR } from "@/utils/constants";
 import { cn, getCommittee } from "@/utils/utils";
 
 export function DashboardPage() {
   const { isPlanEditLocked } = useAdminSettings();
   const { user } = useStoreUser();
-  const { planYear, incrementPlanYear, decrementPlanYear } = useStorePlanYear();
-  const { userPlans, isPending: isLoadingPlans } = useUserPlans();
-  const appMode = useBoundStore((state) => state.appMode);
-  const changedAppMode = useBoundStore((state) => state.changedAppMode);
+  const { activeYear, incrementActiveYear, decrementActiveYear } =
+    useActiveYear();
+  const { userPlans, isLoading: isLoadingPlans } = useUserPlans();
+  const { appMode, changeAppMode } = useAppMode();
+  const { setTimelineEvents } = useTimelineEvents();
 
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [plannerTab, setPlannerTab] = useState<PlannerTab>("Mina");
   const [spectatorTab, setSpectatorTab] = useState<SpectatorTab>("Översikt");
 
-  const isMinYear = useMemo(() => planYear <= MIN_YEAR, [planYear]);
-  const isMaxYear = useMemo(() => planYear >= MAX_YEAR, [planYear]);
+  const isMinYear = useMemo(() => activeYear <= MIN_YEAR, [activeYear]);
+  const isMaxYear = useMemo(() => activeYear >= MAX_YEAR, [activeYear]);
   const committee = getCommittee(user.committeeId);
   const isSpectator = appMode === "spectator";
-  const canCreatePlan = !isPlanEditLocked && planYear >= CURRENT_YEAR;
+  const canCreatePlan = !isPlanEditLocked && activeYear >= CURRENT_YEAR;
 
   const handleCreatePlan = () => {
     setShowCreateDialog(true);
@@ -50,9 +51,14 @@ export function DashboardPage() {
 
   useEffect(() => {
     if (!isLoadingPlans && userPlans.length === 0) {
-      changedAppMode("spectator");
+      changeAppMode("spectator");
     }
-  }, [isLoadingPlans, userPlans, planYear]);
+  }, [isLoadingPlans, userPlans, activeYear]);
+
+  useEffect(() => {
+    // reset timeline events when dashboard is loaded
+    setTimelineEvents([]);
+  }, []);
 
   return (
     <DashboardLayout sidebar={<SidebarPublicPlans />} hideFooter>
@@ -74,7 +80,7 @@ export function DashboardPage() {
             <ToggleGroup
               type="single"
               value={appMode}
-              onValueChange={changedAppMode}
+              onValueChange={changeAppMode}
               variant="outline"
             >
               <ToggleGroupItem
@@ -92,9 +98,9 @@ export function DashboardPage() {
             </ToggleGroup>
           )}
           <InlineYearSelector
-            year={planYear}
-            onIncrement={incrementPlanYear}
-            onDecrement={decrementPlanYear}
+            year={activeYear}
+            onIncrement={incrementActiveYear}
+            onDecrement={decrementActiveYear}
             isMinYear={isMinYear}
             isMaxYear={isMaxYear}
           />
@@ -111,7 +117,6 @@ export function DashboardPage() {
             tabs={SPECTATOR_TABS}
             activeTab={spectatorTab}
             onTabChange={setSpectatorTab}
-            className="mb-4 -mx-4 sm:-mx-6 px-0"
           />
 
           <div className="flex gap-2">
@@ -144,7 +149,6 @@ export function DashboardPage() {
             tabs={PLANNER_TABS}
             activeTab={plannerTab}
             onTabChange={setPlannerTab}
-            className="mb-2 -mx-2 sm:-mx-4 px-0"
           />
 
           <div className="flex gap-2">

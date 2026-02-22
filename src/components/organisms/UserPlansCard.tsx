@@ -1,7 +1,5 @@
 import { PlusIcon } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useStorePlanYear } from "@hooks/useStorePlanYear";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
 import { Skeleton } from "@ui/skeleton";
@@ -13,8 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
-import { usePlansListCard } from "@/hooks/usePlansListCard";
-import { useUserPlanConflicts } from "@/hooks/useUserPlanConflicts";
+import { useUserPlansCard } from "@/hooks/useUserPlansCard";
 import { CURRENT_YEAR } from "@/utils/constants";
 import { CreateNewPlanDialog } from "../molecules/CreateNewPlanDialog";
 import { UserPlansListRow } from "../molecules/UserPlansListRow";
@@ -29,12 +26,17 @@ export const UserPlansCard = ({
   showCreateButton = true,
 }: UserPlansCardProps) => {
   const { t } = useTranslation();
-  const { userPlans, isPending, handlePlanClick } = usePlansListCard();
-  const { getNumCollisionsForPlan } = useUserPlanConflicts();
-  const { planYear } = useStorePlanYear();
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const {
+    userPlans,
+    isLoading,
+    handlePlanClick,
+    activeYear,
+    getNumCollisionsForPlan,
+    showCreateDialog,
+    setShowCreateDialog,
+  } = useUserPlansCard();
 
-  const canCreatePlan = showCreateButton && planYear >= CURRENT_YEAR;
+  const canCreatePlan = showCreateButton && activeYear >= CURRENT_YEAR;
 
   return (
     <>
@@ -69,14 +71,14 @@ export const UserPlansCard = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {!isPending ? (
+              {!isLoading ? (
                 userPlans.length > 0 ? (
                   userPlans.map((plan) => (
                     <UserPlansListRow
                       key={plan.id}
                       plan={plan}
                       collisions={getNumCollisionsForPlan(plan.id)}
-                      onPlanClick={handlePlanClick}
+                      onPlanClick={() => handlePlanClick(plan, "edit")}
                     />
                   ))
                 ) : (

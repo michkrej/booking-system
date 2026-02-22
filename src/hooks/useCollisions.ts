@@ -6,7 +6,8 @@ import {
   type CollisionsByKar,
   type NumCollisionsPerPlanId,
   computeCollisionsV2,
-} from "@/utils/collisionComputation";
+} from "@/utils/collision/collisionComputation";
+import { useAdminSettings } from "./useAdminSettings";
 import { usePublicPlans } from "./usePublicPlans";
 
 export interface UseCollisionsReturn {
@@ -24,9 +25,15 @@ export interface UseCollisionsReturn {
 }
 
 export const useCollisions = (): UseCollisionsReturn => {
-  const { publicPlans, isPending } = usePublicPlans();
+  const { publicPlans, isPending, publicPlansMap } = usePublicPlans();
+  const {
+    settings: { bookableItems },
+  } = useAdminSettings();
 
-  const result = useMemo(() => computeCollisionsV2(publicPlans), [publicPlans]);
+  const result = useMemo(
+    () => computeCollisionsV2(publicPlans, publicPlansMap, bookableItems),
+    [publicPlans],
+  );
 
   const getNumCollisionsForPlan = (planId: string) => {
     return (

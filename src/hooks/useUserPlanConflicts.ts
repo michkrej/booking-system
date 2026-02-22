@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import {
   type CollisionDisplayRow,
   getUserConflictsDisplayRows,
-} from "@/utils/collisionComputation";
+} from "@/utils/collision/collisionComputation";
 import { useCollisions } from "./useCollisions";
 import { usePublicPlans } from "./usePublicPlans";
 import { useUserPlans } from "./useUserPlans";
@@ -15,7 +15,7 @@ export interface PlanConflictCounts {
 
 export const useUserPlanConflicts = () => {
   const { publicPlan: userPublicPlan } = useUserPlans();
-  const { publicPlans } = usePublicPlans();
+  const { publicPlansMap } = usePublicPlans();
   const { getNumCollisionsForPlan, collisionInstances } = useCollisions();
 
   const conflictRows: CollisionDisplayRow[] = useMemo(() => {
@@ -26,12 +26,12 @@ export const useUserPlanConflicts = () => {
 
     const displayRows = getUserConflictsDisplayRows(
       userPublicPlan,
-      publicPlans.filter((plan) => plan.id !== userPublicPlan.id),
+      publicPlansMap,
       collisions,
     );
 
     return displayRows;
-  }, [userPublicPlan, publicPlans]);
+  }, [userPublicPlan, publicPlansMap]);
 
   return {
     conflictRows,

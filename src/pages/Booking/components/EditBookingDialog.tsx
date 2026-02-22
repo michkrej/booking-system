@@ -5,7 +5,6 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { z } from "zod";
 import { useBookingActions } from "@hooks/useBookingActions";
-import { useStoreBookings } from "@hooks/useStoreBookings";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { corridorsC } from "@data/campusValla/rooms";
 import roomsC from "@data/campusValla/rooms/C";
@@ -29,8 +28,9 @@ import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useAllPlans } from "@/hooks/useAllPlans";
 import { type Booking } from "@/interfaces/interfaces";
-import { shiftBookableItemTimes } from "@/utils/bookingUtils";
+import { shiftBookableItemTimes } from "@/utils/booking.utils";
 import { convertToDate } from "@/utils/utils";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
 import { BookableItemEntry } from "./BookableItemEntry";
@@ -49,14 +49,13 @@ export const EditBookingDialog = ({
   onOpenChange,
 }: EditorTemplateProps) => {
   const { id: planId = "" } = useParams();
-  const { updatedBooking } = useStoreBookings();
   const {
     rooms,
-    activePlans,
     building: dropDownBuilding,
     chosenCampus,
   } = useContext(ScheduleContext);
   const { user } = useStoreUser();
+  const { plansMap } = useAllPlans();
   const { addBookingToPlanMutation, updateBookingMutation } =
     useBookingActions();
   const [roomOptions, setRoomOptions] = useState<
@@ -79,8 +78,9 @@ export const EditBookingDialog = ({
   }, [dropDownBuilding, data, chosenCampus]);
 
   const currentPlan = useMemo(() => {
-    return activePlans.find((plan) => plan.id === data?.planId) ?? null;
-  }, [activePlans, data, planId]);
+    if (!data?.planId) return null;
+    return plansMap[data.planId] ?? null;
+  }, [data, plansMap, planId]);
 
   const disabledForm = currentPlan?.userId !== user.id;
 
@@ -164,7 +164,6 @@ export const EditBookingDialog = ({
       },
       {
         onSuccess: () => {
-          updatedBooking(bookingData);
           onOpenChange();
         },
       },
@@ -295,46 +294,50 @@ export const EditBookingDialog = ({
             <Controller
               name="startDate"
               control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Startdatum</FieldLabel>
-                  <DateTimePicker
-                    {...field}
-                    value={field.value as Date}
-                    locale={sv}
-                    weekStartsOn={1}
-                    granularity="minute"
-                    hourCycle={24}
-                    yearRange={0}
-                    placeholder="Startdatum"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
+              render={({ field, fieldState }) => {
+                return (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Startdatum</FieldLabel>
+                    <DateTimePicker
+                      {...field}
+                      value={field.value as Date}
+                      locale={sv}
+                      weekStartsOn={1}
+                      granularity="minute"
+                      hourCycle={24}
+                      yearRange={0}
+                      placeholder="Startdatum"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                );
+              }}
             />
             <Controller
               name="endDate"
               control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>Slutdatum</FieldLabel>
-                  <DateTimePicker
-                    {...field}
-                    value={field.value as Date}
-                    locale={sv}
-                    weekStartsOn={1}
-                    granularity="minute"
-                    hourCycle={24}
-                    yearRange={0}
-                    placeholder="Slutdatum"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
+              render={({ field, fieldState }) => {
+                return (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel>Slutdatum</FieldLabel>
+                    <DateTimePicker
+                      {...field}
+                      value={field.value as Date}
+                      locale={sv}
+                      weekStartsOn={1}
+                      granularity="minute"
+                      hourCycle={24}
+                      yearRange={0}
+                      placeholder="Slutdatum"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                );
+              }}
             />
 
             <Field>

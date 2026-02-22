@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { authService } from "@/services";
-import { getErrorMessage } from "@/utils/error.util";
+import { getErrorMessage } from "@/utils/error.utils";
 
 export const useChangePassword = () => {
   const [isPending, setIsPending] = useState(false);

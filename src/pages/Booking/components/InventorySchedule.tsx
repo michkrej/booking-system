@@ -12,9 +12,8 @@ import {
 import { useMemo, useRef } from "react";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useBookingState } from "@hooks/useBookingState";
-import { useCurrentDate } from "@hooks/useCurrentDate";
 import { committees } from "@data/committees";
-import { useBoundStore } from "@state/store";
+import { useTimelineDate } from "@/hooks/useTimelineDate";
 import {
   type BookableItem,
   type Booking,
@@ -39,11 +38,12 @@ export const InventorySchedule = () => {
     building,
     setBuilding,
     bookings,
-    activePlans,
   } = useBookingState();
-  const { currentDate } = useCurrentDate();
-  const bookableItemLimits = useBoundStore((state) => state.bookableItems);
-  const { isPlanEditLocked } = useAdminSettings();
+  const { timelineDate } = useTimelineDate();
+  const {
+    isPlanEditLocked,
+    settings: { bookableItems: bookableItemLimits },
+  } = useAdminSettings();
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
@@ -122,7 +122,6 @@ export const InventorySchedule = () => {
         building,
         locations: [],
         rooms: [],
-        activePlans,
       }}
     >
       <div className="h-[calc(100vh-121px)]">
@@ -143,7 +142,7 @@ export const InventorySchedule = () => {
             slotCount: 1,
           }}
           showTimeIndicator={false}
-          selectedDate={currentDate}
+          selectedDate={timelineDate}
           startHour="06:00"
           endHour="24:00"
           firstDayOfWeek={1}

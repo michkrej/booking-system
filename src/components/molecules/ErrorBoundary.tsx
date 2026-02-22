@@ -9,7 +9,7 @@ const handleGoHome = () => {
 
 const FallbackComponent = ({ error }: { error: unknown }) => {
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center p-4 bg-muted">
       <Card className="w-full max-w-2xl">
         <CardContent className="flex flex-col items-center gap-4 pt-6 text-center">
           <CardTitle>Något gick fel</CardTitle>
@@ -17,7 +17,7 @@ const FallbackComponent = ({ error }: { error: unknown }) => {
             Hoppsan! Det var visst ett problem med hemsidan.
           </CardDescription>
 
-          <pre className="bg-muted mt-2 max-h-60 w-full overflow-auto rounded p-2 text-left text-xs">
+          <pre className="bg-muted/20 mt-2 max-h-60 w-full overflow-auto rounded p-2 text-left text-xs">
             {import.meta.env.DEV ? (
               <>
                 <p>

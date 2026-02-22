@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { authService } from "@/services";
-import { getErrorMessage } from "@/utils/error.util";
+import { getErrorMessage } from "@/utils/error.utils";
 
 export const useResetPassword = () => {
   const [isPending, setIsPending] = useState(false);

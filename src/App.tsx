@@ -16,6 +16,7 @@ import { AdminPage } from "./pages/admin/admin.page";
 import { DashboardPage } from "./pages/dashboard.page";
 import { InventorySchedulePage } from "./pages/inventorySchedule.page";
 import { LoginPage } from "./pages/login.page";
+import { AuthProvider } from "./providers/AuthProvider";
 
 const queryClient = new QueryClient();
 
@@ -36,10 +37,10 @@ const RequireAuth = () => {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col">
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <ErrorBoundary>
+          <AuthProvider>
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<LoginPage />} />
@@ -55,11 +56,11 @@ function App() {
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </BrowserRouter>
-          </ErrorBoundary>
+          </AuthProvider>
           <Toaster position="top-center" />
         </TooltipProvider>
-      </div>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

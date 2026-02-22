@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { type z } from "zod";
 import { useBookingActions } from "@hooks/useBookingActions";
-import { useStoreBookings } from "@hooks/useStoreBookings";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { corridorsC } from "@data/campusValla/rooms";
 import roomsC from "@data/campusValla/rooms/C";
@@ -30,6 +29,7 @@ import { Label } from "@ui/label";
 import { MultiSelect } from "@ui/multi-select";
 import { Separator } from "@ui/separator";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { useAllPlans } from "@/hooks/useAllPlans";
 import { type Booking, type NewBooking } from "@/interfaces/interfaces";
 import { viewCollisionsPath, viewPath } from "@/utils/constants";
 import { AddBookableItemDropdown } from "./AddBookableItemDropdown";
@@ -49,8 +49,7 @@ export const NewBookingDialog = ({
   onOpenChange,
 }: EditorTemplateProps) => {
   const { id: planId = "" } = useParams();
-  const { createdBooking } = useStoreBookings();
-  const { rooms, activePlans, building } = useContext(ScheduleContext);
+  const { rooms, building } = useContext(ScheduleContext);
   const { user } = useStoreUser();
   const { addBookingToPlanMutation } = useBookingActions();
   const [roomOptions, setRoomOptions] = useState<
@@ -61,6 +60,7 @@ export const NewBookingDialog = ({
       label: room.name,
     })),
   );
+  const { plansMap } = useAllPlans();
 
   const disabledForm = planId === viewPath || planId === viewCollisionsPath;
 
@@ -134,11 +134,10 @@ export const NewBookingDialog = ({
     await addBookingToPlanMutation.mutateAsync(
       {
         booking: bookingData,
-        plan: activePlans.find((plan) => plan.id === planId) ?? null,
+        plan: plansMap[planId] ?? null,
       },
       {
         onSuccess: () => {
-          createdBooking(bookingData);
           onOpenChange();
         },
       },

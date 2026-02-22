@@ -15,7 +15,10 @@ import type { NumericBookableKeys } from "@/interfaces/interfaces";
 import { BOOKABLE_ITEM_OPTIONS } from "@/utils/constants";
 
 export const BookableItemsCard = () => {
-  const { bookableItems, updateBookableItems } = useAdminSettings();
+  const {
+    settings: { bookableItems },
+    updateBookableItems,
+  } = useAdminSettings();
   const [items, setItems] =
     useState<Record<NumericBookableKeys, string | number>>(bookableItems);
   const { t } = useTranslation();

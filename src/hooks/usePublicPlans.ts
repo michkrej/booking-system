@@ -1,27 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
+import type { Plan } from "@/interfaces/interfaces";
 import { plansService } from "@/services";
 import { getCommittee } from "@/utils/utils";
-import { useStorePlanYear } from "./useStorePlanYear";
+import { useActiveYear } from "./useActiveYear";
 
 export const usePublicPlans = () => {
-  const { planYear: year } = useStorePlanYear();
+  const { activeYear } = useActiveYear();
 
   const {
     data = [],
     isPending,
     refetch,
   } = useQuery({
-    queryKey: ["publicPlans", year],
+    queryKey: ["publicPlans", activeYear],
     queryFn: async () => {
-      const plans = await plansService.getPublicPlans(year);
+      const plans = await plansService.getPublicPlans(activeYear);
       return plans;
     },
   });
 
+  const plans: Plan[] = useMemo(() => data ?? [], [data]);
+
   const publicPlansByKar = useMemo(() => {
     const filterByKår = (kår: string) =>
-      data?.filter(
+      plans.filter(
         (plan) =>
           getCommittee(plan.committeeId)?.kår === kår ||
           getCommittee(plan.committeeId)?.kår === "Övrigt",
@@ -31,7 +34,19 @@ export const usePublicPlans = () => {
       consensus: filterByKår("Consensus"),
       stuff: filterByKår("StuFF"),
     };
-  }, [data]);
+  }, [plans]);
 
-  return { publicPlans: data, isPending, refetch, publicPlansByKar };
+  const publicPlansMap = useMemo(() => {
+    const map: Record<string, Plan> = {};
+    plans.forEach((plan) => (map[plan.id] = plan));
+    return map;
+  }, [plans]);
+
+  return {
+    publicPlans: data,
+    isPending,
+    refetch,
+    publicPlansByKar,
+    publicPlansMap,
+  };
 };

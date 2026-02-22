@@ -1,6 +1,5 @@
 import { ArrowRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useStoreUser } from "@hooks/useStoreUser";
 import { useUserPlans } from "@hooks/useUserPlans";
 import { Button } from "@ui/button";
@@ -19,11 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
-import { useCurrentDate } from "@/hooks/useCurrentDate";
+import { useLoadTimelineData } from "@/hooks/useLoadTimelineData";
 import { useUserPlanConflicts } from "@/hooks/useUserPlanConflicts";
-import { useBoundStore } from "@/state/store";
-import type { CollisionDisplayRow } from "@/utils/collisionComputation";
-import { viewCollisionsPath } from "@/utils/constants";
 import { cn, getCommittee } from "@/utils/utils";
 import { FadderiTag } from "../molecules/FadderiTag";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
@@ -34,22 +30,15 @@ const TABS = {
 } as const;
 
 export const UserConflictsCard = () => {
-  const navigate = useNavigate();
   const { user } = useStoreUser();
-  const { userPlans } = useUserPlans();
-  const loadedBookings = useBoundStore((state) => state.loadedBookings);
-  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
-  const { updatedCurrentDate } = useCurrentDate();
+  const { publicPlan: userPublicPlan } = useUserPlans();
   const { conflictRows } = useUserPlanConflicts();
+  const { handleCollisionRowClick, handleViewAllCollisionsClick } =
+    useLoadTimelineData();
 
   const [karFilter, setKarFilter] = useState<
     (typeof TABS)[keyof typeof TABS]["value"]
   >(TABS["Din kår"].value);
-
-  // Find user's public plan
-  const userPublicPlan = useMemo(() => {
-    return userPlans.find((plan) => plan.public);
-  }, [userPlans]);
 
   // Filter by kår
   const filteredRows = useMemo(() => {
@@ -60,55 +49,6 @@ export const UserConflictsCard = () => {
       return otherCommittee?.kår === user.kår;
     });
   }, [conflictRows, karFilter, user.kår]);
-
-  const handleViewTimeline = (
-    row: CollisionDisplayRow,
-    newTab: boolean = false,
-  ) => {
-    loadedBookings(row.bookings);
-    changedActivePlans([row.plan1, row.plan2]);
-
-    const startDate = row.bookings.at(0)?.startDate;
-    if (startDate) {
-      updatedCurrentDate(startDate);
-    }
-
-    const path =
-      row.type === "room"
-        ? `/booking/${viewCollisionsPath}`
-        : `/inventory/${viewCollisionsPath}`;
-    if (newTab) {
-      window.open(path, "_blank");
-    } else {
-      navigate(path);
-    }
-  };
-
-  const handleViewAllConflictsTimeline = () => {
-    if (!userPublicPlan) return;
-
-    const hasRoomCollisions = conflictRows.some((conf) => conf.type === "room");
-
-    const conflictBookings = hasRoomCollisions
-      ? conflictRows
-          .filter((row) => row.type === "room")
-          .flatMap((row) => row.bookings)
-      : conflictRows
-          .filter((row) => row.type === "inventory")
-          .flatMap((row) => row.bookings);
-    const conflictPlans = conflictRows.flatMap((row) => row.plan2);
-
-    loadedBookings(conflictBookings);
-    changedActivePlans([userPublicPlan, ...conflictPlans]);
-
-    updatedCurrentDate(conflictBookings[0]!.startDate);
-
-    if (hasRoomCollisions) {
-      navigate(`/booking/${viewCollisionsPath}`);
-    } else {
-      navigate(`/inventory/${viewCollisionsPath}`);
-    }
-  };
 
   if (!userPublicPlan) {
     return (
@@ -148,10 +88,12 @@ export const UserConflictsCard = () => {
               <ToggleGroupItem value="all">Alla</ToggleGroupItem>
             </ToggleGroup>
             <Button
-              variant="outline"
               size="sm"
               className="ml-4"
-              onClick={handleViewAllConflictsTimeline}
+              onClick={() => handleViewAllCollisionsClick(conflictRows)}
+              onAuxClick={() =>
+                handleViewAllCollisionsClick(conflictRows, true)
+              }
             >
               Tidslinje <ArrowRightIcon className="ml-1 size-4" />
             </Button>
@@ -205,8 +147,8 @@ export const UserConflictsCard = () => {
                     )}
                   >
                     <TableCell
-                      onClick={() => handleViewTimeline(row)}
-                      onAuxClick={() => handleViewTimeline(row, true)}
+                      onClick={() => handleCollisionRowClick(row)}
+                      onAuxClick={() => handleCollisionRowClick(row, true)}
                       className="hover:cursor-pointer hover:underline"
                     >
                       <FadderiTag
@@ -244,8 +186,8 @@ export const UserConflictsCard = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleViewTimeline(row)}
-                        onAuxClick={() => handleViewTimeline(row, true)}
+                        onClick={() => handleCollisionRowClick(row)}
+                        onAuxClick={() => handleCollisionRowClick(row, true)}
                       >
                         Visa <ArrowRightIcon className="ml-1 size-4" />
                       </Button>

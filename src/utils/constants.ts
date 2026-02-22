@@ -1,9 +1,14 @@
 import type { NumericBookableKeys } from "@/interfaces/interfaces";
+import { version } from "../../package.json";
+
+export const CURRENT_APP_VERSION = version;
 
 export const adminError =
   "Möjligheten att skapa och redigera planeringar har låsts av en administratör";
 
 export const CURRENT_YEAR = new Date().getFullYear();
+export const MIN_YEAR = 2025;
+export const MAX_YEAR = CURRENT_YEAR + 1;
 
 export const BOOKABLE_ITEM_KEYS = [
   "bardiskar",

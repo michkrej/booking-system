@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import z from "zod";
+import { useAppMode } from "@/hooks/useAppMode";
 import { useCreatePlan } from "@/hooks/useCreatePlan";
 import { useStoreUser } from "@/hooks/useStoreUser";
-import { useBoundStore } from "@/state/store";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +32,8 @@ export const CreateNewPlanDialog = ({
   const { t } = useTranslation();
   const { user } = useStoreUser();
   const { createPlan, isPending: isCreating } = useCreatePlan();
-  const changedAppMode = useBoundStore((state) => state.changedAppMode);
+  const navigate = useNavigate();
+  const changedAppMode = useAppMode().changeAppMode;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,7 +48,8 @@ export const CreateNewPlanDialog = ({
         form.reset();
         onOpenChange(false);
       },
-      onSuccess: () => {
+      onSuccess: (newPlan) => {
+        navigate(`/booking/${newPlan.id}`);
         changedAppMode("user");
       },
     });

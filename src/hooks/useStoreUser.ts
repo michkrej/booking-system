@@ -1,8 +1,9 @@
+import { useContext } from "react";
 import { committees } from "@/data/committees";
-import { useBoundStore } from "@/state/store";
+import { AuthContext } from "@/providers/AuthProvider";
 
 export const useStoreUser = () => {
-  const user = useBoundStore((state) => state.user);
+  const user = useContext(AuthContext).user;
 
   if (!user) throw new Error("User should be loaded");
 

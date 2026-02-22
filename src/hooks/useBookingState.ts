@@ -5,15 +5,13 @@ import {
   type NewBooking,
 } from "@/interfaces/interfaces";
 import { type View } from "@/pages/Booking/components/ScheduleToolbar";
-import { useBoundStore } from "@/state/store";
 import { defaultCampus } from "@/utils/helpers";
-import { useStoreBookings } from "./useStoreBookings";
 import { useStoreUser } from "./useStoreUser";
+import { useTimelineEvents } from "./useTimelineEvents";
 
 export const useBookingState = () => {
   const { user } = useStoreUser();
-  const { bookings, deletedBooking, updatedBooking } = useStoreBookings();
-  const activePlans = useBoundStore((state) => state.activePlans);
+  const { timelineEvents: bookings } = useTimelineEvents();
 
   const [currentView, setCurrentView] = useState<View>("TimelineDay");
   const [chosenCampus, setChosenCampus] = useState(
@@ -45,10 +43,7 @@ export const useBookingState = () => {
     setIsCreateBookingModalOpen,
     isUpdateBookingModalOpen,
     setIsUpdateBookingModalOpen,
-    bookings,
-    deletedBooking,
-    updatedBooking,
-    activePlans,
     user,
+    bookings,
   };
 };

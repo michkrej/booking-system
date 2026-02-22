@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getDateRangeOverLaps } from "./date.utils";
+import { getDateRangeOverLaps } from "../date.utils";
 
 describe("getDateRangeOverLaps", () => {
   it("should return null if the ranges do not overlap", () => {

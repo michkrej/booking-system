@@ -1,29 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import type { Plan } from "@/interfaces/interfaces";
 import { plansService } from "@/services";
-import { useBoundStore } from "@/state/store";
-import { useStorePlanActions } from "./useStorePlanActions";
-import { useStorePlanYear } from "./useStorePlanYear";
+import { useActiveYear } from "./useActiveYear";
 import { useStoreUser } from "./useStoreUser";
+
+export const userPlansQueryKey = (
+  year: number,
+  userId: string,
+): ["userPlans", number, string] => ["userPlans" as const, year, userId];
 
 export const useUserPlans = () => {
   const { user } = useStoreUser();
-  const { planYear: year } = useStorePlanYear();
-  const { userPlansLoaded } = useStorePlanActions();
+  const { activeYear } = useActiveYear();
 
-  const { isPending } = useQuery({
-    queryKey: ["userPlans", year, user.id],
-    queryFn: async () => {
-      const plans = await plansService.getUserPlans(user.id, year);
-      userPlansLoaded(plans);
-      return plans;
-    },
+  const { data, isLoading } = useQuery({
+    queryKey: userPlansQueryKey(activeYear, user.id),
+    queryFn: () => plansService.getUserPlans(user.id, activeYear),
   });
 
-  const plans = useBoundStore((state) => state.userPlans) ?? [];
+  const plans: Plan[] = useMemo(() => data ?? [], [data]);
+
+  const userPublicPlan = useMemo(() => {
+    return plans.find((plan) => plan.public);
+  }, [plans]);
 
   return {
     userPlans: plans,
-    publicPlan: plans.filter((plan) => plan.public)[0] ?? null,
-    isPending,
+    publicPlan: userPublicPlan,
+    isLoading,
   };
 };

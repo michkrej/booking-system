@@ -1,10 +1,14 @@
-import { format } from "date-fns";
+import { format, setISOWeek, startOfWeek } from "date-fns";
 import { sv } from "date-fns/locale";
 import { locationsValla } from "@/data/campusValla/campusValla";
 import { committees, committeesConsensus, kårer } from "../data/committees";
 import { campuses, locationsNonGrouped, rooms } from "../data/locationsData";
-import { type Kår, type Plan } from "../interfaces/interfaces";
-import { BOOKABLE_ITEM_OPTIONS, viewCollisionsPath } from "./constants";
+import { type Booking, type Kår, type Plan } from "../interfaces/interfaces";
+import {
+  BOOKABLE_ITEM_OPTIONS,
+  CURRENT_YEAR,
+  viewCollisionsPath,
+} from "./constants";
 
 export const exportPlans = async (
   plans: Plan[],
@@ -82,3 +86,42 @@ export const isRoomCollisionView = (string: string) =>
 
 export const isInventoryCollisionView = (string: string) =>
   string.includes("inventory");
+
+export const updatePlansEventList = (
+  plans: Plan[],
+  booking: Booking,
+  action: "add" | "remove" | "update",
+) => {
+  return plans.map((plan) => {
+    if (plan.id !== booking.planId) return plan; // Skip plans that don't match
+
+    let updatedEvents = plan.events;
+
+    switch (action) {
+      case "remove":
+        updatedEvents = plan.events.filter((event) => event.id !== booking.id);
+        break;
+      case "update":
+        updatedEvents = plan.events.map((event) =>
+          event.id === booking.id ? booking : event,
+        );
+        break;
+      case "add":
+        updatedEvents = [...plan.events, booking];
+        break;
+    }
+
+    return { ...plan, events: updatedEvents };
+  });
+};
+
+export const getMottagningStartWeek = () => {
+  const firstDayOfWeek34 = startOfWeek(
+    setISOWeek(new Date(CURRENT_YEAR, 0, 1), 34),
+    {
+      weekStartsOn: 2,
+    },
+  );
+
+  return new Date(firstDayOfWeek34);
+};

@@ -1,6 +1,6 @@
 import { ScheduleComponent } from "@syncfusion/ej2-react-schedule";
 import { createContext } from "react";
-import type { Location, Plan, Room } from "@/interfaces/interfaces";
+import type { Location, Room } from "@/interfaces/interfaces";
 import type { View } from "./ScheduleToolbar";
 
 type ScheduleContextType = {
@@ -8,7 +8,6 @@ type ScheduleContextType = {
   currentView: View;
   chosenCampus: "US" | "Valla";
   building: Location | undefined;
-  activePlans: Plan[];
   setCurrentView: (view: View) => void;
   setChosenCampus: (campus: "US" | "Valla") => void;
   setBuilding: (building: Location | undefined) => void;

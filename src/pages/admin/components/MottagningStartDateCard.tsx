@@ -12,7 +12,10 @@ import { CURRENT_YEAR } from "@/utils/constants";
 
 export const MottagningStartDateCard = () => {
   const { t } = useTranslation();
-  const { mottagningStart, updateMottagningStart } = useAdminSettings();
+  const {
+    settings: { mottagningStart },
+    updateMottagningStart,
+  } = useAdminSettings();
 
   return (
     <Card>

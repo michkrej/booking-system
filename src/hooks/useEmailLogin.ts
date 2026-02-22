@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { authService } from "@/services";
-import { useBoundStore } from "@/state/store";
-import { getErrorMessage } from "@/utils/error.util";
+import { getErrorMessage } from "@/utils/error.utils";
 
 export const useEmailLogin = () => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const userUpdated = useBoundStore((state) => state.userUpdated);
 
   const isMounted = useRef(true);
 
@@ -23,8 +21,7 @@ export const useEmailLogin = () => {
     setError(null);
     setIsPending(true);
     try {
-      const user = await authService.loginWithEmailAndPassword(email, password);
-      userUpdated(user);
+      await authService.loginWithEmailAndPassword(email, password);
 
       if (isMounted.current) {
         setIsPending(false);

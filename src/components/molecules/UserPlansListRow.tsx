@@ -1,6 +1,7 @@
 import { useAdminSettings } from "@/hooks/useAdminSettings";
 import type { Plan } from "@/interfaces/interfaces";
-import { formatDate, getCommittee } from "@/utils/utils";
+import { formatDate } from "@/utils/date.utils";
+import { getCommittee } from "@/utils/utils";
 import { Separator } from "../ui/separator";
 import { TableCell, TableRow } from "../ui/table";
 import { ConflictBadge } from "./ConflictBadge";
@@ -21,7 +22,7 @@ export const UserPlansListRow = ({
   onPlanClick,
 }: UserPlansListRowProps) => {
   const { isPlanEditLocked } = useAdminSettings();
-  const updatedAt = formatDate(plan.updatedAt);
+  const updatedAt = formatDate(plan.updatedAt, "full");
   const committee = getCommittee(plan.committeeId);
 
   const status = isPlanEditLocked ? "locked" : plan.public ? "public" : "draft";
@@ -48,17 +49,13 @@ export const UserPlansListRow = ({
       <TableCell className="hidden sm:table-cell">
         <StatusBadge status={status} />
       </TableCell>
-      <TableCell>
-        <ConflictBadge
-          location={collisions.room}
-          inventory={collisions.inventory}
-          compact
-        />
+      <TableCell className="hidden sm:table-cell">
+        <ConflictBadge numConflicts={collisions.room + collisions.inventory} />
       </TableCell>
       <TableCell className="hidden md:table-cell text-muted-foreground text-sm">
         {updatedAt}
       </TableCell>
-      <TableCell className="flex items-center justify-end gap-2">
+      <TableCell className="flex items-center justify-end sm:gap-2">
         <PlanDeleteButton plan={plan} />
         <Separator orientation="vertical" className="h-5 hidden sm:block" />
         <PlanChangeNameButton plan={plan} />

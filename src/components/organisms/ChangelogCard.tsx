@@ -1,6 +1,4 @@
 import { usePostHog } from "posthog-js/react";
-import { useBoundStore } from "@state/store";
-import { CURRENT_APP_VERSION } from "@state/userStoreSlice";
 import { Button } from "@ui/button";
 import {
   Card,
@@ -10,6 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@ui/card";
+import { useChangelog } from "@/hooks/useChangelog";
+import { CURRENT_APP_VERSION } from "@/utils/constants";
 
 const Changelog = () => {
   return (
@@ -39,54 +39,40 @@ const Changelog = () => {
 };
 
 export const ChangelogCard = () => {
-  const versionUpdateWarning = useBoundStore(
-    (state) => state.versionUpdateWarningClosed,
-  );
-  const closeVersionUpdateWarning = useBoundStore(
-    (state) => state.closeVersionUpdateWarning,
-  );
-
+  const { changelog, markChangelogAsRead } = useChangelog();
   const posthog = usePostHog();
 
-  const versionUpdateWarningClosed =
-    versionUpdateWarning === CURRENT_APP_VERSION;
+  const showChangelog = changelog !== CURRENT_APP_VERSION;
+  if (!showChangelog) return null;
 
   return (
-    <>
-      {!versionUpdateWarningClosed ? (
-        <Card className="col-span-full flex">
-          <CardHeader className="w-full flex-row items-center gap-x-10">
-            <CardTitle>
-              👩‍💻 Bokningsplanering v{CURRENT_APP_VERSION} - Nyheter
-            </CardTitle>
-            <CardDescription className="flex-1">
-              Det har släppts en ny version av hemsidan! Här är en lista över
-              vad som har ändrats.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Changelog />
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <i>
-              Om något inte fungerar{" "}
-              <button
-                className="text-primary decoration-primary font-semibold hover:underline"
-                onClick={() => posthog.capture("feedback_click")}
-              >
-                rapportera det
-              </button>
-            </i>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={closeVersionUpdateWarning}
-            >
-              Ok
-            </Button>
-          </CardFooter>
-        </Card>
-      ) : null}
-    </>
+    <Card className="col-span-full flex">
+      <CardHeader className="w-full flex-row items-center gap-x-10">
+        <CardTitle>
+          👩‍💻 Bokningsplanering v{CURRENT_APP_VERSION} - Nyheter
+        </CardTitle>
+        <CardDescription className="flex-1">
+          Det har släppts en ny version av hemsidan! Här är en lista över vad
+          som har ändrats.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Changelog />
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <i>
+          Om något inte fungerar{" "}
+          <button
+            className="text-primary decoration-primary font-semibold hover:underline"
+            onClick={() => posthog.capture("feedback_click")}
+          >
+            rapportera det
+          </button>
+        </i>
+        <Button variant="secondary" size="sm" onClick={markChangelogAsRead}>
+          Ok
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };

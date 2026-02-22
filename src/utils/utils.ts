@@ -25,20 +25,6 @@ export const convertToDate = (
   return new Date(date.seconds * 1000);
 };
 
-export const formatDate = (
-  date: Timestamp | Date | { seconds: number; nanoseconds: number },
-) => {
-  const convertedToDate = convertToDate(date);
-
-  return convertedToDate.toLocaleString("sv-SE", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
 export const getCommittee = (committeeId: keyof typeof committees) => {
   return committees[committeeId];
 };

@@ -1,6 +1,6 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { type AdminSettings, type Kår } from "@/interfaces/interfaces";
-import { getErrorMessage } from "@/utils/error.util";
+import { getErrorMessage } from "@/utils/error.utils";
 import { convertToDate } from "@/utils/utils";
 import { db } from "./config";
 

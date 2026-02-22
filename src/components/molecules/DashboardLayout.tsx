@@ -14,7 +14,7 @@ export const DashboardLayout = ({
   hideFooter?: boolean;
 }) => {
   return (
-    <div className="bg-muted flex min-h-screen w-full flex-col">
+    <div className="bg-muted flex min-h-screen w-full flex-col overflow-x-hidden">
       <Header />
       <div className="flex flex-1">
         <main

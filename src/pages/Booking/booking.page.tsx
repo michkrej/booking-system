@@ -1,9 +1,9 @@
 import { Layout } from "@components/molecules/layout";
-import { useRefetchPublicPlans } from "@/hooks/useRefetchPublicPlans";
+import { useRefreshTimelineEvents } from "@/hooks/useRefreshTimelineEvents";
 import { Schedule } from "./components/Schedule";
 
 export const BookingPage = () => {
-  useRefetchPublicPlans();
+  useRefreshTimelineEvents();
 
   return (
     <Layout className="bg-white p-0!" hideFooter>

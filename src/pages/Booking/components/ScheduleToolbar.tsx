@@ -11,8 +11,6 @@ import {
 import { useContext, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { useCurrentDate } from "@hooks/useCurrentDate";
-import { useStoreBookings } from "@hooks/useStoreBookings";
 import { campusLocationsMap } from "@data/locationsData";
 import { Button } from "@ui/button";
 import {
@@ -23,6 +21,8 @@ import {
   SelectValue,
 } from "@ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ui/tooltip";
+import { useTimelineDate } from "@/hooks/useTimelineDate";
+import { useTimelineEvents } from "@/hooks/useTimelineEvents";
 import { type Location } from "@/interfaces/interfaces";
 import { convertToDate } from "@/utils/utils";
 import { ScheduleContext } from "./ScheduleContext";
@@ -52,11 +52,11 @@ export const ScheduleToolbar = ({
   } = useContext(ScheduleContext);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentDate, updatedCurrentDate } = useCurrentDate();
-  const { bookings } = useStoreBookings();
+  const { timelineDate, setTimelineDate } = useTimelineDate();
+  const { timelineEvents: bookings } = useTimelineEvents();
 
   const changeDate = (step: number) => {
-    updatedCurrentDate(viewAdjustments[currentView](currentDate, step));
+    setTimelineDate(viewAdjustments[currentView](timelineDate, step));
   };
 
   const goToPrevious = () => changeDate(-1);
@@ -91,29 +91,22 @@ export const ScheduleToolbar = ({
     setBuilding(buildingObject);
   };
 
-  const firstBookingDate = useMemo(() => {
-    const sortedBookings = bookings.sort(
-      (a, b) =>
-        convertToDate(a.startDate).getTime() -
-        convertToDate(b.startDate).getTime(),
-    );
-    return sortedBookings[0]?.startDate;
-  }, [bookings]);
+  const firstBookingDate = bookings[0]?.startDate;
 
   const goToFirstBooking = () => {
     if (!firstBookingDate) return;
-    updatedCurrentDate(convertToDate(firstBookingDate));
+    setTimelineDate(convertToDate(firstBookingDate));
   };
 
   const isAtFirstBooking = useMemo(() => {
     if (!firstBookingDate) return false;
-    if (!currentDate) return false;
+    if (!timelineDate) return false;
 
     return (
       convertToDate(firstBookingDate).getDate() ===
-      convertToDate(currentDate).getDate()
+      convertToDate(timelineDate).getDate()
     );
-  }, [firstBookingDate, currentDate]);
+  }, [firstBookingDate, timelineDate]);
 
   const handleInventoryButtonClick = () => {
     toast.info("I inventarie-vyn går det inte att redigera några bokningar");
@@ -212,11 +205,11 @@ export const ScheduleToolbar = ({
           </Button>
           <span className="pointer-events-none w-[180px] text-center">
             {currentView === "TimelineDay"
-              ? format(currentDate, "d MMMM yyyy", { locale: sv })
+              ? format(timelineDate, "d MMMM yyyy", { locale: sv })
               : null}
             {currentView === "TimelineWeek" ? getWeekDateSpan() : null}
             {currentView === "TimelineMonth"
-              ? format(currentDate, "MMMM yyyy", { locale: sv })
+              ? format(timelineDate, "MMMM yyyy", { locale: sv })
               : null}
           </span>
           <Button size="icon" variant="ghost" onClick={goToNext}>

@@ -14,7 +14,7 @@ import { type Kår } from "@/interfaces/interfaces";
 
 export const LockPlanEditingCard = () => {
   const { t } = useTranslation();
-  const { lockPlans, planEditLocked } = useAdminSettings();
+  const { updateLockedKårPlans, settings } = useAdminSettings();
 
   return (
     <Card>
@@ -30,9 +30,14 @@ export const LockPlanEditingCard = () => {
               <ToggleGroup
                 type="single"
                 variant="outline"
-                defaultValue={planEditLocked[kår] ? "locked" : "unlocked"}
+                defaultValue={
+                  settings.planEditLocked[kår] ? "locked" : "unlocked"
+                }
                 onValueChange={(value) =>
-                  lockPlans.mutate({ kår, newValue: value === "locked" })
+                  updateLockedKårPlans.mutate({
+                    kår,
+                    newValue: value === "locked",
+                  })
                 }
               >
                 <ToggleGroupItem value="unlocked">upplåst</ToggleGroupItem>

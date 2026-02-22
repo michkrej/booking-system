@@ -1,6 +1,7 @@
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
+  type UserCredential,
   signOut as _signOut,
   createUserWithEmailAndPassword,
   reauthenticateWithCredential,
@@ -13,7 +14,7 @@ import {
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import posthog from "posthog-js";
 import { type User, type UserDetails } from "@/interfaces/interfaces";
-import { getErrorMessage } from "@/utils/error.util";
+import { getErrorMessage } from "@/utils/error.utils";
 import { auth, db } from "./config";
 
 const signUpWithEmailAndPassword = async ({
@@ -197,6 +198,28 @@ const changePassword = async (currentPassword: string, newPassword: string) => {
   }
 };
 
+const getUserDetails = async (user: UserCredential["user"]) => {
+  if (!user.email) {
+    throw new Error("Bro user should have email");
+  }
+
+  const userDetailsSnap = await getDoc(doc(db, "users", user.uid));
+
+  if (!userDetailsSnap.exists()) {
+    throw Error("Missing user details document");
+  }
+
+  const userDetails = userDetailsSnap.data() as UserDetails;
+  return {
+    id: user.uid,
+    displayName: user.displayName ?? null,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    committeeId: userDetails.committeeId,
+    admin: userDetails.admin ?? false,
+  } satisfies User;
+};
+
 export const authService = {
   signUpWithEmailAndPassword,
   loginWithEmailAndPassword,
@@ -206,4 +229,5 @@ export const authService = {
   resetPassword,
   signOut,
   changePassword,
+  getUserDetails,
 };

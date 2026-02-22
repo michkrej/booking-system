@@ -16,7 +16,7 @@ import {
   type EditablePlanDetails,
   type Plan,
 } from "@/interfaces/interfaces";
-import { getErrorMessage } from "@/utils/error.util";
+import { getErrorMessage } from "@/utils/error.utils";
 import { convertToDate } from "@/utils/utils";
 import { db } from "./config";
 
@@ -139,7 +139,7 @@ const updatePlanDetails = async (
 
 const addPlanEvent = async (plan: Plan, booking: Booking) => {
   try {
-    const newBooking = { ...booking, planId: plan.id, id: uuidv4() };
+    const newBooking: Booking = { ...booking, planId: plan.id, id: uuidv4() };
     const events = [...plan.events, newBooking];
 
     await updateDoc(doc(db, "plansV2", plan.id), {
@@ -155,8 +155,15 @@ const addPlanEvent = async (plan: Plan, booking: Booking) => {
 
 const updatePlanEvent = async (plan: Plan, event: Booking) => {
   try {
-    const updatedEvent = {
-      ...event,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { createdAt: _, ...eventData } = event;
+
+    const eventInPlan = plan.events.find((e) => e.id === event.id);
+    if (!eventInPlan) throw new Error("Event not found in plan");
+
+    const updatedEvent: Booking = {
+      ...eventInPlan,
+      ...eventData,
       updatedAt: new Date(),
     };
 
@@ -179,13 +186,17 @@ const updatePlanEvent = async (plan: Plan, event: Booking) => {
   }
 };
 
-const deletePlanEvent = async (plan: Plan, eventId: string) => {
+const deletePlanEvent = async (plan: Plan, booking: Booking) => {
   try {
-    const updatedEvents = plan.events.filter((event) => event.id !== eventId);
+    const updatedEvents = plan.events.filter(
+      (event) => event.id !== booking.id,
+    );
     await updateDoc(doc(db, "plansV2", plan.id), {
       events: updatedEvents,
       updatedAt: new Date(),
     });
+
+    return booking;
   } catch (e) {
     console.error("Error deleting plan event:", getErrorMessage(e));
     throw e;

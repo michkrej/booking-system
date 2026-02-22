@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
 import { authService } from "@/services";
-import { useBoundStore } from "@/state/store";
-import { getErrorMessage } from "@/utils/error.util";
-import { useStorePlanActions } from "./useStorePlanActions";
+import { getErrorMessage } from "@/utils/error.utils";
 
 export const useSignOut = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const userUpdated = useBoundStore((state) => state.userUpdated);
-  const { userPlansLoaded, publicPlansLoaded } = useStorePlanActions();
 
   const logout = async () => {
     setError(null);
     setIsPending(true);
     try {
       await authService.signOut();
-      userUpdated(null);
-      userPlansLoaded([]);
-      publicPlansLoaded([]);
 
       if (!isCancelled) {
         setIsPending(false);

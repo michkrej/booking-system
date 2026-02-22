@@ -19,7 +19,7 @@ export function MobileTabNav<T extends string>({
   return (
     <div
       className={cn(
-        "flex bg-card border-b border-border overflow-x-auto lg:hidden",
+        "flex bg-card border-b border-border overflow-x-auto lg:hidden -mx-2 sm:-mx-4 ",
         className,
       )}
     >
@@ -42,4 +42,4 @@ export function MobileTabNav<T extends string>({
 }
 
 export const PLANNER_TABS = ["Mina", "Krockar", "Alla"] as const;
-export const SPECTATOR_TABS = ["Översikt", "Krockar", "Planeringar"] as const;
+export const SPECTATOR_TABS = ["Krockar", "Planeringar"] as const;

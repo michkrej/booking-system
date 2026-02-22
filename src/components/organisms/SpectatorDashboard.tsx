@@ -1,8 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { useCollisions } from "@hooks/useCollisions";
-import { usePublicPlans } from "@hooks/usePublicPlans";
 import { Button } from "@ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/card";
 import {
@@ -22,11 +20,8 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/table";
-import { useCurrentDate } from "@/hooks/useCurrentDate";
-import { useBoundStore } from "@/state/store";
-import type { CollisionDisplayRow } from "@/utils/collisionComputation";
+import { useLoadTimelineData } from "@/hooks/useLoadTimelineData";
 import { KAR_COLORS } from "@/utils/colors";
-import { viewCollisionsPath } from "@/utils/constants";
 import { getCommittee } from "@/utils/utils";
 import { FadderiTag } from "../molecules/FadderiTag";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
@@ -45,13 +40,9 @@ const TABS = {
 export const SpectatorDashboard = ({
   onCreatePlan,
 }: SpectatorDashboardProps) => {
-  const navigate = useNavigate();
-  const { publicPlans } = usePublicPlans();
-  const { summary, getNumCollisionsForPlan, collisionsByKar, displayRows } =
-    useCollisions();
-  const loadedBookings = useBoundStore((state) => state.loadedBookings);
-  const changedActivePlans = useBoundStore((state) => state.changedActivePlans);
-  const { updatedCurrentDate } = useCurrentDate();
+  const { summary, collisionsByKar, displayRows } = useCollisions();
+  const { handleViewAllCollisionsClick, handleCollisionRowClick } =
+    useLoadTimelineData();
 
   const [karFilter, setKarFilter] = useState<
     (typeof TABS)[keyof typeof TABS]["value"]
@@ -100,46 +91,6 @@ export const SpectatorDashboard = ({
     if (currentPage < totalPages - 2) pages.push("ellipsis");
     if (totalPages > 1) pages.push(totalPages);
     return pages;
-  };
-
-  const handleViewAllConflicts = (e: React.MouseEvent<HTMLButtonElement>) => {
-    loadedBookings(displayRows.flatMap((row) => row.bookings));
-    const plans = publicPlans
-      .filter((plan) => getNumCollisionsForPlan(plan.id).summary > 0)
-      .flatMap((plan) => plan);
-    changedActivePlans(plans);
-
-    const date = displayRows[0]?.bookings[0]?.startDate;
-    if (date) updatedCurrentDate(date);
-
-    const hasRoomCollisions = displayRows.some((row) => row.type === "room");
-
-    const url = hasRoomCollisions
-      ? `/booking/${viewCollisionsPath}`
-      : `/inventory/${viewCollisionsPath}`;
-
-    if (e.ctrlKey || e.metaKey) {
-      window.open(url, "_blank");
-    } else {
-      navigate(url);
-    }
-  };
-
-  const handleViewConflict = (row: CollisionDisplayRow, newTab = false) => {
-    loadedBookings(row.bookings);
-    changedActivePlans([row.plan1, row.plan2]);
-    updatedCurrentDate(row.startDate);
-
-    const url =
-      row.type === "room"
-        ? `/booking/${viewCollisionsPath}`
-        : `/inventory/${viewCollisionsPath}`;
-
-    if (newTab) {
-      window.open(url, "_blank");
-    } else {
-      navigate(url);
-    }
   };
 
   return (
@@ -208,7 +159,7 @@ export const SpectatorDashboard = ({
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <CardTitle>Alla krockar</CardTitle>
-            <div className="flex  gap-x-4">
+            <div className="flex justify-between flex-1 sm:flex-auto sm:justify-end flex-wrap gap-y-2">
               <ToggleGroup
                 type="single"
                 value={karFilter}
@@ -222,7 +173,12 @@ export const SpectatorDashboard = ({
                   </ToggleGroupItem>
                 ))}
               </ToggleGroup>
-              <Button onClick={handleViewAllConflicts}>
+              <Button
+                onClick={() => handleViewAllCollisionsClick(displayRows)}
+                onAuxClick={() =>
+                  handleViewAllCollisionsClick(displayRows, true)
+                }
+              >
                 Tidslinje <ArrowRightIcon className="ml-1 size-4" />
               </Button>
             </div>
@@ -232,11 +188,19 @@ export const SpectatorDashboard = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Fadderi 1</TableHead>
-                <TableHead>Fadderi 2</TableHead>
-                <TableHead className="w-[80px]">Typ</TableHead>
-                <TableHead className="hidden sm:table-cell">Detaljer</TableHead>
-                <TableHead className="w-[80px]" />
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  Fadderi 1
+                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">
+                  Fadderi 2
+                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide w-[80px]">
+                  Typ
+                </TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide hidden sm:table-cell">
+                  Detaljer
+                </TableHead>
+                <TableHead className="w-[100px]" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -320,9 +284,8 @@ export const SpectatorDashboard = ({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={(e) => {
-                            handleViewConflict(row, e.ctrlKey || e.metaKey);
-                          }}
+                          onClick={() => handleCollisionRowClick(row)}
+                          onAuxClick={() => handleCollisionRowClick(row, true)}
                         >
                           Visa <ArrowRightIcon className="ml-1 size-4" />
                         </Button>
@@ -350,7 +313,7 @@ export const SpectatorDashboard = ({
                     }
                   />
                 </PaginationItem>
-                <div className="flex items-center justify-center w-[180px]">
+                <div className="flex items-center justify-center w-[200px]">
                   {generatePageNumbers().map((page, index) =>
                     page === "ellipsis" ? (
                       <PaginationItem key={`ellipsis-${index}`}>

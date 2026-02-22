@@ -161,7 +161,7 @@ export type User = {
 } & UserDetails;
 
 export type AdminSettings = {
-  lockPlans: boolean;
+  planEditLocked: Record<Kår, boolean>;
   mottagningStart: Record<Kår, Date>;
   bookableItems: Record<string, number>;
 };

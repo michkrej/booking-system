@@ -17,12 +17,13 @@ import { toast } from "sonner";
 import { useAdminSettings } from "@hooks/useAdminSettings";
 import { useBookingActions } from "@hooks/useBookingActions";
 import { useBookingState } from "@hooks/useBookingState";
-import { useCurrentDate } from "@hooks/useCurrentDate";
 import { corridorsC } from "@data/campusValla/rooms";
 import { committees } from "@data/committees";
 import { campusLocationsMap } from "@data/locationsData";
+import { useAllPlans } from "@/hooks/useAllPlans";
+import { useTimelineDate } from "@/hooks/useTimelineDate";
 import { type Booking, type NewBooking } from "@/interfaces/interfaces";
-import { shiftBookableItemTimes } from "@/utils/bookingUtils";
+import { shiftBookableItemTimes } from "@/utils/booking.utils";
 import { viewCollisionsPath, viewPath } from "@/utils/constants";
 import { EditBookingDialog } from "./EditBookingDialog";
 import { NewBookingDialog } from "./NewBookingDialog";
@@ -51,16 +52,14 @@ export const Schedule = () => {
     setIsCreateBookingModalOpen,
     isUpdateBookingModalOpen,
     setIsUpdateBookingModalOpen,
-    bookings,
-    deletedBooking,
-    updatedBooking,
-    activePlans,
     user,
+    bookings,
   } = useBookingState();
   const { updateBookingMutation, deleteBookingMutation } = useBookingActions();
   const { id = "" } = useParams();
-  const { currentDate } = useCurrentDate();
+  const { timelineDate } = useTimelineDate();
   const { isPlanEditLocked } = useAdminSettings();
+  const { plansMap } = useAllPlans();
 
   const scheduleObj = useRef<ScheduleComponent>(null);
 
@@ -151,7 +150,7 @@ export const Schedule = () => {
     if (args.requestType === "eventRemove" && args.deletedRecords?.length) {
       const entry = args.deletedRecords[0] as Booking;
 
-      const plan = activePlans.find((plan) => plan.id === entry.planId);
+      const plan = plansMap[entry.planId];
       if (!plan) {
         console.warn("Plan not found");
         args.cancel = true;
@@ -164,14 +163,7 @@ export const Schedule = () => {
         return;
       }
 
-      deleteBookingMutation.mutate(
-        { booking: entry, plan: plan },
-        {
-          onSuccess: () => {
-            deletedBooking(entry);
-          },
-        },
-      );
+      deleteBookingMutation.mutate({ booking: entry, plan: plan });
       return;
     }
 
@@ -183,7 +175,7 @@ export const Schedule = () => {
         updatedEvent.roomId = [updatedEvent.roomId];
       }
 
-      const plan = activePlans.find((plan) => plan.id === updatedEvent.planId);
+      const plan = plansMap[updatedEvent.planId];
       if (!plan) {
         console.warn("Plan not found");
         args.cancel = true;
@@ -208,14 +200,7 @@ export const Schedule = () => {
         finalBooking = { ...updatedEvent, bookableItems: shiftedItems };
       }
 
-      updateBookingMutation.mutate(
-        { booking: finalBooking, plan },
-        {
-          onSuccess: () => {
-            updatedBooking(finalBooking);
-          },
-        },
-      );
+      updateBookingMutation.mutate({ booking: finalBooking, plan });
     }
   };
 
@@ -244,7 +229,6 @@ export const Schedule = () => {
         building,
         locations,
         rooms,
-        activePlans,
       }}
     >
       <div className="h-[calc(100vh-121px)]">
@@ -263,7 +247,7 @@ export const Schedule = () => {
             slotCount: 1,
           }}
           showTimeIndicator={false}
-          selectedDate={currentDate}
+          selectedDate={timelineDate}
           startHour="06:00"
           endHour="24:00"
           firstDayOfWeek={1}

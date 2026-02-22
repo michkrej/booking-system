@@ -8,10 +8,12 @@ export const SidebarPlanItem = ({
   item,
   conflictCount,
   onClick,
+  onAuxClick,
 }: {
   item: Plan;
   conflictCount: number;
   onClick: () => void;
+  onAuxClick?: () => void;
 }) => {
   const committee = committees[item.committeeId]!;
 
@@ -19,6 +21,7 @@ export const SidebarPlanItem = ({
     <button
       className="flex items-center justify-between px-5 py-[9px] border-b cursor-pointer hover:bg-muted/50 w-full"
       onClick={onClick}
+      onAuxClick={onAuxClick}
     >
       <div>
         <div className="flex items-center gap-1.5">

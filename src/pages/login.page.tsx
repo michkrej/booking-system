@@ -1,18 +1,18 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useUserIsLoggedIn } from "@hooks/useUserIsLoggedIn";
 import { SiteLogo } from "@components/atoms/siteLogo";
 import { SiteFooter } from "@components/molecules/siteFooter";
 import { NollePCarousel } from "@components/organisms/nollePCarousel";
 import { FormForgotPassword } from "@/components/organisms/FormForgotPassword";
 import { FormLogin } from "@/components/organisms/FormLogin";
 import { FormSignup } from "@/components/organisms/FormSignup";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 export function LoginPage() {
   const { state } = useLocation() as { state: { mode?: string } };
-  const userIsLoggedIn = useUserIsLoggedIn();
+  const { user } = useAuthContext();
 
-  if (userIsLoggedIn) {
-    return <Navigate to="/dashboard" />;
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return (

@@ -6,18 +6,18 @@ import {
   type Plan,
 } from "@/interfaces/interfaces";
 import { getCommittee } from "@/utils/utils";
+import { BOOKABLE_ITEM_OPTIONS } from "../constants";
+import { formatDate, getDateRangeOverLaps } from "../date.utils";
 import {
   type BookingWithCollidingItems,
   type InventoryCollisionsPerPlan,
   findInventoryCollisionsBetweenPlans,
-} from "./collision/findInventoryCollisionsBetweenPlans";
+} from "./findInventoryCollisionsBetweenPlans";
 import {
   type BookingWithCollidingRooms,
   type CollisionsPerPlan,
   findRoomCollisionsBetweenPlans,
-} from "./collision/findRoomCollisionsBetweenPlans";
-import { BOOKABLE_ITEM_OPTIONS } from "./constants";
-import { formatDate, getDateRangeOverLaps } from "./date.utils";
+} from "./findRoomCollisionsBetweenPlans";
 
 interface CollisionSummary {
   total: number;
