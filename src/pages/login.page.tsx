@@ -20,7 +20,7 @@ export function LoginPage() {
       <div className="fixed top-0 m-2">
         <SiteLogo />
       </div>
-      <div className="relative mt-20 flex items-center justify-center lg:mt-0">
+      <div className="relative mt-20 flex items-center justify-center lg:mt-0 flex-1">
         {state?.mode === "forgotPassword" ? (
           <FormForgotPassword />
         ) : state?.mode === "signup" ? (
@@ -28,17 +28,13 @@ export function LoginPage() {
         ) : (
           <FormLogin />
         )}
-        <div className="absolute bottom-0 hidden w-full justify-center lg:flex">
+        <div className="absolute bottom-0 w-full justify-center mt-auto">
           <SiteFooter />
         </div>
       </div>
 
       <div className="relative hidden h-full w-full lg:block">
         <NollePCarousel />
-      </div>
-
-      <div className="mt-auto lg:hidden">
-        <SiteFooter />
       </div>
     </div>
   );

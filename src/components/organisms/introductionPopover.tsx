@@ -1,10 +1,18 @@
+import { usePostHog } from "@posthog/react";
 import { Button } from "@ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@ui/popover";
-import { siteConfig } from "@/config/site";
+import { useChangelog } from "@/hooks/useChangelog";
 
 export const IntroductionPopover = () => {
+  const posthog = usePostHog();
+  const { changelog } = useChangelog();
+
+  const handleClick = () => {
+    posthog.capture("feedkback_click");
+  };
+
   return (
-    <Popover>
+    <Popover defaultOpen={changelog === null}>
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
@@ -29,13 +37,13 @@ export const IntroductionPopover = () => {
           <p className="text-muted-foreground text-sm">
             Jag arbetar löpande med att göra hemsidan bättre för er fadderister
             som använder den.{" "}
-            <a
-              className="underline"
-              href={siteConfig.links.feedback}
-              target="__blank"
+            <button
+              className="underline hover:cursor-pointer"
+              onClick={handleClick}
+              tabIndex={-1}
             >
               Feedback
-            </a>{" "}
+            </button>{" "}
             tas tacksamt emot!
           </p>
         </div>
