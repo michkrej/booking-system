@@ -8,7 +8,7 @@ export const IntroductionPopover = () => {
   const { changelog } = useChangelog();
 
   const handleClick = () => {
-    posthog.capture("feedkback_click");
+    posthog.capture("feedback_click");
   };
 
   return (
