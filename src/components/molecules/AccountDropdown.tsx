@@ -1,8 +1,7 @@
 import { CircleUser } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { siteConfig } from "@/config/site";
 import { useSignOut } from "@/hooks/useSignOut";
 import { useStoreUser } from "@/hooks/useStoreUser";
 import { auth } from "@/services/config";
@@ -25,14 +24,14 @@ export const AccountDropdown = () => {
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] =
     useState(false);
 
-  const isEmailPasswordUser = () => {
+  const isEmailPasswordUser = useMemo(() => {
     const currentUser = auth.currentUser;
     if (!currentUser) return false;
 
     return currentUser.providerData.some(
       (provider) => provider.providerId === "password",
     );
-  };
+  }, [auth.currentUser]);
 
   return (
     <>
@@ -44,23 +43,12 @@ export const AccountDropdown = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-39">
-          <DropdownMenuItem
-            disabled
-            onClick={() => window.open(siteConfig.links.instructionVideo)}
-          >
-            {user.email}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => window.open(siteConfig.links.instructionVideo)}
-          >
-            {t("instruction_video")}
-          </DropdownMenuItem>
+          <DropdownMenuItem disabled>{user.email}</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => posthog.capture("feedback_click")}>
             {t("feedback")}
           </DropdownMenuItem>
-          {isEmailPasswordUser() && (
+          {isEmailPasswordUser && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem
