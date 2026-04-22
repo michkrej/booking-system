@@ -16,22 +16,8 @@ const Changelog = () => {
     <div className="ml-4">
       <ul className="list-disc">
         <li>
-          Nytt gränsnitt för översikten ✨
-          <ul className="list-disc ml-4">
-            <li>
-              I vyn &quot;översikt&quot; ser du dina krockar med andra
-              fadderier.
-            </li>
-            <li>
-              I vyn &quot;krockar&quot; kan du samtliga krockar mellan
-              fadderier.
-            </li>
-          </ul>
-        </li>
-        <li>
-          När du flyttar en områdesbokning med tillhörande inventariebokningar
-          kommer tiden för inventariebokningen att flyttas relativt till själva
-          bokningen av området.
+          Klickar du på &quot;Karta TF&quot; i headern kommer du faktiskt till
+          en karta av TF
         </li>
       </ul>
     </div>
