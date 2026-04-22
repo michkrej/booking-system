@@ -1,3 +1,5 @@
+import TF from "@assets/TF.pdf";
+
 export const siteConfig = {
   name: "Bokningsplanering",
   url: "https://bokningsplanering.com/",
@@ -8,8 +10,7 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/in/michelle-krejci",
     github: "https://github.com/michkrej/booking-system",
     portfolio: "https://michellekrejci.com",
-    TF_2024:
-      "https://datavisualisering.linkoping.se/contentassets/a932eff8fb1d46ab9ccf9d24322626c6/orienteringskarta-tradgardsforeningen/",
+    TF_2024: TF,
   },
 };
 
