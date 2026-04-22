@@ -28,6 +28,15 @@ const Changelog = () => {
       </ul>
 
       <h5 className="font-semibold mt-4 text-base ">
+        Jag jobbar på följande buggar:
+      </h5>
+      <ul className="list-disc ml-4">
+        <li>
+          Bokningar visas inte i planeringen förens man loggar ut och in igen.
+        </li>
+      </ul>
+
+      <h5 className="font-semibold mt-4 text-base ">
         Jag jobbar på följande förbättringar:
       </h5>
       <ul className="list-disc ml-4">
