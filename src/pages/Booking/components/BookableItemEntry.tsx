@@ -78,7 +78,7 @@ export const BookableItemEntry = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Hämta</FieldLabel>
+              <FieldLabel>Lämna</FieldLabel>
               <DateTimePicker
                 {...field}
                 value={field.value as Date}
