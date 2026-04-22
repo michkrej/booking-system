@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { usePostHog } from "posthog-js/react";
 import { Button } from "@ui/button";
 import {
@@ -14,10 +15,35 @@ import { CURRENT_APP_VERSION } from "@/utils/constants";
 const Changelog = () => {
   return (
     <div className="ml-4">
-      <ul className="list-disc">
+      <ul className="list-disc ml-4">
         <li>
-          Klickar du på &quot;Karta TF&quot; i headern kommer du faktiskt till
-          en karta av TF
+          Klickar du på "Karta TF" i headern kommer du faktiskt till en karta av
+          TF
+        </li>
+        <li>
+          När man anger start och slutdatum för en inventariebokning kallas
+          startiden "Hämta" och slutdatumet "Lämna" istället för "Hämta" och
+          "Hämta". Oops.
+        </li>
+      </ul>
+
+      <h5 className="font-semibold mt-4 text-base ">
+        Jag jobbar på följande förbättringar:
+      </h5>
+      <ul className="list-disc ml-4">
+        <li>
+          Krockar ska kunna markeras som hanterade även fast krocken tekniskt
+          sett kvarstår.
+        </li>
+        <li>Kunna sortera listan med krockar på fadderi och typ.</li>
+        <li>
+          Kunna välja om man vill dela sin mejladress med andra som använder
+          plattformen så man kan kontakta varande gällande krockar direkt.
+        </li>
+        <li>
+          När man skapar en bokning ska det <b>inte</b> gå att välja fler
+          inventarier än vad som finns tillgängliga i systemet. Så om MA har
+          registrerat att det finns 50 bänkset ska man inte kunna välja 55.
         </li>
       </ul>
     </div>
@@ -52,8 +78,13 @@ export const ChangelogCard = () => {
             className="text-primary decoration-primary font-semibold hover:underline"
             onClick={() => posthog.capture("feedback_click")}
           >
-            rapportera det
+            rapportera det.
           </button>
+          <span>
+            {" "}
+            Det går också att nå mig på{" "}
+            <span className="text-primary">michkrej@gmail.com</span>.
+          </span>
         </i>
         <Button variant="secondary" size="sm" onClick={markChangelogAsRead}>
           Ok
