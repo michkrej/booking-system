@@ -13,7 +13,7 @@
     "@syncfusion/ej2-cldr-data": "32.1.19",
     "@syncfusion/ej2-dropdowns": "^32.1.22",
     "@syncfusion/ej2-inputs": "^32.1.22",
-    "@syncfusion/ej2-lists": "^32.1.19",
+    "@syncfusion/ej2-lists": "^32.2.7",
     "@syncfusion/ej2-navigations": "^32.1.19",
     "@syncfusion/ej2-popups": "^32.1.19",
     "@syncfusion/ej2-react-schedule": "32.1.22",
